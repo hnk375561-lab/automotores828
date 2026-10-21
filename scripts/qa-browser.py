@@ -40,6 +40,20 @@ def main():
                 if w <= 980:
                     sm = pg.evaluate(JS_SMALL)
                     if sm: problems.append(f"{tag}: controles <44px {sm[:4]}")
+                if w == 1440:
+                    cols = pg.locator("#cars").evaluate("e=>getComputedStyle(e).gridTemplateColumns.trim().split(/\\s+/).length")
+                    if cols != 5: problems.append(f"{tag}: grilla de unidades con {cols} columnas; se esperaban 5")
+                    pg.locator("button[data-ficha]").first.click()
+                    pg.locator("dialog.ficha").wait_for(state="visible")
+                    mini = pg.locator("dialog.ficha .fi-map[data-leaflet]")
+                    if mini.count() != 1: problems.append(f"{tag}: la ficha no incluye el mini mapa del local")
+                    elif not pg.locator("dialog.ficha .fi-map .dr-map-v[aria-label]").count(): problems.append(f"{tag}: el mini mapa no tiene región accesible")
+                    extra = pg.locator("dialog.ficha details.fi-extra")
+                    if extra.count() != 1: problems.append(f"{tag}: no se conservó el bloque de características adicionales")
+                    elif extra.locator("dd").count() < 1: problems.append(f"{tag}: el bloque de características adicionales está vacío")
+                    else:
+                        extra.locator("summary").click()
+                        if not extra.evaluate("e=>e.open"): problems.append(f"{tag}: no se puede desplegar el bloque adicional")
                 if w <= 700:
                     H = pg.evaluate("document.documentElement.scrollHeight"); y = 0; bad = set()
                     while y < H:

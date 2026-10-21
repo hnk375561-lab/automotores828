@@ -2123,6 +2123,42 @@ section[id]::after{content:"";position:absolute;inset:0 auto 0 0;width:3px;backg
 @media(max-width:960px){.cars{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-width:700px){.cars{grid-template-columns:1fr}.car-badge{width:50px;height:50px;top:9px;right:9px}.hero-carousel-controls{left:12px;right:auto;bottom:12px}#financiacion,#tu-usado,#busqueda,#guia,#visita,#contacto{background-image:var(--section-bg-mobile)}#financiacion{--section-bg-mobile:url('images/fondos/fondo-financiacion-800.webp')}#tu-usado{--section-bg-mobile:url('images/fondos/fondo-tu-usado-800.webp')}#busqueda{--section-bg-mobile:url('images/fondos/fondo-busqueda-800.webp')}#guia{--section-bg-mobile:url('images/fondos/fondo-guia-800.webp')}#visita{--section-bg-mobile:url('images/fondos/fondo-visita-800.webp')}#contacto{--section-bg-mobile:url('images/fondos/fondo-contacto-800.webp')}}
 @media(prefers-reduced-motion:reduce){.hero-slide img{animation:none!important}.hero-carousel-controls{display:none!important}}
+
+
+/* Ajustes solicitados: catálogo de cinco columnas en escritorio, fichas compactas y mini mapa accesible. */
+@media(min-width:1200px){#unidades .cars{grid-template-columns:repeat(5,minmax(0,1fr))!important;gap:14px!important}.inventory-section .car h3{font-size:clamp(18px,1.35vw,22px)}.inventory-section .car-s b{font-size:18px}}
+@media(min-width:961px) and (max-width:1199px){#unidades .cars{grid-template-columns:repeat(4,minmax(0,1fr))!important;gap:14px!important}}
+@media(min-width:701px) and (max-width:960px){#unidades .cars{grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:12px!important}}
+@media(min-width:521px) and (max-width:700px){#unidades .cars{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:12px!important}}
+@media(max-width:520px){#unidades .cars{grid-template-columns:1fr!important}}
+
+dialog.ficha .fi-i{padding:clamp(14px,2vw,22px)}
+dialog.ficha .fi-d{grid-template-columns:repeat(3,minmax(0,1fr));gap:0 12px;margin:10px 0}
+dialog.ficha .fi-d div{padding:5px 0}
+dialog.ficha .fi-d dt{font-size:9.5px;line-height:1.15;letter-spacing:.1em}
+dialog.ficha .fi-d dd{margin-top:3px;font-size:14px}
+dialog.ficha .fi-t img{max-height:54dvh}
+dialog.ficha .fi-s{gap:10px;padding:16px}
+dialog.ficha .fi-lg img{width:clamp(104px,13vw,156px)}
+dialog.ficha .fi-sv{gap:4px}
+dialog.ficha .fi-vs{margin-top:4px;padding-top:10px}
+dialog.ficha .fi-map{height:184px;min-height:184px;flex:none;margin-top:8px}
+dialog.ficha .fi-map .dr-map-v{position:absolute;inset:0}
+dialog.ficha .fi-map .dr-ctr{min-height:44px;padding:12px 14px}
+html body .dr-v71 .dr-ctr{min-height:44px;box-sizing:border-box}
+@media(max-width:800px){dialog.ficha .fi-d{grid-template-columns:repeat(2,minmax(0,1fr));gap:0 10px}dialog.ficha .fi-t img{max-height:38dvh}dialog.ficha .fi-map{height:170px;min-height:170px}}
+
+.dr-ctr{min-height:44px;box-sizing:border-box;padding:12px 14px}
+
+/* Ficha modal: las características adicionales siguen completas, pero no ocupan el primer scroll. */
+dialog.ficha .fi-extra{margin:8px 0;border-top:1px solid rgba(255,255,255,.14)}
+dialog.ficha .fi-extra>summary{display:flex;align-items:center;justify-content:space-between;gap:12px;min-height:44px;margin:0;padding:8px 0;cursor:pointer;list-style:none}
+dialog.ficha .fi-extra>summary::-webkit-details-marker{display:none}
+dialog.ficha .fi-extra>summary::after{content:"+";flex:none;display:grid;place-items:center;width:28px;height:28px;background:#ee1c22;color:#060607;font:800 20px/1 var(--b)}
+dialog.ficha .fi-extra[open]>summary::after{content:"−"}
+dialog.ficha .fi-extra[open]>.fi-d{margin-top:6px}
+dialog.ficha .fi-map{height:156px;min-height:156px}
+@media(max-width:800px){dialog.ficha .fi-map{height:144px;min-height:144px}}
 /* Automotores 828 · identidad visual
    Fuente: logo entregado por el responsable (captura del perfil de Instagram, 15/10/2026).
    Paleta: negro #060607 · rojo #ee1c22 (texto sobre negro: #ff4a4a · sobre claro: #b3000c) · plata #d9dbdd · gris damero #2a2a2c.

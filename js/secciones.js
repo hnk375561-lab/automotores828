@@ -666,12 +666,24 @@
       var yaVisible = { 'año': 1, 'marca': 1, 'modelo': 1, 'versión': 1, 'kilómetros': 1, 'color': 1, 'tipo de combustible': 1, 'combustible': 1, 'transmisión': 1, 'motor': 1, 'cilindrada': 1, 'tipo de carrocería': 1, 'carrocería': 1, 'puertas': 1, 'potencia': 1, 'control de tracción': 1, 'tipo de moto': 1, 'numero de velocidades': 1, 'número de velocidades': 1 };
       var extras = (a.atributosPublicados || []).filter(function (x) { return x && x.nombre && x.valor && !yaVisible[norm(x.nombre)]; });
       if (extras.length) {
-        var ep = el('section', null, 'fi-extra'); ep.appendChild(el('p', 'Más características publicadas', 'fi-s-k'));
+        var ep = el('details', null, 'fi-extra');
+        ep.appendChild(el('summary', 'Más características publicadas (' + extras.length + ')', 'fi-s-k'));
         var edl = el('dl', null, 'fi-d');
         extras.forEach(function (x) { var row = el('div'); row.appendChild(el('dt', x.nombre)); row.appendChild(el('dd', x.valor)); edl.appendChild(row); });
         ep.appendChild(edl); ep.appendChild(el('p', 'Datos declarados en la publicación de Mercado Libre; confirmalos con la agencia.', 'fi-n')); info.appendChild(ep);
       }
       if (a.nota) info.appendChild(el('p', a.nota, 'fi-n'));
+
+      /* Mini mapa de la agencia, no de la unidad; Leaflet lo inicia al acercarse a la ficha. */
+      if (ctx.coordenadas && Number.isFinite(Number(ctx.coordenadas.lat)) && Number.isFinite(Number(ctx.coordenadas.lng))) {
+        var miniMap = el('div', null, 'dr-map fi-map');
+        miniMap.dataset.lat = String(ctx.coordenadas.lat); miniMap.dataset.lng = String(ctx.coordenadas.lng);
+        miniMap.dataset.nombre = ctx.nombre || 'Automotores 828'; miniMap.dataset.dir = ctx.dir || '';
+        miniMap.dataset.gmaps = ctx.maps || ''; miniMap.dataset.leaflet = 'js/vendor/leaflet.js'; miniMap.dataset.css = 'js/vendor/leaflet.css';
+        var miniView = el('div', null, 'dr-map-v'); miniView.setAttribute('role', 'region');
+        miniView.setAttribute('aria-label', 'Mapa de ubicación de la agencia; no indica la ubicación del vehículo');
+        miniMap.appendChild(miniView); info.appendChild(miniMap);
+      }
 
       /* acciones */
       var ac = el('div', null, 'fi-ac');

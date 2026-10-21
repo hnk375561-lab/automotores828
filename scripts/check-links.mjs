@@ -16,6 +16,8 @@ const idsOf = Object.fromEntries(pages.map((p) => [p, ids(htmlOf[p])]));
 function checkFormat(where, raw) {
   const url = raw.replace(/&amp;/g, '&');
   if (/DOMINIO-FINAL/.test(url)) return add(problems, where, url, 'placeholder sin reemplazar');
+  // Leaflet sustituye {s} por a, b o c al solicitar cada mosaico; la plantilla no es un enlace navegable.
+  if (/^https:\/\/\{s\}\.tile\.openstreetmap\.org\//.test(url)) return;
   if (url.startsWith('tel:')) { if (!/^tel:\+\d{10,15}$/.test(url)) add(problems, where, url, 'tel: mal formado'); return; }
   if (url.startsWith('mailto:')) return;
   if (url.startsWith('https://wa.me/')) {
