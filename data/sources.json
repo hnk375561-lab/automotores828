@@ -29,6 +29,62 @@
       "url": "https://www.cylex.com.ar/monte-grande/automotores-828-srl-11668018.html",
       "consultado": "2026-10-20",
       "nota": "Directorio: el enlace rotulado sitio web apunta a Mercado Libre."
+    },
+    {
+      "id": "boletin-oficial-2010",
+      "url": "https://boletinoficial.gba.gob.ar/secciones/449/ver",
+      "consultado": "2026-10-20",
+      "estado": "confirmada",
+      "nota": "Aviso societario: contrato constitutivo de Automotores 828 S.R.L. del 01/03/2010; ampliatorio del contrato social publicado en 2010."
+    },
+    {
+      "id": "bna-faccara-2019",
+      "url": "https://www.bna.com.ar/Downloads/Autos-Listado-de-Concesionarias-Adheridas-a-FACCARA-11092019.pdf",
+      "consultado": "2026-10-20",
+      "estado": "confirmada_con_vigencia_historica",
+      "nota": "Listado fechado 11/09/2019: CUIT 30-71145457-4, Automotores 828 S.R.L., Multimarcas, Monte Grande, teléfono 4290-7300."
+    },
+    {
+      "id": "near-place",
+      "url": "https://ar.near-place.com/automotores-828-srl-boulevard-buenos-aires-828-monte-grande",
+      "consultado": "2026-10-20",
+      "estado": "directorio_dudoso",
+      "nota": "Publica dirección 828, teléfono +54 11 4290-7300 y coordenadas -34.8140275,-58.4554839; muestra todos los días como cerrados, en conflicto con otros horarios."
+    },
+    {
+      "id": "la-guia-online",
+      "url": "https://laguiaonline.com.ar/businesses/automotores-828-srl",
+      "consultado": "2026-10-20",
+      "estado": "directorio_secundario",
+      "nota": "Repite razón social y CUIT 30-71145457-4; no lista servicios ni reseñas."
+    },
+    {
+      "id": "mercadolibre-publicacion-financiacion",
+      "url": "https://auto.mercadolibre.com.ar/MLA-4069574430-honda-fit-15-ex-at-_JM",
+      "consultado": "2026-10-20",
+      "estado": "confirmada_para_publicacion_puntual",
+      "nota": "Una publicación declara anticipo US$ 2.500, saldo US$ 2.500, 6 a 24 cuotas fijas en pesos, vehículos al día y transferidos, entrega inmediata y toma de usado; no generalizar."
+    },
+    {
+      "id": "concesionaria-online",
+      "url": "https://concesionariaonline.com.ar/concesionarios-de-coches/automotores-828-srl/",
+      "consultado": "2026-10-20",
+      "estado": "directorio_dudoso",
+      "nota": "Publica 4,1 estrellas y 232 opiniones atribuidas a GMaps sin enlace directo verificable; horarios y dirección de terceros."
+    },
+    {
+      "id": "argentino-reputacion",
+      "url": "https://www.argentino.com.ar/automotores-828-srl-F110DC20212D546",
+      "consultado": "2026-10-20",
+      "estado": "directorio_dudoso",
+      "nota": "Publica puntuación 4,01 y resúmenes de comentarios positivos y negativos; no usar como reseña oficial."
+    },
+    {
+      "id": "emis",
+      "url": "https://www.emis.com/php/company-profile/AR/Automotores_828_SRL_es_22597517.html",
+      "consultado": "2026-10-20",
+      "estado": "contradictoria",
+      "nota": "Muestra domicilio 831 y fechas de fundación dinámicas/inconsistentes; no resolver domicilio ni antigüedad con esta fuente."
     }
   ]
 }

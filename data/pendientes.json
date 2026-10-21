@@ -17,6 +17,48 @@
       "tema": "Confirmar dominio y aprobación para publicar",
       "estado": "abierto",
       "bloqueante": true
+    },
+    {
+      "id": "P4",
+      "tema": "Confirmar si el domicilio operativo es Boulevard Buenos Aires 828 o 831",
+      "estado": "abierto",
+      "bloqueante": true
+    },
+    {
+      "id": "P5",
+      "tema": "Validar CUIT 30-71145457-4 y autorizar su publicación institucional",
+      "estado": "abierto",
+      "bloqueante": false
+    },
+    {
+      "id": "P6",
+      "tema": "Confirmar vigencia y autorización del teléfono fijo +54 11 4290-7300",
+      "estado": "abierto",
+      "bloqueante": true
+    },
+    {
+      "id": "P7",
+      "tema": "Definir antigüedad oficial a comunicar: sociedad desde 2010, trayectoria del rubro o ambas",
+      "estado": "abierto",
+      "bloqueante": false
+    },
+    {
+      "id": "P8",
+      "tema": "Confirmar financiación: anticipo, cuotas, tasa/CFT, gastos, requisitos, moneda y entidad",
+      "estado": "abierto",
+      "bloqueante": false
+    },
+    {
+      "id": "P9",
+      "tema": "Confirmar garantía, posventa, medios de pago, gestoría, transferencia, permuta y consignación",
+      "estado": "abierto",
+      "bloqueante": false
+    },
+    {
+      "id": "P10",
+      "tema": "Entregar enlace oficial de Google y autorizar publicación de puntuación y cantidad de opiniones",
+      "estado": "abierto",
+      "bloqueante": false
     }
   ]
 }

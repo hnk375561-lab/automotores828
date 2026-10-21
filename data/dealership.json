@@ -2,7 +2,14 @@
   "identity": {
     "tradeName": "Automotores 828",
     "legalName": "Automotores 828 S.R.L.",
-    "cuit": null
+    "cuit": null,
+    "publicRegistry": {
+      "cuit": "30-71145457-4",
+      "actividad": "Multimarcas",
+      "fuente": "https://www.bna.com.ar/Downloads/Autos-Listado-de-Concesionarias-Adheridas-a-FACCARA-11092019.pdf",
+      "consultado": "2026-10-20",
+      "estado": "publicado_por_terceros_pendiente_de_validacion_del_negocio"
+    }
   },
   "location": {
     "address": "Blvd. Buenos Aires 828",
@@ -10,7 +17,30 @@
     "city": "Monte Grande",
     "partido": "Esteban Echeverría",
     "province": "Buenos Aires",
-    "mapsUrl": "https://www.google.com/maps/search/?api=1&query=Blvd.%20Buenos%20Aires%20828%2C%20Monte%20Grande%2C%20Buenos%20Aires"
+    "mapsUrl": "https://www.google.com/maps/search/?api=1&query=Blvd.%20Buenos%20Aires%20828%2C%20Monte%20Grande%2C%20Buenos%20Aires",
+    "conflicto": {
+      "estado": "abierto",
+      "candidatos": [
+        {
+          "direccion": "Blvd. Buenos Aires 828",
+          "fuentes": [
+            "repositorio",
+            "Facebook indexado",
+            "Argentino",
+            "Near Place",
+            "Concesionaria Online"
+          ]
+        },
+        {
+          "direccion": "Boulevard Buenos Aires 831",
+          "fuentes": [
+            "Mercado Libre publicación MLA-4069574430",
+            "EMIS"
+          ]
+        }
+      ],
+      "nota": "No resolver sin confirmación directa del negocio."
+    }
   },
   "contact": {
     "nombre": "Automotores 828",
@@ -26,7 +56,25 @@
     "confirmadoPorDueno": false,
     "conflicto": {
       "candidatos": []
-    }
+    },
+    "publicosPendientes": [
+      {
+        "tipo": "telefono_fijo",
+        "valor": "+54 11 4290-7300",
+        "fuentes": [
+          "https://www.bna.com.ar/Downloads/Autos-Listado-de-Concesionarias-Adheridas-a-FACCARA-11092019.pdf",
+          "https://ar.near-place.com/automotores-828-srl-boulevard-buenos-aires-828-monte-grande"
+        ],
+        "estado": "publicado_por_terceros_pendiente_de_confirmacion",
+        "nota": "No se publica como teléfono activo hasta confirmación del negocio."
+      },
+      {
+        "tipo": "moviles_indexados",
+        "valor": "Contactos asociados en el perfil/reels de Instagram; no se transcriben por posible carácter personal o de vendedor individual.",
+        "fuente": "https://www.instagram.com/automotores828/reels/",
+        "estado": "dudoso_no_publicar"
+      }
+    ]
   },
   "hours": {
     "display": true,
@@ -105,12 +153,53 @@
     "escala": 5
   },
   "presentacion": {
-    "antiguedad": "Multimarcas · Vehículos usados"
+    "antiguedad": "Sociedad constituida en 2010 según aviso del Boletín Oficial · Multimarcas · Vehículos usados",
+    "fuenteAntiguedad": "https://boletinoficial.gba.gob.ar/secciones/449/ver",
+    "destacadoNumero": "2010",
+    "destacadoEtiqueta": "sociedad constituida",
+    "destacadoSub": "según Boletín Oficial"
   },
   "publicacion": {
     "official": false,
     "publicIndexing": false,
     "siteUrl": null,
     "previewUrl": null
+  },
+  "investigacionComplementaria": {
+    "consultada": "2026-10-20",
+    "historia": {
+      "estado": "confirmado",
+      "hallazgo": "Contrato constitutivo de Automotores 828 S.R.L. del 01/03/2010; aviso societario en Boletín Oficial.",
+      "fuente": "https://boletinoficial.gba.gob.ar/secciones/449/ver"
+    },
+    "identidadFiscal": {
+      "estado": "publico_pendiente_validacion",
+      "cuit": "30-71145457-4",
+      "actividad": "Multimarcas",
+      "fuente": "https://www.bna.com.ar/Downloads/Autos-Listado-de-Concesionarias-Adheridas-a-FACCARA-11092019.pdf"
+    },
+    "financiacionPuntual": {
+      "estado": "confirmado_solo_para_una_publicacion",
+      "detalle": "Publicación MLA-4069574430: anticipo US$ 2.500, saldo US$ 2.500, 6 a 24 cuotas fijas en pesos; no es política general.",
+      "fuente": "https://auto.mercadolibre.com.ar/MLA-4069574430-honda-fit-15-ex-at-_JM"
+    },
+    "reputacion": {
+      "estado": "dudoso_no_publicar_como_google",
+      "detalle": "Directorios muestran 4,01 y 4,1; Concesionaria Online afirma 232 opiniones sin enlace directo verificable a Google.",
+      "fuentes": [
+        "https://www.argentino.com.ar/automotores-828-srl-F110DC20212D546",
+        "https://concesionariaonline.com.ar/concesionarios-de-coches/automotores-828-srl/"
+      ]
+    },
+    "noEncontrado": [
+      "garantia_escrita_y_reclamos",
+      "requisitos_y_costo_financiacion",
+      "medios_de_pago",
+      "condiciones_formales_permutas_consignaciones",
+      "gestoria_transferencia_verificacion",
+      "sucursal_adicional",
+      "sitio_oficial_dominio_propio",
+      "politica_posventa"
+    ]
   }
 }

@@ -418,6 +418,9 @@ const redes = [
 
 const RV = D.reviews;
 const nDias = (H.semana || []).reduce((n, g) => n + g.dias.length, 0);
+const trayectoriaNumero = D.presentacion.destacadoNumero || '—';
+const trayectoriaEtiqueta = D.presentacion.destacadoEtiqueta || 'trayectoria';
+const trayectoriaSub = D.presentacion.destacadoSub || '';
 const secNosotros = `
 <section class="nz" id="nosotros" aria-labelledby="nos-t">
 <div class="nz-top"><div class="w nz-w">
@@ -429,7 +432,7 @@ const secNosotros = `
 <p class="nz-p">${esc(D.presentacion.antiguedad)}</p>
 <div class="row nz-cta"><a class="btn p" href="#unidades">Ver unidades</a><a class="btn" href="#contacto">Hablar con un asesor</a></div>
 </div>
-<div class="nz-side"><div class="nz-big"><span class="nz-flag" aria-hidden="true"></span><p class="nz-num">18</p><p class="nz-num-l">años de trayectoria</p><p class="nz-num-s">empresa familiar</p></div>${GREVIEWS}</div>
+<div class="nz-side"><div class="nz-big"><span class="nz-flag" aria-hidden="true"></span><p class="nz-num">${esc(trayectoriaNumero)}</p><p class="nz-num-l">${esc(trayectoriaEtiqueta)}</p>${trayectoriaSub ? `<p class="nz-num-s">${esc(trayectoriaSub)}</p>` : ''}</div>${GREVIEWS}</div>
 </div></div>
 <div class="nz-body"><div class="w">
 <h3 class="nz-h">Qué podés resolver con nosotros</h3>
