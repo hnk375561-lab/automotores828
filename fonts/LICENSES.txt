@@ -1,0 +1,21 @@
+Tipografías autoalojadas utilizadas por DR Automóviles. Ambas bajo SIL Open Font License 1.1.
+
+Exo 2 — © The Exo 2 Project Authors (https://github.com/googlefonts/Exo-2.0). Licencia completa en LICENSE-exo-2.txt.
+Inter — © The Inter Project Authors (https://github.com/rsms/inter).
+
+SIL OPEN FONT LICENSE Version 1.1 - 26 February 2007
+
+PERMISSION & CONDITIONS
+Permission is hereby granted, free of charge, to any person obtaining a copy of the Font Software, to use, study, copy, merge, embed, modify, redistribute, and sell modified and unmodified copies of the Font Software, subject to the following conditions:
+
+1. Neither the Font Software nor any of its individual components may be sold by itself.
+2. Copies must contain the copyright notice and this license.
+3. Reserved Font Names may not be used for modified versions without permission.
+4. Author names may not be used to promote modified versions without permission.
+5. The Font Software must be distributed entirely under this license.
+
+TERMINATION
+This license becomes null and void if any of the above conditions are not met.
+
+DISCLAIMER
+THE FONT SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO ANY WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT OF COPYRIGHT, PATENT, TRADEMARK, OR OTHER RIGHT. IN NO EVENT SHALL THE COPYRIGHT HOLDER BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY ARISING FROM, OUT OF THE USE OR INABILITY TO USE THE FONT SOFTWARE.

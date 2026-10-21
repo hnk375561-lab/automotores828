@@ -1,0 +1,99 @@
+/* Horizonte Automotores · v72 */
+
+/* 1 · Horarios: logo en el espacio libre y dirección sin párrafos verticales */
+html body .hz-v71 .hz-stage{align-items:stretch}
+html body .hz-v71 .hz-panel{height:100%}
+html body .hz-v71 .hz-tz{margin:0}
+html body .hz-v71 .hz-brand{margin-top:auto;display:flex;align-items:center;justify-content:center;padding:clamp(16px,2.2vw,26px);background:#fefefe;border:1px solid rgba(238,28,34,.6);border-bottom:6px solid #ee1c22;clip-path:polygon(0 0,calc(100% - 18px) 0,100% 18px,100% 100%,0 100%)}
+html body .hz-v71 .hz-brand img{display:block;width:min(100%,320px);height:auto}
+html body .hz-v71 .hz-addr{grid-template-columns:minmax(0,1fr);gap:16px;padding:20px 24px}
+html body .hz-v71 .hz-addr-t{align-items:center;gap:16px}
+html body .hz-v71 .hz-a{max-width:none;font-size:clamp(18px,1.7vw,22px);line-height:1.25;text-wrap:balance}
+html body .hz-v71 .hz-addr .row{display:flex;flex-wrap:wrap;gap:8px;margin:0}
+html body .hz-v71 .hz-addr .btn{flex:1 1 auto}
+
+/* 2 · Hero: entrada + zoom lento en un solo sentido (sin transiciones que vayan y vuelvan) */
+@keyframes hzKen{from{transform:scale(1.12)}to{transform:scale(1.05)}}
+@keyframes hzMediaIn{from{opacity:0}to{opacity:1}}
+.hero-slide img{transform:scale(1.05);transition:none!important;filter:none!important}
+.hero-media{animation:hzMediaIn 1.2s ease-out both}
+.hero{background-position:center center!important}
+.hero-slide.is-active img,.hero-slide.is-leaving img{animation:hzKen 4.5s cubic-bezier(.22,.61,.36,1) both}
+.hero-slide.is-leaving img{animation-play-state:paused}
+@media(prefers-reduced-motion:reduce){.hero-slide.is-active img,.hero-slide.is-leaving img{animation:none}}
+
+
+/* 3 · Nosotros: isotipo */
+.nz-big .nz-iso{position:absolute;top:clamp(20px,3vw,36px);right:clamp(20px,3vw,36px);width:clamp(104px,11vw,150px);height:auto;overflow:visible}
+
+/* 4 · Reserva expandida dentro de «Visita» */
+.rz{display:grid;grid-template-rows:0fr;margin-top:0;transition:grid-template-rows .6s cubic-bezier(.2,.7,.2,1),margin-top .6s cubic-bezier(.2,.7,.2,1)}
+.rz.is-open{grid-template-rows:1fr;margin-top:clamp(20px,3vw,36px)}
+.rz-clip{min-height:0;overflow:hidden}
+.rz:not(.is-open) .rz-clip{visibility:hidden;transition:visibility 0s .6s}
+.rz-box{position:relative;padding:clamp(18px,3vw,40px);background:#060607;border:1px solid rgba(238,28,34,.5);border-top:5px solid #ee1c22;color:#fff}
+.rz-bar{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:clamp(14px,2vw,24px);font:800 12px/1.3 var(--hero-copy,var(--b));letter-spacing:.14em;text-transform:uppercase}
+.rz-bar b{color:#ee1c22}
+.rz-bar .rz-acts{display:flex;gap:18px}
+.rz-bar button{padding:8px 0;border:0;background:none;color:#fff;font:inherit;letter-spacing:inherit;text-transform:inherit;cursor:pointer}
+.rz-bar button:hover,.rz-bar button:focus-visible{color:#ee1c22}
+.rz-bar button[hidden]{display:none}
+.rz-step[hidden]{display:none}
+.rz-step{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.1fr);gap:clamp(20px,4vw,56px);align-items:center;animation:rzIn .5s cubic-bezier(.2,.7,.2,1) both}
+@keyframes rzIn{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+.rz-k{display:inline-block;margin:0 0 14px;padding:7px 14px;background:#ee1c22;color:#060607;font:800 12px/1.3 var(--hero-copy,var(--b));letter-spacing:.12em;text-transform:uppercase;clip-path:polygon(0 0,calc(100% - 10px) 0,100% 10px,100% 100%,0 100%)}
+.rz h3{margin:0;font:italic 800 clamp(40px,6.4vw,86px)/.92 var(--hero-title,var(--b));letter-spacing:-.03em;text-transform:uppercase;color:#fff}
+.rz h3 em{display:block;width:fit-content;margin-top:.05em;padding:0 .1em .03em;background:#ee1c22;color:#060607;font-style:normal}
+.rz-p{margin:18px 0 0;max-width:38ch;color:#e8e8e8;font:500 16px/1.5 var(--hero-copy,var(--b))}
+.rz-cal{padding:clamp(14px,2vw,26px);background:#f8f8f8;color:#060607}
+.rz-ch{display:grid;grid-template-columns:44px 1fr 44px;align-items:center;padding-bottom:10px;border-bottom:3px solid #060607}
+.rz-ch strong{text-align:center;font:italic 800 clamp(22px,3vw,36px)/1 var(--hero-title,var(--b));letter-spacing:-.02em;text-transform:uppercase}
+.rz-ch button{height:44px;border:0;background:none;font-size:26px;font-weight:800;color:#060607;cursor:pointer}
+.rz-ch button:hover{background:#ee1c22}
+.rz-wd,.rz-days{display:grid;grid-template-columns:repeat(7,minmax(0,1fr))}
+.rz-wd{padding:10px 0 6px;font:700 11px var(--hero-copy,var(--b));letter-spacing:.08em;color:rgba(6,6,7,.75)}
+.rz-wd span{padding-left:6px}
+.rz-days{border-left:1px solid rgba(6,6,7,.28);border-top:1px solid rgba(6,6,7,.28)}
+.rz-d{position:relative;display:flex;flex-direction:column;justify-content:space-between;min-height:clamp(46px,6vw,70px);padding:6px;border:0;border-right:1px solid rgba(6,6,7,.28);border-bottom:1px solid rgba(6,6,7,.28);background:transparent;color:#060607;text-align:left;font:italic 800 clamp(16px,2vw,24px)/1 var(--hero-title,var(--b));cursor:pointer;transition:background .2s,color .2s}
+.rz-d small{font:800 10px/1 var(--hero-copy,var(--b));letter-spacing:.06em;text-transform:uppercase;color:#b3000c}
+.rz-d:disabled{color:rgba(6,6,7,.28);cursor:not-allowed}
+.rz-d:not(:disabled):hover,.rz-d:not(:disabled):focus-visible{background:#ee1c22}
+.rz-d[aria-pressed="true"]{background:#ee1c22}
+.rz-d--e{background:rgba(6,6,7,.05);pointer-events:none}
+.rz-cal :focus-visible{outline-color:#060607}
+.rz-big{font:italic 800 clamp(90px,16vw,200px)/.8 var(--hero-title,var(--b));letter-spacing:-.06em;color:#ee1c22}
+.rz-big small{display:block;margin-bottom:10px;font:800 14px/1 var(--hero-copy,var(--b));letter-spacing:.14em;text-transform:uppercase;color:#fff}
+.rz-big strong{display:block;margin-top:12px;font:italic 800 clamp(22px,3vw,34px)/1 var(--hero-title,var(--b));letter-spacing:-.02em;text-transform:uppercase;color:#fff}
+.rz-slots{display:grid;gap:12px;margin-top:20px}
+.rz-slot{display:flex;flex-direction:column;align-items:flex-start;gap:4px;padding:18px 22px;border:2px solid rgba(255,255,255,.4);background:transparent;color:#fff;text-align:left;cursor:pointer;transition:background .2s,color .2s,border-color .2s}
+.rz-slot b{font:italic 800 24px/1 var(--hero-title,var(--b));text-transform:uppercase}
+.rz-slot small{font:600 13px var(--hero-copy,var(--b));letter-spacing:.06em;text-transform:uppercase;opacity:.85}
+.rz-slot:hover,.rz-slot[aria-selected="true"]{background:#ee1c22;border-color:#ee1c22;color:#060607}
+.rz-go{margin-top:20px;display:inline-flex;align-items:center;justify-content:space-between;gap:28px;min-height:54px;padding:0 24px;border:0;background:#ee1c22;color:#060607;font:800 14px var(--hero-copy,var(--b));letter-spacing:.08em;text-transform:uppercase;cursor:pointer;clip-path:polygon(0 0,calc(100% - 12px) 0,100% 12px,100% 100%,0 100%)}
+.rz-go:disabled{opacity:.4;cursor:not-allowed}
+.rz-acts2{display:flex;flex-wrap:wrap;gap:10px;margin-top:22px}
+.rz-st{margin:18px 0 0;padding:12px 14px;border-left:3px solid #ee1c22;background:rgba(238,28,34,.08);font:600 14px/1.4 var(--hero-copy,var(--b))}
+.rz-dis{margin:12px 0 0;color:#b7b7b7;font:500 13px/1.4 var(--hero-copy,var(--b))}
+@media(max-width:860px){.rz-step{grid-template-columns:minmax(0,1fr)}}
+@media(prefers-reduced-motion:reduce){.rz,.rz-step{transition:none;animation:none}}
+
+/* 5 · Fondos con imagen en secciones oscuras (se cargan al acercarse, sin fixed ni blur: no pesan al scrollear) */
+.hz-bgh{position:relative;isolation:isolate}
+.hz-bgimg{position:absolute;inset:0;z-index:-1;pointer-events:none;opacity:0;background-position:center;background-size:cover;background-repeat:no-repeat}
+.hz-bgimg.is-on{opacity:1}
+
+/* 6 · Rendimiento: sin animaciones de sombra ni filtros sobre el mapa */
+.hz-live .hz-dot,.hz-live[data-abierto="1"] .hz-dot{animation:none!important}
+.hz-lux .hz-map.is-claro .hz-map-v .leaflet-tile-pane{filter:none!important}
+
+/* 2 · Header en laptops (981–1439px): el menú de 10 enlaces + botón no entraba y generaba scroll horizontal */
+@media(min-width:981px) and (max-width:1439px){
+  html body header.site-header--home .w{width:calc(100% - 32px);min-height:84px;gap:12px}
+  html body header.site-header--home .mark .lg-img{height:44px}
+  html body header.site-header--home .site-nav{min-width:0;gap:clamp(6px,.9vw,12px)}
+  html body header.site-header--home .site-nav a{font-size:11px;letter-spacing:.06em}
+  html body header.site-header--home .hc .btn{min-height:40px;padding-inline:12px}
+}
+@media(min-width:981px) and (max-width:1199px){
+  html body header.site-header--home .hc{display:none}
+}

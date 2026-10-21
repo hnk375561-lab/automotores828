@@ -1,0 +1,110 @@
+/* DR Automóviles · identidad visual
+   Fuente: logo entregado por el responsable (captura del perfil de Instagram, 15/10/2026).
+   Paleta: negro #060607 · rojo #ee1c22 (texto sobre negro: #ff4a4a · sobre claro: #b3000c) · plata #d9dbdd · gris damero #2a2a2c.
+   Tipografía: Exo 2 (cursiva, títulos) + Inter (texto). Se carga después de los estilos de cada página. */
+:root{--dr-red:#ee1c22;--dr-red-hi:#ff4a4a;--dr-red-deep:#b3000c;--dr-ink:#060607;--dr-silver:#d9dbdd;--dr-check:#2a2a2c}
+::selection{background:var(--dr-red);color:#fff}
+
+/* Logo circular sobre negro: sin placa blanca ni recuadro */
+html body .lg-img,html body .lg-ft,html body .lg-404,html body .lg-bk{background:transparent!important;padding:0!important;box-shadow:0 0 0 1.5px rgba(255,255,255,.22)!important;border-radius:50%;width:auto!important;aspect-ratio:1/1;object-fit:contain}
+html body .mark .lg-img{height:48px!important}
+html body .site-header--home .mark .lg-img{height:68px!important}
+html body .lg-ft{height:92px!important;margin:0 0 14px}
+html body .lg-404{height:150px!important;max-width:none!important}
+html body .lg-bk{height:44px!important}
+html body .dr-v71 .dr-brand{background:transparent;border:0;clip-path:none;padding:0;justify-content:flex-start}
+html body .dr-v71 .dr-brand img{width:min(100%,200px);border-radius:50%}
+@media(max-width:980px){html body .mark .lg-img{height:42px!important}html body .site-header--home .mark .lg-img{height:52px!important}}
+
+/* Los énfasis de los títulos siguen la cursiva del logo */
+h1 em,h2 em,h3 em{font-style:italic}
+
+/* Damero de bandera: una sola firma visual (borde inferior del encabezado y borde superior del pie) */
+header:not(.site-header--home):not(.cv-head)::after{content:"";position:absolute;left:0;right:0;bottom:-7px;height:7px;background:repeating-conic-gradient(var(--dr-red) 0 25%,var(--dr-check) 0 50%) 0 0/14px 14px;pointer-events:none}
+footer{position:relative}
+footer::before{content:"";position:absolute;left:0;right:0;top:0;height:7px;background:repeating-conic-gradient(var(--dr-red) 0 25%,var(--dr-check) 0 50%) 0 0/14px 14px;pointer-events:none}
+@media(prefers-reduced-motion:reduce){html body .mark .lg-img{transition:none}}
+
+/* Hero sin fotografías: el logo ocupa el lugar del carrusel */
+.hero-logo{position:absolute;right:max(24px,7vw);top:50%;transform:translateY(-50%);margin:0;width:min(34vw,440px);aspect-ratio:1/1}
+.hero-logo img{display:block;width:100%;height:100%;object-fit:contain;border-radius:50%;box-shadow:0 0 0 2px rgba(255,255,255,.2),0 0 90px rgba(238,28,34,.28)}
+@media(max-width:900px){.hero-logo{display:none}}
+
+/* Motivos de DR: velocímetro de progreso en los formularios, bandera en el comparador y damero en «Nosotros» */
+.cv-arc{fill:none;stroke:var(--cv-ln);stroke-width:5;stroke-linecap:round}
+.cv-ticks{fill:none;stroke:var(--cv-tx);stroke-width:2.5;stroke-linecap:round;opacity:.7}
+.cv-needle{transform-origin:48px 48px;transform:rotate(calc(-90deg + var(--p,0) * 180deg));transition:transform .8s cubic-bezier(.2,.7,.2,1)}
+.cv-needle path{fill:none;stroke:var(--dr-red);stroke-width:3.5;stroke-linecap:round}
+.cv-hub{fill:var(--cv-tx)}
+.cv-sun.is-full .cv-needle path{stroke:var(--dr-red-hi)}
+.cmp-flag{flex:none;width:46px;height:26px}
+.cmp-flag svg{display:block;width:100%;height:100%;overflow:visible;fill:none;stroke:var(--dr-red);stroke-width:2.5;stroke-linecap:round}
+.nz-flag{position:absolute;right:-12%;top:-14%;width:78%;aspect-ratio:1;border-radius:50%;background:repeating-conic-gradient(rgba(238,28,34,.85) 0 25%,rgba(42,42,44,.9) 0 50%) 0 0/44px 44px;opacity:.5;-webkit-mask-image:radial-gradient(circle,#000 0 52%,transparent 74%);mask-image:radial-gradient(circle,#000 0 52%,transparent 74%)}
+@media(prefers-reduced-motion:reduce){.cv-needle{transition:none}}
+
+/* Opiniones de Google bajo el bloque «18 años»: mismo damero, mismo negro y rojo; solo puntaje, cantidad, fecha y enlace a la ficha */
+.nz-side{display:flex;flex-direction:column;gap:14px;min-width:0}
+.gr{position:relative;overflow:hidden;color:#fff;background:#0a0a0c;border-bottom:8px solid #ee1c22;clip-path:polygon(0 0,100% 0,100% 100%,40px 100%,0 calc(100% - 40px))}
+.gr::before{content:"";display:block;height:12px;background:repeating-conic-gradient(#ee1c22 0 25%,#060607 0 50%) 0 0/12px 12px}
+.gr-in{position:relative;display:grid;grid-template-columns:auto minmax(0,1fr);column-gap:clamp(18px,2.6vw,32px);row-gap:16px;align-items:center;padding:clamp(20px,2.4vw,28px) clamp(22px,3vw,40px) clamp(22px,2.6vw,30px)}
+.gr-top{grid-column:1/-1;display:flex;align-items:center;gap:10px;margin:0;font:800 12px/1 "Exo 2",system-ui,sans-serif;letter-spacing:.2em;text-transform:uppercase;color:rgba(255,255,255,.78)}
+.gr-g{flex:none;width:22px;height:22px;padding:3px;border-radius:50%;background:#fff;box-sizing:border-box}
+.gr-g svg{display:block;width:100%;height:100%}
+.gr-score{margin:0;color:#fff;font:italic 800 clamp(64px,8vw,92px)/.8 var(--hero-title,"Exo 2",system-ui,sans-serif);letter-spacing:-.05em}
+.gr-score small{font-size:.34em;letter-spacing:0;color:rgba(255,255,255,.55);font-weight:700;margin-left:.12em}
+.gr-meta{display:flex;flex-direction:column;gap:8px;min-width:0}
+.gr-stars{--p:94%;display:block;width:114px;height:22px;background:linear-gradient(90deg,#fbbc04 var(--p),rgba(255,255,255,.22) var(--p));-webkit-mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M12 2.2l2.9 6.3 6.9.8-5.1 4.7 1.4 6.8L12 17.3 5.9 20.8l1.4-6.8L2.2 9.3l6.9-.8z'/%3E%3C/svg%3E") 0 0/22.8px 22px repeat-x;mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M12 2.2l2.9 6.3 6.9.8-5.1 4.7 1.4 6.8L12 17.3 5.9 20.8l1.4-6.8L2.2 9.3l6.9-.8z'/%3E%3C/svg%3E") 0 0/22.8px 22px repeat-x}
+.gr-n{margin:0;font:700 clamp(15px,1.5vw,17px)/1.25 "Exo 2",system-ui,sans-serif;color:#fff}
+.gr-n b{color:#ee1c22;font-weight:800}
+.gr-foot{grid-column:1/-1;display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px 18px;padding-top:16px;border-top:1px solid rgba(255,255,255,.14)}
+.gr-src{margin:0;font-size:12px;line-height:1.35;color:rgba(255,255,255,.58)}
+.gr-cta{display:inline-flex;align-items:center;gap:8px;padding:11px 16px;border:1px solid rgba(255,255,255,.5);color:#fff;text-decoration:none;font:800 12px/1 "Exo 2",system-ui,sans-serif;letter-spacing:.14em;text-transform:uppercase;transition:background-color .2s ease,border-color .2s ease}
+.gr-cta svg{width:14px;height:14px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.gr-cta:hover{background:#ee1c22;border-color:#ee1c22}
+.gr-cta:focus-visible{outline:2px solid #fff;outline-offset:3px}
+@media(max-width:480px){.gr-in{grid-template-columns:minmax(0,1fr);justify-items:start}.gr-foot{flex-direction:column;align-items:flex-start}}
+@media(prefers-reduced-motion:reduce){.gr-cta{transition:none}}
+
+/* Unidad vendida */
+.car-v,.fi-v{display:inline-block;margin-left:.5rem;padding:.15rem .55rem;border-radius:2px;background:#ee1c22;color:#fff;font:700 .72rem/1.2 "Exo 2",system-ui,sans-serif;letter-spacing:.08em;text-transform:uppercase;vertical-align:middle}
+.car--vendida .car-ph img{filter:grayscale(.6) brightness(.85)}
+/* Unidad vendida: franja de bandera a cuadros sobre la foto (misma identidad que el bloque "18 años") */
+.car--vendida .car-ph{position:relative}
+.car--vendida .car-ph::after{content:"Unidad vendida";position:absolute;left:0;right:0;top:50%;transform:translateY(-50%);box-sizing:border-box;height:clamp(54px,20%,84px);display:flex;align-items:center;justify-content:center;padding:14px 10px;pointer-events:none;
+  font:italic 800 clamp(18px,2.4vw,26px)/1 "Exo 2",system-ui,sans-serif;letter-spacing:.14em;text-transform:uppercase;color:#fff;text-shadow:0 2px 8px rgba(0,0,0,.7);
+  background:repeating-conic-gradient(#ee1c22 0 25%,#060607 0 50%) 0 0/16px 16px repeat-x,
+             repeating-conic-gradient(#ee1c22 0 25%,#060607 0 50%) 0 100%/16px 16px repeat-x,
+             linear-gradient(rgba(6,6,7,.84),rgba(6,6,7,.84));
+  box-shadow:0 0 0 1px rgba(238,28,34,.55),0 6px 22px rgba(0,0,0,.55)}
+
+/* ===== Barra de menú siempre visible (sticky) al hacer scroll ===== */
+html body header.site-header--home{
+  position:fixed!important;
+  top:0;left:0;right:0;
+  inset:0 0 auto 0;
+  z-index:1000!important;
+  background:linear-gradient(180deg,rgba(6,6,7,.72),rgba(6,6,7,0))!important;
+  box-shadow:none;
+  transition:background .25s ease,box-shadow .25s ease;
+}
+html body header.site-header--home.is-scrolled{
+  background:linear-gradient(180deg,rgba(6,6,7,.98),rgba(6,6,7,.95))!important;
+  box-shadow:0 2px 14px rgba(0,0,0,.45);
+}
+html{scroll-padding-top:110px}
+@media(max-width:980px){html{scroll-padding-top:84px}}
+
+
+/* ===== Ficha de unidad: relleno útil de la columna derecha ===== */
+.fi-sim,.fi-gu{margin-top:18px;padding:14px 0 0;border-top:1px solid rgba(255,255,255,.12)}
+.fi-sim .fi-s-k,.fi-gu .fi-s-k{margin:0 0 10px}
+.fi-sim-g{display:grid;gap:8px}
+.fi-sim-c{display:flex;align-items:center;gap:12px;width:100%;padding:6px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.12);color:#fff;text-align:left;cursor:pointer;font:inherit;transition:border-color .2s,background .2s}
+.fi-sim-c:hover,.fi-sim-c:focus-visible{border-color:var(--dr-red);background:rgba(238,28,34,.08)}
+.fi-sim-c img{flex:none;width:84px;height:58px;object-fit:cover;display:block}
+.fi-sim-t{display:grid;gap:3px;min-width:0}
+.fi-sim-t b{font:italic 400 17px/1.15 "Exo 2",system-ui,sans-serif;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.fi-sim-t small{color:#9e9e9e;font-size:12px}
+.fi-gu-l{list-style:none;margin:0;padding:0;display:grid;gap:9px}
+.fi-gu-l li{position:relative;padding-left:24px;color:#d9dbdd;font-size:14px;line-height:1.4}
+.fi-gu-l li::before{content:"";position:absolute;left:3px;top:.45em;width:12px;height:6px;border-left:2px solid var(--dr-red);border-bottom:2px solid var(--dr-red);transform:rotate(-45deg)}

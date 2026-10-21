@@ -1,0 +1,6 @@
+Tipografías autoalojadas utilizadas por Horizonte Automotores:
+
+- Cormorant Garamond — © The Cormorant Project Authors.
+- Inter — © The Inter Project Authors.
+
+Ambas se distribuyen bajo SIL Open Font License 1.1. El texto completo está en LICENSES.txt.

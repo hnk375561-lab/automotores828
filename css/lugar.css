@@ -1,0 +1,149 @@
+/* CHITA · «Conocé el lugar» (.lz) — reemplaza a .sx/.sxs de chita-v61 y chita-v62.
+   Rendimiento: solo se animan transform y opacity (GPU). Sin blur, sin backdrop-filter, sin @property animado,
+   sin inclinación 3D. Para volver atrás: restaurar chita-v61/v62, js/salon.js y el bloque <div class="sx"> en index.html. */
+#unidades{overflow-x:clip}
+html body #unidades .lz{--rojo:#C1121F;--chapa:#0A2C8C;--ink:#0A1020;--cw:min(60vw,290px);--step:calc(var(--cw) * 1.07);
+  position:relative;isolation:isolate;overflow:hidden;color:#fff;background:var(--ink);
+  margin:clamp(56px,8vw,120px) calc(50% - 50vw) 0;padding:0 0 clamp(48px,6vw,96px);
+  content-visibility:auto;contain-intrinsic-size:auto 1700px}
+html body #unidades .lz::before{content:"";position:absolute;inset:0;z-index:-1;pointer-events:none;background:
+  linear-gradient(112deg,rgba(10,44,140,.62) 0 33%,transparent 33.1%),
+  linear-gradient(112deg,transparent 0 33%,var(--rojo) 33.1% 33.5%,transparent 33.6%),
+  radial-gradient(55% 45% at 92% 8%,rgba(193,18,31,.34),transparent 70%)}
+html body #unidades .lz *{box-sizing:border-box}
+html body #unidades .lz-in{width:min(1320px,100% - 40px);margin-inline:auto;padding-top:clamp(36px,5.5vw,84px)}
+/* ---------- Encabezado ---------- */
+html body #unidades .lz-head{display:grid;gap:clamp(24px,3.5vw,56px);align-items:end}
+html body #unidades .lz-ey{display:inline-block;margin-bottom:18px;padding:8px 16px 8px 14px;background:var(--rojo);color:#fff;
+  font:800 12px/1 var(--font-display,Arial,sans-serif);letter-spacing:.16em;text-transform:uppercase;
+  clip-path:polygon(0 0,100% 0,calc(100% - 10px) 100%,0 100%)}
+html body #unidades .lz-t h3{margin:0;color:#fff;font:800 clamp(42px,6.2vw,100px)/.94 var(--font-display,Arial,sans-serif);letter-spacing:-.025em;text-wrap:balance}
+html body #unidades .lz-t h3 em{display:inline-block;margin:.04em 0;padding:.02em .2em;font-style:normal;color:#fff;background:var(--rojo);
+  clip-path:polygon(0 0,100% 0,calc(100% - .12em) 100%,0 100%)}
+html body #unidades .lz-side p{margin:0;max-width:44ch;color:#d5deee;font:400 clamp(16px,1.3vw,19px)/1.55 var(--b,system-ui,sans-serif)}
+html body #unidades .lz-cta{display:flex;flex-wrap:wrap;gap:12px;margin-top:clamp(20px,2.4vw,32px)}
+html body #unidades .lz-btn{display:inline-flex;align-items:center;justify-content:center;min-height:52px;padding:0 26px;border:2px solid #fff;
+  background:transparent;color:#fff;text-decoration:none;font:700 15px/1 var(--b,system-ui,sans-serif);letter-spacing:.02em;
+  transition:background-color .2s,border-color .2s,transform .2s}
+html body #unidades .lz-btn:hover{background:rgba(255,255,255,.12)}
+html body #unidades .lz-btn--p{background:var(--rojo);border-color:var(--rojo)}
+html body #unidades .lz-btn--p:hover{background:#d8202d;border-color:#d8202d}
+html body #unidades .lz-btn:focus-visible,html body #unidades .lz-b:focus-visible,html body #unidades .lz-seg:focus-visible,html body #unidades .lz-fig button:focus-visible{outline:3px solid #fff;outline-offset:3px}
+@media(min-width:900px){html body #unidades .lz-head{grid-template-columns:minmax(0,1.35fr) minmax(0,.65fr)}}
+/* ---------- Reels ---------- */
+html body #unidades .lz-reels{position:relative;margin:clamp(28px,4vw,56px) calc(50% - 50vw) 0;outline:none}
+html body #unidades .lz-wm{position:absolute;left:50%;top:46%;z-index:0;transform:translate(-50%,-50%);pointer-events:none;user-select:none;
+  font:900 clamp(120px,24vw,380px)/.8 var(--font-display,Arial,sans-serif);letter-spacing:-.04em;color:rgba(255,255,255,.035)}
+html body #unidades .lz-stage{position:relative;z-index:1;height:calc(var(--cw) * 1.7778 + 28px);contain:layout paint}
+html body #unidades .lz-card{position:absolute;left:50%;top:14px;width:var(--cw);aspect-ratio:9/16;margin:0 0 0 calc(var(--cw) / -2);
+  border-radius:14px;overflow:hidden;background:#05080f;cursor:pointer;
+  transform:translate3d(calc(var(--o,0) * var(--step)),0,0) scale(var(--s,1));
+  transition:transform .55s cubic-bezier(.22,.8,.24,1),opacity .55s ease;will-change:transform;
+  box-shadow:0 18px 40px -18px rgba(0,0,0,.8)}
+html body #unidades .lz-card[data-d="1"]{--s:.84;opacity:.9}
+html body #unidades .lz-card[data-d="2"]{--s:.7;opacity:.6}
+html body #unidades .lz-card[data-d="3"]{--s:.6;opacity:0;visibility:hidden}
+html body #unidades .lz-card.is-a{--s:1;z-index:5;cursor:default;box-shadow:0 0 0 2px #fff,0 0 0 5px rgba(193,18,31,.9),0 34px 60px -22px rgba(0,0,0,.9)}
+html body #unidades .lz-card::after{content:"";position:absolute;inset:0;background:#050912;opacity:.5;transition:opacity .45s;pointer-events:none}
+html body #unidades .lz-card.is-a::after{opacity:0}
+html body #unidades .lz-p,html body #unidades .lz-card video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block}
+html body #unidades .lz-card video{opacity:0;transition:opacity .35s}
+html body #unidades .lz-card.is-live video{opacity:1}
+html body #unidades .lz-card.is-live .lz-p{visibility:hidden}
+html body #unidades .lz-pl{position:absolute;left:50%;top:50%;width:68px;height:68px;margin:-34px 0 0 -34px;border-radius:50%;
+  background:rgba(193,18,31,.94);display:grid;place-items:center;opacity:0;transform:scale(.85);
+  transition:opacity .25s,transform .25s;pointer-events:none}
+html body #unidades .lz-pl svg{width:28px;height:28px;fill:#fff;margin-left:3px}
+html body #unidades .lz-card.is-a:not(.is-playing) .lz-pl{opacity:1;transform:none}
+html body #unidades .lz-card.is-busy .lz-pl{opacity:0}
+html body #unidades .lz-ld{position:absolute;left:50%;top:50%;width:44px;height:44px;margin:-22px 0 0 -22px;border-radius:50%;
+  border:3px solid rgba(255,255,255,.25);border-top-color:#fff;opacity:0;pointer-events:none}
+html body #unidades .lz-card.is-busy .lz-ld{opacity:1;animation:lzspin .8s linear infinite}
+@keyframes lzspin{to{transform:rotate(360deg)}}
+html body #unidades .lz-x{position:absolute;right:14px;top:14px;z-index:6;width:46px;height:46px;border-radius:50%;border:0;background:rgba(0,0,0,.6);
+  display:none;place-items:center;cursor:pointer}
+html body #unidades .lz-x svg{width:22px;height:22px;stroke:#fff;stroke-width:2.4;fill:none;stroke-linecap:round}
+/* ---------- Controles ---------- */
+html body #unidades .lz-ctl{position:relative;z-index:2;display:flex;align-items:center;justify-content:center;gap:8px;width:min(620px,100%);
+  margin:clamp(18px,2.4vw,30px) auto 0;padding:8px 10px;border-radius:999px;background:rgba(5,9,18,.88);border:1px solid rgba(255,255,255,.14)}
+html body #unidades .lz-b{flex:none;width:44px;height:44px;border:0;border-radius:50%;background:transparent;color:#fff;display:grid;place-items:center;cursor:pointer;transition:background-color .2s}
+html body #unidades .lz-b:hover{background:rgba(255,255,255,.14)}
+html body #unidades .lz-b svg{width:22px;height:22px;fill:none;stroke:#fff;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}
+html body #unidades .lz-b .i-play,html body #unidades .lz-b .i-pause{fill:#fff;stroke:none}
+html body #unidades .lz-pp{background:var(--rojo)}
+html body #unidades .lz-pp:hover{background:#d8202d}
+html body #unidades .lz-pp .i-pause{display:none}
+html body #unidades .lz-reels.is-playing .lz-pp .i-play{display:none}
+html body #unidades .lz-reels.is-playing .lz-pp .i-pause{display:block}
+html body #unidades .lz-b .s-sp{fill:#fff;stroke:none}
+html body #unidades .lz-b .s-x{display:block}
+html body #unidades .lz-b .s-w{display:none}
+html body #unidades .lz-reels.is-snd .lz-b .s-x{display:none}
+html body #unidades .lz-reels.is-snd .lz-b .s-w{display:block}
+html body #unidades .lz-sg{flex:1;min-width:0;display:flex;gap:6px;align-items:center}
+html body #unidades .lz-seg{flex:1;height:30px;padding:0;border:0;background:none;cursor:pointer;display:grid;align-items:center}
+html body #unidades .lz-seg i{display:block;height:4px;border-radius:2px;background:rgba(255,255,255,.28);position:relative;overflow:hidden}
+html body #unidades .lz-seg i::after{content:"";position:absolute;inset:0;background:var(--rojo);transform-origin:left;transform:scaleX(var(--p,0))}
+html body #unidades .lz-seg.on i{background:rgba(255,255,255,.4)}
+html body #unidades .lz-cap{margin:14px 0 0;text-align:center;color:#d5deee;font:700 13px/1.3 var(--b,system-ui,sans-serif);letter-spacing:.14em;text-transform:uppercase;min-height:1.3em}
+/* ---------- Frente del local ---------- */
+html body #unidades .lz-front{margin-top:clamp(48px,6vw,96px)}
+html body #unidades .lz-fh{display:flex;flex-wrap:wrap;align-items:end;justify-content:space-between;gap:16px 32px;margin-bottom:clamp(18px,2.4vw,30px)}
+html body #unidades .lz-fh h4{margin:0;color:#fff;font:800 clamp(28px,3.4vw,48px)/1 var(--font-display,Arial,sans-serif);letter-spacing:-.02em}
+html body #unidades .lz-fh h4 small{display:block;margin-top:10px;color:#b9c6df;font:500 16px/1.3 var(--b,system-ui,sans-serif);letter-spacing:0}
+html body #unidades .lz-mos{display:grid;gap:12px;grid-template-columns:1fr 1fr}
+html body #unidades .lz-fig{position:relative;margin:0;overflow:hidden;background:#101a30;aspect-ratio:4/3}
+html body #unidades .lz-fig:first-child{grid-column:1/-1;aspect-ratio:16/10}
+html body #unidades .lz-fig button{position:absolute;inset:0;width:100%;height:100%;padding:0;border:0;background:none;cursor:zoom-in;display:block}
+html body #unidades .lz-fig img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .6s cubic-bezier(.22,.8,.24,1)}
+html body #unidades .lz-fig::after{content:"";position:absolute;inset:auto 0 0 0;height:46%;background:linear-gradient(0deg,rgba(5,9,18,.82),transparent);pointer-events:none}
+html body #unidades .lz-fig figcaption{position:absolute;left:16px;right:16px;bottom:14px;z-index:1;pointer-events:none;color:#fff;font:700 13px/1.25 var(--b,system-ui,sans-serif);letter-spacing:.1em;text-transform:uppercase}
+html body #unidades .lz-fig figcaption::before{content:"";display:block;width:34px;height:3px;margin-bottom:9px;background:var(--rojo)}
+@media(hover:hover){html body #unidades .lz-fig:hover img{transform:scale(1.035)}}
+@media(min-width:900px){html body #unidades .lz-mos{grid-template-columns:1.5fr 1fr;grid-template-rows:1fr 1fr}
+html body #unidades .lz-fig,html body #unidades .lz-fig:first-child{aspect-ratio:auto;min-height:230px}
+html body #unidades .lz-fig:first-child{grid-column:1;grid-row:1/span 2;min-height:480px}}
+html body #unidades .lz-fig:first-child img{object-position:18% 50%}
+/* Frente del local: la foto grande + el logo de Chita (las otras dos fotos se quitaron por baja calidad) */
+html body #unidades .lz-fig.lz-logo{grid-column:1/-1;aspect-ratio:16/8;display:grid;place-items:center;background:radial-gradient(circle at 50% 38%,#17295a 0%,#0b1330 72%);border-left:6px solid var(--rojo)}
+html body #unidades .lz-fig.lz-logo::after{display:none}
+html body #unidades .lz-fig.lz-logo img{width:auto;height:72%;max-width:80%;aspect-ratio:1;object-fit:contain;border-radius:50%;box-shadow:0 18px 40px rgba(0,0,0,.45);transition:none}
+html body #unidades .lz-fig.lz-logo figcaption{left:0;right:0;text-align:center;bottom:14px}
+html body #unidades .lz-fig.lz-logo figcaption::before{margin:0 auto 9px}
+@media(hover:hover){html body #unidades .lz-fig.lz-logo:hover img{transform:none}}
+@media(min-width:900px){
+ html body #unidades .lz-mos{grid-template-columns:1.6fr 1fr;grid-template-rows:auto}
+ html body #unidades .lz-fig.lz-logo{grid-column:2;grid-row:1;aspect-ratio:auto;min-height:480px}
+ html body #unidades .lz-fig.lz-logo img{height:auto;width:78%;max-width:78%}
+ html body #unidades .lz-fig:first-child{grid-row:1}
+}
+html body #unidades .lz-lb{width:min(1100px,94vw);max-height:92vh;padding:0;border:0;background:#05080f;color:#fff;overflow:hidden}
+html body #unidades .lz-lb::backdrop{background:rgba(3,6,12,.86)}
+html body #unidades .lz-lb img{display:block;width:100%;height:auto;max-height:calc(92vh - 56px);object-fit:contain}
+html body #unidades .lz-lb p{margin:0;padding:14px 60px 14px 18px;font:700 13px/1.3 var(--b,system-ui,sans-serif);letter-spacing:.1em;text-transform:uppercase}
+html body #unidades .lz-lb button{position:absolute;right:8px;top:8px;width:44px;height:44px;border:0;border-radius:50%;background:rgba(0,0,0,.65);cursor:pointer;display:grid;place-items:center}
+html body #unidades .lz-lb button svg{width:22px;height:22px;stroke:#fff;stroke-width:2.4;fill:none;stroke-linecap:round}
+/* ---------- Escritorio ---------- */
+@media(min-width:760px){html body #unidades .lz{--cw:min(21vw,300px)}}
+@media(min-width:1100px){html body #unidades .lz{--cw:300px}}
+/* ---------- Pantalla completa ---------- */
+html body #unidades .lz-card:fullscreen{position:fixed;inset:0;width:100%;height:100%;margin:0;border-radius:0;transform:none!important;box-shadow:none;background:#000;aspect-ratio:auto;opacity:1}
+html body #unidades .lz-card:fullscreen video,html body #unidades .lz-card:fullscreen .lz-p{object-fit:contain}
+html body #unidades .lz-card:fullscreen .lz-x{display:grid}
+html body #unidades .lz-card:-webkit-full-screen{position:fixed;inset:0;width:100%;height:100%;margin:0;border-radius:0;transform:none!important;box-shadow:none;background:#000;aspect-ratio:auto;opacity:1}
+html body #unidades .lz-card:-webkit-full-screen video,html body #unidades .lz-card:-webkit-full-screen .lz-p{object-fit:contain}
+html body #unidades .lz-card:-webkit-full-screen .lz-x{display:grid}
+@media(prefers-reduced-motion:reduce){html body #unidades .lz-card,html body #unidades .lz-card::after,html body #unidades .lz-fig img,html body #unidades .lz-btn,html body #unidades .lz-pl{transition:none!important}
+html body #unidades .lz-card.is-busy .lz-ld{animation:none}}
+
+/* Pesos y tracking: site.css fuerza `#unidades *{font-weight:400!important;letter-spacing:.005em!important}` (herencia de DM Serif).
+   Se restablecen solo para esta sección. */
+html body #unidades .lz .lz-ey{font-weight:800!important;letter-spacing:.16em!important}
+html body #unidades .lz .lz-t h3,html body #unidades .lz .lz-t h3 em{font-weight:800!important;letter-spacing:-.025em!important}
+html body #unidades .lz .lz-side p{font-weight:400!important;letter-spacing:0!important}
+html body #unidades .lz .lz-btn{font-weight:700!important;letter-spacing:.02em!important}
+html body #unidades .lz .lz-cap{font-weight:700!important;letter-spacing:.14em!important}
+html body #unidades .lz .lz-fh h4{font-weight:800!important;letter-spacing:-.02em!important}
+html body #unidades .lz .lz-fh h4 small{font-weight:500!important;letter-spacing:0!important}
+html body #unidades .lz .lz-fig figcaption,html body #unidades .lz .lz-lb p{font-weight:700!important;letter-spacing:.1em!important}
+html body #unidades .lz .lz-wm{font-weight:900!important;letter-spacing:-.04em!important}
