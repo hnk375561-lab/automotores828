@@ -1,8 +1,9 @@
 /* Automotores 828 · mapas Leaflet + OpenStreetMap.
-   Inicializa el mapa de horarios, el de Nosotros y los que se agreguen dentro de una ficha. */
+   La creación de Leaflet se difiere a un momento ocioso para no bloquear el scroll al entrar en la sección. */
 (function () {
   'use strict';
-  var roots = new WeakSet(), leafletPromise = null;
+  var scheduled = new WeakSet(), started = new WeakSet(), leafletPromise = null;
+  var scrolling = false, scrollTimer = 0, idleHandles = [];
 
   function el(tag, txt, cls) { var e = document.createElement(tag); if (txt != null) e.textContent = txt; if (cls) e.className = cls; return e; }
   function cargar(root) {
@@ -16,11 +17,42 @@
     });
     return leafletPromise;
   }
-  function init(root) {
-    if (!root || roots.has(root)) return;
+  function cancelIdle() {
+    idleHandles.forEach(function (h) { if (window.cancelIdleCallback) window.cancelIdleCallback(h); else clearTimeout(h); });
+    idleHandles = [];
+  }
+  function markScrollEnd() {
+    clearTimeout(scrollTimer);
+    scrollTimer = setTimeout(function () { scrolling = false; flushReady(); }, 180);
+  }
+  function onScroll() {
+    scrolling = true; cancelIdle(); markScrollEnd();
+  }
+  function queueIdle(fn) {
+    cancelIdle();
+    if (scrolling) return;
+    var run = function () { idleHandles = []; if (!scrolling) fn(); };
+    if (window.requestIdleCallback) idleHandles.push(window.requestIdleCallback(run, { timeout: 1800 }));
+    else idleHandles.push(setTimeout(run, 120));
+  }
+  var pending = [];
+  function defer(root, job) { pending.push({ root: root, job: job, ready: false }); }
+  function flushIdle(root, onlyReady) {
+    if (scrolling) { pending.forEach(function (item) { if (!root || item.root === root) item.ready = true; }); return; }
+    var jobs = pending.filter(function (item) { return (!root || item.root === root) && (!onlyReady || item.ready); });
+    pending = pending.filter(function (item) { return !((!root || item.root === root) && (!onlyReady || item.ready)); });
+    if (jobs.length) queueIdle(function () { jobs.forEach(function (item) { item.job(); }); });
+  }
+  function flushReady() {
+    if (pending.some(function (item) { return item.ready; })) flushIdle(null, true);
+  }
+  window.addEventListener('scroll', onScroll, { passive: true });
+
+  function init(root, immediate) {
+    if (!root || scheduled.has(root) || started.has(root)) return;
     var view = root.querySelector('.dr-map-v, .map-v');
     if (!view) return;
-    roots.add(root);
+    scheduled.add(root);
     var ph = root.querySelector('[data-mapa-ph]') || root.querySelector('.map-p');
     var trigger = root.querySelector('[data-mapa-abrir]');
     var status = root.querySelector('.map-m');
@@ -41,11 +73,11 @@
       return w;
     }
     function pintar() {
-      root.classList.add('is-open'); if (ph) ph.hidden = true;
+      started.add(root); root.classList.add('is-open'); if (ph) ph.hidden = true;
       var movil = !!(L.Browser && L.Browser.mobile);
-      mapa = L.map(view, { scrollWheelZoom: false, dragging: !movil, zoomControl: true, attributionControl: true, zoomSnap: 1, minZoom: 12, maxZoom: 19, fadeAnimation: false, markerZoomAnimation: false, inertia: !movil }).setView([lat, lng], 17);
+      mapa = L.map(view, { scrollWheelZoom: false, dragging: !movil, zoomControl: true, attributionControl: true, zoomSnap: 1, minZoom: 12, maxZoom: 19, fadeAnimation: false, zoomAnimation: false, markerZoomAnimation: false, inertia: !movil, preferCanvas: true }).setView([lat, lng], 17);
       var attr = '&copy; <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener noreferrer">OpenStreetMap</a> contributors';
-      var tiles = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 19, attribution: attr, keepBuffer: 2, updateWhenIdle: movil, updateWhenZooming: false });
+      var tiles = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 19, attribution: attr, keepBuffer: 1, updateWhenIdle: true, updateWhenZooming: false, noWrap: true });
       var errores = 0, cargado = false;
       tiles.on('tileload', function () { cargado = true; });
       tiles.on('tileerror', function () { if (++errores >= 4 && !cargado) respaldo(); });
@@ -58,19 +90,28 @@
       mapa.addControl(new Centrar());
       if (movil) { var cand = el('button', 'Tocá para mover el mapa', 'dr-lock'); cand.type = 'button'; cand.addEventListener('click', function () { mapa.dragging.enable(); cand.remove(); }); root.appendChild(cand); }
       else { mapa.on('click', function () { mapa.scrollWheelZoom.enable(); }); view.addEventListener('mouseleave', function () { if (mapa) mapa.scrollWheelZoom.disable(); }); }
-      setTimeout(function () { if (mapa) mapa.invalidateSize(); }, 80);
-      setTimeout(function () { if (mapa) mapa.invalidateSize(); }, 500);
+      requestAnimationFrame(function () { if (mapa) mapa.invalidateSize({ pan: false }); });
     }
     function iniciar() {
+      if (started.has(root)) return;
+      started.add(root);
       dijo('Cargando el mapa…');
       cargar(root).then(function () { dijo(''); pintar(); }).catch(function () { dijo(''); respaldo(); });
     }
-    if (trigger) { trigger.hidden = false; trigger.addEventListener('click', iniciar); }
-    if ('IntersectionObserver' in window) { var io = new IntersectionObserver(function (es) { if (es.some(function (e) { return e.isIntersecting; })) { io.disconnect(); iniciar(); } }, { rootMargin: '500px 0px' }); io.observe(root); }
-    else iniciar();
+    if (trigger) { trigger.hidden = false; trigger.addEventListener('click', function () { if (!started.has(root)) { cancelIdle(); iniciar(); } }); }
+    if (immediate) iniciar();
+    else {
+      defer(root, iniciar);
+      if ('IntersectionObserver' in window) {
+        var io = new IntersectionObserver(function (es) {
+          if (es.some(function (e) { return e.isIntersecting; })) { io.disconnect(); flushIdle(root); }
+        }, { rootMargin: '180px 0px', threshold: 0.01 });
+        io.observe(root);
+      } else flushIdle(root);
+    }
   }
   function scan(node) { if (!node || node.nodeType !== 1) return; if (node.matches('[data-leaflet]')) init(node); node.querySelectorAll('[data-leaflet]').forEach(init); }
   document.querySelectorAll('[data-leaflet]').forEach(init);
   if (window.MutationObserver) new MutationObserver(function (ms) { ms.forEach(function (m) { m.addedNodes.forEach(scan); }); }).observe(document.body, { childList: true, subtree: true });
-  window.drCrearMapa = init;
+  window.drCrearMapa = function (root) { init(root, true); };
 }());

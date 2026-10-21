@@ -492,7 +492,7 @@ const index = page({
   title: `${NAME} · Autos y motos en ${L.city}, ${L.province}`,
   desc: `${NAME} en ${L.city}, ${L.partido}: compra y venta de autos y motos usados, permutas y consignaciones. Visitanos en ${L.address} o escribinos por redes o correo.`,
   file: 'index.html',
-  extraHead: `<link rel="stylesheet" href="css/hero-carousel.css">\n<link rel="stylesheet" href="css/fondos-secciones.css">\n<script type="application/ld+json">${JSON.stringify(ld)}</script>\n<script defer src="js/hero-carousel.js"></script>\n<script defer src="js/fondos-secciones.js"></script>\n<script defer src="js/secciones.js"></script>\n<script defer src="js/mapa.js?v=20261021-2"></script>\n<script defer src="js/horarios.js"></script>\n<script defer src="js/site.js"></script>\n<script defer src="js/reserva-inline.js"></script>\n`,
+  extraHead: `<link rel="stylesheet" href="css/hero-carousel.css">\n<link rel="stylesheet" href="css/fondos-secciones.css">\n<script type="application/ld+json">${JSON.stringify(ld)}</script>\n<script defer src="js/hero-carousel.js"></script>\n<script defer src="js/fondos-secciones.js"></script>\n<script defer src="js/secciones.js"></script>\n<script defer src="js/mapa.js?v=20261021-3"></script>\n<script defer src="js/horarios.js"></script>\n<script defer src="js/site.js"></script>\n<script defer src="js/reserva-inline.js"></script>\n`,
   body: `${header()}
 <main id="top">
 <div class="hero" role="region" aria-label="${esc(NAME)}">
