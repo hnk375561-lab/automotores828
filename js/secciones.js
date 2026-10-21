@@ -41,7 +41,7 @@
     $$('li.car', ul).forEach(function (li) { items[li.getAttribute('data-i')] = li; });
     list.forEach(function (a) {
       a.t = items[a.i] ? items[a.i].getAttribute('data-t') : norm(a.titulo);
-      a.t = norm(a.t + ' ' + [a.carroceria, a.transmision, a.combustible].filter(Boolean).join(' '));
+      a.t = norm(a.t + ' ' + [a.tipoVehiculo, a.tipoMoto, a.modelo, a.version, a.carroceria, a.transmision, a.combustible, a.cilindrada].filter(Boolean).join(' '));
       a.ant = a.anio != null ? anioHoy - a.anio : null;
       a.monto = a.precio && a.precio.moneda === 'ARS' ? a.precio.monto : null;
       a.pub = a.publicado ? Math.floor((Date.now() - new Date(a.publicado + 'T12:00:00').getTime()) / 864e5) : null;
@@ -80,13 +80,15 @@
       return { k: k, tipo: 'rango', t: titulo, s: span, get: get, vals: vals, f: f, nota: nota };
     }
     var GR = [];
+    GR.push(porValor('tipoVehiculo', 'chips', 'Tipo de vehículo', 3, function (a) { return a.tipoVehiculo; }));
     GR.push(porValor('marca', 'chips', 'Marca', 5, function (a) { return a.marca; }));
     GR.push(porValor('carr', 'chips', 'Tipo de carrocería', 4, function (a) { return a.carroceria; }));
     GR.push(porValor('modelo', 'select', 'Modelo', 3, function (a) { return a.modelo; }, null, { todos: 'Todos los modelos' }));
     GR.push(porValor('version', 'select', 'Versión', 4, function (a) { return a.version; }, null, { todos: 'Todas las versiones' }));
     GR.push(rango('anio', 'Año', 3, function (a) { return a.anio; }, function (d) { return uniq(function (a) { return a.anio; }).sort(function (x, y) { return x - y; }); }, function (n) { return String(n); }));
     GR.push(rango('km', 'Kilómetros', 3, function (a) { return a.km; }, function (d) { return pasos(d, 10000); }, function (n) { return fmt(n) + ' km'; }, 'Las unidades sin kilometraje publicado no entran en este filtro.'));
-    GR.push(rango('precio', 'Precio publicado', 3, function (a) { return a.monto; }, function (d) { return pasos(d, 2500000); }, function (n) { return '$ ' + fmt(n); }));
+    GR.push(rango('precio', 'Precio en ARS', 3, function (a) { return a.monto; }, function (d) { return pasos(d, 2500000); }, function (n) { return '$ ' + fmt(n); }, 'Este rango solo incluye publicaciones en pesos; usá el filtro Moneda para ver las cotizadas en dólares.'));
+    GR.push(porValor('moneda', 'select', 'Moneda', 2, function (a) { return a.precio && a.precio.moneda; }, null, { todos: 'Todas las monedas' }));
     GR.push({ k: 'pub', tipo: 'chips', uno: true, t: 'Publicación', s: 3, ops: [
       { id: '7', label: 'Últimos 7 días', test: function (a) { return a.pub != null && a.pub <= 7; } },
       { id: '15', label: 'Últimos 15 días', test: function (a) { return a.pub != null && a.pub <= 15; } },
@@ -116,8 +118,8 @@
 
     var ORDEN = [['', 'Orden de publicación'], ['p-asc', 'Precio: menor a mayor'], ['p-desc', 'Precio: mayor a menor'], ['a-desc', 'Año: más nuevo primero'], ['a-asc', 'Año: más antiguo primero'], ['k-asc', 'Kilometraje: menor primero'], ['k-desc', 'Kilometraje: mayor primero'], ['m-asc', 'Marca: de la A a la Z']];
     if (!list.some(function (a) { return a.monto != null; })) ORDEN = ORDEN.filter(function (o) { return o[0].charAt(0) !== 'p'; });
-    ORDEN.splice(1, 0, ['f-desc', 'Publicación: más reciente primero'], ['f-asc', 'Publicación: más antigua primero']);
-    var KEY = { f: function (a) { return a.publicado; }, p: function (a) { return a.monto; }, a: function (a) { return a.anio; }, k: function (a) { return a.km; }, m: function (a) { return a.marca; } };
+    if (list.some(function (a) { return a.publicado != null; })) ORDEN.splice(1, 0, ['f-desc', 'Publicación: más reciente primero'], ['f-asc', 'Publicación: más antigua primero']);
+    var KEY = { f: function (a) { return a.publicado; }, p: function (a) { return st.moneda === 'USD' && a.precio && a.precio.moneda === 'USD' ? a.precio.monto : a.monto; }, a: function (a) { return a.anio; }, k: function (a) { return a.km; }, m: function (a) { return a.marca; } };
 
     /* ----- estado ----- */
     var st = { q: '', orden: '' };
@@ -185,7 +187,7 @@
     /* ----- panel ----- */
     var top = el('div', null, 'fx-top'), body = el('div', null, 'fx-body'), act = el('div', null, 'fx-act');
     body.id = 'fx-body';
-    var fq = el('div', null, 'f'), lq = el('label', 'Buscar por marca, modelo, año o color'), q = el('input');
+    var fq = el('div', null, 'f'), lq = el('label', 'Buscar por tipo, marca, modelo, año o color'), q = el('input');
     q.type = 'search'; q.id = 'q'; q.autocomplete = 'off'; q.maxLength = 60; lq.htmlFor = 'q'; fq.appendChild(lq); fq.appendChild(q);
     var fo = el('div', null, 'f'), lo = el('label', 'Ordenar'), ord = el('select');
     ord.id = 'orden'; lo.htmlFor = 'orden';
@@ -407,7 +409,7 @@
       var w = el('div', null, 'w'), lst = el('ul', null, 'tray-l');
       cmp.forEach(function (i) {
         var a = list[i], li = el('li', null, 'tray-i'), b = el('button', '×'); b.type = 'button'; b.setAttribute('aria-label', 'Quitar de la comparación: ' + a.titulo);
-        if (a.media && a.media[0]) { var th = el('img', null, 'tray-th'); th.src = a.media[0].src; th.alt = ''; th.decoding = 'async'; li.appendChild(th); }
+        if (a.media && a.media[0]) { var th = el('img', null, 'tray-th'); th.src = a.media[0].thumb || a.media[0].card || a.media[0].src; th.alt = ''; th.decoding = 'async'; li.appendChild(th); }
         li.appendChild(el('span', a.marca + ' ' + a.modeloTxt)); li.appendChild(b); lst.appendChild(li);
         b.addEventListener('click', function () { cmp.splice(cmp.indexOf(i), 1); pintarBandeja(); });
       });
@@ -627,7 +629,7 @@
           th = el('div', null, 'fi-th');
           a.media.forEach(function (m, k) {
             var b = el('button'); b.type = 'button'; b.setAttribute('aria-label', 'Ver foto ' + (k + 1) + ' de ' + a.media.length);
-            var im = el('img'); im.src = m.src; im.alt = ''; im.loading = 'lazy'; im.decoding = 'async'; b.appendChild(im);
+            var im = el('img'); im.src = m.thumb || m.src; im.alt = ''; im.loading = 'lazy'; im.decoding = 'async'; b.appendChild(im);
             b.addEventListener('click', function () { ir(k); }); th.appendChild(b); tbs.push(b);
           });
           var tk = 0;
@@ -643,7 +645,7 @@
 
       /* datos */
       var info = el('div', null, 'fi-i');
-      var mb = el('p', a.marca, 'fi-b'); if (a.vendida) mb.appendChild(el('span', 'Vendida', 'fi-v')); info.appendChild(mb);
+      var mb = el('p', a.marca + (a.tipoVehiculo === 'Moto' ? ' · Moto' : ''), 'fi-b'); if (a.vendida) mb.appendChild(el('span', 'Vendida', 'fi-v')); info.appendChild(mb);
       var h = el('h2', a.modeloTxt); h.id = 'fi-ttl'; info.appendChild(h);
       info.appendChild(el('p', a.precio ? peso(a) : 'Consultar precio', 'fi-pr'));
       if (a.anticipo && a.anticipo.monto != null) info.appendChild(el('p', 'Anticipo publicado: ' + (a.anticipo.moneda === 'USD' ? 'US$ ' : '$ ') + fmt(a.anticipo.monto), 'fi-n'));
@@ -656,10 +658,19 @@
         dd.appendChild(document.createTextNode(String(v)));
         d.appendChild(el('dt', k)); d.appendChild(dd); dl.appendChild(d);
       }
-      dato('Año', a.anio); dato('Kilómetros', a.km != null ? fmt(a.km) + ' km' : 'Consultar'); dato('Caja', a.transmision); dato('Combustible', a.combustible);
-      dato('Color', a.color, a.sw); dato('Cilindrada', a.cilindrada); dato('Versión', a.version); dato('Carrocería', a.carroceria);
-      if (a.publicado) dato('Publicada', fecha(a.publicado));
+      dato('Tipo', a.tipoVehiculo); dato('Tipo de moto', a.tipoMoto); dato('Año', a.anio); dato('Kilómetros', a.km != null ? fmt(a.km) + ' km' : 'Consultar'); dato('Caja', a.transmision); dato('Combustible', a.combustible);
+      dato('Color', a.color, a.sw); dato('Cilindrada', a.cilindrada); dato('Motor', a.tipoVehiculo === 'Moto' ? a.motor : null); dato('Potencia', a.potencia); dato('Tracción', a.traccion);
+      dato('Versión', a.version); dato('Carrocería', a.carroceria); dato('Puertas', a.puertas); dato('Velocidades', a.numeroVelocidades);
+      if (a.relevadoEl) dato('Relevado', fecha(a.relevadoEl));
       info.appendChild(dl);
+      var yaVisible = { 'año': 1, 'marca': 1, 'modelo': 1, 'versión': 1, 'kilómetros': 1, 'color': 1, 'tipo de combustible': 1, 'combustible': 1, 'transmisión': 1, 'motor': 1, 'cilindrada': 1, 'tipo de carrocería': 1, 'carrocería': 1, 'puertas': 1, 'potencia': 1, 'control de tracción': 1, 'tipo de moto': 1, 'numero de velocidades': 1, 'número de velocidades': 1 };
+      var extras = (a.atributosPublicados || []).filter(function (x) { return x && x.nombre && x.valor && !yaVisible[norm(x.nombre)]; });
+      if (extras.length) {
+        var ep = el('section', null, 'fi-extra'); ep.appendChild(el('p', 'Más características publicadas', 'fi-s-k'));
+        var edl = el('dl', null, 'fi-d');
+        extras.forEach(function (x) { var row = el('div'); row.appendChild(el('dt', x.nombre)); row.appendChild(el('dd', x.valor)); edl.appendChild(row); });
+        ep.appendChild(edl); ep.appendChild(el('p', 'Datos declarados en la publicación de Mercado Libre; confirmalos con la agencia.', 'fi-n')); info.appendChild(ep);
+      }
       if (a.nota) info.appendChild(el('p', a.nota, 'fi-n'));
 
       /* acciones */

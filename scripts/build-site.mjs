@@ -27,11 +27,19 @@ for (const f of files) {
   n++;
 }
 for (const f of optional) if (fs.existsSync(path.join(root, f))) { fs.copyFileSync(path.join(root, f), path.join(out, f)); n++; }
+function copyPublicAssets(src, dest, allowed) {
+  fs.mkdirSync(dest, { recursive: true });
+  for (const ent of fs.readdirSync(src, { withFileTypes: true })) {
+    const from = path.join(src, ent.name), to = path.join(dest, ent.name);
+    if (ent.isDirectory()) copyPublicAssets(from, to, allowed);
+    else if (ent.isFile() && allowed.test(ent.name)) { fs.copyFileSync(from, to); n++; }
+  }
+}
 for (const d of dirs) {
   const src = path.join(root, d);
   if (!fs.existsSync(src)) continue;
-  fs.mkdirSync(path.join(out, d), { recursive: true });
-  for (const f of fs.readdirSync(src)) if (/\.(woff2|webp|png|jpe?g|svg|avif)$/i.test(f)) { fs.copyFileSync(path.join(src, f), path.join(out, d, f)); n++; }
+  const allowed = d === 'fonts' ? /\.woff2$/i : /\.(webp|png|jpe?g|svg|avif)$/i;
+  copyPublicAssets(src, path.join(out, d), allowed);
 }
 for (const d of whole) { const src = path.join(root, d); if (fs.existsSync(src)) { fs.cpSync(src, path.join(out, d), { recursive: true }); n += fs.readdirSync(src, { recursive: true }).length; } }
 fs.writeFileSync(path.join(out, '.nojekyll'), '');

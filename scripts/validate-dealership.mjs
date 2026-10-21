@@ -116,18 +116,43 @@ if (d && a) {
   const nCards = (idx.match(/<li class="car[ "]/g) || []).length;
   if (nCards !== a.autos.length) err(`index.html tiene ${nCards} tarjetas y data/vehicles.json tiene ${a.autos.length} unidades (correr npm run build)`);
   const ids = new Set();
+  let fotosTotales = 0;
+  const porTipo = { Auto: 0, Moto: 0 };
   for (const v of a.autos) {
     if (!v.id || ids.has(v.id)) err(`vehicles.json: id faltante o repetido (${v.id})`);
     ids.add(v.id);
     if (!v.titulo) err(`vehicles.json ${v.id}: falta titulo`);
-    if (!/^https:\/\/((www\.)?(facebook|instagram|tiktok)\.com\/|auto\.mercadolibre\.com\.ar\/MLA-\d+)/.test(v.url || '')) err(`vehicles.json ${v.id}: url debe ser una publicación de Facebook, Instagram, TikTok o Mercado Libre`);
+    if (!['Auto', 'Moto'].includes(v.tipoVehiculo)) err(`vehicles.json ${v.id}: tipoVehiculo debe ser Auto o Moto`);
+    else porTipo[v.tipoVehiculo]++;
+    if (!/^https:\/\/((www\.)?(facebook|instagram|tiktok)\.com\/|(auto|moto)\.mercadolibre\.com\.ar\/MLA-\d+)/.test(v.url || '')) err(`vehicles.json ${v.id}: url debe ser una publicación de Facebook, Instagram, TikTok o Mercado Libre`);
     if (v.precio && (!['ARS', 'USD'].includes(v.precio.moneda) || typeof v.precio.monto !== 'number' || !v.precio.fecha)) err(`vehicles.json ${v.id}: precio incompleto (moneda, monto y fecha)`);
     if (v.km != null && typeof v.km !== 'number') err(`vehicles.json ${v.id}: km debe ser número`);
     const years = [...String(v.titulo).matchAll(/\b(?:19|20)\d{2}\b/g)].map((m) => Number(m[0]));
     if (years.length && v.anio != null && v.anio !== years.at(-1)) err(`vehicles.json ${v.id}: anio ${v.anio} no coincide con el año final del título (${years.at(-1)})`);
     if (!idx.includes(v.titulo.replace(/&/g, '&amp;'))) err(`index.html: falta la unidad ${v.id}`);
+    if (!Array.isArray(v.fotos) || !v.fotos.length) err(`vehicles.json ${v.id}: falta la galería`);
+    else {
+      fotosTotales += v.fotos.length;
+      if (v.fuente?.fotosPublicadas !== v.fotos.length) err(`vehicles.json ${v.id}: recuento de fotos de fuente no coincide con la galería`);
+      const urlsFoto = new Set();
+      v.fotos.forEach((foto, i) => {
+        if (!foto.fuente || !/^https:\/\/http2\.mlstatic\.com\/D_NQ_NP_2X_/.test(foto.fuente)) err(`vehicles.json ${v.id}: foto ${i + 1} sin fuente original de alta resolución`);
+        if (urlsFoto.has(foto.fuente)) err(`vehicles.json ${v.id}: URL de foto repetida (${i + 1})`);
+        urlsFoto.add(foto.fuente);
+        if (!(foto.width > 0 && foto.height > 0)) err(`vehicles.json ${v.id}: dimensiones ausentes en foto ${i + 1}`);
+        for (const k of ['src', 'thumb', ...(i === 0 ? ['card'] : [])]) {
+          const rel = foto[k];
+          if (typeof rel !== 'string' || !rel.startsWith('images/stock/')) { err(`vehicles.json ${v.id}: falta ruta local ${k} en foto ${i + 1}`); continue; }
+          const abs = path.resolve(root, rel);
+          if (!abs.startsWith(root + path.sep) || !fs.existsSync(abs)) err(`vehicles.json ${v.id}: archivo ${k} no existe o sale del repositorio: ${rel}`);
+        }
+      });
+    }
   }
   if (a.autos.length && !a.relevadoEl) err('vehicles.json: falta relevadoEl (fecha del relevamiento)');
+  if (a.resultadoPagina !== a.autos.length) err('vehicles.json: resultadoPagina no coincide con las fichas integradas');
+  if (a.conteoPorTipo?.autos !== porTipo.Auto || a.conteoPorTipo?.motos !== porTipo.Moto) err('vehicles.json: conteoPorTipo no coincide con las fichas integradas');
+  if (a.fotosDetectadas !== fotosTotales || a.fotosIntegradas !== fotosTotales) err(`vehicles.json: fotos detectadas/integradas no coinciden con las galerías (${fotosTotales})`);
   for (const u of rev?.unidades ?? []) {
     if (a.autos.some((v) => v.id === u.id || v.url === u.url)) err(`autos-en-revision.json: ${u.id} está también publicada en vehicles.json`);
     if (idx.includes(u.titulo)) err(`index.html: se muestra ${u.id} (${u.titulo}), que está en revisión`);

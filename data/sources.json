@@ -2,9 +2,25 @@
   "fuentes": [
     {
       "id": "mercadolibre-vendedor",
-      "url": "https://vehiculos.mercadolibre.com.ar/_CustId_121360385",
-      "consultado": "2026-10-20",
-      "nota": "Listado público del vendedor: 58 resultados; se incorporaron 48 tarjetas cargadas con título, precio, año, kilometraje, enlace e imagen. La consulta no confirma disponibilidad futura."
+      "url": "https://vehiculos.mercadolibre.com.ar/_CustId_121360385?utm_source",
+      "consultado": "2026-10-21",
+      "nota": "Captura puntual de las publicaciones individuales accesibles del perfil: se recorrieron autos y camionetas (incluida la página 2) y la categoría de motos; 58 IDs únicos y 771 imágenes asociadas a sus galerías locales. Precio, moneda y atributos reflejan lo publicado al 21/10/2026; disponibilidad y precio pueden cambiar y deben confirmarse con el vendedor. Las características son declaraciones de la publicación, no inspección del vehículo.",
+      "estado": "reconciliada_con_captura_completa",
+      "paginasConsultadas": [
+        "https://vehiculos.mercadolibre.com.ar/_CustId_121360385?utm_source",
+        "https://autos.mercadolibre.com.ar/_CustId_121360385?utm_source",
+        "https://autos.mercadolibre.com.ar/_Desde_49_CustId_121360385",
+        "https://motos.mercadolibre.com.ar/_CustId_121360385"
+      ],
+      "publicacionesReconciliadas": 58,
+      "idsUnicos": 58,
+      "porCategoria": {
+        "autosYCamionetas": 50,
+        "motos": 8
+      },
+      "fotosDetectadas": 771,
+      "fotosDescargadas": 771,
+      "fotosIntegradas": 771
     },
     {
       "id": "instagram",

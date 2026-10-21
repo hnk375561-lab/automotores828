@@ -52,7 +52,7 @@ ${ogBase ? `<meta property="og:url" content="${ogBase}${p}">\n` : ''}<meta prope
 <meta property="og:image:type" content="image/jpeg">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
-<meta property="og:image:alt" content="${NAME} · Autos usados en ${L.city}, ${L.province}">
+<meta property="og:image:alt" content="${NAME} · Autos y motos usados en ${L.city}, ${L.province}">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="${esc(title)}">
 <meta name="twitter:description" content="${esc(desc)}">
@@ -92,6 +92,8 @@ const footer = (fuentes) => `<footer><div class="w">
 <p class="ft-c">© 2026 ${esc(NAME)}</p>${demo ? `<p class="demo-note" data-demo-note>${esc(LEYENDA)}</p>` : ''}${fuentes ? `<p>Fuentes: <a href="${FB}" ${EXT}>Facebook</a> · <a href="${IG}" ${EXT}>Instagram</a>${TT ? ` · <a href="${TT}" ${EXT}>TikTok</a>` : ''}${D.reviews.googleUrl ? ` · <a href="${D.reviews.googleUrl}" ${EXT}>Ficha de Google</a>` : ''}</p>` : ''}<p><a href="privacidad.html">Privacidad y avisos</a></p></div></footer>`;
 
 const autos = A.autos;
+const cantidadMotos = autos.filter((a) => a.tipoVehiculo === 'Moto').length;
+const cantidadAutos = autos.length - cantidadMotos;
 const ctaHead = WA ? { href: WA, t: 'WhatsApp' } : { href: FB, t: 'Facebook' };
 const header = (pre = '', skip = '#unidades') => `<a class="skip" href="${skip}">Saltar al contenido</a>
 <header class="site-header${pre ? ' site-header--inner' : ' site-header--home'}"><div class="w"><a class="mark" href="./" aria-label="${esc(NAME)}, inicio"><img class="lg-img" src="images/logo.png" width="1254" height="1254" alt="${esc(NAME)}"></a>
@@ -115,12 +117,12 @@ const jsonSafe = (o) => JSON.stringify(o).replace(/</g, '\\u003c');
 const SW = { blanco: '#f1f1ee', negro: '#161b1d', rojo: '#c21f1f', 'gris plata': '#b4bbbe', 'gris oscuro': '#4b5256', plata: '#b4bbbe', gris: '#8a9296', azul: '#1e4a8c', verde: '#2f6b45', bordo: '#6d1a2a', beige: '#cdbb98', dorado: '#b99a45', naranja: '#d9742a', amarillo: '#e5c717', marron: '#6b4a32' };
 const swatch = (c) => SW[norm(c || '')] || null;
 const marcaDe = (a) => a.marca || a.titulo.split(' ')[0];
-const sinMarca = (a) => { const m = marcaDe(a); return a.titulo.startsWith(m + ' ') ? a.titulo.slice(m.length + 1) : a.titulo; };
+const sinMarca = (a) => { const m = marcaDe(a); return a.tipoVehiculo === 'Moto' ? (a.modelo || a.titulo) : a.titulo.startsWith(m + ' ') ? a.titulo.slice(m.length + 1) : a.titulo; };
 const consultaHref = (a) => wa(a.vendida ? `Hola! Vi que el ${a.titulo}${a.anio ? ' ' + a.anio : ''} está vendido. ¿Tienen unidades similares?` : `Hola! Me interesa el ${a.titulo}${a.anio ? ' ' + a.anio : ''}.`) || a.url;
 // Fotos opcionales: no se inventan ni se toman de terceros; solo se publican si data/ las autoriza.
-const mediaDe = (a) => (Array.isArray(a.fotos) ? a.fotos : Array.isArray(a.imagenes) ? a.imagenes : Array.isArray(a.galeria) ? a.galeria : []).map((x) => typeof x === 'string' ? { src: x, alt: a.titulo } : x).filter((x) => x && (x.src || x.url)).map((x) => ({ src: x.src || x.url, srcset: x.srcset || '', alt: x.alt || a.titulo, tipo: x.tipo || '' }));
-const cardSrcset = (m) => { if (m.srcset) return m.srcset; const k = /^(images\/stock\/unidad-\d+)\.webp$/.exec(m.src || ''); return k && fs.existsSync(new URL('../' + k[1] + '-640.webp', import.meta.url)) && fs.existsSync(new URL('../' + k[1] + '-1000.webp', import.meta.url)) ? `${k[1]}-640.webp 640w, ${k[1]}-1000.webp 1000w` : ''; };
-const mediaTag = (a, i) => { const m = mediaDe(a)[0]; const ss = m ? cardSrcset(m) : ''; return m ? `<figure class="car-ph"><img src="${esc(m.src)}"${ss ? ` srcset="${esc(ss)}"` : ''} sizes="(max-width: 600px) calc(100vw - 48px), 360px" width="${m.width || 900}" height="${m.height || 600}" loading="${i === 0 ? 'eager' : 'lazy'}"${i === 0 ? ' fetchpriority="high"' : ''} decoding="async" alt="${esc(m.alt)}"></figure>` : ''; };
+const mediaDe = (a) => (Array.isArray(a.fotos) ? a.fotos : Array.isArray(a.imagenes) ? a.imagenes : Array.isArray(a.galeria) ? a.galeria : []).map((x) => typeof x === 'string' ? { src: x, alt: a.titulo } : x).filter((x) => x && (x.src || x.url)).map((x) => ({ src: x.src || x.url, srcset: x.srcset || '', card: x.card || '', cardWidth: x.cardWidth || null, cardHeight: x.cardHeight || null, thumb: x.thumb || '', width: x.width || null, height: x.height || null, alt: x.alt || a.titulo, tipo: x.tipo || '' }));
+const cardSrcset = (m) => { if (m.srcset) return m.srcset; if (m.card) return `${m.card} ${m.cardWidth || 600}w, ${m.src} ${m.width || 900}w`; const k = /^(images\/stock\/unidad-\d+)\.webp$/.exec(m.src || ''); return k && fs.existsSync(new URL('../' + k[1] + '-640.webp', import.meta.url)) && fs.existsSync(new URL('../' + k[1] + '-1000.webp', import.meta.url)) ? `${k[1]}-640.webp 640w, ${k[1]}-1000.webp 1000w` : ''; };
+const mediaTag = (a, i) => { const m = mediaDe(a)[0]; const ss = m ? cardSrcset(m) : ''; return m ? `<figure class="car-ph"><img src="${esc(m.card || m.src)}"${ss ? ` srcset="${esc(ss)}"` : ''} sizes="(max-width: 600px) calc(100vw - 48px), 360px" width="${m.cardWidth || m.width || 900}" height="${m.cardHeight || m.height || 600}" loading="${i === 0 ? 'eager' : 'lazy'}"${i === 0 ? ' fetchpriority="high"' : ''} decoding="async" alt="${esc(m.alt)}"></figure>` : ''; };
 const IC = {
   wa: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20l1.3-4A8 8 0 1 1 8 18.7z"/><path d="M9 9c0 3 3 6 6 6l1-1.5-2-1-1 .8a4 4 0 0 1-2-2l.8-1-1-2z"/></svg>',
   ig: '<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3.5" y="3.5" width="17" height="17" rx="5"/><circle cx="12" cy="12" r="4"/><path d="M17.4 6.6h.01"/></svg>',
@@ -146,17 +148,27 @@ const card = (a) => {
   const sw = swatch(a.color);
   const fila = (k, v) => (v ? `<div><dt>${k}</dt><dd>${v}</dd></div>` : '');
   const pr = a.precio ? `<p class="pr">${a.precio.moneda === 'USD' ? 'US$ ' : '$ '}${fmt(a.precio.monto)}</p><p class="n">Precio publicado el ${esc(fdate(a.precio.fecha))}; puede haber cambiado.</p>` : '<p class="pr">Consultar precio</p>';
-  const busca = norm([a.titulo, marca, a.modelo, a.version, a.cilindrada, a.color, a.anio].filter((x) => x !== undefined && x !== null && x !== '').join(' '));
+  const busca = norm([a.titulo, a.tipoVehiculo, a.tipoMoto, marca, a.modelo, a.version, a.cilindrada, a.color, a.anio].filter((x) => x !== undefined && x !== null && x !== '').join(' '));
   return `<li class="car reveal${a.vendida ? ' car--vendida' : ''}" style="--reveal-delay:${Math.min(i,5)*60}ms" data-t="${esc(busca)}" data-i="${i}">
 ${mediaTag(a, i)}
-<div class="car-h"><span class="car-b">${esc(marca)}</span>${a.vendida ? '<span class="car-v">Vendida</span>' : ''}<label class="car-c" hidden><input type="checkbox" value="${i}" aria-label="Comparar ${esc(a.titulo)}"><span>Comparar</span></label></div>
+<div class="car-h"><span class="car-b">${esc(marca)}</span>${a.tipoVehiculo === 'Moto' ? '<span class="car-b">Moto</span>' : ''}${a.vendida ? '<span class="car-v">Vendida</span>' : ''}<label class="car-c" hidden><input type="checkbox" value="${i}" aria-label="Comparar ${esc(a.titulo)}"><span>Comparar</span></label></div>
 <h3>${esc(sinMarca(a))}</h3>
 <div class="car-s"><p><b${a.anio == null ? ' class="nd"' : ''}>${a.anio != null ? a.anio : 'Sin dato'}</b><small>Año</small></p><p><b${a.km == null ? ' class="nd"' : ''}>${a.km != null ? fmt(a.km) : 'Consultar'}</b><small>Kilómetros</small></p></div>
 <dl class="sp">${fila('Caja', a.transmision ? esc(a.transmision) : '')}${fila('Combustible', a.combustible ? esc(a.combustible) : '')}${fila('Color', a.color ? `${sw ? `<i class="sw" style="--sw:${sw}"></i>` : ''}${esc(a.color)}` : '')}</dl>
 <div class="car-f">${pr}${a.nota ? `<p class="n">${esc(a.nota)}</p>` : ''}<button class="btn sm ficha-trigger" type="button" data-ficha="${i}" aria-label="Ver la ficha completa de ${esc(a.titulo)}">Ver la ficha completa</button><button class="btn sm gallery-trigger" type="button" data-gallery="${i}" hidden>Ver galería</button><a class="btn sm" href="${esc(consultaHref(a))}" ${EXT} aria-label="Consultar por ${esc(a.titulo)}">${a.vendida ? 'Consultar por similares' : WA ? 'Reservar esta unidad' : 'Consultar por Facebook'}</a>${quick(a, i)}</div>
 </li>`;
 };
-const catData = autos.map((a, i) => ({ i, titulo: a.titulo, media: mediaDe(a), marca: marcaDe(a), modelo: a.modelo || null, modeloTxt: sinMarca(a), cilindrada: a.cilindrada || null, version: a.version || null, anio: a.anio ?? null, km: a.km ?? null, carroceria: a.carroceria || null, id: a.id || null, vendida: !!a.vendida, nota: a.nota || null, publicado: a.publicadoEl || null, hrefFin: wa(`Hola! Quiero consultar financiación para el ${a.titulo}${a.anio ? ' ' + a.anio : ''}.`), hrefVisita: wa(`Hola! Quiero coordinar una visita y prueba de manejo del ${a.titulo}${a.anio ? ' ' + a.anio : ''}.`), mail: mailHref(a), transmision: a.transmision || null, combustible: a.combustible || null, color: a.color || null, sw: swatch(a.color), precio: a.precio || null, anticipo: a.anticipo || null, url: a.url, href: consultaHref(a) }));
+const catData = autos.map((a, i) => ({
+  i, titulo: a.titulo, media: mediaDe(a), marca: marcaDe(a), modelo: a.modelo || null, modeloTxt: sinMarca(a),
+  tipoVehiculo: a.tipoVehiculo || 'Auto', tipoMoto: a.tipoMoto || null, cilindrada: a.cilindrada || null, motor: a.motor || null,
+  potencia: a.potencia || null, traccion: a.traccion || null, puertas: a.puertas || null, numeroVelocidades: a.numeroVelocidades || null,
+  version: a.version || null, anio: a.anio ?? null, km: a.km ?? null, carroceria: a.carroceria || null, id: a.id || null,
+  vendida: !!a.vendida, nota: a.nota || null, relevadoEl: a.relevadoEl || a.fuente?.consultado || null,
+  atributosPublicados: a.atributosPublicados || [], hrefFin: wa(`Hola! Quiero consultar financiación para el ${a.titulo}${a.anio ? ' ' + a.anio : ''}.`),
+  hrefVisita: wa(`Hola! Quiero coordinar una visita y prueba de manejo del ${a.titulo}${a.anio ? ' ' + a.anio : ''}.`),
+  mail: mailHref(a), transmision: a.transmision || null, combustible: a.combustible || null, color: a.color || null,
+  sw: swatch(a.color), precio: a.precio || null, anticipo: a.anticipo || null, url: a.url, href: consultaHref(a)
+}));
 const unidades = autos.length
   ? `${autos.length > 1 ? '<div class="fx" id="tools" hidden></div>\n' : ''}<p id="sinres" class="vacio" hidden>Ninguna unidad coincide con los filtros. Sacá alguno o limpiá todos para ver las ${autos.length} unidades.</p><ul class="cars" id="cars">\n${autos.map(card).join('\n')}\n</ul>\n<script type="application/json" id="cat-data">${jsonSafe(catData)}</script>\n<script type="application/json" id="cat-ctx">${jsonSafe({ nombre: NAME, tel: C.phoneTel || null, telTxt: C.phone || null, wa: C.whatsApp ? WA : null, waTxt: C.whatsAppDisplay || null, email: C.email || null, maps: L.mapsUrl || null, dir: `${L.address}, ${L.city}, ${L.province}`, horario: D.hours.corto || null, ig: IG, fb: FB, ciudad: L.city, servicios: SERV_FICHA })}</script>\n<p class="src">${A.relevadoEl ? `Stock al ${esc(fdate(A.relevadoEl))}. ` : ''}Consultá precio y disponibilidad actualizados por nuestros canales de contacto.</p>\n<div class="row mt"><a class="btn p" href="${IG}" ${EXT}>Ver más en Instagram</a><a class="btn" href="${FB}" ${EXT}>Ver más en Facebook</a>${TT ? `<a class="btn" href="${TT}" ${EXT}>Ver más en TikTok</a>` : ''}</div>`
   : `<div class="vacio"><p>Las unidades disponibles se publican en nuestro Instagram, TikTok y Facebook. Escribinos y te contamos disponibilidad y precio.</p><div class="row"><a class="btn p" href="${IG}" ${EXT}>Ver Instagram</a>${TT ? `<a class="btn" href="${TT}" ${EXT}>Ver TikTok</a>` : ''}<a class="btn" href="${FB}" ${EXT}>Ver Facebook</a></div></div>`;
@@ -197,7 +209,7 @@ const faq = [
   qa('¿Cómo coordino una visita?', `Entrá a <a href="reserva.html">Agendar visita y prueba de manejo</a>, elegí un día y una franja y enviá la consulta. No es un turno: el día y la hora se acuerdan con ${esc(NAME)}.`),
   H.display ? qa('¿Cuándo atienden?', `Los días y franjas, y si estamos abiertos ahora, están en la sección <a href="#horarios">Horarios</a>.`) : '',
   // Información general de compra de usados: fuentes en data/sources.json (guiaGeneral). No describe condiciones de la agencia.
-  qa('¿Puedo pedir yo el informe de dominio de un auto?', `Sí. Cualquier persona mayor de edad puede solicitarlo en el Registro del Automotor o por internet, en el sitio de la <a href="${DNRPA}" ${EXT}>DNRPA</a>. Muestra quién es el titular y las anotaciones del vehículo, como prendas o embargos. Conviene pedirlo antes de decidir la compra.`),
+  qa('¿Puedo pedir yo el informe de dominio de un vehículo?', `Sí. Cualquier persona mayor de edad puede solicitarlo en el Registro del Automotor o por internet, en el sitio de la <a href="${DNRPA}" ${EXT}>DNRPA</a>. Muestra quién es el titular y las anotaciones del vehículo, como prendas o embargos. Conviene pedirlo antes de decidir la compra.`),
   qa('¿Cuánto cuesta la transferencia?', `Depende de cada vehículo: los aranceles y los impuestos se calculan sobre su valuación oficial y varían según la jurisdicción. La <a href="${DNRPA}" ${EXT}>DNRPA</a> ofrece un estimador online, pero el cálculo definitivo lo hace el Registro al presentar el trámite. Este sitio no informa costos de transferencia.`),
   qa('¿El seguro es obligatorio para circular?', `Sí. Todo automotor debe tener, como mínimo, un seguro de responsabilidad civil contra terceros para circular (<a href="${LEY24449}" ${EXT}>Ley de Tránsito 24.449</a>, art. 68).`),
 ].filter(Boolean).join('\n');
@@ -299,11 +311,11 @@ const secBusqueda = `
 <div class="conversion-panel cv-panel">
 <datalist id="dl-marcas">${MARCAS.map((m) => `<option value="${esc(m)}">`).join('')}</datalist>
 ${cvForm({
-  uid: 'b', busca: true, intro: 'Hola! Estoy buscando un auto.', aria: 'Qué auto buscás', ey: 'Armá tu consulta', h3: 'El auto que tenés en mente',
-  ejemplo: { 'b-mm': 'Volkswagen Amarok', 'b-ca': 'Pick-up', 'b-an': '2010', 'b-tr': 'Manual', 'b-co': 'Diésel', 'b-mo': 'US$', 'b-pr': '25.000', 'b-us': 'Trabajo, Ruta', 'b-pa': 'Financiado', 'b-no': 'Me interesa que sea 4x4.' },
+  uid: 'b', busca: true, intro: 'Hola! Estoy buscando un auto o una moto.', aria: 'Qué vehículo buscás', ey: 'Armá tu consulta', h3: 'El vehículo que tenés en mente',
+  ejemplo: { 'b-mm': 'Volkswagen Amarok', 'b-ca': 'Moto', 'b-an': '2010', 'b-tr': 'Manual', 'b-co': 'Nafta', 'b-mo': 'US$', 'b-pr': '25.000', 'b-us': 'Ciudad, ruta', 'b-pa': 'Financiado', 'b-no': 'Contame las opciones disponibles.' },
   body: `
 <div class="cv-f cv-f--wide">${cvL('Marca o modelo', 'b-mm')}<input id="b-mm" data-lbl="Marca o modelo" data-p list="dl-marcas" autocomplete="off" placeholder="Ej: Peugeot 208, Chevrolet Cruze…" required></div>
-<div class="cv-f cv-f--wide">${cvT('Tipo de vehículo', 'Podés marcar varios')}${cvChips('b-ca', 'Carrocería', ['Sedán', 'Hatchback', 'Pick-up', 'SUV', 'Utilitario', 'Monovolumen'], true)}</div>
+<div class="cv-f cv-f--wide">${cvT('Tipo de vehículo', 'Elegí una opción')}${cvChips('b-ca', 'Tipo de vehículo', ['Auto', 'Moto'], true)}</div>
 <div class="cv-f">${cvL('Año mínimo', 'b-an')}<input id="b-an" data-lbl="Año mínimo" data-p data-anio inputmode="numeric" maxlength="4" autocomplete="off" placeholder="Ej: 2015"><div class="cv-quick" aria-label="Años sugeridos">${[2010, 2015, 2018, 2020].map((y) => `<button type="button" class="cv-q" data-set="b-an" data-v="${y}">${y}+</button>`).join('')}</div></div>
 <div class="cv-f">${cvT('Caja', 'Indistinto si no elegís')}${cvChips('b-tr', 'Transmisión', ['Manual', 'Automática'])}${cvT('Combustible', 'Podés marcar varios')}${cvChips('b-co', 'Combustible', ['Nafta', 'Diésel', 'GNC', 'Híbrido'], true)}</div>
 <div class="cv-f cv-f--wide cv-money">${cvL('Presupuesto aproximado', 'b-pr', 'Opcional')}<div class="cv-money-r"><div class="cv-cur" role="group" aria-label="Moneda"><button type="button" class="cv-chip is-on" aria-pressed="true" data-cur="$">$</button><button type="button" class="cv-chip" aria-pressed="false" data-cur="US$">US$</button></div><input id="b-pr" data-lbl="Presupuesto" data-p data-fmt="miles" data-pre="#b-mo" inputmode="numeric" autocomplete="off" placeholder="Ej: 12.000.000"><input type="hidden" id="b-mo" value="$"></div></div>
@@ -465,8 +477,8 @@ const HERO_FOTOS = ['01', '02', '03', '04', '05', '06', '07', '08'];
 const HERO_SLIDES = HERO_FOTOS.map((n, k) => `<figure class="hero-slide hero-slide--${n}${k === 0 ? ' is-active' : ''}" data-hero-slide><img src="images/hero/hero-${n}.webp" srcset="images/hero/hero-${n}-828.webp 828w, images/hero/hero-${n}.webp 1440w" sizes="100vw" width="1440" height="1440" alt="" decoding="async"${k === 0 ? ' fetchpriority="high"' : ' loading="lazy"'}></figure>`).join('');
 
 const index = page({
-  title: `${NAME} · Autos usados en ${L.city}, ${L.province}`,
-  desc: `${NAME} en ${L.city}, ${L.partido}: compra y venta de autos usados, permutas y consignaciones. Visitanos en ${L.address} o escribinos por redes o correo.`,
+  title: `${NAME} · Autos y motos en ${L.city}, ${L.province}`,
+  desc: `${NAME} en ${L.city}, ${L.partido}: compra y venta de autos y motos usados, permutas y consignaciones. Visitanos en ${L.address} o escribinos por redes o correo.`,
   file: 'index.html',
   extraHead: `<link rel="stylesheet" href="css/hero-carousel.css">\n<link rel="stylesheet" href="css/fondos-secciones.css">\n<script type="application/ld+json">${JSON.stringify(ld)}</script>\n<script defer src="js/hero-carousel.js"></script>\n<script defer src="js/fondos-secciones.js"></script>\n<script defer src="js/secciones.js"></script>\n<script defer src="js/mapa.js"></script>\n<script defer src="js/horarios.js"></script>\n<script defer src="js/site.js"></script>\n<script defer src="js/reserva-inline.js"></script>\n`,
   body: `${header()}
@@ -475,7 +487,7 @@ const index = page({
 <div class="hero-media" data-hero-carousel aria-hidden="true">${HERO_SLIDES}</div>
 <div class="hx-copy">
 <p class="ey">${esc(L.city)} · ${esc(L.partido)}</p>
-<h1><span class="sr">${esc(NAME)}: </span>Autos usados <em>en ${esc(L.city)}</em></h1>
+<h1><span class="sr">${esc(NAME)}: </span>Autos y motos <em>en ${esc(L.city)}</em></h1>
 <p class="lead">Compra y venta de vehículos usados, permutas y consignaciones. Consultá por financiación.</p>
 <div class="row"><a class="btn p" href="#unidades">Ver unidades</a>${C.whatsApp ? `<a class="btn" href="${WA}" ${EXT}>Escribir por WhatsApp</a>` : ''}<a class="btn lnk" href="${L.mapsUrl}" ${EXT}>Cómo llegar</a></div></div>
 <a class="hx-down" href="#unidades">Explorá las unidades</a>
@@ -484,8 +496,8 @@ const index = page({
 ${secHorarios}
 <section id="unidades" class="inventory-section" aria-labelledby="unidades-t"><div class="w wide">
 <div class="inventory-head">
-<div class="inventory-title"><p class="ey reveal"><span class="ey-brand">828</span> · Compra y venta · ${esc(L.city)}</p><h2 id="unidades-t" class="reveal">Nuestras <em>unidades</em></h2><p class="sec-p">Compra y venta de vehículos usados. Mirá lo que hay en nuestras redes o escribinos por nuestros canales de contacto.</p></div>
-<div class="inventory-meta" aria-label="Resumen del catálogo"><span class="inventory-meta-kicker">${esc(NAME)}</span><span>Unidades en nuestras redes</span><i aria-hidden="true"></i></div>
+<div class="inventory-title"><p class="ey reveal"><span class="ey-brand">828</span> · Compra y venta · ${esc(L.city)}</p><h2 id="unidades-t" class="reveal">Nuestras <em>unidades</em></h2><p class="sec-p">Catálogo relevado el ${A.relevadoEl ? esc(fdate(A.relevadoEl)) : 'último relevamiento'}: ${cantidadAutos} autos y camionetas y ${cantidadMotos} motos. Precios y disponibilidad pueden cambiar; confirmalos con la agencia.</p></div>
+<div class="inventory-meta" aria-label="Resumen del catálogo"><span class="inventory-meta-kicker">${esc(NAME)}</span><span>${autos.length} unidades · ${cantidadAutos} autos · ${cantidadMotos} motos</span><i aria-hidden="true"></i></div>
 </div>
 <div class="inventory-rule" aria-hidden="true"><span></span><small>${esc(L.city)} · ${esc(L.province)}</small><span></span></div>
 ${unidades}
@@ -511,7 +523,7 @@ ${secNosotros}
 <div class="dr-ct-head"><p class="ey"><span class="ey-brand">828</span> · Contacto</p><h2 id="contacto-t">Hablá con <em>un asesor</em></h2><p class="sec-p">Escribinos o llamanos y te contamos disponibilidad, precio y formas de pago de la unidad que te interese.</p></div>
 <div class="dr-ct-grid">
 <ul class="dr-ch">${canales}</ul>
-<aside class="dr-ct-side" aria-label="Consultar y redes"><p class="dr-ct-t">¿Buscás un auto?</p><p>Contanos qué estás buscando y te ayudamos a encontrarlo.</p><div class="row"><a class="btn p" href="${ctaHead.href}" ${EXT}>${WA ? 'Consultar con un asesor' : 'Consultar por Facebook'}</a><a class="btn" href="reserva.html">Agendar visita</a></div>
+<aside class="dr-ct-side" aria-label="Consultar y redes"><p class="dr-ct-t">¿Buscás un vehículo?</p><p>Contanos qué estás buscando y te ayudamos a encontrarlo.</p><div class="row"><a class="btn p" href="${ctaHead.href}" ${EXT}>${WA ? 'Consultar con un asesor' : 'Consultar por Facebook'}</a><a class="btn" href="reserva.html">Agendar visita</a></div>
 <div class="dr-soc"><p class="dr-k">En la web</p><ul>${redes}</ul></div></aside>
 </div>
 </div></section>
@@ -564,13 +576,13 @@ const reserva = `<!DOCTYPE html>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 ${robotsMeta}<title>Coordiná tu visita · ${esc(NAME)}</title>
-<meta name="description" content="Elegí un día y una franja y armá la consulta para ir a ver un auto. Es una consulta, no un turno.">
+<meta name="description" content="Elegí un día y una franja y armá la consulta para ir a ver una unidad. Es una consulta, no un turno.">
 <meta name="theme-color" content="#060607">
 <meta property="og:type" content="website">
 <meta property="og:title" content="Coordiná tu visita · ${esc(NAME)}">
-<meta property="og:description" content="Elegí un día y una franja y armá la consulta para ir a ver un auto. Es una consulta, no un turno.">
+<meta property="og:description" content="Elegí un día y una franja y armá la consulta para ir a ver una unidad. Es una consulta, no un turno.">
 <meta property="og:locale" content="es_AR">
-${ogTags('reserva.html', `Coordiná tu visita · ${NAME}`, 'Elegí un día y una franja y armá la consulta para ir a ver un auto. Es una consulta, no un turno.')}${canon('reserva.html')}<link rel="manifest" href="site.webmanifest">
+${ogTags('reserva.html', `Coordiná tu visita · ${NAME}`, 'Elegí un día y una franja y armá la consulta para ir a ver una unidad. Es una consulta, no un turno.')}${canon('reserva.html')}<link rel="manifest" href="site.webmanifest">
 <link rel="icon" type="image/png" sizes="192x192" href="images/icon-192.png">
 <link rel="apple-touch-icon" href="images/icon-180.png">
 <link rel="stylesheet" href="css/reserva.css"><link rel="stylesheet" href="css/motion.css">
@@ -631,7 +643,7 @@ write('robots.txt', demo ? 'User-agent: *\nDisallow: /\n' : `User-agent: *\nAllo
 const smPath = path.join(root, 'sitemap.xml');
 if (!demo && siteUrl) write('sitemap.xml', `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n  <url><loc>${siteUrl}</loc></url>\n  <url><loc>${siteUrl}reserva.html</loc></url>\n  <url><loc>${siteUrl}privacidad.html</loc></url>\n</urlset>\n`);
 else if (fs.existsSync(smPath)) fs.rmSync(smPath);
-write('site.webmanifest', JSON.stringify({ name: NAME, short_name: 'Automotores 828', description: `Autos usados en ${L.city}, ${L.province}.`, lang: 'es-AR', start_url: './', scope: './', display: 'standalone', background_color: '#060607', theme_color: '#060607', icons: [{ src: 'images/icon-192.png', sizes: '192x192', type: 'image/png', purpose: 'any' }, { src: 'images/icon-512.png', sizes: '512x512', type: 'image/png', purpose: 'any' }] }, null, 2) + '\n');
+write('site.webmanifest', JSON.stringify({ name: NAME, short_name: 'Automotores 828', description: `Autos y motos usados en ${L.city}, ${L.province}.`, lang: 'es-AR', start_url: './', scope: './', display: 'standalone', background_color: '#060607', theme_color: '#060607', icons: [{ src: 'images/icon-192.png', sizes: '192x192', type: 'image/png', purpose: 'any' }, { src: 'images/icon-512.png', sizes: '512x512', type: 'image/png', purpose: 'any' }] }, null, 2) + '\n');
 write('favicon.svg', read('favicon.svg'));
 
 console.log(`Generado: index.html (${(index.length / 1024).toFixed(1)} KB), privacidad.html, reserva.html, 404.html · ${autos.length} unidades · modo ${demo ? 'demo (noindex)' : 'producción'}`);
