@@ -150,6 +150,34 @@
       "consultado": "2026-10-21",
       "estado": "fragmento_indexado_vigencia_por_verificar",
       "nota": "Menciona parada Boulevard Buenos Aires 803, línea 164 y combis; ficha con dirección malformada y posible antigüedad. Verificar antes de ofrecer como indicación de llegada."
+    },
+    {
+      "id": "tiktok-828automotores-2026",
+      "url": "https://www.tiktok.com/@828automotores",
+      "consultado": "2026-10-21",
+      "estado": "perfil_abierto_atribucion_oficial_pendiente",
+      "nota": "Perfil público AUTOMOTORES 828 / 828automotores; bio menciona compra-venta, financiación, Monte Grande y 20 años en el rubro. La vinculación con la empresa es probable, no confirmada por el titular. Métricas observadas: 1.000 seguidores y 2.809 me gusta; variables y no publicar como actuales."
+    },
+    {
+      "id": "moovit-en-2026",
+      "url": "https://moovitapp.com/index/en/public_transit-Automotores_828-Buenos_Aires-site_171491368-1602",
+      "consultado": "2026-10-21",
+      "estado": "pagina_abierta_informacion_de_transporte_no_oficial",
+      "nota": "Enumera paradas Alfonso Amat 480 (38 m), Boulevard Buenos Aires 909 (96 m), colectivos 164/306/51/394/501 y combis, y tren Roca con estación Monte Grande a 1.835 m. La ficha tiene dirección malformada; rutas/tiempos requieren verificación antes de publicación."
+    },
+    {
+      "id": "cylex-ficha-831-2026",
+      "url": "https://www.cylex.com.ar/monte-grande/automotores-828-srl-11505885.html",
+      "consultado": "2026-10-21",
+      "estado": "directorio_abierto_actualizacion_indicada_2026_08_02",
+      "nota": "Ficha extraída directamente: domicilio 831, B1842, fijo 011 4290-7300 y enlace a catálogo de Mercado Libre _CustId_121360385. No demuestra dirección operativa actual ni vigencia telefónica."
+    },
+    {
+      "id": "todosnegocios-ficha-2026",
+      "url": "https://ar.todosnegocios.com/automotores-srl_1f-011-4290-7300",
+      "consultado": "2026-10-21",
+      "estado": "directorio_abierto_con_errores_de_plantilla",
+      "nota": "Muestra dirección 828, teléfono y catálogo ML, pero los enlaces sociales redirigen a cuentas de Mercado Libre y atribuye entrega a domicilio/venta de autos nuevos sin evidencia específica. No tomar esas categorías como hechos del negocio."
     }
   ]
 }

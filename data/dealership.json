@@ -263,6 +263,50 @@
         "Mantener fuera del sitio métricas sociales de fecha incierta, datos de transporte no verificados y datos estimados o bancarios."
       ],
       "informe": "docs/INVESTIGACION-COMPLEMENTARIA-2026-10-21.md"
+    },
+    "auditoriaTxtMadre2026_10_21": {
+      "informe": "docs/AUDITORIA-TXT-MADRE-OSINT-2026-10-21.md",
+      "estado": "leads_contrastados_directamente_con_fuentes_publicas",
+      "tiktok": {
+        "usuario": "@828automotores",
+        "nombreVisible": "AUTOMOTORES 828",
+        "observado": "Bio de compra-venta/financiación, Monte Grande y “20 años en el rubro”; al relevar, 1.000 seguidores y 2.809 me gusta.",
+        "estado": "perfil_y_contenido_publico_verificados_atribucion_comercial_probable_pendiente_de_confirmacion",
+        "fuente": "https://www.tiktok.com/@828automotores",
+        "nota": "La cifra de antigüedad es una afirmación del perfil y contradice el dato societario de 2010; no tratar como antigüedad legal ni publicar métricas como vigentes."
+      },
+      "moovit": {
+        "estado": "pagina_abierta_con_detalles_de_movilidad_no_oficiales_y_sujetos_a_cambio",
+        "paradas": [
+          "Alfonso Amat 480: 38 m, 1 min a pie",
+          "Boulevard Buenos Aires 909: 96 m, 2 min a pie"
+        ],
+        "colectivos": [
+          "164",
+          "306",
+          "51",
+          "394",
+          "501",
+          "combis"
+        ],
+        "tren": "Línea Roca; estación Monte Grande, aprox. 1.835 m / 24 min a pie",
+        "fuente": "https://moovitapp.com/index/en/public_transit-Automotores_828-Buenos_Aires-site_171491368-1602",
+        "nota": "Moovit contiene dirección de destino malformada; confirmar rutas y tiempos con operador antes de publicar."
+      },
+      "cylexAbierto": {
+        "domicilio": "Boulevard Buenos Aires 831, B1842",
+        "telefono": "011 4290-7300",
+        "actualizadoEnFuente": "2026-08-02",
+        "catalogoMercadoLibre": "https://vehiculos.mercadolibre.com.ar/_CustId_121360385",
+        "estado": "directorio_abierto_corrobora_ficha_831_y_catalogo_no_resuelve_domicilio_comercial",
+        "fuente": "https://www.cylex.com.ar/monte-grande/automotores-828-srl-11505885.html"
+      },
+      "todosNegocios": {
+        "hallazgos": "Publica dirección 828, teléfono y catálogo del vendedor; enlaces rotulados Facebook/Instagram/YouTube apuntan a cuentas de Mercado Libre y añade entrega a domicilio sin evidencia específica.",
+        "estado": "directorio_abierto_con_indicios_de_datos_de_plantilla_no_usar_para_confirmar_servicios_o_redes",
+        "fuente": "https://ar.todosnegocios.com/automotores-srl_1f-011-4290-7300"
+      },
+      "correccionEstadoRepo": "El TXT indica 48 tarjetas, pero el main vigente ya integra 58 publicaciones y 771 fotos asociadas; usar los datos actuales de data/vehicles.json."
     }
   }
 }
