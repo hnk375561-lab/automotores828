@@ -52,7 +52,7 @@ if (d && a) {
 
   const idx = html['index.html'];
   const visible = pages.map((p) => html[p]).join('\n').replace(/<script[\s\S]*?<\/script>|<style[\s\S]*?<\/style>/g, '');
-  const visNoCars = visible.replace(/<li class="car">[\s\S]*?<\/li>/g, '');
+  const visNoCars = visible.replace(/<li class="car[^\"]*"[^>]*>[\s\S]*?<\/li>/g, '');
 
   // --- datos del negocio ---
   const L = d.location;
@@ -112,7 +112,7 @@ if (d && a) {
     if (!v.id || ids.has(v.id)) err(`vehicles.json: id faltante o repetido (${v.id})`);
     ids.add(v.id);
     if (!v.titulo) err(`vehicles.json ${v.id}: falta titulo`);
-    if (!/^https:\/\/((www\.)?(facebook|instagram|tiktok)\.com\/)/.test(v.url || '')) err(`vehicles.json ${v.id}: url debe ser una publicación de Facebook, Instagram o TikTok`);
+    if (!/^https:\/\/((www\.)?(facebook|instagram|tiktok)\.com\/|auto\.mercadolibre\.com\.ar\/MLA-\d+)/.test(v.url || '')) err(`vehicles.json ${v.id}: url debe ser una publicación de Facebook, Instagram, TikTok o Mercado Libre`);
     if (v.precio && (!['ARS', 'USD'].includes(v.precio.moneda) || typeof v.precio.monto !== 'number' || !v.precio.fecha)) err(`vehicles.json ${v.id}: precio incompleto (moneda, monto y fecha)`);
     if (v.km != null && typeof v.km !== 'number') err(`vehicles.json ${v.id}: km debe ser número`);
     if (!idx.includes(v.titulo.replace(/&/g, '&amp;'))) err(`index.html: falta la unidad ${v.id}`);

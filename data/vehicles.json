@@ -1,4 +1,1687 @@
 {
-  "relevadoEl": null,
-  "autos": []
+  "relevadoEl": "2026-10-20",
+  "fuenteListado": "https://vehiculos.mercadolibre.com.ar/_CustId_121360385",
+  "resultadoPagina": 58,
+  "autos": [
+    {
+      "id": "4103009836",
+      "titulo": "Honda Fit 2014 1.4 Lx-l Mt 100cv",
+      "marca": "Honda",
+      "anio": 2014,
+      "km": 204000,
+      "precio": {
+        "moneda": "USD",
+        "monto": 10000,
+        "fecha": "2026-10-20"
+      },
+      "anticipo": {
+        "moneda": "USD",
+        "monto": 5000,
+        "fecha": "2026-10-20"
+      },
+      "url": "https://auto.mercadolibre.com.ar/MLA-4103009836-honda-fit-14-lx-l-mt-100cv-_JM",
+      "publicadoEl": "2026-10-20",
+      "estado": "publicado_en_consulta",
+      "fotos": [
+        {
+          "src": "images/stock/ml-4103009836.webp",
+          "alt": "Honda Fit 2014 1.4 Lx-l Mt 100cv · foto de la publicación en Mercado Libre",
+          "width": 560,
+          "height": 560,
+          "fuente": "https://http2.mlstatic.com/D_Q_NP_2X_999849-MLA118209438796_102026-E.webp"
+        }
+      ],
+      "fuente": {
+        "tipo": "Mercado Libre",
+        "url": "https://auto.mercadolibre.com.ar/MLA-4103009836-honda-fit-14-lx-l-mt-100cv-_JM",
+        "consultado": "2026-10-20"
+      },
+      "nota": "Precio y disponibilidad sujetos a confirmación directa con Automotores 828."
+    },
+    {
+      "id": "2137817901",
+      "titulo": "Peugeot 208 2021 1.6l Active",
+      "marca": "Peugeot",
+      "anio": 2021,
+      "km": 81500,
+      "precio": {
+        "moneda": "ARS",
+        "monto": 21000000,
+        "fecha": "2026-10-20"
+      },
+      "anticipo": {
+        "moneda": "ARS",
+        "monto": 10500000,
+        "fecha": "2026-10-20"
+      },
+      "url": "https://auto.mercadolibre.com.ar/MLA-2137817901-peugeot-208-16l-active-_JM",
+      "publicadoEl": "2026-10-20",
+      "estado": "publicado_en_consulta",
+      "fotos": [
+        {
+          "src": "images/stock/ml-2137817901.webp",
+          "alt": "Peugeot 208 2021 1.6l Active · foto de la publicación en Mercado Libre",
+          "width": 560,
+          "height": 560,
+          "fuente": "https://http2.mlstatic.com/D_Q_NP_2X_954970-MLA117551990090_102026-E.webp"
+        }
+      ],
+      "fuente": {
+        "tipo": "Mercado Libre",
+        "url": "https://auto.mercadolibre.com.ar/MLA-2137817901-peugeot-208-16l-active-_JM",
+        "consultado": "2026-10-20"
+      },
+      "nota": "Precio y disponibilidad sujetos a confirmación directa con Automotores 828."
+    },
+    {
+      "id": "2185939777",
+      "titulo": "Renault Sandero Stepway 2014 1.6 Confort 105cv",
+      "marca": "Renault",
+      "anio": 2014,
+      "km": 200000,
+      "precio": {
+        "moneda": "ARS",
+        "monto": 13500000,
+        "fecha": "2026-10-20"
+      },
+      "anticipo": {
+        "moneda": "ARS",
+        "monto": 6750000,
+        "fecha": "2026-10-20"
+      },
+      "url": "https://auto.mercadolibre.com.ar/MLA-2185939777-renault-sandero-stepway-16-confort-105cv-_JM",
+      "publicadoEl": "2026-10-20",
+      "estado": "publicado_en_consulta",
+      "fotos": [
+        {
+          "src": "images/stock/ml-2185939777.webp",
+          "alt": "Renault Sandero Stepway 2014 1.6 Confort 105cv · foto de la publicación en Mercado Libre",
+          "width": 560,
+          "height": 560,
+          "fuente": "https://http2.mlstatic.com/D_Q_NP_2X_887626-MLA119287939149_102026-E.webp"
+        }
+      ],
+      "fuente": {
+        "tipo": "Mercado Libre",
+        "url": "https://auto.mercadolibre.com.ar/MLA-2185939777-renault-sandero-stepway-16-confort-105cv-_JM",
+        "consultado": "2026-10-20"
+      },
+      "nota": "Precio y disponibilidad sujetos a confirmación directa con Automotores 828."
+    },
+    {
+      "id": "2032707077",
+      "titulo": "Peugeot 2008 2021 1.6 Feline",
+      "marca": "Peugeot",
+      "anio": 2008,
+      "km": 137800,
+      "precio": {
+        "moneda": "ARS",
+        "monto": 21000000,
+        "fecha": "2026-10-20"
+      },
+      "anticipo": {
+        "moneda": "ARS",
+        "monto": 10500000,
+        "fecha": "2026-10-20"
+      },
+      "url": "https://auto.mercadolibre.com.ar/MLA-2032707077-peugeot-2008-16-feline-_JM",
+      "publicadoEl": "2026-10-20",
+      "estado": "publicado_en_consulta",
+      "fotos": [
+        {
+          "src": "images/stock/ml-2032707077.webp",
+          "alt": "Peugeot 2008 2021 1.6 Feline · foto de la publicación en Mercado Libre",
+          "width": 560,
+          "height": 560,
+          "fuente": "https://http2.mlstatic.com/D_Q_NP_2X_627418-MLA116668045799_082026-E.webp"
+        }
+      ],
+      "fuente": {
+        "tipo": "Mercado Libre",
+        "url": "https://auto.mercadolibre.com.ar/MLA-2032707077-peugeot-2008-16-feline-_JM",
+        "consultado": "2026-10-20"
+      },
+      "nota": "Precio y disponibilidad sujetos a confirmación directa con Automotores 828."
+    },
+    {
+      "id": "3962722820",
+      "titulo": "Peugeot 208 2016 1.5 Allure Touchscreen",
+      "marca": "Peugeot",
+      "anio": 2016,
+      "km": 80000,
+      "precio": {
+        "moneda": "ARS",
+        "monto": 14500000,
+        "fecha": "2026-10-20"
+      },
+      "anticipo": {
+        "moneda": "ARS",
+        "monto": 7250000,
+        "fecha": "2026-10-20"
+      },
+      "url": "https://auto.mercadolibre.com.ar/MLA-3962722820-peugeot-208-15-allure-touchscreen-_JM",
+      "publicadoEl": "2026-10-20",
+      "estado": "publicado_en_consulta",
+      "fotos": [
+        {
+          "src": "images/stock/ml-3962722820.webp",
+          "alt": "Peugeot 208 2016 1.5 Allure Touchscreen · foto de la publicación en Mercado Libre",
+          "width": 560,
+          "height": 560,
+          "fuente": "https://http2.mlstatic.com/D_Q_NP_2X_694991-MLA117804925641_092026-E.webp"
+        }
+      ],
+      "fuente": {
+        "tipo": "Mercado Libre",
+        "url": "https://auto.mercadolibre.com.ar/MLA-3962722820-peugeot-208-15-allure-touchscreen-_JM",
+        "consultado": "2026-10-20"
+      },
+      "nota": "Precio y disponibilidad sujetos a confirmación directa con Automotores 828."
+    },
+    {
+      "id": "2191782749",
+      "titulo": "Peugeot 208 2019 1.6 Allure",
+      "marca": "Peugeot",
+      "anio": 2019,
+      "km": 53000,
+      "precio": {
+        "moneda": "ARS",
+        "monto": 17500000,
+        "fecha": "2026-10-20"
+      },
+      "anticipo": {
+        "moneda": "ARS",
+        "monto": 8750000,
+        "fecha": "2026-10-20"
+      },
+      "url": "https://auto.mercadolibre.com.ar/MLA-2191782749-peugeot-208-16-allure-_JM",
+      "publicadoEl": "2026-10-20",
+      "estado": "publicado_en_consulta",
+      "fotos": [
+        {
+          "src": "images/stock/ml-2191782749.webp",
+          "alt": "Peugeot 208 2019 1.6 Allure · foto de la publicación en Mercado Libre",
+          "width": 560,
+          "height": 560,
+          "fuente": "https://http2.mlstatic.com/D_Q_NP_2X_915828-MLA119366148741_102026-E.webp"
+        }
+      ],
+      "fuente": {
+        "tipo": "Mercado Libre",
+        "url": "https://auto.mercadolibre.com.ar/MLA-2191782749-peugeot-208-16-allure-_JM",
+        "consultado": "2026-10-20"
+      },
+      "nota": "Precio y disponibilidad sujetos a confirmación directa con Automotores 828."
+    },
+    {
+      "id": "2116059721",
+      "titulo": "Fiat Palio 2013 1.4 Weekend Attractive 87cv",
+      "marca": "Fiat",
+      "anio": 2013,
+      "km": 183800,
+      "precio": {
+        "moneda": "ARS",
+        "monto": 12000000,
+        "fecha": "2026-10-20"
+      },
+      "anticipo": {
+        "moneda": "ARS",
+        "monto": 6000000,
+        "fecha": "2026-10-20"
+      },
+      "url": "https://auto.mercadolibre.com.ar/MLA-2116059721-fiat-palio-14-weekend-attractive-87cv-_JM",
+      "publicadoEl": "2026-10-20",
+      "estado": "publicado_en_consulta",
+      "fotos": [
+        {
+          "src": "images/stock/ml-2116059721.webp",
+          "alt": "Fiat Palio 2013 1.4 Weekend Attractive 87cv · foto de la publicación en Mercado Libre",
+          "width": 560,
+          "height": 560,
+          "fuente": "https://http2.mlstatic.com/D_Q_NP_2X_873113-MLA118096236463_092026-E.webp"
+        }
+      ],
+      "fuente": {
+        "tipo": "Mercado Libre",
+        "url": "https://auto.mercadolibre.com.ar/MLA-2116059721-fiat-palio-14-weekend-attractive-87cv-_JM",
+        "consultado": "2026-10-20"
+      },
+      "nota": "Precio y disponibilidad sujetos a confirmación directa con Automotores 828."
+    },
+    {
+      "id": "2140604399",
+      "titulo": "Citroën C4 Lounge 2020 1.6 Vti 115 Live",
+      "marca": "Citroën",
+      "anio": 2020,
+      "km": 116000,
+      "precio": {
+        "moneda": "ARS",
+        "monto": 18500000,
+        "fecha": "2026-10-20"
+      },
+      "anticipo": {
+        "moneda": "ARS",
+        "monto": 9250000,
+        "fecha": "2026-10-20"
+      },
+      "url": "https://auto.mercadolibre.com.ar/MLA-2140604399-citron-c4-lounge-16-vti-115-live-_JM",
+      "publicadoEl": "2026-10-20",
+      "estado": "publicado_en_consulta",
+      "fotos": [
+        {
+          "src": "images/stock/ml-2140604399.webp",
+          "alt": "Citroën C4 Lounge 2020 1.6 Vti 115 Live · foto de la publicación en Mercado Libre",
+          "width": 560,
+          "height": 560,
+          "fuente": "https://http2.mlstatic.com/D_Q_NP_2X_682948-MLA117212882606_102026-E.webp"
+        }
+      ],
+      "fuente": {
+        "tipo": "Mercado Libre",
+        "url": "https://auto.mercadolibre.com.ar/MLA-2140604399-citron-c4-lounge-16-vti-115-live-_JM",
+        "consultado": "2026-10-20"
+      },
+      "nota": "Precio y disponibilidad sujetos a confirmación directa con Automotores 828."
+    },
+    {
+      "id": "2090433129",
+      "titulo": "Toyota Yaris 2021 1.5 107cv Xls Cvt",
+      "marca": "Toyota",
+      "anio": 2021,
+      "km": 111000,
+      "precio": {
+        "moneda": "ARS",
+        "monto": 25000000,
+        "fecha": "2026-10-20"
+      },
+      "anticipo": {
+        "moneda": "ARS",
+        "monto": 12500000,
+        "fecha": "2026-10-20"
+      },
+      "url": "https://auto.mercadolibre.com.ar/MLA-2090433129-toyota-yaris-15-107cv-xls-cvt-_JM",
+      "publicadoEl": "2026-10-20",
+      "estado": "publicado_en_consulta",
+      "fotos": [
+        {
+          "src": "images/stock/ml-2090433129.webp",
+          "alt": "Toyota Yaris 2021 1.5 107cv Xls Cvt · foto de la publicación en Mercado Libre",
+          "width": 560,
+          "height": 560,
+          "fuente": "https://http2.mlstatic.com/D_Q_NP_2X_804910-MLA115549710880_082026-E.webp"
+        }
+      ],
+      "fuente": {
+        "tipo": "Mercado Libre",
+        "url": "https://auto.mercadolibre.com.ar/MLA-2090433129-toyota-yaris-15-107cv-xls-cvt-_JM",
+        "consultado": "2026-10-20"
+      },
+      "nota": "Precio y disponibilidad sujetos a confirmación directa con Automotores 828."
+    },
+    {
+      "id": "4049171736",
+      "titulo": "Renault Duster 2018 1.6 Ph2 4x2 Dynamique",
+      "marca": "Renault",
+      "anio": 2018,
+      "km": 170000,
+      "precio": {
+        "moneda": "ARS",
+        "monto": 18500000,
+        "fecha": "2026-10-20"
+      },
+      "anticipo": {
+        "moneda": "ARS",
+        "monto": 9250000,
+        "fecha": "2026-10-20"
+      },
+      "url": "https://auto.mercadolibre.com.ar/MLA-4049171736-renault-duster-16-ph2-4x2-dynamique-_JM",
+      "publicadoEl": "2026-10-20",
+      "estado": "publicado_en_consulta",
+      "fotos": [
+        {
+          "src": "images/stock/ml-4049171736.webp",
+          "alt": "Renault Duster 2018 1.6 Ph2 4x2 Dynamique · foto de la publicación en Mercado Libre",
+          "width": 560,
+          "height": 560,
+          "fuente": "https://http2.mlstatic.com/D_Q_NP_2X_841387-MLA119025014629_102026-E.webp"
+        }
+      ],
+      "fuente": {
+        "tipo": "Mercado Libre",
+        "url": "https://auto.mercadolibre.com.ar/MLA-4049171736-renault-duster-16-ph2-4x2-dynamique-_JM",
+        "consultado": "2026-10-20"
+      },
+      "nota": "Precio y disponibilidad sujetos a confirmación directa con Automotores 828."
+    },
+    {
+      "id": "3839696394",
+      "titulo": "Ford Fiesta Kinetic 2016 1.6 Se 120cv",
+      "marca": "Ford",
+      "anio": 2016,
+      "km": 128900,
+      "precio": {
+        "moneda": "ARS",
+        "monto": 15500000,
+        "fecha": "2026-10-20"
+      },
+      "anticipo": {
+        "moneda": "ARS",
+        "monto": 7750000,
+        "fecha": "2026-10-20"
+      },
+      "url": "https://auto.mercadolibre.com.ar/MLA-3839696394-ford-fiesta-kinetic-16-se-120cv-_JM",
+      "publicadoEl": "2026-10-20",
+      "estado": "publicado_en_consulta",
+      "fotos": [
+        {
+          "src": "images/stock/ml-3839696394.webp",
+          "alt": "Ford Fiesta Kinetic 2016 1.6 Se 120cv · foto de la publicación en Mercado Libre",
+          "width": 560,
+          "height": 560,
+          "fuente": "https://http2.mlstatic.com/D_Q_NP_2X_705297-MLA115145461662_082026-E.webp"
+        }
+      ],
+      "fuente": {
+        "tipo": "Mercado Libre",
+        "url": "https://auto.mercadolibre.com.ar/MLA-3839696394-ford-fiesta-kinetic-16-se-120cv-_JM",
+        "consultado": "2026-10-20"
+      },
+      "nota": "Precio y disponibilidad sujetos a confirmación directa con Automotores 828."
+    },
+    {
+      "id": "3745641530",
+      "titulo": "Peugeot 208 2016 1.6 Allure Nav Tiptronic",
+      "marca": "Peugeot",
+      "anio": 2016,
+      "km": 114000,
+      "precio": {
+        "moneda": "ARS",
+        "monto": 15500000,
+        "fecha": "2026-10-20"
+      },
+      "anticipo": {
+        "moneda": "ARS",
+        "monto": 7750000,
+        "fecha": "2026-10-20"
+      },
+      "url": "https://auto.mercadolibre.com.ar/MLA-3745641530-peugeot-208-16-allure-nav-tiptronic-_JM",
+      "publicadoEl": "2026-10-20",
+      "estado": "publicado_en_consulta",
+      "fotos": [
+        {
+          "src": "images/stock/ml-3745641530.webp",
+          "alt": "Peugeot 208 2016 1.6 Allure Nav Tiptronic · foto de la publicación en Mercado Libre",
+          "width": 560,
+          "height": 560,
+          "fuente": "https://http2.mlstatic.com/D_Q_NP_2X_938507-MLA116103269970_092026-E.webp"
+        }
+      ],
+      "fuente": {
+        "tipo": "Mercado Libre",
+        "url": "https://auto.mercadolibre.com.ar/MLA-3745641530-peugeot-208-16-allure-nav-tiptronic-_JM",
+        "consultado": "2026-10-20"
+      },
+      "nota": "Precio y disponibilidad sujetos a confirmación directa con Automotores 828."
+    },
+    {
+      "id": "1982665981",
+      "titulo": "Citroën C3 2016 1.6 Vti 115 Shine",
+      "marca": "Citroën",
+      "anio": 2016,
+      "km": 105000,
+      "precio": {
+        "moneda": "ARS",
+        "monto": 15000000,
+        "fecha": "2026-10-20"
+      },
+      "anticipo": {
+        "moneda": "ARS",
+        "monto": 7500000,
+        "fecha": "2026-10-20"
+      },
+      "url": "https://auto.mercadolibre.com.ar/MLA-1982665981-citron-c3-16-vti-115-shine-_JM",
+      "publicadoEl": "2026-10-20",
+      "estado": "publicado_en_consulta",
+      "fotos": [
+        {
+          "src": "images/stock/ml-1982665981.webp",
+          "alt": "Citroën C3 2016 1.6 Vti 115 Shine · foto de la publicación en Mercado Libre",
+          "width": 560,
+          "height": 560,
+          "fuente": "https://http2.mlstatic.com/D_Q_NP_2X_989239-MLA115079549312_082026-E.webp"
+        }
+      ],
+      "fuente": {
+        "tipo": "Mercado Libre",
+        "url": "https://auto.mercadolibre.com.ar/MLA-1982665981-citron-c3-16-vti-115-shine-_JM",
+        "consultado": "2026-10-20"
+      },
+      "nota": "Precio y disponibilidad sujetos a confirmación directa con Automotores 828."
+    },
+    {
+      "id": "2164403203",
+      "titulo": "Ford Fiesta Kinetic 2017 1.6 S",
+      "marca": "Ford",
+      "anio": 2017,
+      "km": 107000,
+      "precio": {
+        "moneda": "ARS",
+        "monto": 15500000,
+        "fecha": "2026-10-20"
+      },
+      "anticipo": {
+        "moneda": "ARS",
+        "monto": 7750000,
+        "fecha": "2026-10-20"
+      },
+      "url": "https://auto.mercadolibre.com.ar/MLA-2164403203-ford-fiesta-kinetic-16-s-_JM",
+      "publicadoEl": "2026-10-20",
+      "estado": "publicado_en_consulta",
+      "fotos": [
+        {
+          "src": "images/stock/ml-2164403203.webp",
+          "alt": "Ford Fiesta Kinetic 2017 1.6 S · foto de la publicación en Mercado Libre",
+          "width": 560,
+          "height": 560,
+          "fuente": "https://http2.mlstatic.com/D_Q_NP_2X_684320-MLA118966690045_102026-E.webp"
+        }
+      ],
+      "fuente": {
+        "tipo": "Mercado Libre",
+        "url": "https://auto.mercadolibre.com.ar/MLA-2164403203-ford-fiesta-kinetic-16-s-_JM",
+        "consultado": "2026-10-20"
+      },
+      "nota": "Precio y disponibilidad sujetos a confirmación directa con Automotores 828."
+    },
+    {
+      "id": "4045139284",
+      "titulo": "Volkswagen Up! 2016 1.0 High Up! 75cv",
+      "marca": "Volkswagen",
+      "anio": 2016,
+      "km": 141000,
+      "precio": {
+        "moneda": "ARS",
+        "monto": 13000000,
+        "fecha": "2026-10-20"
+      },
+      "anticipo": {
+        "moneda": "ARS",
+        "monto": 6500000,
+        "fecha": "2026-10-20"
+      },
+      "url": "https://auto.mercadolibre.com.ar/MLA-4045139284-volkswagen-up-10-high-up-75cv-_JM",
+      "publicadoEl": "2026-10-20",
+      "estado": "publicado_en_consulta",
+      "fotos": [
+        {
+          "src": "images/stock/ml-4045139284.webp",
+          "alt": "Volkswagen Up! 2016 1.0 High Up! 75cv · foto de la publicación en Mercado Libre",
+          "width": 560,
+          "height": 560,
+          "fuente": "https://http2.mlstatic.com/D_Q_NP_2X_713490-MLA118975462373_102026-E.webp"
+        }
+      ],
+      "fuente": {
+        "tipo": "Mercado Libre",
+        "url": "https://auto.mercadolibre.com.ar/MLA-4045139284-volkswagen-up-10-high-up-75cv-_JM",
+        "consultado": "2026-10-20"
+      },
+      "nota": "Precio y disponibilidad sujetos a confirmación directa con Automotores 828."
+    },
+    {
+      "id": "2060553841",
+      "titulo": "Volkswagen Gol Trend 2019 1.6 Trendline 101cv",
+      "marca": "Volkswagen",
+      "anio": 2019,
+      "km": 121100,
+      "precio": {
+        "moneda": "ARS",
+        "monto": 17500000,
+        "fecha": "2026-10-20"
+      },
+      "anticipo": {
+        "moneda": "ARS",
+        "monto": 8750000,
+        "fecha": "2026-10-20"
+      },
+      "url": "https://auto.mercadolibre.com.ar/MLA-2060553841-volkswagen-gol-trend-16-trendline-101cv-_JM",
+      "publicadoEl": "2026-10-20",
+      "estado": "publicado_en_consulta",
+      "fotos": [
+        {
+          "src": "images/stock/ml-2060553841.webp",
+          "alt": "Volkswagen Gol Trend 2019 1.6 Trendline 101cv · foto de la publicación en Mercado Libre",
+          "width": 560,
+          "height": 560,
+          "fuente": "https://http2.mlstatic.com/D_Q_NP_2X_688860-MLA117371007561_092026-E.webp"
+        }
+      ],
+      "fuente": {
+        "tipo": "Mercado Libre",
+        "url": "https://auto.mercadolibre.com.ar/MLA-2060553841-volkswagen-gol-trend-16-trendline-101cv-_JM",
+        "consultado": "2026-10-20"
+      },
+      "nota": "Precio y disponibilidad sujetos a confirmación directa con Automotores 828."
+    },
+    {
+      "id": "4081416070",
+      "titulo": "Ford Ka 2016 1.5 S",
+      "marca": "Ford",
+      "anio": 2016,
+      "km": 135700,
+      "precio": {
+        "moneda": "ARS",
+        "monto": 15000000,
+        "fecha": "2026-10-20"
+      },
+      "anticipo": {
+        "moneda": "ARS",
+        "monto": 7500000,
+        "fecha": "2026-10-20"
+      },
+      "url": "https://auto.mercadolibre.com.ar/MLA-4081416070-ford-ka-15-s-_JM",
+      "publicadoEl": "2026-10-20",
+      "estado": "publicado_en_consulta",
+      "fotos": [
+        {
+          "src": "images/stock/ml-4081416070.webp",
+          "alt": "Ford Ka 2016 1.5 S · foto de la publicación en Mercado Libre",
+          "width": 560,
+          "height": 560,
+          "fuente": "https://http2.mlstatic.com/D_Q_NP_2X_921093-MLA119481464175_102026-E.webp"
+        }
+      ],
+      "fuente": {
+        "tipo": "Mercado Libre",
+        "url": "https://auto.mercadolibre.com.ar/MLA-4081416070-ford-ka-15-s-_JM",
+        "consultado": "2026-10-20"
+      },
+      "nota": "Precio y disponibilidad sujetos a confirmación directa con Automotores 828."
+    },
+    {
+      "id": "2165221307",
+      "titulo": "Volkswagen Up! 2016 1.0 Take Up! Aa 75cv 3p",
+      "marca": "Volkswagen",
+      "anio": 2016,
+      "km": 141000,
+      "precio": {
+        "moneda": "USD",
+        "monto": 11800,
+        "fecha": "2026-10-20"
+      },
+      "anticipo": {
+        "moneda": "USD",
+        "monto": 5900,
+        "fecha": "2026-10-20"
+      },
+      "url": "https://auto.mercadolibre.com.ar/MLA-2165221307-volkswagen-up-10-take-up-aa-75cv-3p-_JM",
+      "publicadoEl": "2026-10-20",
+      "estado": "publicado_en_consulta",
+      "fotos": [
+        {
+          "src": "images/stock/ml-2165221307.webp",
+          "alt": "Volkswagen Up! 2016 1.0 Take Up! Aa 75cv 3p · foto de la publicación en Mercado Libre",
+          "width": 560,
+          "height": 560,
+          "fuente": "https://http2.mlstatic.com/D_Q_NP_2X_616580-MLA118977088531_102026-E.webp"
+        }
+      ],
+      "fuente": {
+        "tipo": "Mercado Libre",
+        "url": "https://auto.mercadolibre.com.ar/MLA-2165221307-volkswagen-up-10-take-up-aa-75cv-3p-_JM",
+        "consultado": "2026-10-20"
+      },
+      "nota": "Precio y disponibilidad sujetos a confirmación directa con Automotores 828."
+    },
+    {
+      "id": "4035984788",
+      "titulo": "Citroën C3 Picasso 2013 1.6 Exclusive 110cv",
+      "marca": "Citroën",
+      "anio": 2013,
+      "km": 171000,
+      "precio": {
+        "moneda": "ARS",
+        "monto": 11500000,
+        "fecha": "2026-10-20"
+      },
+      "anticipo": {
+        "moneda": "ARS",
+        "monto": 5750000,
+        "fecha": "2026-10-20"
+      },
+      "url": "https://auto.mercadolibre.com.ar/MLA-4035984788-citron-c3-picasso-16-exclusive-110cv-_JM",
+      "publicadoEl": "2026-10-20",
+      "estado": "publicado_en_consulta",
+      "fotos": [
+        {
+          "src": "images/stock/ml-4035984788.webp",
+          "alt": "Citroën C3 Picasso 2013 1.6 Exclusive 110cv · foto de la publicación en Mercado Libre",
+          "width": 560,
+          "height": 560,
+          "fuente": "https://http2.mlstatic.com/D_Q_NP_2X_799713-MLA117668791690_102026-E.webp"
+        }
+      ],
+      "fuente": {
+        "tipo": "Mercado Libre",
+        "url": "https://auto.mercadolibre.com.ar/MLA-4035984788-citron-c3-picasso-16-exclusive-110cv-_JM",
+        "consultado": "2026-10-20"
+      },
+      "nota": "Precio y disponibilidad sujetos a confirmación directa con Automotores 828."
+    },
+    {
+      "id": "2063195983",
+      "titulo": "Peugeot 408 2015 1.6 Feline Hdi 115cv",
+      "marca": "Peugeot",
+      "anio": 2015,
+      "km": 170000,
+      "precio": {
+        "moneda": "ARS",
+        "monto": 15000000,
+        "fecha": "2026-10-20"
+      },
+      "anticipo": {
+        "moneda": "ARS",
+        "monto": 7500000,
+        "fecha": "2026-10-20"
+      },
+      "url": "https://auto.mercadolibre.com.ar/MLA-2063195983-peugeot-408-16-feline-hdi-115cv-_JM",
+      "publicadoEl": "2026-10-20",
+      "estado": "publicado_en_consulta",
+      "fotos": [
+        {
+          "src": "images/stock/ml-2063195983.webp",
+          "alt": "Peugeot 408 2015 1.6 Feline Hdi 115cv · foto de la publicación en Mercado Libre",
+          "width": 560,
+          "height": 560,
+          "fuente": "https://http2.mlstatic.com/D_Q_NP_2X_910820-MLA117195707279_092026-E.webp"
+        }
+      ],
+      "fuente": {
+        "tipo": "Mercado Libre",
+        "url": "https://auto.mercadolibre.com.ar/MLA-2063195983-peugeot-408-16-feline-hdi-115cv-_JM",
+        "consultado": "2026-10-20"
+      },
+      "nota": "Precio y disponibilidad sujetos a confirmación directa con Automotores 828."
+    },
+    {
+      "id": "2164327687",
+      "titulo": "Ford Fiesta Kinetic 2016 1.6 S 120cv",
+      "marca": "Ford",
+      "anio": 2016,
+      "km": 148900,
+      "precio": {
+        "moneda": "ARS",
+        "monto": 14500000,
+        "fecha": "2026-10-20"
+      },
+      "anticipo": {
+        "moneda": "ARS",
+        "monto": 7250000,
+        "fecha": "2026-10-20"
+      },
+      "url": "https://auto.mercadolibre.com.ar/MLA-2164327687-ford-fiesta-kinetic-16-s-120cv-_JM",
+      "publicadoEl": "2026-10-20",
+      "estado": "publicado_en_consulta",
+      "fotos": [
+        {
+          "src": "images/stock/ml-2164327687.webp",
+          "alt": "Ford Fiesta Kinetic 2016 1.6 S 120cv · foto de la publicación en Mercado Libre",
+          "width": 560,
+          "height": 560,
+          "fuente": "https://http2.mlstatic.com/D_Q_NP_2X_747551-MLA118965049959_102026-E.webp"
+        }
+      ],
+      "fuente": {
+        "tipo": "Mercado Libre",
+        "url": "https://auto.mercadolibre.com.ar/MLA-2164327687-ford-fiesta-kinetic-16-s-120cv-_JM",
+        "consultado": "2026-10-20"
+      },
+      "nota": "Precio y disponibilidad sujetos a confirmación directa con Automotores 828."
+    },
+    {
+      "id": "2057558089",
+      "titulo": "Renault Duster 2018 1.6 Ph2 4x2 Expression",
+      "marca": "Renault",
+      "anio": 2018,
+      "km": 125000,
+      "precio": {
+        "moneda": "ARS",
+        "monto": 21000000,
+        "fecha": "2026-10-20"
+      },
+      "anticipo": {
+        "moneda": "ARS",
+        "monto": 10500000,
+        "fecha": "2026-10-20"
+      },
+      "url": "https://auto.mercadolibre.com.ar/MLA-2057558089-renault-duster-16-ph2-4x2-expression-_JM",
+      "publicadoEl": "2026-10-20",
+      "estado": "publicado_en_consulta",
+      "fotos": [
+        {
+          "src": "images/stock/ml-2057558089.webp",
+          "alt": "Renault Duster 2018 1.6 Ph2 4x2 Expression · foto de la publicación en Mercado Libre",
+          "width": 560,
+          "height": 560,
+          "fuente": "https://http2.mlstatic.com/D_Q_NP_2X_604799-MLA115862389654_092026-E.webp"
+        }
+      ],
+      "fuente": {
+        "tipo": "Mercado Libre",
+        "url": "https://auto.mercadolibre.com.ar/MLA-2057558089-renault-duster-16-ph2-4x2-expression-_JM",
+        "consultado": "2026-10-20"
+      },
+      "nota": "Precio y disponibilidad sujetos a confirmación directa con Automotores 828."
+    },
+    {
+      "id": "2128200017",
+      "titulo": "Citroën C4 Cactus 2019 1.6 Vti 115 Feel",
+      "marca": "Citroën",
+      "anio": 2019,
+      "km": 50500,
+      "precio": {
+        "moneda": "ARS",
+        "monto": 19000000,
+        "fecha": "2026-10-20"
+      },
+      "anticipo": {
+        "moneda": "ARS",
+        "monto": 9500000,
+        "fecha": "2026-10-20"
+      },
+      "url": "https://auto.mercadolibre.com.ar/MLA-2128200017-citron-c4-cactus-16-vti-115-feel-_JM",
+      "publicadoEl": "2026-10-20",
+      "estado": "publicado_en_consulta",
+      "fotos": [
+        {
+          "src": "images/stock/ml-2128200017.webp",
+          "alt": "Citroën C4 Cactus 2019 1.6 Vti 115 Feel · foto de la publicación en Mercado Libre",
+          "width": 560,
+          "height": 560,
+          "fuente": "https://http2.mlstatic.com/D_Q_NP_2X_948664-MLA118388992533_092026-E.webp"
+        }
+      ],
+      "fuente": {
+        "tipo": "Mercado Libre",
+        "url": "https://auto.mercadolibre.com.ar/MLA-2128200017-citron-c4-cactus-16-vti-115-feel-_JM",
+        "consultado": "2026-10-20"
+      },
+      "nota": "Precio y disponibilidad sujetos a confirmación directa con Automotores 828."
+    },
+    {
+      "id": "4036030430",
+      "titulo": "Toyota Corolla 2016 1.8 Xei Mt Pack 140cv",
+      "marca": "Toyota",
+      "anio": 2016,
+      "km": 149000,
+      "precio": {
+        "moneda": "USD",
+        "monto": 14500,
+        "fecha": "2026-10-20"
+      },
+      "anticipo": {
+        "moneda": "USD",
+        "monto": 7250,
+        "fecha": "2026-10-20"
+      },
+      "url": "https://auto.mercadolibre.com.ar/MLA-4036030430-toyota-corolla-18-xei-mt-pack-140cv-_JM",
+      "publicadoEl": "2026-10-20",
+      "estado": "publicado_en_consulta",
+      "fotos": [
+        {
+          "src": "images/stock/ml-4036030430.webp",
+          "alt": "Toyota Corolla 2016 1.8 Xei Mt Pack 140cv · foto de la publicación en Mercado Libre",
+          "width": 560,
+          "height": 560,
+          "fuente": "https://http2.mlstatic.com/D_Q_NP_2X_985711-MLA118859393517_102026-E.webp"
+        }
+      ],
+      "fuente": {
+        "tipo": "Mercado Libre",
+        "url": "https://auto.mercadolibre.com.ar/MLA-4036030430-toyota-corolla-18-xei-mt-pack-140cv-_JM",
+        "consultado": "2026-10-20"
+      },
+      "nota": "Precio y disponibilidad sujetos a confirmación directa con Automotores 828."
+    },
+    {
+      "id": "2164369907",
+      "titulo": "Fiat Cronos 2022 1.3 Gse Drive",
+      "marca": "Fiat",
+      "anio": 2022,
+      "km": 100000,
+      "precio": {
+        "moneda": "ARS",
+        "monto": 18000000,
+        "fecha": "2026-10-20"
+      },
+      "anticipo": {
+        "moneda": "ARS",
+        "monto": 9000000,
+        "fecha": "2026-10-20"
+      },
+      "url": "https://auto.mercadolibre.com.ar/MLA-2164369907-fiat-cronos-13-gse-drive-_JM",
+      "publicadoEl": "2026-10-20",
+      "estado": "publicado_en_consulta",
+      "fotos": [
+        {
+          "src": "images/stock/ml-2164369907.webp",
+          "alt": "Fiat Cronos 2022 1.3 Gse Drive · foto de la publicación en Mercado Libre",
+          "width": 560,
+          "height": 560,
+          "fuente": "https://http2.mlstatic.com/D_Q_NP_2X_896053-MLA117370253672_102026-E.webp"
+        }
+      ],
+      "fuente": {
+        "tipo": "Mercado Libre",
+        "url": "https://auto.mercadolibre.com.ar/MLA-2164369907-fiat-cronos-13-gse-drive-_JM",
+        "consultado": "2026-10-20"
+      },
+      "nota": "Precio y disponibilidad sujetos a confirmación directa con Automotores 828."
+    },
+    {
+      "id": "2036182413",
+      "titulo": "Citroën C3 2019 1.6 Vti 115 At6 Feel",
+      "marca": "Citroën",
+      "anio": 2019,
+      "km": 45600,
+      "precio": {
+        "moneda": "ARS",
+        "monto": 18000000,
+        "fecha": "2026-10-20"
+      },
+      "anticipo": {
+        "moneda": "ARS",
+        "monto": 9000000,
+        "fecha": "2026-10-20"
+      },
+      "url": "https://auto.mercadolibre.com.ar/MLA-2036182413-citron-c3-16-vti-115-at6-feel-_JM",
+      "publicadoEl": "2026-10-20",
+      "estado": "publicado_en_consulta",
+      "fotos": [
+        {
+          "src": "images/stock/ml-2036182413.webp",
+          "alt": "Citroën C3 2019 1.6 Vti 115 At6 Feel · foto de la publicación en Mercado Libre",
+          "width": 560,
+          "height": 560,
+          "fuente": "https://http2.mlstatic.com/D_Q_NP_2X_692217-MLA115597836684_092026-E.webp"
+        }
+      ],
+      "fuente": {
+        "tipo": "Mercado Libre",
+        "url": "https://auto.mercadolibre.com.ar/MLA-2036182413-citron-c3-16-vti-115-at6-feel-_JM",
+        "consultado": "2026-10-20"
+      },
+      "nota": "Precio y disponibilidad sujetos a confirmación directa con Automotores 828."
+    },
+    {
+      "id": "4073718400",
+      "titulo": "Honda Fit 2012 1.5 Ex-l At 120cv",
+      "marca": "Honda",
+      "anio": 2012,
+      "km": 150000,
+      "precio": {
+        "moneda": "USD",
+        "monto": 11800,
+        "fecha": "2026-10-20"
+      },
+      "anticipo": {
+        "moneda": "USD",
+        "monto": 5900,
+        "fecha": "2026-10-20"
+      },
+      "url": "https://auto.mercadolibre.com.ar/MLA-4073718400-honda-fit-15-ex-l-at-120cv-_JM",
+      "publicadoEl": "2026-10-20",
+      "estado": "publicado_en_consulta",
+      "fotos": [
+        {
+          "src": "images/stock/ml-4073718400.webp",
+          "alt": "Honda Fit 2012 1.5 Ex-l At 120cv · foto de la publicación en Mercado Libre",
+          "width": 560,
+          "height": 560,
+          "fuente": "https://http2.mlstatic.com/D_Q_NP_2X_859757-MLA117719984254_102026-E.webp"
+        }
+      ],
+      "fuente": {
+        "tipo": "Mercado Libre",
+        "url": "https://auto.mercadolibre.com.ar/MLA-4073718400-honda-fit-15-ex-l-at-120cv-_JM",
+        "consultado": "2026-10-20"
+      },
+      "nota": "Precio y disponibilidad sujetos a confirmación directa con Automotores 828."
+    },
+    {
+      "id": "4099578036",
+      "titulo": "Jeep Renegade 2018 1.8 Sport At",
+      "marca": "Jeep",
+      "anio": 2018,
+      "km": 69900,
+      "precio": {
+        "moneda": "USD",
+        "monto": 15000,
+        "fecha": "2026-10-20"
+      },
+      "anticipo": {
+        "moneda": "USD",
+        "monto": 7500,
+        "fecha": "2026-10-20"
+      },
+      "url": "https://auto.mercadolibre.com.ar/MLA-4099578036-jeep-renegade-18-sport-at-_JM",
+      "publicadoEl": "2026-10-20",
+      "estado": "publicado_en_consulta",
+      "fotos": [
+        {
+          "src": "images/stock/ml-4099578036.webp",
+          "alt": "Jeep Renegade 2018 1.8 Sport At · foto de la publicación en Mercado Libre",
+          "width": 560,
+          "height": 560,
+          "fuente": "https://http2.mlstatic.com/D_Q_NP_2X_785442-MLA118155780308_102026-E.webp"
+        }
+      ],
+      "fuente": {
+        "tipo": "Mercado Libre",
+        "url": "https://auto.mercadolibre.com.ar/MLA-4099578036-jeep-renegade-18-sport-at-_JM",
+        "consultado": "2026-10-20"
+      },
+      "nota": "Precio y disponibilidad sujetos a confirmación directa con Automotores 828."
+    },
+    {
+      "id": "4043980626",
+      "titulo": "Ford Ka 2018 1.5 Se",
+      "marca": "Ford",
+      "anio": 2018,
+      "km": 120300,
+      "precio": {
+        "moneda": "ARS",
+        "monto": 15500000,
+        "fecha": "2026-10-20"
+      },
+      "anticipo": {
+        "moneda": "ARS",
+        "monto": 7750000,
+        "fecha": "2026-10-20"
+      },
+      "url": "https://auto.mercadolibre.com.ar/MLA-4043980626-ford-ka-15-se-_JM",
+      "publicadoEl": "2026-10-20",
+      "estado": "publicado_en_consulta",
+      "fotos": [
+        {
+          "src": "images/stock/ml-4043980626.webp",
+          "alt": "Ford Ka 2018 1.5 Se · foto de la publicación en Mercado Libre",
+          "width": 560,
+          "height": 560,
+          "fuente": "https://http2.mlstatic.com/D_Q_NP_2X_848970-MLA118966443569_102026-E.webp"
+        }
+      ],
+      "fuente": {
+        "tipo": "Mercado Libre",
+        "url": "https://auto.mercadolibre.com.ar/MLA-4043980626-ford-ka-15-se-_JM",
+        "consultado": "2026-10-20"
+      },
+      "nota": "Precio y disponibilidad sujetos a confirmación directa con Automotores 828."
+    },
+    {
+      "id": "2032158299",
+      "titulo": "Fiat Argo 2026 1.3 Drive",
+      "marca": "Fiat",
+      "anio": 2026,
+      "km": 0,
+      "precio": {
+        "moneda": "ARS",
+        "monto": 28000000,
+        "fecha": "2026-10-20"
+      },
+      "anticipo": {
+        "moneda": "ARS",
+        "monto": 14000000,
+        "fecha": "2026-10-20"
+      },
+      "url": "https://auto.mercadolibre.com.ar/MLA-2032158299-fiat-argo-13-drive-_JM",
+      "publicadoEl": "2026-10-20",
+      "estado": "publicado_en_consulta",
+      "fotos": [
+        {
+          "src": "images/stock/ml-2032158299.webp",
+          "alt": "Fiat Argo 2026 1.3 Drive · foto de la publicación en Mercado Libre",
+          "width": 560,
+          "height": 560,
+          "fuente": "https://http2.mlstatic.com/D_Q_NP_2X_929151-MLA115252932060_082026-E.webp"
+        }
+      ],
+      "fuente": {
+        "tipo": "Mercado Libre",
+        "url": "https://auto.mercadolibre.com.ar/MLA-2032158299-fiat-argo-13-drive-_JM",
+        "consultado": "2026-10-20"
+      },
+      "nota": "Precio y disponibilidad sujetos a confirmación directa con Automotores 828."
+    },
+    {
+      "id": "4036169954",
+      "titulo": "Renault Sandero 2023 1.6 16v Intens",
+      "marca": "Renault",
+      "anio": 2023,
+      "km": 8400,
+      "precio": {
+        "moneda": "ARS",
+        "monto": 22500000,
+        "fecha": "2026-10-20"
+      },
+      "anticipo": {
+        "moneda": "ARS",
+        "monto": 11250000,
+        "fecha": "2026-10-20"
+      },
+      "url": "https://auto.mercadolibre.com.ar/MLA-4036169954-renault-sandero-16-16v-intens-_JM",
+      "publicadoEl": "2026-10-20",
+      "estado": "publicado_en_consulta",
+      "fotos": [
+        {
+          "src": "images/stock/ml-4036169954.webp",
+          "alt": "Renault Sandero 2023 1.6 16v Intens · foto de la publicación en Mercado Libre",
+          "width": 560,
+          "height": 560,
+          "fuente": "https://http2.mlstatic.com/D_Q_NP_2X_731003-MLA119285494043_102026-E.webp"
+        }
+      ],
+      "fuente": {
+        "tipo": "Mercado Libre",
+        "url": "https://auto.mercadolibre.com.ar/MLA-4036169954-renault-sandero-16-16v-intens-_JM",
+        "consultado": "2026-10-20"
+      },
+      "nota": "Precio y disponibilidad sujetos a confirmación directa con Automotores 828."
+    },
+    {
+      "id": "2063192705",
+      "titulo": "Volkswagen Gol Trend 2020 1.6 Trendline 101cv",
+      "marca": "Volkswagen",
+      "anio": 2020,
+      "km": 106000,
+      "precio": {
+        "moneda": "ARS",
+        "monto": 18000000,
+        "fecha": "2026-10-20"
+      },
+      "anticipo": {
+        "moneda": "ARS",
+        "monto": 9000000,
+        "fecha": "2026-10-20"
+      },
+      "url": "https://auto.mercadolibre.com.ar/MLA-2063192705-volkswagen-gol-trend-16-trendline-101cv-_JM",
+      "publicadoEl": "2026-10-20",
+      "estado": "publicado_en_consulta",
+      "fotos": [
+        {
+          "src": "images/stock/ml-2063192705.webp",
+          "alt": "Volkswagen Gol Trend 2020 1.6 Trendline 101cv · foto de la publicación en Mercado Libre",
+          "width": 560,
+          "height": 560,
+          "fuente": "https://http2.mlstatic.com/D_Q_NP_2X_998354-MLA117195841243_092026-E.webp"
+        }
+      ],
+      "fuente": {
+        "tipo": "Mercado Libre",
+        "url": "https://auto.mercadolibre.com.ar/MLA-2063192705-volkswagen-gol-trend-16-trendline-101cv-_JM",
+        "consultado": "2026-10-20"
+      },
+      "nota": "Precio y disponibilidad sujetos a confirmación directa con Automotores 828."
+    },
+    {
+      "id": "2069940821",
+      "titulo": "Ford Ka 2018 1.5 S",
+      "marca": "Ford",
+      "anio": 2018,
+      "km": 109900,
+      "precio": {
+        "moneda": "ARS",
+        "monto": 15500000,
+        "fecha": "2026-10-20"
+      },
+      "anticipo": {
+        "moneda": "ARS",
+        "monto": 7750000,
+        "fecha": "2026-10-20"
+      },
+      "url": "https://auto.mercadolibre.com.ar/MLA-2069940821-ford-ka-15-s-_JM",
+      "publicadoEl": "2026-10-20",
+      "estado": "publicado_en_consulta",
+      "fotos": [
+        {
+          "src": "images/stock/ml-2069940821.webp",
+          "alt": "Ford Ka 2018 1.5 S · foto de la publicación en Mercado Libre",
+          "width": 560,
+          "height": 560,
+          "fuente": "https://http2.mlstatic.com/D_Q_NP_2X_774387-MLA117317870395_092026-E.webp"
+        }
+      ],
+      "fuente": {
+        "tipo": "Mercado Libre",
+        "url": "https://auto.mercadolibre.com.ar/MLA-2069940821-ford-ka-15-s-_JM",
+        "consultado": "2026-10-20"
+      },
+      "nota": "Precio y disponibilidad sujetos a confirmación directa con Automotores 828."
+    },
+    {
+      "id": "2063616163",
+      "titulo": "Volkswagen Golf 2017 1.4 Comfortline Tsi Dsg",
+      "marca": "Volkswagen",
+      "anio": 2017,
+      "km": 170000,
+      "precio": {
+        "moneda": "ARS",
+        "monto": 21000000,
+        "fecha": "2026-10-20"
+      },
+      "anticipo": {
+        "moneda": "ARS",
+        "monto": 10500000,
+        "fecha": "2026-10-20"
+      },
+      "url": "https://auto.mercadolibre.com.ar/MLA-2063616163-volkswagen-golf-14-comfortline-tsi-dsg-_JM",
+      "publicadoEl": "2026-10-20",
+      "estado": "publicado_en_consulta",
+      "fotos": [
+        {
+          "src": "images/stock/ml-2063616163.webp",
+          "alt": "Volkswagen Golf 2017 1.4 Comfortline Tsi Dsg · foto de la publicación en Mercado Libre",
+          "width": 560,
+          "height": 560,
+          "fuente": "https://http2.mlstatic.com/D_Q_NP_2X_664585-MLA115935828714_092026-E.webp"
+        }
+      ],
+      "fuente": {
+        "tipo": "Mercado Libre",
+        "url": "https://auto.mercadolibre.com.ar/MLA-2063616163-volkswagen-golf-14-comfortline-tsi-dsg-_JM",
+        "consultado": "2026-10-20"
+      },
+      "nota": "Precio y disponibilidad sujetos a confirmación directa con Automotores 828."
+    },
+    {
+      "id": "3922900592",
+      "titulo": "Peugeot 408 2012 2.0 Feline 143cv",
+      "marca": "Peugeot",
+      "anio": 2012,
+      "km": 184800,
+      "precio": {
+        "moneda": "ARS",
+        "monto": 12500000,
+        "fecha": "2026-10-20"
+      },
+      "anticipo": {
+        "moneda": "ARS",
+        "monto": 6250000,
+        "fecha": "2026-10-20"
+      },
+      "url": "https://auto.mercadolibre.com.ar/MLA-3922900592-peugeot-408-20-feline-143cv-_JM",
+      "publicadoEl": "2026-10-20",
+      "estado": "publicado_en_consulta",
+      "fotos": [
+        {
+          "src": "images/stock/ml-3922900592.webp",
+          "alt": "Peugeot 408 2012 2.0 Feline 143cv · foto de la publicación en Mercado Libre",
+          "width": 560,
+          "height": 560,
+          "fuente": "https://http2.mlstatic.com/D_Q_NP_2X_962272-MLA115854354596_092026-E.webp"
+        }
+      ],
+      "fuente": {
+        "tipo": "Mercado Libre",
+        "url": "https://auto.mercadolibre.com.ar/MLA-3922900592-peugeot-408-20-feline-143cv-_JM",
+        "consultado": "2026-10-20"
+      },
+      "nota": "Precio y disponibilidad sujetos a confirmación directa con Automotores 828."
+    },
+    {
+      "id": "2164036085",
+      "titulo": "Chevrolet S10 2015 2.8 Cd 4x2 Ltz Tdci 200cv",
+      "marca": "Chevrolet",
+      "anio": 2015,
+      "km": 129200,
+      "precio": {
+        "moneda": "USD",
+        "monto": 21000,
+        "fecha": "2026-10-20"
+      },
+      "anticipo": {
+        "moneda": "USD",
+        "monto": 10500,
+        "fecha": "2026-10-20"
+      },
+      "url": "https://auto.mercadolibre.com.ar/MLA-2164036085-chevrolet-s10-28-cd-4x2-ltz-tdci-200cv-_JM",
+      "publicadoEl": "2026-10-20",
+      "estado": "publicado_en_consulta",
+      "fotos": [
+        {
+          "src": "images/stock/ml-2164036085.webp",
+          "alt": "Chevrolet S10 2015 2.8 Cd 4x2 Ltz Tdci 200cv · foto de la publicación en Mercado Libre",
+          "width": 560,
+          "height": 560,
+          "fuente": "https://http2.mlstatic.com/D_Q_NP_2X_720487-MLA118963817767_102026-E.webp"
+        }
+      ],
+      "fuente": {
+        "tipo": "Mercado Libre",
+        "url": "https://auto.mercadolibre.com.ar/MLA-2164036085-chevrolet-s10-28-cd-4x2-ltz-tdci-200cv-_JM",
+        "consultado": "2026-10-20"
+      },
+      "nota": "Precio y disponibilidad sujetos a confirmación directa con Automotores 828."
+    },
+    {
+      "id": "2080295489",
+      "titulo": "Chevrolet Meriva 2011 1.8 Gls",
+      "marca": "Chevrolet",
+      "anio": 2011,
+      "km": 170000,
+      "precio": {
+        "moneda": "ARS",
+        "monto": 10000000,
+        "fecha": "2026-10-20"
+      },
+      "anticipo": {
+        "moneda": "ARS",
+        "monto": 5000000,
+        "fecha": "2026-10-20"
+      },
+      "url": "https://auto.mercadolibre.com.ar/MLA-2080295489-chevrolet-meriva-18-gls-_JM",
+      "publicadoEl": "2026-10-20",
+      "estado": "publicado_en_consulta",
+      "fotos": [
+        {
+          "src": "images/stock/ml-2080295489.webp",
+          "alt": "Chevrolet Meriva 2011 1.8 Gls · foto de la publicación en Mercado Libre",
+          "width": 560,
+          "height": 560,
+          "fuente": "https://http2.mlstatic.com/D_Q_NP_2X_968371-MLA117537149559_092026-E.webp"
+        }
+      ],
+      "fuente": {
+        "tipo": "Mercado Libre",
+        "url": "https://auto.mercadolibre.com.ar/MLA-2080295489-chevrolet-meriva-18-gls-_JM",
+        "consultado": "2026-10-20"
+      },
+      "nota": "Precio y disponibilidad sujetos a confirmación directa con Automotores 828."
+    },
+    {
+      "id": "3911569720",
+      "titulo": "Peugeot 307 2010 2.0 Sedan Hdi Xs 110cv",
+      "marca": "Peugeot",
+      "anio": 2010,
+      "km": 177260,
+      "precio": {
+        "moneda": "ARS",
+        "monto": 10000000,
+        "fecha": "2026-10-20"
+      },
+      "anticipo": {
+        "moneda": "ARS",
+        "monto": 5000000,
+        "fecha": "2026-10-20"
+      },
+      "url": "https://auto.mercadolibre.com.ar/MLA-3911569720-peugeot-307-20-sedan-hdi-xs-110cv-_JM",
+      "publicadoEl": "2026-10-20",
+      "estado": "publicado_en_consulta",
+      "fotos": [
+        {
+          "src": "images/stock/ml-3911569720.webp",
+          "alt": "Peugeot 307 2010 2.0 Sedan Hdi Xs 110cv · foto de la publicación en Mercado Libre",
+          "width": 560,
+          "height": 560,
+          "fuente": "https://http2.mlstatic.com/D_Q_NP_2X_838230-MLA117412555373_092026-E.webp"
+        }
+      ],
+      "fuente": {
+        "tipo": "Mercado Libre",
+        "url": "https://auto.mercadolibre.com.ar/MLA-3911569720-peugeot-307-20-sedan-hdi-xs-110cv-_JM",
+        "consultado": "2026-10-20"
+      },
+      "nota": "Precio y disponibilidad sujetos a confirmación directa con Automotores 828."
+    },
+    {
+      "id": "1957627121",
+      "titulo": "Jeep Renegade 2018 2.0 Trailhawk At9 4x4",
+      "marca": "Jeep",
+      "anio": 2018,
+      "km": 97100,
+      "precio": {
+        "moneda": "USD",
+        "monto": 22000,
+        "fecha": "2026-10-20"
+      },
+      "anticipo": {
+        "moneda": "USD",
+        "monto": 11000,
+        "fecha": "2026-10-20"
+      },
+      "url": "https://auto.mercadolibre.com.ar/MLA-1957627121-jeep-renegade-20-trailhawk-at9-4x4-_JM",
+      "publicadoEl": "2026-10-20",
+      "estado": "publicado_en_consulta",
+      "fotos": [
+        {
+          "src": "images/stock/ml-1957627121.webp",
+          "alt": "Jeep Renegade 2018 2.0 Trailhawk At9 4x4 · foto de la publicación en Mercado Libre",
+          "width": 560,
+          "height": 560,
+          "fuente": "https://http2.mlstatic.com/D_Q_NP_2X_924300-MLA117132869649_092026-E.webp"
+        }
+      ],
+      "fuente": {
+        "tipo": "Mercado Libre",
+        "url": "https://auto.mercadolibre.com.ar/MLA-1957627121-jeep-renegade-20-trailhawk-at9-4x4-_JM",
+        "consultado": "2026-10-20"
+      },
+      "nota": "Precio y disponibilidad sujetos a confirmación directa con Automotores 828."
+    },
+    {
+      "id": "3962982670",
+      "titulo": "Honda Civic 2018 2.0 Ex Cvt",
+      "marca": "Honda",
+      "anio": 2018,
+      "km": 145000,
+      "precio": {
+        "moneda": "USD",
+        "monto": 19000,
+        "fecha": "2026-10-20"
+      },
+      "anticipo": {
+        "moneda": "USD",
+        "monto": 9500,
+        "fecha": "2026-10-20"
+      },
+      "url": "https://auto.mercadolibre.com.ar/MLA-3962982670-honda-civic-20-ex-cvt-_JM",
+      "publicadoEl": "2026-10-20",
+      "estado": "publicado_en_consulta",
+      "fotos": [
+        {
+          "src": "images/stock/ml-3962982670.webp",
+          "alt": "Honda Civic 2018 2.0 Ex Cvt · foto de la publicación en Mercado Libre",
+          "width": 560,
+          "height": 560,
+          "fuente": "https://http2.mlstatic.com/D_Q_NP_2X_790885-MLA117828315837_092026-E.webp"
+        }
+      ],
+      "fuente": {
+        "tipo": "Mercado Libre",
+        "url": "https://auto.mercadolibre.com.ar/MLA-3962982670-honda-civic-20-ex-cvt-_JM",
+        "consultado": "2026-10-20"
+      },
+      "nota": "Precio y disponibilidad sujetos a confirmación directa con Automotores 828."
+    },
+    {
+      "id": "2168683951",
+      "titulo": "Renault Logan 2023 1.6 16v Intense",
+      "marca": "Renault",
+      "anio": 2023,
+      "km": 103300,
+      "precio": {
+        "moneda": "ARS",
+        "monto": 20000000,
+        "fecha": "2026-10-20"
+      },
+      "anticipo": {
+        "moneda": "ARS",
+        "monto": 10000000,
+        "fecha": "2026-10-20"
+      },
+      "url": "https://auto.mercadolibre.com.ar/MLA-2168683951-renault-logan-16-16v-intense-_JM",
+      "publicadoEl": "2026-10-20",
+      "estado": "publicado_en_consulta",
+      "fotos": [
+        {
+          "src": "images/stock/ml-2168683951.webp",
+          "alt": "Renault Logan 2023 1.6 16v Intense · foto de la publicación en Mercado Libre",
+          "width": 560,
+          "height": 560,
+          "fuente": "https://http2.mlstatic.com/D_Q_NP_2X_799169-MLA119025937491_102026-E.webp"
+        }
+      ],
+      "fuente": {
+        "tipo": "Mercado Libre",
+        "url": "https://auto.mercadolibre.com.ar/MLA-2168683951-renault-logan-16-16v-intense-_JM",
+        "consultado": "2026-10-20"
+      },
+      "nota": "Precio y disponibilidad sujetos a confirmación directa con Automotores 828."
+    },
+    {
+      "id": "4017993224",
+      "titulo": "Toyota Etios 2017 1.5 Xls At",
+      "marca": "Toyota",
+      "anio": 2017,
+      "km": 179000,
+      "precio": {
+        "moneda": "ARS",
+        "monto": 17500000,
+        "fecha": "2026-10-20"
+      },
+      "anticipo": {
+        "moneda": "ARS",
+        "monto": 8750000,
+        "fecha": "2026-10-20"
+      },
+      "url": "https://auto.mercadolibre.com.ar/MLA-4017993224-toyota-etios-15-xls-at-_JM",
+      "publicadoEl": "2026-10-20",
+      "estado": "publicado_en_consulta",
+      "fotos": [
+        {
+          "src": "images/stock/ml-4017993224.webp",
+          "alt": "Toyota Etios 2017 1.5 Xls At · foto de la publicación en Mercado Libre",
+          "width": 560,
+          "height": 560,
+          "fuente": "https://http2.mlstatic.com/D_Q_NP_2X_997884-MLA118559411713_102026-E.webp"
+        }
+      ],
+      "fuente": {
+        "tipo": "Mercado Libre",
+        "url": "https://auto.mercadolibre.com.ar/MLA-4017993224-toyota-etios-15-xls-at-_JM",
+        "consultado": "2026-10-20"
+      },
+      "nota": "Precio y disponibilidad sujetos a confirmación directa con Automotores 828."
+    },
+    {
+      "id": "4004324338",
+      "titulo": "Chevrolet Prisma 2018 1.4 Lt 98cv",
+      "marca": "Chevrolet",
+      "anio": 2018,
+      "km": 180000,
+      "precio": {
+        "moneda": "ARS",
+        "monto": 14500000,
+        "fecha": "2026-10-20"
+      },
+      "anticipo": {
+        "moneda": "ARS",
+        "monto": 7250000,
+        "fecha": "2026-10-20"
+      },
+      "url": "https://auto.mercadolibre.com.ar/MLA-4004324338-chevrolet-prisma-14-lt-98cv-_JM",
+      "publicadoEl": "2026-10-20",
+      "estado": "publicado_en_consulta",
+      "fotos": [
+        {
+          "src": "images/stock/ml-4004324338.webp",
+          "alt": "Chevrolet Prisma 2018 1.4 Lt 98cv · foto de la publicación en Mercado Libre",
+          "width": 560,
+          "height": 560,
+          "fuente": "https://http2.mlstatic.com/D_Q_NP_2X_977526-MLA118386527347_092026-E.webp"
+        }
+      ],
+      "fuente": {
+        "tipo": "Mercado Libre",
+        "url": "https://auto.mercadolibre.com.ar/MLA-4004324338-chevrolet-prisma-14-lt-98cv-_JM",
+        "consultado": "2026-10-20"
+      },
+      "nota": "Precio y disponibilidad sujetos a confirmación directa con Automotores 828."
+    },
+    {
+      "id": "3922903672",
+      "titulo": "Suzuki Vitara 1992 1.6 Jlx Sidekick",
+      "marca": "Suzuki",
+      "anio": 1992,
+      "km": 320000,
+      "precio": {
+        "moneda": "USD",
+        "monto": 9000,
+        "fecha": "2026-10-20"
+      },
+      "anticipo": {
+        "moneda": "USD",
+        "monto": 4500,
+        "fecha": "2026-10-20"
+      },
+      "url": "https://auto.mercadolibre.com.ar/MLA-3922903672-suzuki-vitara-16-jlx-sidekick-_JM",
+      "publicadoEl": "2026-10-20",
+      "estado": "publicado_en_consulta",
+      "fotos": [
+        {
+          "src": "images/stock/ml-3922903672.webp",
+          "alt": "Suzuki Vitara 1992 1.6 Jlx Sidekick · foto de la publicación en Mercado Libre",
+          "width": 560,
+          "height": 560,
+          "fuente": "https://http2.mlstatic.com/D_Q_NP_2X_714835-MLA115854903912_092026-E.webp"
+        }
+      ],
+      "fuente": {
+        "tipo": "Mercado Libre",
+        "url": "https://auto.mercadolibre.com.ar/MLA-3922903672-suzuki-vitara-16-jlx-sidekick-_JM",
+        "consultado": "2026-10-20"
+      },
+      "nota": "Precio y disponibilidad sujetos a confirmación directa con Automotores 828."
+    },
+    {
+      "id": "2163985589",
+      "titulo": "Citroën Xsara Picasso 2010 2.0 Fase2 Hdi Exclusive",
+      "marca": "Citroën",
+      "anio": 2010,
+      "km": 225000,
+      "precio": {
+        "moneda": "ARS",
+        "monto": 9500000,
+        "fecha": "2026-10-20"
+      },
+      "anticipo": {
+        "moneda": "ARS",
+        "monto": 4750000,
+        "fecha": "2026-10-20"
+      },
+      "url": "https://auto.mercadolibre.com.ar/MLA-2163985589-citron-xsara-picasso-20-fase2-hdi-exclusive-_JM",
+      "publicadoEl": "2026-10-20",
+      "estado": "publicado_en_consulta",
+      "fotos": [
+        {
+          "src": "images/stock/ml-2163985589.webp",
+          "alt": "Citroën Xsara Picasso 2010 2.0 Fase2 Hdi Exclusive · foto de la publicación en Mercado Libre",
+          "width": 560,
+          "height": 560,
+          "fuente": "https://http2.mlstatic.com/D_Q_NP_2X_903914-MLA118963822799_102026-E.webp"
+        }
+      ],
+      "fuente": {
+        "tipo": "Mercado Libre",
+        "url": "https://auto.mercadolibre.com.ar/MLA-2163985589-citron-xsara-picasso-20-fase2-hdi-exclusive-_JM",
+        "consultado": "2026-10-20"
+      },
+      "nota": "Precio y disponibilidad sujetos a confirmación directa con Automotores 828."
+    },
+    {
+      "id": "3910583314",
+      "titulo": "Ford Focus Iii 2016 2.0 Titanium Mt",
+      "marca": "Ford",
+      "anio": 2016,
+      "km": 122800,
+      "precio": {
+        "moneda": "ARS",
+        "monto": 19000000,
+        "fecha": "2026-10-20"
+      },
+      "anticipo": {
+        "moneda": "ARS",
+        "monto": 9500000,
+        "fecha": "2026-10-20"
+      },
+      "url": "https://auto.mercadolibre.com.ar/MLA-3910583314-ford-focus-iii-20-titanium-mt-_JM",
+      "publicadoEl": "2026-10-20",
+      "estado": "publicado_en_consulta",
+      "fotos": [
+        {
+          "src": "images/stock/ml-3910583314.webp",
+          "alt": "Ford Focus Iii 2016 2.0 Titanium Mt · foto de la publicación en Mercado Libre",
+          "width": 560,
+          "height": 560,
+          "fuente": "https://http2.mlstatic.com/D_Q_NP_2X_824365-MLA117371467449_092026-E.webp"
+        }
+      ],
+      "fuente": {
+        "tipo": "Mercado Libre",
+        "url": "https://auto.mercadolibre.com.ar/MLA-3910583314-ford-focus-iii-20-titanium-mt-_JM",
+        "consultado": "2026-10-20"
+      },
+      "nota": "Precio y disponibilidad sujetos a confirmación directa con Automotores 828."
+    },
+    {
+      "id": "2163981297",
+      "titulo": "BMW Serie 3 1999 323 Ti 2.3",
+      "marca": "BMW",
+      "anio": 1999,
+      "km": 201000,
+      "precio": {
+        "moneda": "USD",
+        "monto": 11500,
+        "fecha": "2026-10-20"
+      },
+      "anticipo": {
+        "moneda": "USD",
+        "monto": 5750,
+        "fecha": "2026-10-20"
+      },
+      "url": "https://auto.mercadolibre.com.ar/MLA-2163981297-bmw-323-ti-23-_JM",
+      "publicadoEl": "2026-10-20",
+      "estado": "publicado_en_consulta",
+      "fotos": [
+        {
+          "src": "images/stock/ml-2163981297.webp",
+          "alt": "BMW Serie 3 1999 323 Ti 2.3 · foto de la publicación en Mercado Libre",
+          "width": 560,
+          "height": 560,
+          "fuente": "https://http2.mlstatic.com/D_Q_NP_2X_612306-MLA118963419489_102026-E.webp"
+        }
+      ],
+      "fuente": {
+        "tipo": "Mercado Libre",
+        "url": "https://auto.mercadolibre.com.ar/MLA-2163981297-bmw-323-ti-23-_JM",
+        "consultado": "2026-10-20"
+      },
+      "nota": "Precio y disponibilidad sujetos a confirmación directa con Automotores 828."
+    },
+    {
+      "id": "4043971584",
+      "titulo": "Fiat Siena 2015 1.6 El 16v",
+      "marca": "Fiat",
+      "anio": 2015,
+      "km": 202200,
+      "precio": {
+        "moneda": "ARS",
+        "monto": 12000000,
+        "fecha": "2026-10-20"
+      },
+      "anticipo": {
+        "moneda": "ARS",
+        "monto": 6000000,
+        "fecha": "2026-10-20"
+      },
+      "url": "https://auto.mercadolibre.com.ar/MLA-4043971584-fiat-siena-16-el-16v-_JM",
+      "publicadoEl": "2026-10-20",
+      "estado": "publicado_en_consulta",
+      "fotos": [
+        {
+          "src": "images/stock/ml-4043971584.webp",
+          "alt": "Fiat Siena 2015 1.6 El 16v · foto de la publicación en Mercado Libre",
+          "width": 560,
+          "height": 560,
+          "fuente": "https://http2.mlstatic.com/D_Q_NP_2X_943565-MLA118964570881_102026-E.webp"
+        }
+      ],
+      "fuente": {
+        "tipo": "Mercado Libre",
+        "url": "https://auto.mercadolibre.com.ar/MLA-4043971584-fiat-siena-16-el-16v-_JM",
+        "consultado": "2026-10-20"
+      },
+      "nota": "Precio y disponibilidad sujetos a confirmación directa con Automotores 828."
+    }
+  ]
 }

@@ -1,6 +1,12 @@
 {
   "fuentes": [
     {
+      "id": "mercadolibre-vendedor",
+      "url": "https://vehiculos.mercadolibre.com.ar/_CustId_121360385",
+      "consultado": "2026-10-20",
+      "nota": "Listado público del vendedor: 58 resultados; se incorporaron 48 tarjetas cargadas con título, precio, año, kilometraje, enlace e imagen. La consulta no confirma disponibilidad futura."
+    },
+    {
       "id": "instagram",
       "url": "https://www.instagram.com/automotores828/",
       "consultado": "2026-10-20",

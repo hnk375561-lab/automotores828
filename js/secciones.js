@@ -646,6 +646,7 @@
       var mb = el('p', a.marca, 'fi-b'); if (a.vendida) mb.appendChild(el('span', 'Vendida', 'fi-v')); info.appendChild(mb);
       var h = el('h2', a.modeloTxt); h.id = 'fi-ttl'; info.appendChild(h);
       info.appendChild(el('p', a.precio ? peso(a) : 'Consultar precio', 'fi-pr'));
+      if (a.anticipo && a.anticipo.monto != null) info.appendChild(el('p', 'Anticipo publicado: ' + (a.anticipo.moneda === 'USD' ? 'US$ ' : '$ ') + fmt(a.anticipo.monto), 'fi-n'));
       if (a.precio && a.precio.fecha) info.appendChild(el('p', 'Precio al ' + fecha(a.precio.fecha) + '.', 'fi-n'));
       var dl = el('dl', null, 'fi-d');
       function dato(k, v, sw) {
@@ -683,7 +684,7 @@
         });
         ac2.appendChild(cm);
       }
-      if (a.url) ac2.appendChild(enlace('Ver en Instagram', a.url, 'btn sm', true));
+      if (a.url) ac2.appendChild(enlace('Ver publicación original', a.url, 'btn sm', true));
       if (ctx.maps) ac2.appendChild(enlace('Cómo llegar', ctx.maps, 'btn sm', true));
       info.appendChild(ac2);
 
