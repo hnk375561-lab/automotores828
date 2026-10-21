@@ -1,4 +1,4 @@
-/* DR Automóviles · reserva dentro de «Visita»: se expande como una sección más (mismo flujo que reserva.html:
+/* Automotores 828 · reserva dentro de «Visita»: se expande como una sección más (mismo flujo que reserva.html:
    mes → día y franja → resumen con WhatsApp). El número y el mapa salen de los botones que ya tiene la sección. */
 (function () {
   'use strict';
@@ -18,7 +18,7 @@
   box.innerHTML =
     '<div class="rz-clip"><div class="rz-box" role="region" aria-label="Coordiná tu visita">' +
     '<div class="rz-bar"><span><b>Coordiná tu visita</b> / consulta</span><span class="rz-acts"><button type="button" data-back hidden>← Atrás</button><button type="button" data-close>✕ Cerrar</button></span></div>' +
-    '<div class="rz-step" data-s="month"><div><p class="rz-k">DR Automóviles</p><h3 id="rz-t">Elegí<em>cuándo</em><em>venir.</em></h3><p class="rz-p">Elegí un día en el calendario y armá la consulta. Todavía no es un turno.</p></div>' +
+    '<div class="rz-step" data-s="month"><div><p class="rz-k">Automotores 828</p><h3 id="rz-t">Elegí<em>cuándo</em><em>venir.</em></h3><p class="rz-p">Elegí un día en el calendario y armá la consulta. Todavía no es un turno.</p></div>' +
     '<div class="rz-cal"><div class="rz-ch"><button type="button" data-prev aria-label="Mes anterior">←</button><strong data-ml></strong><button type="button" data-next aria-label="Mes siguiente">→</button></div>' +
     '<div class="rz-wd" aria-hidden="true"><span>LU</span><span>MA</span><span>MI</span><span>JU</span><span>VI</span><span>SA</span><span>DO</span></div><div class="rz-days" data-days role="group" aria-label="Calendario de consulta"></div></div></div>' +
     '<div class="rz-step" data-s="time" hidden><div class="rz-big" aria-hidden="true"><small data-dm></small><span data-dn></span><strong data-dw></strong></div>' +
@@ -26,7 +26,7 @@
     '<div class="rz-step" data-s="confirm" hidden><div><p class="rz-k">Tu visita</p><h3><span data-sd>DÍA</span><em data-sf>FRANJA</em></h3><p class="rz-p">' + addr + '</p></div>' +
     '<div><div class="rz-acts2"><a class="btn p" data-wa target="_blank" rel="noopener noreferrer" href="' + (wa ? 'https://wa.me/' + wa : '#') + '">Escribir por WhatsApp ↗</a>' + (maps ? '<a class="btn" target="_blank" rel="noopener noreferrer" href="' + maps + '">Abrir Maps</a>' : '') + '<button type="button" class="btn" data-restart>Elegir otro día</button></div>' +
     '<p class="rz-st" role="status" aria-live="polite" data-send></p>' +
-    '<p class="rz-dis">Con este mensaje consultás por una visita. El día y la hora se acuerdan con DR Automóviles.</p></div></div>' +
+    '<p class="rz-dis">Con este mensaje consultás por una visita. El día y la hora se acuerdan con Automotores 828.</p></div></div>' +
     '</div></div></div><div class="sr" aria-live="polite" data-live></div>';
   grid.parentNode.insertBefore(box, grid.nextSibling);
 

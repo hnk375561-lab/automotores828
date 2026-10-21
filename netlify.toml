@@ -1,4 +1,4 @@
-# DR Automóviles · publica SOLO la lista blanca de scripts/build-site.mjs
+# Automotores 828 · publica SOLO la lista blanca de scripts/build-site.mjs
 [build]
   command = "node scripts/build-site.mjs"
   publish = "_site"

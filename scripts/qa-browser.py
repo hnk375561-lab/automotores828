@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""DR Automóviles · QA en navegador real (Chromium vía Playwright de Python).
+"""Automotores 828 · QA en navegador real (Chromium vía Playwright de Python).
 Uso:  python3 scripts/qa-browser.py      (levanta node scripts/serve.mjs por su cuenta)
 Falla (exit 1) si hay: overflow horizontal, errores de consola, titulares partidos a mitad de palabra,
 controles táctiles < 44px (en ≤980px), el FAB tapando controles, o contenido oculto con movimiento reducido."""

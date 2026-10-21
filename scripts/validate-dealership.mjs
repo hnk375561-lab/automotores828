@@ -44,7 +44,7 @@ if (d && a) {
     for (const m of h.matchAll(/(?:src|href)="([^"]+)"/g)) {
       const u = m[1];
       if (/^(https?:|mailto:|tel:|#|\.\/?#?)/.test(u) || u === './') continue;
-      const local = u.split(/[?#]/)[0].replace(/^\/dr-automoviles\//, ''); // la 404 usa rutas absolutas bajo el nombre del repo (GitHub Pages)
+      const local = u.split(/[?#]/)[0].replace(/^\/automotores828\//, ''); // la 404 usa rutas absolutas bajo el nombre del repo (GitHub Pages)
       if (local && !fs.existsSync(path.join(root, local))) err(`${p}: referencia a archivo inexistente ${u}`);
     }
     for (const m of h.matchAll(/url\(([^)]+)\)/g)) { const u = m[1].replace(/["']/g, '').trim(); if (u.startsWith('data:') || u.startsWith('#')) continue; if (!fs.existsSync(path.join(root, u))) err(`${p}: css url() a archivo inexistente ${m[1]}`); }

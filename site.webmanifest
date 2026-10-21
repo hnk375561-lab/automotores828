@@ -1,7 +1,7 @@
 {
-  "name": "DR Automóviles",
-  "short_name": "DR Automóviles",
-  "description": "Autos usados en Paso del Rey, Buenos Aires.",
+  "name": "Automotores 828",
+  "short_name": "Automotores 828",
+  "description": "Autos usados en Monte Grande, Buenos Aires.",
   "lang": "es-AR",
   "start_url": "./",
   "scope": "./",

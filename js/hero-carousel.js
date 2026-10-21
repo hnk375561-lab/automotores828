@@ -1,4 +1,4 @@
-/* DR Automóviles · carrusel del hero
+/* Automotores 828 · carrusel del hero
    Cambia de foto cada 2 segundos (todas, incluida la primera), con crossfade y zoom (Ken Burns) en cada una.
    Se detiene solo con la pestaña oculta; con «reducir movimiento» queda fija la primera foto. */
 (function () {

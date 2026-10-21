@@ -1,0 +1,28 @@
+{
+  "fuentes": [
+    {
+      "id": "instagram",
+      "url": "https://www.instagram.com/automotores828/",
+      "consultado": "2026-10-20",
+      "nota": "Perfil público: multimarcas, 0 km, usados, financiación y cuotas fijas."
+    },
+    {
+      "id": "facebook",
+      "url": "https://www.facebook.com/automotoressrl828/",
+      "consultado": "2026-10-20",
+      "nota": "Página pública: Automotores 828, Monte Grande y correo público."
+    },
+    {
+      "id": "argentino",
+      "url": "https://www.argentino.com.ar/automotores-828-srl-F110DC20212D546",
+      "consultado": "2026-10-20",
+      "nota": "Directorio: dirección, horarios y referencia a Mercado Libre."
+    },
+    {
+      "id": "cylex",
+      "url": "https://www.cylex.com.ar/monte-grande/automotores-828-srl-11668018.html",
+      "consultado": "2026-10-20",
+      "nota": "Directorio: el enlace rotulado sitio web apunta a Mercado Libre."
+    }
+  ]
+}

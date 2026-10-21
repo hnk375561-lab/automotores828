@@ -1,4 +1,4 @@
-/* DR Automóviles · js/mapa.js
+/* Automotores 828 · js/mapa.js
    Mapa interactivo de «Horarios y ubicación». Leaflet + OpenStreetMap se cargan al acercarse a la sección
    (o al tocar «Ver mapa»). Mapa siempre claro (sin filtros de color, que eran lo que lo hacía pesado), marcador con el nombre, botón para centrar y, si fallan las teselas, mapa de Google. */
 (function () {
@@ -55,8 +55,7 @@
 
     var attr = '&copy; <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener noreferrer">OpenStreetMap</a>';
     var fuentes = [
-      { url: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png', o: { maxZoom: 19, attribution: attr, keepBuffer: 3, updateWhenIdle: movil, updateWhenZooming: false } },
-      { url: 'https://{s}.tile.openstreetmap.fr/osmfr/{z}/{x}/{y}.png', o: { maxZoom: 19, subdomains: 'abc', attribution: attr, keepBuffer: 3, updateWhenIdle: movil, updateWhenZooming: false } }
+      { url: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png', o: { maxZoom: 19, attribution: attr, keepBuffer: 3, updateWhenIdle: movil, updateWhenZooming: false } }
     ];
     var k = 0, errores = 0, tiles = null, cargo = false;
     function capa() {

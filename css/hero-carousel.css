@@ -1,4 +1,4 @@
-/* DR Automóviles · hero con fotos a pantalla completa (carrusel de 2 s con crossfade + zoom).
+/* Automotores 828 · hero con fotos a pantalla completa (carrusel de 2 s con crossfade + zoom).
    Se carga después de los estilos de la página; js/hero-carousel.js alterna las clases is-active / is-leaving. */
 html body .hero{background:#060607}
 html body .hero-media{position:absolute;inset:0;z-index:0;overflow:hidden;background:#060607;animation:none}

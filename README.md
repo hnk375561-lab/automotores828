@@ -1,6 +1,6 @@
-# DR Automóviles — sitio web
+# Automotores 828 — sitio web
 
-Sitio estático de DR Automóviles (Don Segundo Sombra 1130, Paso del Rey, Moreno, Buenos Aires). Estado: **demo no indexable** construida con información pública.
+Sitio estático de Automotores 828 (Blvd. Buenos Aires 828, Monte Grande, Esteban Echeverría, Buenos Aires). Estado: **demo no indexable** construida con información pública.
 
 Las páginas se generan desde `data/dealership.json` y `data/vehicles.json` con `npm run build` (`scripts/build-index.mjs`, estilos en `scripts/estilos.css`). No se editan a mano.
 

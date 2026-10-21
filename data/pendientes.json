@@ -1,0 +1,22 @@
+{
+  "items": [
+    {
+      "id": "P1",
+      "tema": "Confirmar teléfono/WhatsApp comercial y autorización de publicación",
+      "estado": "abierto",
+      "bloqueante": true
+    },
+    {
+      "id": "P2",
+      "tema": "Recibir fotos y logo originales con autorización de uso",
+      "estado": "abierto",
+      "bloqueante": false
+    },
+    {
+      "id": "P3",
+      "tema": "Confirmar dominio y aprobación para publicar",
+      "estado": "abierto",
+      "bloqueante": true
+    }
+  ]
+}

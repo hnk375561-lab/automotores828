@@ -1,4 +1,4 @@
-/* DR Automóviles · fotos de fondo en alta calidad para las secciones.
+/* Automotores 828 · fotos de fondo en alta calidad para las secciones.
    Cada foto se descarga y decodifica recién cuando la sección está cerca de la pantalla, de a una por vez.
    Sin background-attachment:fixed. Con "ahorro de datos" no se cargan. */
 (function () {

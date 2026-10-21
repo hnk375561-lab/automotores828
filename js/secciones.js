@@ -1,4 +1,4 @@
-/* DR Automóviles · js/secciones.js
+/* Automotores 828 · js/secciones.js
    1) Catálogo: filtros, orden y comparador de hasta 4 unidades (lee el JSON de #cat-data, que genera scripts/build-index.mjs desde data/vehicles.json).
    2) Formularios «Tu usado» y «Contanos qué auto buscás»: arman un mensaje que la persona copia y envía ella.
       No se transmite ni se guarda nada.
@@ -450,7 +450,7 @@
       var sun = el('span', null, 'cmp-flag'); sun.setAttribute('aria-hidden', 'true'); sun.innerHTML = '<svg viewBox="0 0 64 36" focusable="false"><path d="M8 3v32"/><path d="M8 6h46v20H8z"/><path d="M8 16h46M19.5 6v20M31 6v20M42.5 6v20"/></svg>';
       tt.appendChild(sun);
       var tx = el('div', null, 'cmp-tx');
-      tx.appendChild(el('p', 'DR Automóviles', 'cmp-ey'));
+      tx.appendChild(el('p', 'Automotores 828', 'cmp-ey'));
       var h = el('h2', 'Comparador'); h.id = 'cmp-ttl'; tx.appendChild(h);
       tx.appendChild(el('p', sel.length + ' unidades, lado a lado', 'cmp-sub'));
       tt.appendChild(tx); hd.appendChild(tt);

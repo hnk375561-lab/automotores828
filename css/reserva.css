@@ -1,4 +1,4 @@
-/* DR AUTOMÓVILES · RESERVA · identidad: negro #060607, rojo #ee1c22 y blanco #f8f8f8 (ver docs/IDENTIDAD.md)
+/* AUTOMOTORES 828 · RESERVA · identidad: negro #060607, rojo #ee1c22 y blanco #f8f8f8 (ver docs/IDENTIDAD.md)
    Base: RESERVA v57 · cada paso entra completo en una sola pantalla (sin scroll) y todo el texto es legible.
    Reemplaza por completo al css/reserva.css anterior. */
 @font-face{font-family:"Inter";src:url('../fonts/inter-latin-var.woff2') format('woff2');font-weight:100 900;font-display:swap}
@@ -166,7 +166,7 @@ button.day-cell{min-height:32px}
 
 .brand:has(.lg-bk)::before{display:none}.brand .lg-bk{display:block;height:36px;width:auto;background:#fefefe;padding:3px 8px}
 
-/* DR AUTOMÓVILES · refinamiento de flujo, jerarquía y estados */
+/* AUTOMOTORES 828 · refinamiento de flujo, jerarquía y estados */
 .booking-nav{box-shadow:0 10px 32px rgba(0,0,0,.22)}
 .booking-nav::after{content:none}
 .calendar-shell{box-shadow:none}

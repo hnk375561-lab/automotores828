@@ -1,4 +1,4 @@
-// Verificador de enlaces de DR Automóviles.  Uso:   node scripts/check-links.mjs            (solo enlaces internos y formatos)
+// Verificador de enlaces de Automotores 828.  Uso:   node scripts/check-links.mjs            (solo enlaces internos y formatos)
 //                                           node scripts/check-links.mjs --external (además prueba los externos por red)
 import fs from 'node:fs';
 import path from 'node:path';

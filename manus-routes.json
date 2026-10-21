@@ -1,0 +1,9 @@
+{
+  "routes": [
+    {"path":"/","title":"Automotores 828"},
+    {"path":"/index.html","title":"Automotores 828"},
+    {"path":"/reserva.html","title":"Agendar visita"},
+    {"path":"/privacidad.html","title":"Privacidad y avisos"},
+    {"path":"/404.html","title":"Página no encontrada"}
+  ]
+}

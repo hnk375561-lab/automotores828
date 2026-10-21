@@ -1,4 +1,4 @@
-Tipografías autoalojadas utilizadas por DR Automóviles. Ambas bajo SIL Open Font License 1.1.
+Tipografías autoalojadas utilizadas por Automotores 828. Ambas bajo SIL Open Font License 1.1.
 
 Exo 2 — © The Exo 2 Project Authors (https://github.com/googlefonts/Exo-2.0). Licencia completa en LICENSE-exo-2.txt.
 Inter — © The Inter Project Authors (https://github.com/rsms/inter).

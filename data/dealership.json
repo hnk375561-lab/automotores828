@@ -1,0 +1,116 @@
+{
+  "identity": {
+    "tradeName": "Automotores 828",
+    "legalName": "Automotores 828 S.R.L.",
+    "cuit": null
+  },
+  "location": {
+    "address": "Blvd. Buenos Aires 828",
+    "postalCode": "B1842",
+    "city": "Monte Grande",
+    "partido": "Esteban Echeverría",
+    "province": "Buenos Aires",
+    "mapsUrl": "https://www.google.com/maps/search/?api=1&query=Blvd.%20Buenos%20Aires%20828%2C%20Monte%20Grande%2C%20Buenos%20Aires"
+  },
+  "contact": {
+    "nombre": "Automotores 828",
+    "phone": null,
+    "phoneTel": null,
+    "whatsApp": null,
+    "whatsAppDisplay": null,
+    "email": "automotores828@live.com",
+    "facebook": "https://www.facebook.com/automotoressrl828/",
+    "instagram": "automotores828",
+    "tiktok": null,
+    "youtube": null,
+    "confirmadoPorDueno": false,
+    "conflicto": {
+      "candidatos": []
+    }
+  },
+  "hours": {
+    "display": true,
+    "corto": "L-V 9–13 y 15–19 · S 9–13",
+    "semana": [
+      {
+        "dias": [
+          1,
+          2,
+          3,
+          4,
+          5
+        ],
+        "etiqueta": "Lunes a viernes",
+        "rangos": [
+          [
+            "09:00",
+            "13:00"
+          ],
+          [
+            "15:00",
+            "19:00"
+          ]
+        ]
+      },
+      {
+        "dias": [
+          6
+        ],
+        "etiqueta": "Sábados",
+        "rangos": [
+          [
+            "09:00",
+            "13:00"
+          ]
+        ]
+      }
+    ],
+    "domingo": "Cerrado"
+  },
+  "services": {
+    "published": [
+      {
+        "clave": "vehiculos-usados",
+        "texto": "Vehículos usados",
+        "fuente": "https://www.instagram.com/automotores828/"
+      },
+      {
+        "clave": "0km",
+        "texto": "Vehículos 0 km",
+        "fuente": "https://www.instagram.com/automotores828/"
+      },
+      {
+        "clave": "financiacion",
+        "texto": "Financiación y cuotas fijas",
+        "fuente": "https://www.instagram.com/automotores828/"
+      },
+      {
+        "clave": "permuta",
+        "texto": "Permutas",
+        "fuente": "https://www.argentino.com.ar/automotores-828-srl-F110DC20212D546"
+      },
+      {
+        "clave": "consignacion",
+        "texto": "Consignaciones",
+        "fuente": "https://www.argentino.com.ar/automotores-828-srl-F110DC20212D546"
+      }
+    ]
+  },
+  "reviews": {
+    "publicadas": false,
+    "googleUrl": null,
+    "puntaje": null,
+    "cantidad": null,
+    "fecha": null,
+    "escala": 5
+  },
+  "presentacion": {
+    "antiguedad": "Multimarcas · Vehículos usados"
+  },
+  "publicacion": {
+    "official": false,
+    "publicIndexing": false,
+    "siteUrl": null,
+    "previewUrl": null
+  }
+}
