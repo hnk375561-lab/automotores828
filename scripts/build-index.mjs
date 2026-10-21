@@ -485,13 +485,14 @@ const HERO_FOTOS = [
   ['09', 'images/hero/hero-09.webp', 'images/hero/hero-09-828.webp', 1131, 1131, 'Toyota Yaris 2021 en Automotores 828'],
   ['10', 'images/hero/hero-10.webp', 'images/hero/hero-10-828.webp', 900, 1200, 'Renault Duster 2018 en Automotores 828'],
 ];
-const HERO_SLIDES = HERO_FOTOS.map(([n, src, small, width, height, alt], k) => `<figure class="hero-slide hero-slide--${n}${k === 0 ? ' is-active' : ''}" data-hero-slide><img src="${src}" srcset="${small} 828w, ${src} ${width}w" sizes="100vw" width="${width}" height="${height}" alt="${esc(alt)}" decoding="async"${k === 0 ? ' fetchpriority="high"' : ' loading="lazy"'}></figure>`).join('');
+const HERO_VERSION = '?v=20261021-2';
+const HERO_SLIDES = HERO_FOTOS.map(([n, src, small, width, height, alt], k) => `<figure class="hero-slide hero-slide--${n}${k === 0 ? ' is-active' : ''}" data-hero-slide><img src="${src}${HERO_VERSION}" srcset="${small}${HERO_VERSION} 828w, ${src}${HERO_VERSION} ${width}w" sizes="100vw" width="${width}" height="${height}" alt="${esc(alt)}" decoding="async"${k === 0 ? ' fetchpriority="high"' : ' loading="lazy"'}></figure>`).join('');
 
 const index = page({
   title: `${NAME} · Autos y motos en ${L.city}, ${L.province}`,
   desc: `${NAME} en ${L.city}, ${L.partido}: compra y venta de autos y motos usados, permutas y consignaciones. Visitanos en ${L.address} o escribinos por redes o correo.`,
   file: 'index.html',
-  extraHead: `<link rel="stylesheet" href="css/hero-carousel.css">\n<link rel="stylesheet" href="css/fondos-secciones.css">\n<script type="application/ld+json">${JSON.stringify(ld)}</script>\n<script defer src="js/hero-carousel.js"></script>\n<script defer src="js/fondos-secciones.js"></script>\n<script defer src="js/secciones.js"></script>\n<script defer src="js/mapa.js"></script>\n<script defer src="js/horarios.js"></script>\n<script defer src="js/site.js"></script>\n<script defer src="js/reserva-inline.js"></script>\n`,
+  extraHead: `<link rel="stylesheet" href="css/hero-carousel.css">\n<link rel="stylesheet" href="css/fondos-secciones.css">\n<script type="application/ld+json">${JSON.stringify(ld)}</script>\n<script defer src="js/hero-carousel.js"></script>\n<script defer src="js/fondos-secciones.js"></script>\n<script defer src="js/secciones.js"></script>\n<script defer src="js/mapa.js?v=20261021-2"></script>\n<script defer src="js/horarios.js"></script>\n<script defer src="js/site.js"></script>\n<script defer src="js/reserva-inline.js"></script>\n`,
   body: `${header()}
 <main id="top">
 <div class="hero" role="region" aria-label="${esc(NAME)}">
