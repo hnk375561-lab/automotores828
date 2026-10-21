@@ -59,6 +59,36 @@
       "tema": "Entregar enlace oficial de Google y autorizar publicación de puntuación y cantidad de opiniones",
       "estado": "abierto",
       "bloqueante": false
+    },
+    {
+      "id": "P11",
+      "tema": "Confirmar horarios comerciales actuales con el negocio o ficha oficial de Google ante conflicto entre directorios",
+      "estado": "abierto",
+      "bloqueante": false
+    },
+    {
+      "id": "P12",
+      "tema": "Confirmar si 11 6023-9259 es línea institucional vigente; no publicar hasta autorización",
+      "estado": "abierto",
+      "bloqueante": false
+    },
+    {
+      "id": "P13",
+      "tema": "Aclarar modalidad de comercialización de vehículos 0 km frente a la actividad registral visible de usados",
+      "estado": "abierto",
+      "bloqueante": false
+    },
+    {
+      "id": "P14",
+      "tema": "Confirmar titularidad oficial de TikTok y autorización de la variante “828 Automotores” para SEO",
+      "estado": "abierto",
+      "bloqueante": false
+    },
+    {
+      "id": "P15",
+      "tema": "Verificar vigencia de las opciones de transporte y parada de Moovit antes de publicar indicaciones",
+      "estado": "abierto",
+      "bloqueante": false
     }
   ]
 }

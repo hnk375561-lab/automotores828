@@ -101,6 +101,55 @@
       "consultado": "2026-10-20",
       "estado": "contradictoria",
       "nota": "Muestra domicilio 831 y fechas de fundación dinámicas/inconsistentes; no resolver domicilio ni antigüedad con esta fuente."
+    },
+    {
+      "id": "w20-registro-fiscal-2026",
+      "url": "https://w20argentina.com/empresa/automotores-828-srl-30711454574",
+      "consultado": "2026-10-21",
+      "estado": "agregador_de_datos_registrales_pendiente_validacion",
+      "nota": "Muestra domicilio fiscal Boulevard Buenos Aires 831, contrato constitutivo 01/03/2010, altas fiscales 2010 y actividad 451210 venta de vehículos usados. Fuente secundaria atribuida a AFIP/RNS; no usar para resolver domicilio comercial ni inferir ausencia de venta de 0 km."
+    },
+    {
+      "id": "cuitonline-2026",
+      "url": "https://www.cuitonline.com/detalle/30711454574/automotores-828-srl.html",
+      "consultado": "2026-10-21",
+      "estado": "contenido_indexado_en_fragmento_no_abierta_completamente",
+      "nota": "Fragmento indexado coincide en domicilio 831, contrato 01/03/2010, actividad 451210 y fechas de alta de regímenes. La consulta automatizada no pudo abrir la página completa."
+    },
+    {
+      "id": "instagram-bio-2026-10-21",
+      "url": "https://www.instagram.com/automotores828/",
+      "consultado": "2026-10-21",
+      "estado": "fuente_primaria_del_negocio_consultada_solo_via_fragmento",
+      "nota": "Fragmento de bio muestra teléfono fijo 4290-7300 y línea 11 6023-9259; no confirma vigencia ni que la segunda línea sea institucional. No publicar contactos nuevos sin validación."
+    },
+    {
+      "id": "cylex-horarios-2026",
+      "url": "https://www.cylex.com.ar/monte-grande/automotores-828-srl-11505885.html",
+      "consultado": "2026-10-21",
+      "estado": "directorio_secundario_conflictivo",
+      "nota": "Fragmento atribuye actualización 18/07/2024 y publica horarios distintos a los del repositorio. No reemplazar horario vigente sin confirmar."
+    },
+    {
+      "id": "latinoplaces-2026",
+      "url": "https://ar.latinoplaces.com/buenos-aires/828-automotores-srl-165926",
+      "consultado": "2026-10-21",
+      "estado": "directorio_secundario_no_apto_para_reputacion_oficial",
+      "nota": "Muestra 3,6/9 y horarios; posible espejo de otras fuentes. No tratar como ficha Google vigente ni como confirmación independiente."
+    },
+    {
+      "id": "wheree-2026",
+      "url": "https://828-automotores-srl.wheree.com/",
+      "consultado": "2026-10-21",
+      "estado": "directorio_secundario_no_apto_para_reputacion_oficial",
+      "nota": "Fragmento muestra 4,1/8 y opiniones no auditadas; no publicar puntuación ni reproducir reseñas."
+    },
+    {
+      "id": "moovit-transporte-2026",
+      "url": "https://moovitapp.com/index/es-419/transporte_p%C3%BAblico-Automotores_828-Buenos_Aires-site_171491368-1602",
+      "consultado": "2026-10-21",
+      "estado": "fragmento_indexado_vigencia_por_verificar",
+      "nota": "Menciona parada Boulevard Buenos Aires 803, línea 164 y combis; ficha con dirección malformada y posible antigüedad. Verificar antes de ofrecer como indicación de llegada."
     }
   ]
 }

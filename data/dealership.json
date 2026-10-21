@@ -166,7 +166,7 @@
     "previewUrl": null
   },
   "investigacionComplementaria": {
-    "consultada": "2026-10-20",
+    "consultada": "2026-10-21",
     "historia": {
       "estado": "confirmado",
       "hallazgo": "Contrato constitutivo de Automotores 828 S.R.L. del 01/03/2010; aviso societario en Boletín Oficial.",
@@ -200,6 +200,69 @@
       "sucursal_adicional",
       "sitio_oficial_dominio_propio",
       "politica_posventa"
-    ]
+    ],
+    "segundaPasada2026_10_21": {
+      "estado": "investigacion_parcial_hallazgos_no_aprobados_para_publicacion",
+      "domicilioFiscal": {
+        "valor": "Boulevard Buenos Aires 831, Monte Grande (1842)",
+        "estado": "registral_publico_pendiente_de_validacion_del_negocio",
+        "fuentes": [
+          "https://w20argentina.com/empresa/automotores-828-srl-30711454574",
+          "https://www.cuitonline.com/detalle/30711454574/automotores-828-srl.html",
+          "https://www.dunsguide.com/company/fbe8fab93cd75816c4193802b54d5e14/automotores-828-srl"
+        ],
+        "nota": "Dato registral no prueba la ubicación actual del salón; mantener abierto conflicto 828/831."
+      },
+      "actividadRegistral": {
+        "codigo": "451210",
+        "descripcion": "Venta de autos, camionetas y utilitarios usados",
+        "estado": "publicado_por_agregadores_con_origen_arca_no_exhaustivo",
+        "fuentes": [
+          "https://w20argentina.com/empresa/automotores-828-srl-30711454574",
+          "https://www.cuitonline.com/detalle/30711454574/automotores-828-srl.html"
+        ],
+        "nota": "No demuestra ausencia de venta de 0 km; confirmar modalidad antes de describirla."
+      },
+      "telefonoBioInstagram": {
+        "valor": "+54 11 4290-7300",
+        "estado": "bio_del_negocio_indexada_vigencia_pendiente_de_confirmacion",
+        "fuente": "https://www.instagram.com/automotores828/"
+      },
+      "lineaAdicionalInstagram": {
+        "valor": "11 6023-9259",
+        "estado": "institucionalidad_no_confirmada_no_publicar",
+        "fuente": "https://www.instagram.com/automotores828/"
+      },
+      "horarios": {
+        "estado": "conflicto_de_fuentes_pendiente_de_confirmacion",
+        "candidatoCylex": "L-V 08:00-13:00 y 15:00-20:00; S 08:00-13:30; D cerrado",
+        "fuente": "https://www.cylex.com.ar/monte-grande/automotores-828-srl-11505885.html",
+        "nota": "Cylex indica actualización 2024-07-18; no reemplaza horario vigente."
+      },
+      "reputacionDirectorios": {
+        "estado": "contradictoria_no_publicar_como_google",
+        "observaciones": [
+          "LatinoPlaces 3.6/9",
+          "Near Place 3.9/5",
+          "Wheree 4.1/8",
+          "Argentino 4.01",
+          "Concesionaria Online 4.1/232"
+        ],
+        "nota": "Fuentes secundarias sin vínculo verificable uniforme a la ficha oficial actual."
+      },
+      "canalesYLogistica": {
+        "instagramMetricas": "Aproximadamente 18.000 seguidores, 1.030 seguidos y 1.191 publicaciones según fragmento indexado; fecha desconocida, no publicar como actuales.",
+        "tiktok": "Contenido indexado atribuible de forma no confirmada; no enlazar hasta validar cuenta oficial.",
+        "transporte": "Moovit menciona parada Boulevard Buenos Aires 803, línea 164 y combis; información potencialmente antigua, verificar antes de publicar.",
+        "varianteNombre": "“828 Automotores SRL” aparece en directorios; posible variante SEO, requiere autorización."
+      },
+      "conclusionesEditoriales": [
+        "No modificar la dirección pública ni resolver el conflicto 828/831 sin confirmación directa.",
+        "No publicar horarios alternativos ni ratings de directorios.",
+        "Separar fecha de constitución societaria (01/03/2010) de años de experiencia comercial no verificados.",
+        "Mantener fuera del sitio métricas sociales de fecha incierta, datos de transporte no verificados y datos estimados o bancarios."
+      ],
+      "informe": "docs/INVESTIGACION-COMPLEMENTARIA-2026-10-21.md"
+    }
   }
 }
