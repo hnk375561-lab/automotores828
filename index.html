@@ -2111,6 +2111,16 @@ section[id]::after{content:"";position:absolute;inset:0 auto 0 0;width:3px;backg
 @media(max-width:980px){
   .cv-form input:not([type=hidden]),.cv-form select,.cv-form textarea,.cv-chip,.cv-q,.cv-btn,.qa-tabs button,.fi-x{min-height:44px!important}
 }
+
+/* ===== Mapa didáctico visible · referencia honesta sin coordenadas inventadas ===== */
+html body .dr-map--didactic{position:relative;min-height:clamp(380px,46vw,560px);overflow:hidden;background:#eef2f3;border:1px solid rgba(238,28,34,.6)}
+.dr-map--didactic .dr-didactic-art{position:absolute;inset:0;background-color:#e8edef;background-image:linear-gradient(rgba(6,6,7,.045) 1px,transparent 1px),linear-gradient(90deg,rgba(6,6,7,.045) 1px,transparent 1px);background-size:44px 44px}
+.dr-didactic-art svg{display:block;width:100%;height:100%;opacity:.95}
+.dr-road{fill:none;stroke:#c8d0d2;stroke-width:22;stroke-linecap:round}.dr-road-a{stroke:#d5dcde}.dr-road-b{stroke:#c1cbcd}.dr-road-c{stroke:#dce2e3}.dr-route{fill:none;stroke:#ee1c22;stroke-width:6;stroke-linecap:round;stroke-dasharray:14 12}.dr-route-node{fill:#060607;stroke:#ee1c22;stroke-width:4}.dr-pin path{fill:#ee1c22;stroke:#060607;stroke-width:3}.dr-pin circle{fill:#060607}
+.dr-didactic-label{position:absolute;padding:7px 10px;background:#060607;color:#fff;font:800 11px/1 var(--b);letter-spacing:.14em;text-transform:uppercase}.dr-didactic-label--from{left:12%;bottom:25%}.dr-didactic-label--to{left:calc(50% - 19px);top:31px;background:#ee1c22;color:#060607;font-size:16px}
+html body .dr-map--didactic .dr-map-ph--didactic{background:linear-gradient(90deg,rgba(6,6,7,.82),rgba(6,6,7,.25) 70%,transparent);align-items:flex-start;justify-content:flex-end;text-align:left;padding:clamp(22px,4vw,42px);color:#fff}
+.dr-map--didactic .dr-map-ph--didactic .dr-map-ic{border-color:#ee1c22}.dr-map--didactic .dr-map-ph--didactic .dr-map-ic svg{stroke:#ee1c22}.dr-map--didactic .dr-map-ph--didactic p{max-width:32em}.dr-map--didactic .dr-map-ph--didactic .map-m{font-size:14px;font-weight:500;line-height:1.45}.dr-map--didactic .dr-map-ph--didactic .row{justify-content:flex-start}
+@media(max-width:700px){html body .dr-map--didactic{min-height:390px}.dr-didactic-label--from{left:8%;bottom:31%}.dr-didactic-label--to{top:24px}}
 </style>
 <link rel="stylesheet" href="css/dr-identidad.css">
 <link rel="stylesheet" href="css/hero-carousel.css">
@@ -2158,7 +2168,10 @@ section[id]::after{content:"";position:absolute;inset:0 auto 0 0;width:3px;backg
 <p class="dr-tz">Hora de Argentina: ahora son las <b data-reloj>--:--:--</b></p>
 </div>
 <div class="dr-mapwrap">
-
+<div class="dr-map dr-map--didactic" id="mapa" data-mapa-didactico>
+<div class="dr-didactic-art" aria-hidden="true"><svg viewBox="0 0 720 360" role="img"><path class="dr-road dr-road-a" d="M-20 275C130 250 175 125 320 145s205 135 420 78"/><path class="dr-road dr-road-b" d="M125 -20c28 108 98 134 144 180s45 108 50 220"/><path class="dr-road dr-road-c" d="M445 -20c-10 105-20 165 38 218s124 62 247 64"/><path class="dr-route" d="M120 270C210 230 230 176 318 175s105 66 192 55"/><circle class="dr-route-node" cx="120" cy="270" r="9"/><circle class="dr-route-node" cx="510" cy="230" r="9"/><g class="dr-pin" transform="translate(318 112)"><path d="M0 44S-25 22-25 0a25 25 0 1 1 50 0C25 22 0 44 0 44Z"/><circle cx="0" cy="0" r="8"/></g></svg><span class="dr-didactic-label dr-didactic-label--from">Tu recorrido</span><span class="dr-didactic-label dr-didactic-label--to">828</span></div>
+<div class="dr-map-ph dr-map-ph--didactic"><span class="dr-map-ic"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s-7-6.2-7-11a7 7 0 0 1 14 0c0 4.8-7 11-7 11z"/><circle cx="12" cy="10" r="2.5"/></svg></span><p>Mapa didáctico de referencia</p><p class="map-m">Llegá a Automotores 828 · Blvd. Buenos Aires 828, Monte Grande, Buenos Aires</p><div class="row"><a class="btn p sm" href="https://www.google.com/maps/search/?api=1&query=Blvd.%20Buenos%20Aires%20828%2C%20Monte%20Grande%2C%20Buenos%20Aires" target="_blank" rel="noopener noreferrer">Abrir indicaciones</a></div></div>
+</div>
 <div class="dr-addr"><div class="dr-addr-t"><span class="dr-addr-i"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s-7-6.2-7-11a7 7 0 0 1 14 0c0 4.8-7 11-7 11z"/><circle cx="12" cy="10" r="2.5"/></svg></span><div><p class="dr-k">Dónde estamos</p><p class="dr-a">Blvd. Buenos Aires 828, Monte Grande, Buenos Aires</p></div></div>
 <div class="row"><a class="btn p sm" href="https://www.google.com/maps/search/?api=1&query=Blvd.%20Buenos%20Aires%20828%2C%20Monte%20Grande%2C%20Buenos%20Aires" target="_blank" rel="noopener noreferrer">Cómo llegar</a><button class="btn sm" type="button" data-copiar="Blvd. Buenos Aires 828, Monte Grande, Buenos Aires" hidden>Copiar dirección</button></div></div>
 </div>
