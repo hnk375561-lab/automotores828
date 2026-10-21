@@ -1,0 +1,27 @@
+CAMBIOS (auditoría 13/10/2026)
+
+Copiar estos archivos sobre el repo (misma ruta):
+  404.html
+  index.html
+  privacidad.html
+  js/secciones.js
+  scripts/build-index.mjs
+
+BORRAR del repo (no se pueden incluir en un zip):
+  js/app.js
+  js/lugar.js
+  css/lugar.css
+(opcional: borrar también ARCHIVOS-A-BORRAR.txt, ya cumplido)
+
+Qué se hizo
+  H-05  Eliminados los restos de agencias anteriores. npm test queda en verde.
+  H-11  Formularios "Tu usado" y "Tu búsqueda": botón "Enviar por WhatsApp"
+        (usa el número de data/dealership.json; el texto se actualiza mientras se escribe;
+        con campos obligatorios vacíos no abre WhatsApp y muestra la validación).
+        "Copiar mensaje" queda como alternativa.
+  H-14  Sección Visita: texto acorde a lo que hay (botón "Elegir día y franja").
+  H-16  Aviso de demo: franja superior corta ("Demo ilustrativa · No es el sitio oficial")
+        y una sola leyenda en el pie (antes 3 repeticiones).
+  H-17  404 con las fuentes del sitio, también en rutas anidadas.
+
+index.html, privacidad.html y 404.html son generados: salen de scripts/build-index.mjs (npm run build).

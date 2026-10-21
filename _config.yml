@@ -1,0 +1,11 @@
+exclude:
+  - golive
+  - data
+  - scripts
+  - docs
+  - CLAUDE.md
+  - README.md
+  - package.json
+  - netlify.toml
+  - plan.md
+  - LICENSE

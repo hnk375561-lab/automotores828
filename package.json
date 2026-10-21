@@ -1,0 +1,22 @@
+{
+  "name": "dr-automoviles-web",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "node scripts/serve.mjs",
+    "build": "node scripts/build-index.mjs",
+    "test": "node scripts/validate-dealership.mjs && node scripts/audit-copy.mjs --prohibidos",
+    "test:prod": "node scripts/validate-dealership.mjs --prod && node scripts/audit-copy.mjs --prohibidos",
+    "site": "node scripts/build-site.mjs",
+    "images": "node scripts/make-images.mjs",
+    "audit": "node scripts/audit-copy.mjs",
+    "check:links": "node scripts/check-links.mjs",
+    "check:browser": "python3 scripts/qa-browser.py"
+  },
+  "devDependencies": {
+    "sharp": "^0.33.5"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}
