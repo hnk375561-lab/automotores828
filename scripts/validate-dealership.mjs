@@ -12,6 +12,14 @@ const warns = [];
 const err = (m) => errors.push(m);
 const json = (f) => { try { return JSON.parse(rd(f)); } catch (e) { err(`${f} no es JSON válido: ${e.message}`); return null; } };
 
+// El sitio se genera con CSS inline; una declaración inválida se replica en todas las rutas.
+const cssFiles = ['scripts/estilos.css', 'css/reserva.css'];
+for (const f of cssFiles) {
+  const css = rd(f);
+  if (/rgba\([^)]*\),\s*\.?\d+\)/.test(css)) err(`${f}: hay una llamada rgba() mal formada`);
+  if (/linear-gradient\([^)]*rgba\([^)]*\),\s*\.?\d+/.test(css)) err(`${f}: hay un gradiente con alpha mal formado`);
+}
+
 const d = json('data/dealership.json');
 const a = json('data/vehicles.json');
 const pend = json('data/pendientes.json');
@@ -115,6 +123,8 @@ if (d && a) {
     if (!/^https:\/\/((www\.)?(facebook|instagram|tiktok)\.com\/|auto\.mercadolibre\.com\.ar\/MLA-\d+)/.test(v.url || '')) err(`vehicles.json ${v.id}: url debe ser una publicación de Facebook, Instagram, TikTok o Mercado Libre`);
     if (v.precio && (!['ARS', 'USD'].includes(v.precio.moneda) || typeof v.precio.monto !== 'number' || !v.precio.fecha)) err(`vehicles.json ${v.id}: precio incompleto (moneda, monto y fecha)`);
     if (v.km != null && typeof v.km !== 'number') err(`vehicles.json ${v.id}: km debe ser número`);
+    const years = [...String(v.titulo).matchAll(/\b(?:19|20)\d{2}\b/g)].map((m) => Number(m[0]));
+    if (years.length && v.anio != null && v.anio !== years.at(-1)) err(`vehicles.json ${v.id}: anio ${v.anio} no coincide con el año final del título (${years.at(-1)})`);
     if (!idx.includes(v.titulo.replace(/&/g, '&amp;'))) err(`index.html: falta la unidad ${v.id}`);
   }
   if (a.autos.length && !a.relevadoEl) err('vehicles.json: falta relevadoEl (fecha del relevamiento)');

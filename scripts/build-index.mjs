@@ -86,7 +86,7 @@ ${body}
 }
 
 const footer = (fuentes) => `<footer><div class="w">
-<div class="ft"><div class="ft-m"><img class="lg-ft" src="images/logo-sm.png" width="256" height="256" alt=""><p class="ft-b">${esc(NAME)}</p><p>${esc(L.address)}, ${esc(L.city)}, ${esc(L.province)}</p></div>
+<div class="ft"><div class="ft-m"><img class="lg-ft" src="images/logo-sm.png" width="1254" height="1254" alt=""><p class="ft-b">${esc(NAME)}</p><p>${esc(L.address)}, ${esc(L.city)}, ${esc(L.province)}</p></div>
 <div><p class="ft-k">Contacto</p>${C.phoneTel ? `<p><a href="tel:${C.phoneTel}">${esc(C.phone)}</a></p>` : ''}${C.whatsApp ? `<p><a href="${WA}" ${EXT}>WhatsApp ${esc(C.whatsAppDisplay)}</a></p>` : ''}${C.email ? `<p><a href="mailto:${esc(C.email)}">${esc(C.email)}</a></p>` : ''}</div>
 <div><p class="ft-k">Redes</p><p><a href="${FB}" ${EXT}>Facebook</a></p><p><a href="${IG}" ${EXT}>Instagram</a></p>${TT ? `<p><a href="${TT}" ${EXT}>TikTok</a></p>` : ''}${YT ? `<p><a href="${YT}" ${EXT}>YouTube</a></p>` : ''}</div></div>
 <p class="ft-c">© 2026 ${esc(NAME)}</p>${demo ? `<p class="demo-note" data-demo-note>${esc(LEYENDA)}</p>` : ''}${fuentes ? `<p>Fuentes: <a href="${FB}" ${EXT}>Facebook</a> · <a href="${IG}" ${EXT}>Instagram</a>${TT ? ` · <a href="${TT}" ${EXT}>TikTok</a>` : ''}${D.reviews.googleUrl ? ` · <a href="${D.reviews.googleUrl}" ${EXT}>Ficha de Google</a>` : ''}</p>` : ''}<p><a href="privacidad.html">Privacidad y avisos</a></p></div></footer>`;
@@ -94,7 +94,7 @@ const footer = (fuentes) => `<footer><div class="w">
 const autos = A.autos;
 const ctaHead = WA ? { href: WA, t: 'WhatsApp' } : { href: FB, t: 'Facebook' };
 const header = (pre = '', skip = '#unidades') => `<a class="skip" href="${skip}">Saltar al contenido</a>
-<header class="site-header${pre ? ' site-header--inner' : ' site-header--home'}"><div class="w"><a class="mark" href="./" aria-label="${esc(NAME)}, inicio"><img class="lg-img" src="images/logo.png" width="900" height="360" alt="${esc(NAME)}"></a>
+<header class="site-header${pre ? ' site-header--inner' : ' site-header--home'}"><div class="w"><a class="mark" href="./" aria-label="${esc(NAME)}, inicio"><img class="lg-img" src="images/logo.png" width="1254" height="1254" alt="${esc(NAME)}"></a>
 <nav class="site-nav" id="site-nav" aria-label="Principal"><a href="${pre}#horarios">Horarios</a><a href="${pre}#unidades">Unidades</a><a href="${pre}#financiacion">Financiación</a><a href="${pre}#guia">Guía</a><a href="${pre}#preguntas">Preguntas</a><a href="${pre}#nosotros">Nosotros</a><a href="${pre}#contacto">Contacto</a><a href="${pre}#tu-usado">Tu usado</a><a href="${pre}#busqueda">Tu búsqueda</a><a href="${pre}#visita">Visita</a></nav>
 <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="site-nav" data-menu-toggle><span class="menu-icon" aria-hidden="true"></span><span>Menú</span></button>
 <div class="hc"><a class="btn p sm" href="${ctaHead.href}" ${EXT}>${ctaHead.t}</a></div></div></header>
@@ -218,7 +218,7 @@ const glos = [
 ].map(([t, d]) => qa(t, d)).join('\n');
 const secPreguntas = `
 <section class="lt" id="preguntas" aria-labelledby="preg-t"><div class="w">
-<p class="ey">Preguntas</p><h2 id="preg-t">Lo que <em>conviene saber</em></h2>
+<p class="ey"><span class="ey-brand">828</span> · Preguntas</p><h2 id="preg-t">Lo que <em>conviene saber</em></h2>
 <p class="sec-p">Respuestas cortas y un glosario del comprador. Información general de octubre de 2026: no es una condición ni una promesa de ${esc(NAME)}.</p>
 <div class="qa" data-qa><div class="qa-tabs" role="tablist" aria-label="Preguntas y glosario" hidden><button type="button" role="tab" id="qa-t1" aria-controls="qa-p1" aria-selected="true">Preguntas frecuentes</button><button type="button" role="tab" id="qa-t2" aria-controls="qa-p2" aria-selected="false" tabindex="-1">Glosario del comprador</button></div>
 <div class="qa-p" id="qa-p1" role="tabpanel" aria-labelledby="qa-t1"><h3>Preguntas frecuentes</h3>${faq}</div><div class="qa-p" id="qa-p2" role="tabpanel" aria-labelledby="qa-t2"><h3>Glosario del comprador</h3>${glos}</div></div>
@@ -260,7 +260,7 @@ const secUsado = hasSvc('permuta') ? `
 <section class="conversion conversion--trade" id="tu-usado" aria-labelledby="usado-t"><div class="w">
 <div class="conversion-layout">
 <div class="conversion-story">
-<p class="ey">Tu próximo paso</p><h2 id="usado-t">Entregá tu usado como <em>parte de pago</em></h2>
+<p class="ey"><span class="ey-brand">828</span> · Tu próximo paso</p><h2 id="usado-t">Entregá tu usado como <em>parte de pago</em></h2>
 <p class="sec-p">Tomamos permutas. Contanos cuál es y armá el mensaje para enviárselo a ${esc(NAME)} por el canal que prefieras.</p>
 <ol class="cv-steps"><li><b>Contanos qué tenés</b><span>Marca, modelo, año y kilometraje alcanzan para empezar.</span></li><li><b>Mirá tu mensaje armarse</b><span>Se escribe solo a medida que completás los datos.</span></li><li><b>Envialo a ${esc(NAME)}</b><span>Por el canal que prefieras. Las condiciones se acuerdan con ellos.</span></li></ol>
 <ul class="cv-pills"><li>Permutas</li><li>Consignaciones</li><li>Compra y venta</li></ul>
@@ -291,7 +291,7 @@ const secBusqueda = `
 <section class="conversion conversion--search lt" id="busqueda" aria-labelledby="bus-t"><div class="w">
 <div class="conversion-layout">
 <div class="conversion-story">
-<p class="ey">Del otro lado del volante</p><h2 id="bus-t">Contanos qué auto <em>buscás</em></h2>
+<p class="ey"><span class="ey-brand">828</span> · Del otro lado del volante</p><h2 id="bus-t">Contanos qué auto <em>buscás</em></h2>
 <p class="sec-p">Armá un mensaje con lo que tenés en mente y enviáselo a ${esc(NAME)} por el canal que prefieras.</p>
 <ol class="cv-steps"><li><b>Decinos qué buscás</b><span>Una marca o un modelo alcanza; el resto afina la búsqueda.</span></li><li><b>${autos.length ? 'Mirá qué hay publicado' : 'Revisá nuestras redes'}</b><span>${autos.length ? 'Mientras escribís, te mostramos las unidades del catálogo que encajan.' : 'Las unidades se publican en Instagram, TikTok y Facebook.'}</span></li><li><b>Enviá la consulta</b><span>Por el canal que prefieras, sin registrarte ni dejar datos en el sitio.</span></li></ol>
 <ul class="cv-pills"><li>Sin compromiso</li><li>Consultá financiación</li><li>Permutas</li></ul>
@@ -319,7 +319,7 @@ ${cvForm({
 
 const secGuia = `
 <section id="guia" aria-labelledby="guia-t"><div class="w">
-<p class="ey">Guía</p><h2 id="guia-t">Antes de comprar un <em>usado</em></h2>
+<p class="ey"><span class="ey-brand">828</span> · Guía de compra</p><h2 id="guia-t">Antes de comprar un <em>usado</em></h2>
 <p class="sec-p">Información general para cualquier compra de un usado, de octubre de 2026. No es una condición ni una promesa de ${esc(NAME)}.</p>
 <div class="guia-bar"><button class="btn sm" type="button" data-guia-all hidden>Plegar todo</button></div>
 <div class="guia">
@@ -363,7 +363,7 @@ const hrAddr = H.display ? `<div class="dr-addr"><div class="dr-addr-t"><span cl
 <div class="row"><a class="btn p sm" href="${L.mapsUrl}" ${EXT}>Cómo llegar</a>${COORD ? `<a class="btn sm" href="https://waze.com/ul?ll=${COORD.lat},${COORD.lng}&amp;navigate=yes" ${EXT}>Abrir en Waze</a>` : ''}<button class="btn sm" type="button" data-copiar="${esc(DIR_COMPLETA)}" hidden>Copiar dirección</button></div></div>` : '';
 const secHorarios = H.display ? `
 <section id="horarios" class="dr-hr dr-lux dr-v71" aria-labelledby="hor-t" data-semana="${esc(JSON.stringify(H.semana))}"><div class="w">
-<div class="dr-hr-head"><p class="ey">Horarios y ubicación</p><h2 id="hor-t">Cuándo y dónde <em>visitarnos</em></h2></div>
+<div class="dr-hr-head"><p class="ey"><span class="ey-brand">828</span> · Horarios y ubicación</p><h2 id="hor-t">Cuándo y dónde <em>visitarnos</em></h2></div>
 <div class="dr-stage">
 <div class="dr-panel">
 <div class="dr-now" data-live data-abierto="0">
@@ -387,7 +387,7 @@ ${hrAddr}
 const visHr = H.display ? `<ul class="vz-hrs">${H.semana.map((g) => `<li data-dias="${g.dias.join(',')}"><span>${esc(g.etiqueta)}</span><b>${g.rangos.map((r) => `${fh(r[0])} a ${fh(r[1])}`).join(' y ')}</b></li>`).join('')}${H.domingo ? `<li data-dias="0"><span>Domingos</span><b>${esc(H.domingo)}</b></li>` : ''}</ul>` : '';
 const secVisita = `
 <section id="visita" class="visita-s vz" aria-labelledby="vis-t"><div class="w vis-w">
-<div class="vz-head"><p class="ey">Visita</p><h2 id="vis-t">Coordiná tu <em>visita</em></h2>
+<div class="vz-head"><p class="ey"><span class="ey-brand">828</span> · Visita<h2 id="vis-t">Coordiná tu <em>visita</em></h2>
 <p class="sec-p">Pasá a conocer las unidades. Armá la consulta en un minuto y la agencia acuerda con vos el día y la hora.</p></div>
 <div class="vz-grid">
 <div class="vz-main"><h3>Agendá una visita y prueba de manejo</h3>
@@ -425,8 +425,8 @@ const secNosotros = `
 <section class="nz" id="nosotros" aria-labelledby="nos-t">
 <div class="nz-top"><div class="w nz-w">
 <div class="nz-intro">
-<p class="ey">Nosotros</p>
-<span class="nz-logo"><img src="images/logo-sm.png" width="256" height="256" alt=""></span>
+<p class="ey"><span class="ey-brand">828</span> · Nosotros</p>
+<span class="nz-logo"><img src="images/logo-sm.png" width="1254" height="1254" alt=""></span>
 <h2 id="nos-t">Quiénes <em>somos</em></h2>
 <p class="nz-lead">${esc(NAME)} compra y vende vehículos usados en ${esc(L.city)}, partido de ${esc(L.partido)}.</p>
 <p class="nz-p">${esc(D.presentacion.antiguedad)}</p>
@@ -480,7 +480,7 @@ const index = page({
 ${secHorarios}
 <section id="unidades" class="inventory-section" aria-labelledby="unidades-t"><div class="w wide">
 <div class="inventory-head">
-<div class="inventory-title"><p class="ey reveal">Compra y venta · ${esc(L.city)}</p><h2 id="unidades-t" class="reveal">Nuestras <em>unidades</em></h2><p class="sec-p">Compra y venta de vehículos usados. Mirá lo que hay en nuestras redes o escribinos por nuestros canales de contacto.</p></div>
+<div class="inventory-title"><p class="ey reveal"><span class="ey-brand">828</span> · Compra y venta · ${esc(L.city)}</p><h2 id="unidades-t" class="reveal">Nuestras <em>unidades</em></h2><p class="sec-p">Compra y venta de vehículos usados. Mirá lo que hay en nuestras redes o escribinos por nuestros canales de contacto.</p></div>
 <div class="inventory-meta" aria-label="Resumen del catálogo"><span class="inventory-meta-kicker">${esc(NAME)}</span><span>Unidades en nuestras redes</span><i aria-hidden="true"></i></div>
 </div>
 <div class="inventory-rule" aria-hidden="true"><span></span><small>${esc(L.city)} · ${esc(L.province)}</small><span></span></div>
@@ -488,7 +488,7 @@ ${unidades}
 </div></section>
 
 <section class="finance-section" id="financiacion" aria-labelledby="fin-t"><div class="w">
-<div class="finance-head"><div><p class="ey">Financiación y servicios</p><h2 id="fin-t">Financiá tu <em>próximo vehículo</em></h2><p class="sec-p">Consultanos por financiación. Las condiciones se informan por consulta: este sitio no publica condiciones de financiación.</p></div><aside class="finance-aside"><span>${esc(NAME)}</span><p>Encontrá una forma de avanzar hacia tu próxima unidad.</p></aside></div>
+<div class="finance-head"><div><p class="ey"><span class="ey-brand">828</span> · Financiación y servicios</p><h2 id="fin-t">Financiá tu <em>próximo vehículo</em></h2><p class="sec-p">Consultanos por financiación. Las condiciones se informan por consulta: este sitio no publica condiciones de financiación.</p></div><aside class="finance-aside"><span>${esc(NAME)}</span><p>Encontrá una forma de avanzar hacia tu próxima unidad.</p></aside></div>
 <div class="finance-rule" aria-hidden="true"><span></span><small>Servicios para moverte mejor</small><span></span></div>
 <div class="cards finance-cards">${hasSvc('financiacion') ? `<div class="card finance-card"><span class="finance-card-no">Financiación</span><h3>Consultá por financiación</h3><p>Escribinos y te contamos cómo avanzar con la unidad que te interese. Las condiciones dependen de la unidad y de cada solicitante.</p></div>` : ''}${hasSvc('permuta') ? `<div class="card finance-card"><span class="finance-card-no">Tu usado</span><h3>Permutas</h3><p>Tomamos permutas. Contanos qué tenés y armá el mensaje desde la sección «Tu usado».</p></div>` : ''}${hasSvc('consignacion') ? `<div class="card finance-card"><span class="finance-card-no">Consignación</span><h3>Consignaciones</h3><p>Podés dejar tu vehículo en consignación. Las condiciones se coordinan con ${esc(NAME)}.</p></div>` : ''}${hasSvc('compra-venta') ? `<div class="card finance-card"><span class="finance-card-no">Compra y venta</span><h3>Vehículos usados</h3><p>Compra y venta de vehículos usados en ${esc(L.city)}.</p></div>` : ''}</div>
 <div class="row fin-cta"><a class="btn p" href="${wa('Hola! Quiero consultar por financiación.') || FB}" ${EXT}>${C.whatsApp ? 'Consultar por financiación' : 'Consultar por Facebook'}</a>${hasSvc('permuta') ? '<a class="btn" href="#tu-usado">Consultar por mi usado</a>' : ''}</div>
@@ -504,7 +504,7 @@ ${secVisita}
 ${secNosotros}
 
 <section id="contacto" class="ct dr-ct" aria-labelledby="contacto-t"><div class="w">
-<div class="dr-ct-head"><p class="ey">Contacto</p><h2 id="contacto-t">Hablá con <em>un asesor</em></h2><p class="sec-p">Escribinos o llamanos y te contamos disponibilidad, precio y formas de pago de la unidad que te interese.</p></div>
+<div class="dr-ct-head"><p class="ey"><span class="ey-brand">828</span> · Contacto</p><h2 id="contacto-t">Hablá con <em>un asesor</em></h2><p class="sec-p">Escribinos o llamanos y te contamos disponibilidad, precio y formas de pago de la unidad que te interese.</p></div>
 <div class="dr-ct-grid">
 <ul class="dr-ch">${canales}</ul>
 <aside class="dr-ct-side" aria-label="Consultar y redes"><p class="dr-ct-t">¿Buscás un auto?</p><p>Contanos qué estás buscando y te ayudamos a encontrarlo.</p><div class="row"><a class="btn p" href="${ctaHead.href}" ${EXT}>${WA ? 'Consultar con un asesor' : 'Consultar por Facebook'}</a><a class="btn" href="reserva.html">Agendar visita</a></div>
@@ -546,7 +546,7 @@ const nf = page({
   desc: `La página que buscás no existe. Volvé al inicio de ${NAME}.`,
   file: '404.html', withFonts: false,
   extraHead: nf404Head,
-  body: `<main class="nf"><div><img class="lg-404" src="${logo404}" width="360" height="144" alt="${esc(NAME)}"><p class="ey">Error 404</p><h1>No encontramos <em>esa página</em></h1><p>Puede que el enlace esté mal escrito o que la página ya no exista.</p><a id="home" class="btn p" href="${home404}">Volver al inicio</a></div></main>`,
+  body: `<main class="nf"><div><img class="lg-404" src="${logo404}" width="1254" height="1254" alt="${esc(NAME)}"><p class="ey">Error 404</p><h1>No encontramos <em>esa página</em></h1><p>Puede que el enlace esté mal escrito o que la página ya no exista.</p><a id="home" class="btn p" href="${home404}">Volver al inicio</a></div></main>`,
 });
 
 
@@ -574,7 +574,7 @@ ${ogTags('reserva.html', `Coordiná tu visita · ${NAME}`, 'Elegí un día y una
 <body>
 <main id="booking" data-step="month" data-closed="${closedDays.join(',')}" data-morning-only="${morningOnly.join(',')}">
   <header class="booking-nav">
-    <a class="brand" href="index.html" aria-label="Volver a ${esc(NAME)}"><img class="lg-bk" src="images/logo-sm.png" width="360" height="144" alt="${esc(NAME)}"></a>
+    <a class="brand" href="index.html" aria-label="Volver a ${esc(NAME)}"><img class="lg-bk" src="images/logo-sm.png" width="1254" height="1254" alt="${esc(NAME)}"></a>
     <p class="eyebrow">Coordiná tu visita <span aria-hidden="true">/</span> consulta</p>
     <button class="back" id="back" type="button" aria-label="Volver" hidden>← Atrás</button>
   </header>

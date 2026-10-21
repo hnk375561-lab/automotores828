@@ -181,7 +181,7 @@ button.day-cell{min-height:32px}
 
 /* RESERVA · capa editorial alineada al sistema luxury del sitio */
 :root{--gold:#ee1c22;--gold-hi:#ff4a4a;--carbon:#181818;--graphite:#252525;--ivory:#f8f8f8;--ease:cubic-bezier(.2,.7,.2,1)}
-body{font-family:"Inter",system-ui,sans-serif}.booking-nav{background:rgba(6,6,7),.88);border-bottom:1px solid rgba(238,28,34,.35);backdrop-filter:blur(18px) saturate(140%);box-shadow:0 12px 40px rgba(0,0,0,.28)}
+body{font-family:"Inter",system-ui,sans-serif}.booking-nav{background:rgba(6,6,7,.88);border-bottom:1px solid rgba(238,28,34,.35);backdrop-filter:blur(18px) saturate(140%);box-shadow:0 12px 40px rgba(0,0,0,.28)}
 .booking-nav::after{background:linear-gradient(90deg,var(--gold),var(--gold-hi));height:2px;bottom:-2px}
 .kicker{background:var(--gold);color:var(--ink);clip-path:none;border-radius:999px}.month-copy h1 em,.day-copy h2 em,.time-copy h2 em,.confirm-copy h2 em{background:linear-gradient(135deg,var(--gold),var(--gold-hi));color:var(--ink);clip-path:none}
 .calendar-shell{box-shadow:0 24px 70px rgba(0,0,0,.28);clip-path:none;border:1px solid rgba(238,28,34,.24)}.day-cell[aria-current=true]{background:var(--gold);box-shadow:none}
