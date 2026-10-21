@@ -1,0 +1,397 @@
+{
+  "generatedAt": "2026-10-21",
+  "policy": {
+    "source": "Activos locales del repositorio y galerías ya integradas del vendedor",
+    "noExternalStock": true,
+    "duplicateImages": 0,
+    "sourceLimit": "Los originales disponibles llegan como máximo a 1440 px en hero y 1200 px en stock; no se inventan resoluciones superiores."
+  },
+  "hero": [
+    {
+      "section": "hero",
+      "slot": 1,
+      "source": "images/hero/hero-01.webp",
+      "src": "images/hero/hero-01.webp",
+      "srcset": [
+        {
+          "path": "images/hero/hero-01-828.webp",
+          "width": 828
+        },
+        {
+          "path": "images/hero/hero-01.webp",
+          "width": 1440
+        }
+      ],
+      "width": 1440,
+      "height": 1440,
+      "objectPosition": "50% 50%"
+    },
+    {
+      "section": "hero",
+      "slot": 2,
+      "source": "images/hero/hero-02.webp",
+      "src": "images/hero/hero-02.webp",
+      "srcset": [
+        {
+          "path": "images/hero/hero-02-828.webp",
+          "width": 828
+        },
+        {
+          "path": "images/hero/hero-02.webp",
+          "width": 1440
+        }
+      ],
+      "width": 1440,
+      "height": 1440,
+      "objectPosition": "50% 50%"
+    },
+    {
+      "section": "hero",
+      "slot": 3,
+      "source": "images/hero/hero-03.webp",
+      "src": "images/hero/hero-03.webp",
+      "srcset": [
+        {
+          "path": "images/hero/hero-03-828.webp",
+          "width": 828
+        },
+        {
+          "path": "images/hero/hero-03.webp",
+          "width": 1440
+        }
+      ],
+      "width": 1440,
+      "height": 1440,
+      "objectPosition": "50% 50%"
+    },
+    {
+      "section": "hero",
+      "slot": 4,
+      "source": "images/hero/hero-04.webp",
+      "src": "images/hero/hero-04.webp",
+      "srcset": [
+        {
+          "path": "images/hero/hero-04-828.webp",
+          "width": 828
+        },
+        {
+          "path": "images/hero/hero-04.webp",
+          "width": 1440
+        }
+      ],
+      "width": 1440,
+      "height": 1440,
+      "objectPosition": "50% 50%"
+    },
+    {
+      "section": "hero",
+      "slot": 5,
+      "source": "images/hero/hero-05.webp",
+      "src": "images/hero/hero-05.webp",
+      "srcset": [
+        {
+          "path": "images/hero/hero-05-828.webp",
+          "width": 828
+        },
+        {
+          "path": "images/hero/hero-05.webp",
+          "width": 1440
+        }
+      ],
+      "width": 1440,
+      "height": 1440,
+      "objectPosition": "50% 50%"
+    },
+    {
+      "section": "hero",
+      "slot": 6,
+      "source": "images/hero/hero-06.webp",
+      "src": "images/hero/hero-06.webp",
+      "srcset": [
+        {
+          "path": "images/hero/hero-06-828.webp",
+          "width": 828
+        },
+        {
+          "path": "images/hero/hero-06.webp",
+          "width": 1440
+        }
+      ],
+      "width": 1440,
+      "height": 1440,
+      "objectPosition": "50% 50%"
+    },
+    {
+      "section": "hero",
+      "slot": 7,
+      "source": "images/hero/hero-07.webp",
+      "src": "images/hero/hero-07.webp",
+      "srcset": [
+        {
+          "path": "images/hero/hero-07-828.webp",
+          "width": 828
+        },
+        {
+          "path": "images/hero/hero-07.webp",
+          "width": 1440
+        }
+      ],
+      "width": 1440,
+      "height": 1440,
+      "objectPosition": "50% 50%"
+    },
+    {
+      "section": "hero",
+      "slot": 8,
+      "source": "images/hero/hero-08.webp",
+      "src": "images/hero/hero-08.webp",
+      "srcset": [
+        {
+          "path": "images/hero/hero-08-828.webp",
+          "width": 828
+        },
+        {
+          "path": "images/hero/hero-08.webp",
+          "width": 1440
+        }
+      ],
+      "width": 1440,
+      "height": 1440,
+      "objectPosition": "50% 50%"
+    },
+    {
+      "section": "hero",
+      "slot": 9,
+      "source": "images/stock/ml-4103009836-p16.webp",
+      "src": "images/hero/hero-09.webp",
+      "srcset": [
+        {
+          "path": "images/hero/hero-09-828.webp",
+          "width": 828
+        },
+        {
+          "path": "images/hero/hero-09.webp",
+          "width": 1200
+        }
+      ],
+      "width": 1200,
+      "height": 900,
+      "objectPosition": "50% 50%"
+    },
+    {
+      "section": "hero",
+      "slot": 10,
+      "source": "images/stock/ml-4081416070-p13.webp",
+      "src": "images/hero/hero-10.webp",
+      "srcset": [
+        {
+          "path": "images/hero/hero-10-828.webp",
+          "width": 828
+        },
+        {
+          "path": "images/hero/hero-10.webp",
+          "width": 1200
+        }
+      ],
+      "width": 1200,
+      "height": 900,
+      "objectPosition": "50% 50%"
+    }
+  ],
+  "sections": {
+    "financiacion": {
+      "source": "images/stock/ml-4073718400-p15.webp",
+      "desktop": "images/fondos/fondo-financiacion.webp",
+      "mobile": "images/fondos/fondo-financiacion-800.webp",
+      "width": 1200,
+      "height": 900,
+      "objectPosition": "50% 50%"
+    },
+    "tu-usado": {
+      "source": "images/stock/ml-4049171736-p12.webp",
+      "desktop": "images/fondos/fondo-tu-usado.webp",
+      "mobile": "images/fondos/fondo-tu-usado-800.webp",
+      "width": 1200,
+      "height": 900,
+      "objectPosition": "50% 50%"
+    },
+    "busqueda": {
+      "source": "images/stock/ml-4043971584-p13.webp",
+      "desktop": "images/fondos/fondo-busqueda.webp",
+      "mobile": "images/fondos/fondo-busqueda-800.webp",
+      "width": 1200,
+      "height": 900,
+      "objectPosition": "50% 50%"
+    },
+    "guia": {
+      "source": "images/stock/ml-3906245030-p07.webp",
+      "desktop": "images/fondos/fondo-guia.webp",
+      "mobile": "images/fondos/fondo-guia-800.webp",
+      "width": 1200,
+      "height": 900,
+      "objectPosition": "50% 50%"
+    },
+    "visita": {
+      "source": "images/stock/ml-2063173351-p02.webp",
+      "desktop": "images/fondos/fondo-visita.webp",
+      "mobile": "images/fondos/fondo-visita-800.webp",
+      "width": 1200,
+      "height": 900,
+      "objectPosition": "50% 50%"
+    },
+    "contacto": {
+      "source": "images/stock/ml-2163981297-p17.webp",
+      "desktop": "images/fondos/fondo-contacto.webp",
+      "mobile": "images/fondos/fondo-contacto-800.webp",
+      "width": 1200,
+      "height": 900,
+      "objectPosition": "50% 50%"
+    },
+    "footer": {
+      "source": "images/stock/ml-3783768058-p02.webp",
+      "desktop": "images/fondos/fondo-footer.webp",
+      "mobile": "images/fondos/fondo-footer-800.webp",
+      "width": 1200,
+      "height": 675,
+      "objectPosition": "50% 50%"
+    }
+  },
+  "resolutionRanking": [
+    {
+      "path": "images/hero/hero-01.webp",
+      "width": 1440,
+      "height": 1440,
+      "pixels": 2073600,
+      "orientation": "landscape",
+      "sha256": "48d1a61cd72cbc3f72a98febf3e5b15581d391c54185b5cf23716380ae770d32"
+    },
+    {
+      "path": "images/hero/hero-02.webp",
+      "width": 1440,
+      "height": 1440,
+      "pixels": 2073600,
+      "orientation": "landscape",
+      "sha256": "b4a50d37b6ff71aa31cad68dc4174a2a34e3627ca4af7276ccf1560c73151f31"
+    },
+    {
+      "path": "images/hero/hero-03.webp",
+      "width": 1440,
+      "height": 1440,
+      "pixels": 2073600,
+      "orientation": "landscape",
+      "sha256": "6a1cfcc1c48540d24d18b5440d2e52ee040e472659d45897fd5a1fb9c9b42341"
+    },
+    {
+      "path": "images/hero/hero-04.webp",
+      "width": 1440,
+      "height": 1440,
+      "pixels": 2073600,
+      "orientation": "landscape",
+      "sha256": "dbe9c9905d9c44bfd4ccd055cb8b6ae60a216374c6b20efc295eb5da1cbba6e7"
+    },
+    {
+      "path": "images/hero/hero-05.webp",
+      "width": 1440,
+      "height": 1440,
+      "pixels": 2073600,
+      "orientation": "landscape",
+      "sha256": "9b259a9d317c99f45fc2b31a36506d668233774f78fb071c41a7f194c424f14a"
+    },
+    {
+      "path": "images/hero/hero-06.webp",
+      "width": 1440,
+      "height": 1440,
+      "pixels": 2073600,
+      "orientation": "landscape",
+      "sha256": "d9f108d7db60924db60918ed465c706a078a2f2324331256af8353762cb8973c"
+    },
+    {
+      "path": "images/hero/hero-07.webp",
+      "width": 1440,
+      "height": 1440,
+      "pixels": 2073600,
+      "orientation": "landscape",
+      "sha256": "77a9ccefda802846d4e9a3850a918fb661657b02443c75ab46b398bee51fdc55"
+    },
+    {
+      "path": "images/hero/hero-08.webp",
+      "width": 1440,
+      "height": 1440,
+      "pixels": 2073600,
+      "orientation": "landscape",
+      "sha256": "1e8575334a2bbb28804355d125849665487631dae842ddc4dbac04cb337d9a64"
+    },
+    {
+      "path": "images/stock/ml-4103009836-p16.webp",
+      "width": 1200,
+      "height": 900,
+      "pixels": 1080000,
+      "orientation": "landscape",
+      "sha256": "bfe53c1c123df36a51db421212fb094c1898b417fadbbb50fc34ca639474c63a"
+    },
+    {
+      "path": "images/stock/ml-4081416070-p13.webp",
+      "width": 1200,
+      "height": 900,
+      "pixels": 1080000,
+      "orientation": "landscape",
+      "sha256": "d8eb0694edef1787e0b4792136d88bb025a981392876e020bd712b8595356e31"
+    },
+    {
+      "path": "images/stock/ml-4073718400-p15.webp",
+      "width": 1200,
+      "height": 900,
+      "pixels": 1080000,
+      "orientation": "landscape",
+      "sha256": "75543a1d0a0e1487c40b88e16d960477eb1180d8ec2d75122eb8acf70d16b2e0"
+    },
+    {
+      "path": "images/stock/ml-4049171736-p12.webp",
+      "width": 1200,
+      "height": 900,
+      "pixels": 1080000,
+      "orientation": "landscape",
+      "sha256": "26bd174d36bc8d5f6de383c039ccbf70a478d87e06023e5b94e2648b66ff9631"
+    },
+    {
+      "path": "images/stock/ml-4043971584-p13.webp",
+      "width": 1200,
+      "height": 900,
+      "pixels": 1080000,
+      "orientation": "landscape",
+      "sha256": "093b601b2712cf27668af31002bc660501061402e6ae6cf6b0dd28e9d5c84a59"
+    },
+    {
+      "path": "images/stock/ml-3906245030-p07.webp",
+      "width": 1200,
+      "height": 900,
+      "pixels": 1080000,
+      "orientation": "landscape",
+      "sha256": "42df93e9b54067511d1bb45f4f720b10edb00bed9d09c9364d4244c216ffe651"
+    },
+    {
+      "path": "images/stock/ml-2063173351-p02.webp",
+      "width": 1200,
+      "height": 900,
+      "pixels": 1080000,
+      "orientation": "landscape",
+      "sha256": "d4d1208b8c57127465435a4779971018015c0406611a25489039c8986d90ea12"
+    },
+    {
+      "path": "images/stock/ml-2163981297-p17.webp",
+      "width": 1200,
+      "height": 900,
+      "pixels": 1080000,
+      "orientation": "landscape",
+      "sha256": "114ee2c4240d5ac0e07abda245e7126da268a69a28fd7ba6cb3062417ff51602"
+    },
+    {
+      "path": "images/stock/ml-3783768058-p02.webp",
+      "width": 1200,
+      "height": 675,
+      "pixels": 810000,
+      "orientation": "landscape",
+      "sha256": "6d9e14755b7635c2b981d65ba7c47a32789ddc7a9f4b9a63668a848d9f6fdb7c"
+    }
+  ]
+}

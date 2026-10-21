@@ -122,7 +122,7 @@ const consultaHref = (a) => wa(a.vendida ? `Hola! Vi que el ${a.titulo}${a.anio 
 // Fotos opcionales: no se inventan ni se toman de terceros; solo se publican si data/ las autoriza.
 const mediaDe = (a) => (Array.isArray(a.fotos) ? a.fotos : Array.isArray(a.imagenes) ? a.imagenes : Array.isArray(a.galeria) ? a.galeria : []).map((x) => typeof x === 'string' ? { src: x, alt: a.titulo } : x).filter((x) => x && (x.src || x.url)).map((x) => ({ src: x.src || x.url, srcset: x.srcset || '', card: x.card || '', cardWidth: x.cardWidth || null, cardHeight: x.cardHeight || null, thumb: x.thumb || '', width: x.width || null, height: x.height || null, alt: x.alt || a.titulo, tipo: x.tipo || '' }));
 const cardSrcset = (m) => { if (m.srcset) return m.srcset; if (m.card) return `${m.card} ${m.cardWidth || 600}w, ${m.src} ${m.width || 900}w`; const k = /^(images\/stock\/unidad-\d+)\.webp$/.exec(m.src || ''); return k && fs.existsSync(new URL('../' + k[1] + '-640.webp', import.meta.url)) && fs.existsSync(new URL('../' + k[1] + '-1000.webp', import.meta.url)) ? `${k[1]}-640.webp 640w, ${k[1]}-1000.webp 1000w` : ''; };
-const mediaTag = (a, i) => { const m = mediaDe(a)[0]; const ss = m ? cardSrcset(m) : ''; return m ? `<figure class="car-ph"><img src="${esc(m.card || m.src)}"${ss ? ` srcset="${esc(ss)}"` : ''} sizes="(max-width: 600px) calc(100vw - 48px), 360px" width="${m.cardWidth || m.width || 900}" height="${m.cardHeight || m.height || 600}" loading="${i === 0 ? 'eager' : 'lazy'}"${i === 0 ? ' fetchpriority="high"' : ''} decoding="async" alt="${esc(m.alt)}"></figure>` : ''; };
+  const mediaTag = (a, i) => { const m = mediaDe(a)[0]; const ss = m ? cardSrcset(m) : ''; return m ? `<figure class="car-ph"><img src="${esc(m.card || m.src)}"${ss ? ` srcset="${esc(ss)}"` : ''} sizes="(max-width: 600px) calc(100vw - 48px), 360px" width="${m.cardWidth || m.width || 900}" height="${m.cardHeight || m.height || 600}" loading="${i === 0 ? 'eager' : 'lazy'}"${i === 0 ? ' fetchpriority="high"' : ''} decoding="async" alt="${esc(m.alt)}"><span class="car-badge" aria-hidden="true"></span></figure>` : ''; };
 const IC = {
   wa: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20l1.3-4A8 8 0 1 1 8 18.7z"/><path d="M9 9c0 3 3 6 6 6l1-1.5-2-1-1 .8a4 4 0 0 1-2-2l.8-1-1-2z"/></svg>',
   ig: '<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3.5" y="3.5" width="17" height="17" rx="5"/><circle cx="12" cy="12" r="4"/><path d="M17.4 6.6h.01"/></svg>',
@@ -473,8 +473,20 @@ const ld = {
 };
 
 // Carrusel del hero: fotos de unidades suministradas por el responsable (16/10/2026). Decorativas: sin texto alternativo ni datos de venta.
-const HERO_FOTOS = ['01', '02', '03', '04', '05', '06', '07', '08'];
-const HERO_SLIDES = HERO_FOTOS.map((n, k) => `<figure class="hero-slide hero-slide--${n}${k === 0 ? ' is-active' : ''}" data-hero-slide><img src="images/hero/hero-${n}.webp" srcset="images/hero/hero-${n}-828.webp 828w, images/hero/hero-${n}.webp 1440w" sizes="100vw" width="1440" height="1440" alt="" decoding="async"${k === 0 ? ' fetchpriority="high"' : ' loading="lazy"'}></figure>`).join('');
+const HERO_FOTOS = [
+  ['01', 'images/hero/hero-01.webp', 'images/hero/hero-01-828.webp', 1440, 1440],
+  ['02', 'images/hero/hero-02.webp', 'images/hero/hero-02-828.webp', 1440, 1440],
+  ['03', 'images/hero/hero-03.webp', 'images/hero/hero-03-828.webp', 1440, 1440],
+  ['04', 'images/hero/hero-04.webp', 'images/hero/hero-04-828.webp', 1440, 1440],
+  ['05', 'images/hero/hero-05.webp', 'images/hero/hero-05-828.webp', 1440, 1440],
+  ['06', 'images/hero/hero-06.webp', 'images/hero/hero-06-828.webp', 1440, 1440],
+  ['07', 'images/hero/hero-07.webp', 'images/hero/hero-07-828.webp', 1440, 1440],
+  ['08', 'images/hero/hero-08.webp', 'images/hero/hero-08-828.webp', 1440, 1440],
+  ['09', 'images/hero/hero-09.webp', 'images/hero/hero-09-828.webp', 1200, 900],
+  ['10', 'images/hero/hero-10.webp', 'images/hero/hero-10-828.webp', 1200, 900],
+];
+const HERO_SLIDES = HERO_FOTOS.map(([n, src, small, width, height], k) => `<figure class="hero-slide hero-slide--${n}${k === 0 ? ' is-active' : ''}" data-hero-slide><img src="${src}" srcset="${small} 828w, ${src} ${width}w" sizes="100vw" width="${width}" height="${height}" alt="" decoding="async"${k === 0 ? ' fetchpriority="high"' : ' loading="lazy"'}></figure>`).join('');
+const HERO_CONTROLS = `<div class="hero-carousel-controls" data-hero-controls aria-label="Controles de fotografías"><button class="hero-carousel-btn" type="button" data-hero-prev aria-label="Foto anterior">‹</button><span class="hero-carousel-count" data-hero-count aria-live="polite">01 / 10</span><button class="hero-carousel-btn" type="button" data-hero-next aria-label="Foto siguiente">›</button><button class="hero-carousel-toggle" type="button" data-hero-toggle aria-pressed="false">Pausar</button></div>`;
 
 const index = page({
   title: `${NAME} · Autos y motos en ${L.city}, ${L.province}`,
@@ -484,7 +496,7 @@ const index = page({
   body: `${header()}
 <main id="top">
 <div class="hero" role="region" aria-label="${esc(NAME)}">
-<div class="hero-media" data-hero-carousel aria-hidden="true">${HERO_SLIDES}</div>
+<div class="hero-media" data-hero-carousel aria-hidden="true">${HERO_SLIDES}</div>${HERO_CONTROLS}
 <div class="hx-copy">
 <p class="ey">${esc(L.city)} · ${esc(L.partido)}</p>
 <h1><span class="sr">${esc(NAME)}: </span>Autos y motos <em>en ${esc(L.city)}</em></h1>

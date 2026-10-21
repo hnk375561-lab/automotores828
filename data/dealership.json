@@ -18,6 +18,16 @@
     "partido": "Esteban Echeverría",
     "province": "Buenos Aires",
     "mapsUrl": "https://www.google.com/maps/search/?api=1&query=Blvd.%20Buenos%20Aires%20828%2C%20Monte%20Grande%2C%20Buenos%20Aires",
+    "coordenadas": {
+      "lat": -34.8138439,
+      "lng": -58.455598,
+      "fuentes": [
+        "https://nominatim.openstreetmap.org/ui/search.html?q=Blvd.%20Buenos%20Aires%20828%2C%20Monte%20Grande%2C%20Esteban%20Echeverr%C3%ADa%2C%20Buenos%20Aires%2C%20Argentina",
+        "https://photon.komoot.io/api/?limit=5&q=Boulevard%20Buenos%20Aires%20828%2C%20Monte%20Grande%2C%20Argentina"
+      ],
+      "verificacion": "Nominatim y Photon devuelven el mismo objeto OSM way 677528363 y la misma posición para el número 828. El número 831 devuelve otro objeto cercano (aprox. 8 m al noreste), por lo que se conserva 828 como dirección pública del salón y no se resuelve el conflicto registral/fiscal.",
+      "consultado": "2026-10-21"
+    },
     "conflicto": {
       "estado": "abierto",
       "candidatos": [

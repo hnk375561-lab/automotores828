@@ -1,6 +1,6 @@
 /* Automotores 828 · js/mapa.js
    Mapa interactivo de «Horarios y ubicación». Leaflet + OpenStreetMap se cargan al acercarse a la sección
-   (o al tocar «Ver mapa»). Mapa siempre claro (sin filtros de color, que eran lo que lo hacía pesado), marcador con el nombre, botón para centrar y, si fallan las teselas, mapa de Google. */
+   (o al tocar «Ver mapa»). Usa tiles oscuros de Carto, marcador branded, botón para centrar y salida honesta si falla la red. */
 (function () {
   'use strict';
   var root = document.querySelector('[data-leaflet]');
@@ -26,17 +26,14 @@
     var s = document.createElement('script'); s.src = root.dataset.leaflet; s.onload = ok; s.onerror = fallo; document.head.appendChild(s);
   }
 
-  /* Si Leaflet o las teselas no responden, se muestra el mapa de Google (interactivo) en el mismo lugar. */
-  function respaldoGoogle() {
+  /* Si la red no permite teselas, no se inventa un mapa estático ni se reemplaza por un embed genérico. */
+  function respaldoMapa() {
     if (mapa) { try { mapa.remove(); } catch (e) {} mapa = null; }
     view.textContent = '';
-    var f = document.createElement('iframe');
-    f.src = 'https://maps.google.com/maps?q=' + lat + ',' + lng + '&hl=es&z=16&output=embed';
-    f.title = 'Mapa de ' + nombre; f.loading = 'lazy'; f.referrerPolicy = 'no-referrer-when-downgrade'; f.setAttribute('allowfullscreen', '');
-    f.className = 'dr-map-f';
-    view.appendChild(f);
+    view.appendChild(el('p', 'No pudimos cargar el mapa interactivo. Abrí las indicaciones para ver el recorrido.', 'dr-map-error'));
     root.classList.add('is-open');
-    if (ph) ph.hidden = true;
+    if (ph) ph.hidden = false;
+    dijo('Mapa no disponible; las indicaciones siguen activas.');
   }
 
   function popup() {
@@ -55,7 +52,7 @@
 
     var attr = '&copy; <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener noreferrer">OpenStreetMap</a>';
     var fuentes = [
-      { url: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png', o: { maxZoom: 19, attribution: attr, keepBuffer: 3, updateWhenIdle: movil, updateWhenZooming: false } }
+      { url: 'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', o: { subdomains: 'abcd', maxZoom: 19, attribution: attr + ' · <a href="https://carto.com/attributions" target="_blank" rel="noopener noreferrer">CARTO</a>', keepBuffer: 3, updateWhenIdle: movil, updateWhenZooming: false } }
     ];
     var k = 0, errores = 0, tiles = null, cargo = false;
     function capa() {
@@ -65,7 +62,7 @@
         errores++;
         if (errores < 4 || cargo) return;
         if (k < fuentes.length - 1) { k++; capa(); return; }
-        respaldoGoogle();
+        respaldoMapa();
       });
       tiles.on('tileload', function () { cargo = true; });
       tiles.addTo(mapa);
@@ -111,7 +108,7 @@
     if (iniciado) return; iniciado = true;
     if (trigger) trigger.disabled = true;
     dijo('Cargando el mapa…');
-    cargar(function () { dijo(''); pintar(); }, function () { dijo(''); iniciado = false; if (trigger) trigger.disabled = false; respaldoGoogle(); });
+    cargar(function () { dijo(''); pintar(); }, function () { dijo(''); iniciado = false; if (trigger) trigger.disabled = false; respaldoMapa(); });
   }
 
   if (trigger) trigger.addEventListener('click', iniciar);
