@@ -462,7 +462,7 @@ ${hasSvc('consignacion') ? `<li class="nz-tile"><span class="nz-ic">${ICN.shield
 <div class="nz-net nz-net--mapa" id="donde"><div class="w"><h3 class="nz-h">Dónde encontrarnos</h3><p class="nz-net-p">Esta es la dirección de ${esc(NAME)}.</p>
 <ul><li class="is-here">${ICX.pin}<div><b>${esc(NAME)}</b><span>${esc(DIR_COMPLETA)}</span></div></li></ul>
 ${L.mapsUrl ? `<p class="nz-net-acc"><a class="btn p sm" href="${L.mapsUrl}" ${EXT}>Abrir en Google Maps</a></p>` : ''}</div>
-${COORD ? `<div class="nz-mapa"><iframe src="https://maps.google.com/maps?q=${COORD.lat},${COORD.lng}&hl=es&z=17&output=embed" title="Mapa con la ubicación de ${esc(NAME)}" loading="lazy" referrerpolicy="no-referrer-when-downgrade" allowfullscreen></iframe></div>` : ''}</div>
+${COORD ? `<div class="nz-mapa"><div class="dr-map" id="mapa-nosotros" data-lat="${COORD.lat}" data-lng="${COORD.lng}" data-nombre="${esc(NAME)}" data-dir="${esc(DIR_COMPLETA)}" data-gmaps="${esc(L.mapsUrl)}" data-leaflet="js/vendor/leaflet.js" data-css="js/vendor/leaflet.css"><div class="dr-map-v" role="region" aria-label="Mapa con la ubicación de ${esc(NAME)}"></div><div class="dr-map-ph" data-mapa-ph><span class="dr-map-ic">${ICX.pin}</span><p>Mapa de ${esc(L.city)}</p><p class="map-m src" role="status" aria-live="polite">Cargando el mapa…</p></div></div></div>` : ''}</div>
 </section>`;
 
 const ld = {
@@ -472,21 +472,20 @@ const ld = {
   ...(siteUrl ? { url: siteUrl } : {}), ...(C.phoneTel ? { telephone: C.phoneTel } : {}), ...(C.email ? { email: C.email } : {}), ...(L.mapsUrl ? { hasMap: L.mapsUrl } : {}), ...(COORD ? { geo: { '@type': 'GeoCoordinates', latitude: COORD.lat, longitude: COORD.lng } } : {}), ...(openSpec.length ? { openingHoursSpecification: openSpec } : {}),
 };
 
-// Carrusel del hero: fotos de unidades suministradas por el responsable (16/10/2026). Decorativas: sin texto alternativo ni datos de venta.
+// Carrusel del hero: primeras fotos de diez unidades ya integradas en data/vehicles.json.
 const HERO_FOTOS = [
-  ['01', 'images/hero/hero-01.webp', 'images/hero/hero-01-828.webp', 1440, 1440],
-  ['02', 'images/hero/hero-02.webp', 'images/hero/hero-02-828.webp', 1440, 1440],
-  ['03', 'images/hero/hero-03.webp', 'images/hero/hero-03-828.webp', 1440, 1440],
-  ['04', 'images/hero/hero-04.webp', 'images/hero/hero-04-828.webp', 1440, 1440],
-  ['05', 'images/hero/hero-05.webp', 'images/hero/hero-05-828.webp', 1440, 1440],
-  ['06', 'images/hero/hero-06.webp', 'images/hero/hero-06-828.webp', 1440, 1440],
-  ['07', 'images/hero/hero-07.webp', 'images/hero/hero-07-828.webp', 1440, 1440],
-  ['08', 'images/hero/hero-08.webp', 'images/hero/hero-08-828.webp', 1440, 1440],
-  ['09', 'images/hero/hero-09.webp', 'images/hero/hero-09-828.webp', 1200, 900],
-  ['10', 'images/hero/hero-10.webp', 'images/hero/hero-10-828.webp', 1200, 900],
+  ['01', 'images/hero/hero-01.webp', 'images/hero/hero-01-828.webp', 900, 1200, 'Honda Fit 2014 en Automotores 828'],
+  ['02', 'images/hero/hero-02.webp', 'images/hero/hero-02-828.webp', 902, 902, 'Peugeot 208 2021 en Automotores 828'],
+  ['03', 'images/hero/hero-03.webp', 'images/hero/hero-03-828.webp', 900, 1200, 'Renault Sandero Stepway 2014 en Automotores 828'],
+  ['04', 'images/hero/hero-04.webp', 'images/hero/hero-04-828.webp', 900, 1200, 'Peugeot 2008 2021 en Automotores 828'],
+  ['05', 'images/hero/hero-05.webp', 'images/hero/hero-05-828.webp', 1195, 1195, 'Peugeot 208 2019 en Automotores 828'],
+  ['06', 'images/hero/hero-06.webp', 'images/hero/hero-06-828.webp', 900, 900, 'Fiat Palio 2013 en Automotores 828'],
+  ['07', 'images/hero/hero-07.webp', 'images/hero/hero-07-828.webp', 900, 1200, 'Peugeot 208 2016 en Automotores 828'],
+  ['08', 'images/hero/hero-08.webp', 'images/hero/hero-08-828.webp', 1141, 1141, 'Citroën C4 Lounge 2020 en Automotores 828'],
+  ['09', 'images/hero/hero-09.webp', 'images/hero/hero-09-828.webp', 1131, 1131, 'Toyota Yaris 2021 en Automotores 828'],
+  ['10', 'images/hero/hero-10.webp', 'images/hero/hero-10-828.webp', 900, 1200, 'Renault Duster 2018 en Automotores 828'],
 ];
-const HERO_SLIDES = HERO_FOTOS.map(([n, src, small, width, height], k) => `<figure class="hero-slide hero-slide--${n}${k === 0 ? ' is-active' : ''}" data-hero-slide><img src="${src}" srcset="${small} 828w, ${src} ${width}w" sizes="100vw" width="${width}" height="${height}" alt="" decoding="async"${k === 0 ? ' fetchpriority="high"' : ' loading="lazy"'}></figure>`).join('');
-const HERO_CONTROLS = `<div class="hero-carousel-controls" data-hero-controls aria-label="Controles de fotografías"><button class="hero-carousel-btn" type="button" data-hero-prev aria-label="Foto anterior">‹</button><span class="hero-carousel-count" data-hero-count aria-live="polite">01 / 10</span><button class="hero-carousel-btn" type="button" data-hero-next aria-label="Foto siguiente">›</button><button class="hero-carousel-toggle" type="button" data-hero-toggle aria-pressed="false">Pausar</button></div>`;
+const HERO_SLIDES = HERO_FOTOS.map(([n, src, small, width, height, alt], k) => `<figure class="hero-slide hero-slide--${n}${k === 0 ? ' is-active' : ''}" data-hero-slide><img src="${src}" srcset="${small} 828w, ${src} ${width}w" sizes="100vw" width="${width}" height="${height}" alt="${esc(alt)}" decoding="async"${k === 0 ? ' fetchpriority="high"' : ' loading="lazy"'}></figure>`).join('');
 
 const index = page({
   title: `${NAME} · Autos y motos en ${L.city}, ${L.province}`,
@@ -496,7 +495,7 @@ const index = page({
   body: `${header()}
 <main id="top">
 <div class="hero" role="region" aria-label="${esc(NAME)}">
-<div class="hero-media" data-hero-carousel aria-hidden="true">${HERO_SLIDES}</div>${HERO_CONTROLS}
+<div class="hero-media" data-hero-carousel>${HERO_SLIDES}</div>
 <div class="hx-copy">
 <p class="ey">${esc(L.city)} · ${esc(L.partido)}</p>
 <h1><span class="sr">${esc(NAME)}: </span>Autos y motos <em>en ${esc(L.city)}</em></h1>
