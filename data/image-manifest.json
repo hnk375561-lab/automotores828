@@ -4,7 +4,7 @@
     "source": "Activos locales del repositorio y galerías ya integradas del vendedor",
     "noExternalStock": true,
     "duplicateImages": 0,
-    "sourceLimit": "Los originales disponibles llegan como máximo a 1440 px en hero y 1200 px en stock; no se inventan resoluciones superiores."
+    "sourceLimit": "Máximo medido en el repositorio: 1195 px de ancho en hero y 1200 px en stock; no se inventan resoluciones superiores."
   },
   "hero": [
     {
@@ -15,15 +15,17 @@
       "srcset": [
         {
           "path": "images/hero/hero-01-828.webp",
-          "width": 828
+          "width": 621,
+          "height": 828
         },
         {
           "path": "images/hero/hero-01.webp",
-          "width": 1440
+          "width": 900,
+          "height": 1200
         }
       ],
-      "width": 1440,
-      "height": 1440,
+      "width": 900,
+      "height": 1200,
       "objectPosition": "50% 50%"
     },
     {
@@ -34,15 +36,17 @@
       "srcset": [
         {
           "path": "images/hero/hero-02-828.webp",
-          "width": 828
+          "width": 828,
+          "height": 828
         },
         {
           "path": "images/hero/hero-02.webp",
-          "width": 1440
+          "width": 902,
+          "height": 902
         }
       ],
-      "width": 1440,
-      "height": 1440,
+      "width": 902,
+      "height": 902,
       "objectPosition": "50% 50%"
     },
     {
@@ -53,15 +57,17 @@
       "srcset": [
         {
           "path": "images/hero/hero-03-828.webp",
-          "width": 828
+          "width": 621,
+          "height": 828
         },
         {
           "path": "images/hero/hero-03.webp",
-          "width": 1440
+          "width": 900,
+          "height": 1200
         }
       ],
-      "width": 1440,
-      "height": 1440,
+      "width": 900,
+      "height": 1200,
       "objectPosition": "50% 50%"
     },
     {
@@ -72,15 +78,17 @@
       "srcset": [
         {
           "path": "images/hero/hero-04-828.webp",
-          "width": 828
+          "width": 621,
+          "height": 828
         },
         {
           "path": "images/hero/hero-04.webp",
-          "width": 1440
+          "width": 900,
+          "height": 1200
         }
       ],
-      "width": 1440,
-      "height": 1440,
+      "width": 900,
+      "height": 1200,
       "objectPosition": "50% 50%"
     },
     {
@@ -91,15 +99,17 @@
       "srcset": [
         {
           "path": "images/hero/hero-05-828.webp",
-          "width": 828
+          "width": 828,
+          "height": 828
         },
         {
           "path": "images/hero/hero-05.webp",
-          "width": 1440
+          "width": 1195,
+          "height": 1195
         }
       ],
-      "width": 1440,
-      "height": 1440,
+      "width": 1195,
+      "height": 1195,
       "objectPosition": "50% 50%"
     },
     {
@@ -110,15 +120,17 @@
       "srcset": [
         {
           "path": "images/hero/hero-06-828.webp",
-          "width": 828
+          "width": 828,
+          "height": 828
         },
         {
           "path": "images/hero/hero-06.webp",
-          "width": 1440
+          "width": 900,
+          "height": 900
         }
       ],
-      "width": 1440,
-      "height": 1440,
+      "width": 900,
+      "height": 900,
       "objectPosition": "50% 50%"
     },
     {
@@ -129,15 +141,17 @@
       "srcset": [
         {
           "path": "images/hero/hero-07-828.webp",
-          "width": 828
+          "width": 621,
+          "height": 828
         },
         {
           "path": "images/hero/hero-07.webp",
-          "width": 1440
+          "width": 900,
+          "height": 1200
         }
       ],
-      "width": 1440,
-      "height": 1440,
+      "width": 900,
+      "height": 1200,
       "objectPosition": "50% 50%"
     },
     {
@@ -148,15 +162,17 @@
       "srcset": [
         {
           "path": "images/hero/hero-08-828.webp",
-          "width": 828
+          "width": 828,
+          "height": 828
         },
         {
           "path": "images/hero/hero-08.webp",
-          "width": 1440
+          "width": 1141,
+          "height": 1141
         }
       ],
-      "width": 1440,
-      "height": 1440,
+      "width": 1141,
+      "height": 1141,
       "objectPosition": "50% 50%"
     },
     {
@@ -167,15 +183,17 @@
       "srcset": [
         {
           "path": "images/hero/hero-09-828.webp",
-          "width": 828
+          "width": 828,
+          "height": 828
         },
         {
           "path": "images/hero/hero-09.webp",
-          "width": 1200
+          "width": 1131,
+          "height": 1131
         }
       ],
-      "width": 1200,
-      "height": 900,
+      "width": 1131,
+      "height": 1131,
       "objectPosition": "50% 50%"
     },
     {
@@ -186,15 +204,17 @@
       "srcset": [
         {
           "path": "images/hero/hero-10-828.webp",
-          "width": 828
+          "width": 621,
+          "height": 828
         },
         {
           "path": "images/hero/hero-10.webp",
-          "width": 1200
+          "width": 900,
+          "height": 1200
         }
       ],
-      "width": 1200,
-      "height": 900,
+      "width": 900,
+      "height": 1200,
       "objectPosition": "50% 50%"
     }
   ],
@@ -258,68 +278,20 @@
   },
   "resolutionRanking": [
     {
-      "path": "images/hero/hero-01.webp",
-      "width": 1440,
-      "height": 1440,
-      "pixels": 2073600,
-      "orientation": "landscape",
-      "sha256": "48d1a61cd72cbc3f72a98febf3e5b15581d391c54185b5cf23716380ae770d32"
-    },
-    {
-      "path": "images/hero/hero-02.webp",
-      "width": 1440,
-      "height": 1440,
-      "pixels": 2073600,
-      "orientation": "landscape",
-      "sha256": "b4a50d37b6ff71aa31cad68dc4174a2a34e3627ca4af7276ccf1560c73151f31"
-    },
-    {
-      "path": "images/hero/hero-03.webp",
-      "width": 1440,
-      "height": 1440,
-      "pixels": 2073600,
-      "orientation": "landscape",
-      "sha256": "6a1cfcc1c48540d24d18b5440d2e52ee040e472659d45897fd5a1fb9c9b42341"
-    },
-    {
-      "path": "images/hero/hero-04.webp",
-      "width": 1440,
-      "height": 1440,
-      "pixels": 2073600,
-      "orientation": "landscape",
-      "sha256": "dbe9c9905d9c44bfd4ccd055cb8b6ae60a216374c6b20efc295eb5da1cbba6e7"
-    },
-    {
       "path": "images/hero/hero-05.webp",
-      "width": 1440,
-      "height": 1440,
-      "pixels": 2073600,
+      "width": 1195,
+      "height": 1195,
+      "pixels": 1428025,
       "orientation": "landscape",
-      "sha256": "9b259a9d317c99f45fc2b31a36506d668233774f78fb071c41a7f194c424f14a"
-    },
-    {
-      "path": "images/hero/hero-06.webp",
-      "width": 1440,
-      "height": 1440,
-      "pixels": 2073600,
-      "orientation": "landscape",
-      "sha256": "d9f108d7db60924db60918ed465c706a078a2f2324331256af8353762cb8973c"
-    },
-    {
-      "path": "images/hero/hero-07.webp",
-      "width": 1440,
-      "height": 1440,
-      "pixels": 2073600,
-      "orientation": "landscape",
-      "sha256": "77a9ccefda802846d4e9a3850a918fb661657b02443c75ab46b398bee51fdc55"
+      "sha256": "cdf10392dde602b9021937b69b91e20dd122d3761d48a3ffb7cfc10426f5a8ec"
     },
     {
       "path": "images/hero/hero-08.webp",
-      "width": 1440,
-      "height": 1440,
-      "pixels": 2073600,
+      "width": 1141,
+      "height": 1141,
+      "pixels": 1301881,
       "orientation": "landscape",
-      "sha256": "1e8575334a2bbb28804355d125849665487631dae842ddc4dbac04cb337d9a64"
+      "sha256": "d7e3e2fd54d3619a66b4f1504dc8fe18b72eb3ba5aaccf7a55899bf09a9c6e5f"
     },
     {
       "path": "images/stock/ml-4103009836-p16.webp",
@@ -386,12 +358,60 @@
       "sha256": "114ee2c4240d5ac0e07abda245e7126da268a69a28fd7ba6cb3062417ff51602"
     },
     {
+      "path": "images/hero/hero-01.webp",
+      "width": 900,
+      "height": 1200,
+      "pixels": 1080000,
+      "orientation": "portrait",
+      "sha256": "8e1d97a77de69e325bae3827646fd3de4191b379e7c4534cfbb5a3ad96991aea"
+    },
+    {
+      "path": "images/hero/hero-03.webp",
+      "width": 900,
+      "height": 1200,
+      "pixels": 1080000,
+      "orientation": "portrait",
+      "sha256": "d7ec3b2971a3cc44e6ad58e8fec50377e0da4f3209cbecb46cb92abf144e6a09"
+    },
+    {
+      "path": "images/hero/hero-04.webp",
+      "width": 900,
+      "height": 1200,
+      "pixels": 1080000,
+      "orientation": "portrait",
+      "sha256": "d76d908b2f6032a615a7ff07268ab19014b34d4e8efde295201a5aed24601ca3"
+    },
+    {
+      "path": "images/hero/hero-07.webp",
+      "width": 900,
+      "height": 1200,
+      "pixels": 1080000,
+      "orientation": "portrait",
+      "sha256": "69f16cc86f83930ab5733f4932f2141ed1ecedb8517d2a2af4b6ff3aa55df453"
+    },
+    {
+      "path": "images/hero/hero-02.webp",
+      "width": 902,
+      "height": 902,
+      "pixels": 813604,
+      "orientation": "landscape",
+      "sha256": "cfdaf418ba8b1d2d17bd1753f0d0bd3cb897c76ef2fb44bed54f62dbe77cf5ed"
+    },
+    {
       "path": "images/stock/ml-3783768058-p02.webp",
       "width": 1200,
       "height": 675,
       "pixels": 810000,
       "orientation": "landscape",
       "sha256": "6d9e14755b7635c2b981d65ba7c47a32789ddc7a9f4b9a63668a848d9f6fdb7c"
+    },
+    {
+      "path": "images/hero/hero-06.webp",
+      "width": 900,
+      "height": 900,
+      "pixels": 810000,
+      "orientation": "landscape",
+      "sha256": "2bfb5a1012d019b1ae4a52975bc748e75793d4d66bc5a12aea3662fd1ce5cf89"
     }
   ]
 }

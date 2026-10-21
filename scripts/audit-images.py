@@ -5,7 +5,7 @@ No descarga activos externos: solo usa imágenes ya presentes en images/.
 Uso: python3 scripts/audit-images.py
 """
 from __future__ import annotations
-import hashlib, json, shutil
+import hashlib, json
 from pathlib import Path
 from PIL import Image, ImageOps
 
@@ -38,6 +38,11 @@ def info(rel: str) -> dict:
                 "sha256": hashlib.sha256(p.read_bytes()).hexdigest()}
 
 def save_variant(src: Path, dst: Path, width: int, quality: int = 86) -> tuple[int, int]:
+    # Los derivados existentes son artefactos aprobados: no recomprimirlos cada vez
+    # que se actualiza el manifiesto evita cambios binarios y pérdidas acumuladas.
+    if dst.exists():
+        with Image.open(dst) as existing:
+            return existing.size
     with Image.open(src) as original:
         im = ImageOps.exif_transpose(original).convert("RGB")
         scale = min(1, width / im.width)
@@ -46,6 +51,21 @@ def save_variant(src: Path, dst: Path, width: int, quality: int = 86) -> tuple[i
             im = im.resize(size, Image.Resampling.LANCZOS)
         im.save(dst, "WEBP", quality=quality, method=6)
         return im.size
+
+def dimensions(rel: str) -> tuple[int, int]:
+    with Image.open(ROOT / rel) as im:
+        return im.size
+
+def verify_srcset(entries: list[dict]) -> None:
+    """Fail closed if any advertised srcset width differs from the encoded file."""
+    for entry in entries:
+        for candidate in entry["srcset"]:
+            width, _ = dimensions(candidate["path"])
+            if candidate["width"] != width:
+                raise SystemExit(
+                    f"ERROR: srcset width mismatch for {candidate['path']}: "
+                    f"declared {candidate['width']}px, actual {width}px"
+                )
 
 def ensure_hero_assets() -> list[dict]:
     entries = []
@@ -63,10 +83,12 @@ def ensure_hero_assets() -> list[dict]:
             w, h = im.size
         small = OUT_HERO / f"hero-{i:02d}-828.webp"
         save_variant(out, small, 828)
+        small_w, small_h = dimensions(str(small.relative_to(ROOT)))
+        w, h = dimensions(str(out.relative_to(ROOT)))
         entries.append({"section": "hero", "slot": i, "source": source,
                         "src": str(out.relative_to(ROOT)), "srcset": [
-                            {"path": str(small.relative_to(ROOT)), "width": 828},
-                            {"path": str(out.relative_to(ROOT)), "width": w}],
+                            {"path": str(small.relative_to(ROOT)), "width": small_w, "height": small_h},
+                            {"path": str(out.relative_to(ROOT)), "width": w, "height": h}],
                         "width": w, "height": h, "objectPosition": "50% 50%"})
     return entries
 
@@ -87,6 +109,7 @@ def ensure_backgrounds() -> dict:
 
 hero_entries = ensure_hero_assets()
 backgrounds = ensure_backgrounds()
+verify_srcset(hero_entries)
 all_entries = [info(x["source"]) for x in hero_entries] + [info(x["source"]) for x in backgrounds.values()]
 hashes = {}
 for e in all_entries:
@@ -99,7 +122,7 @@ manifest = {
     "generatedAt": "2026-10-21",
     "policy": {"source": "Activos locales del repositorio y galerías ya integradas del vendedor",
                "noExternalStock": True, "duplicateImages": 0,
-               "sourceLimit": "Los originales disponibles llegan como máximo a 1440 px en hero y 1200 px en stock; no se inventan resoluciones superiores."},
+               "sourceLimit": f"Máximo medido en el repositorio: {max(e['width'] for e in hero_entries)} px de ancho en hero y {max(e['width'] for e in all_entries if e['path'].startswith('images/stock/'))} px en stock; no se inventan resoluciones superiores."},
     "hero": hero_entries,
     "sections": backgrounds,
     "resolutionRanking": sorted(all_entries, key=lambda x: (x["pixels"], x["width"]), reverse=True),
