@@ -1882,8 +1882,8 @@ html body .sb>.src{margin-top:18px;color:#cbcbcb}
 .nz-top{padding-block:clamp(52px,8vw,112px);background:linear-gradient(180deg,#f8f8f8,#efefea)}
 .nz-w{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,.9fr);gap:clamp(28px,5vw,80px);align-items:center}
 .nz .ey{margin:0 0 16px}
-.nz-logo{display:inline-block;margin:0 0 18px;background:#fefefe;border:1px solid #060607;line-height:0}
-.nz-logo img{display:block;width:auto;height:clamp(64px,7vw,88px)}
+.nz-logo{display:inline-block;margin:0 0 18px;background:none!important;border:0!important;box-shadow:none!important;border-radius:50%;line-height:0}
+.nz-logo img{display:block;width:auto;height:clamp(64px,7vw,88px);border-radius:50%;box-shadow:none!important;background:transparent!important}
 #nosotros.nz h2{max-width:none;margin:0;color:#060607;font:italic 800 clamp(54px,9vw,132px)/.9 var(--hero-title,var(--b));letter-spacing:-.05em}
 #nosotros.nz h2 em{display:block;width:fit-content;margin-top:.04em;padding:0 .1em;background:#ee1c22;color:#060607;font-style:normal}
 #nosotros.nz h2::after{content:none}
@@ -2141,6 +2141,28 @@ section[id]::after{content:"";position:absolute;inset:0 auto 0 0;width:3px;backg
 @media(min-width:701px) and (max-width:960px){#unidades .cars{grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:12px!important}}
 @media(min-width:521px) and (max-width:700px){#unidades .cars{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:12px!important}}
 @media(max-width:520px){#unidades .cars{grid-template-columns:1fr!important}}
+
+/* Refinamiento final 2026-10: lectura, foco y navegación móvil. */
+html{scrollbar-gutter:stable}
+button,a,input,select,textarea{touch-action:manipulation}
+button,.btn,.site-nav a{min-height:44px}
+.btn:focus-visible,.site-nav a:focus-visible,.menu-toggle:focus-visible{outline:3px solid var(--gold-hi,#ff4a4a);outline-offset:4px}
+.site-nav a{display:inline-flex;align-items:center}
+@media(max-width:980px){
+  .site-header--home .site-nav{max-height:calc(100svh - 96px);overflow-y:auto;overscroll-behavior:contain}
+  .site-header--home .site-nav a{min-height:48px}
+  .site-header--home .menu-toggle[aria-expanded="true"]{background:var(--gold,#ee1c22);border-color:var(--gold,#ee1c22);color:var(--ink,#060607)}
+  .site-header--home .menu-toggle[aria-expanded="true"] .menu-icon,.site-header--home .menu-toggle[aria-expanded="true"] .menu-icon::before,.site-header--home .menu-toggle[aria-expanded="true"] .menu-icon::after{background:var(--ink,#060607)}
+}
+@media(max-width:520px){
+  .inventory-section .fx{width:100%;margin-inline:0}
+  .inventory-section .fx input,.inventory-section .fx select,.inventory-section .fx button{min-height:48px}
+  .inventory-section .car{border-radius:0}
+}
+@media(prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  .site-nav{transition:none!important}
+}
 
 dialog.ficha .fi-i{padding:clamp(14px,2vw,22px)}
 dialog.ficha .fi-d{grid-template-columns:repeat(3,minmax(0,1fr));gap:0 12px;margin:10px 0}
