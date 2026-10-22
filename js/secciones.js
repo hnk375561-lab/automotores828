@@ -789,26 +789,21 @@
         /* panel de marca bajo la foto: logotipo, qué ofrece la agencia y cómo visitarla (no repite lo de la derecha) */
         var pn = el('aside', null, 'fi-s'); pn.setAttribute('aria-label', 'Sobre ' + (ctx.nombre || 'la agencia'));
         var plate = el('div', null, 'fi-lg'), lg = el('img'); lg.src = 'images/logo-sm.png'; lg.width = 160; lg.height = 160; lg.alt = ctx.nombre || ''; lg.decoding = 'async'; lg.loading = 'lazy';
-        lg.className = 'lg-img';
-        plate.appendChild(lg);
-        var p1 = el('p', null, 'fi-p'), p2 = el('p', null, 'fi-p'), p3 = el('p', null, 'fi-p'), p4 = el('p', null, 'fi-p');
-        p1.innerHTML = '<strong>' + esc(ctx.nombre || '') + '</strong> · Compra, venta, permutas y consignaciones de autos y motos usados.';
-        p2.innerHTML = 'Visitanos en <strong>' + esc(ctx.direccion || '') + '</strong>.';
-        if (ctx.horarios && ctx.horarios.semana) {
-          var hs = ctx.horarios.semana;
-          var htxt = '';
-          if (Array.isArray(hs)) {
-            htxt = hs.map(function (d) { return d.horario ? (d.etiqueta || d.dias) + ': ' + d.horario : (d.etiqueta || ''); }).filter(Boolean).join(' · ');
-          }
-          if (htxt) p3.innerHTML = 'Horarios: <strong>' + esc(htxt) + '</strong> · <a href="#horarios">ver completo</a>.';
-          else p3.innerHTML = 'Horarios y mapa: <a href="#horarios">ver sección</a>.';
-        } else {
-          p3.innerHTML = 'Horarios y mapa: <a href="#horarios">ver sección</a>.';
+        plate.appendChild(lg); pn.appendChild(plate);
+        if (ctx.ciudad) pn.appendChild(el('p', 'Compra y venta de usados en ' + ctx.ciudad, 'fi-s-t'));
+        if (ctx.servicios && ctx.servicios.length) {
+          pn.appendChild(el('p', 'Qué ofrece la agencia', 'fi-s-k'));
+          var sv = el('ul', null, 'fi-sv');
+          ctx.servicios.forEach(function (t) { sv.appendChild(el('li', t)); });
+          pn.appendChild(sv);
         }
-        p4.innerHTML = 'Financiación <em>a consultar</em>. Tasación a consultar.';
-        plate.appendChild(p1); plate.appendChild(p2); plate.appendChild(p3); plate.appendChild(p4);
-        var hl = enlace('Ver horarios y mapa', '#horarios', 'btn sm', false); hl.addEventListener('click', function () { fdlg.close(); });
-        plate.appendChild(hl);
+        var vis = el('div', null, 'fi-vs');
+        vis.appendChild(el('p', 'Visitanos', 'fi-s-k'));
+        if (ctx.dir) vis.appendChild(el('p', ctx.dir, 'fi-s-a'));
+        var ev = window.drEstado ? window.drEstado() : null, est = ev ? ev.txt : (ctx.horario || '');
+        if (est) { var le = el('p', est, 'fi-e'); if (ev) le.setAttribute('data-abierto', ev.abierto ? '1' : '0'); vis.appendChild(le); }
+        if ($('#horarios')) {
+          var hl = enlace('Ver horarios y mapa', '#horarios', 'btn sm', false); hl.addEventListener('click', function () { fdlg.close(); });
           vis.appendChild(hl);
         }
         pn.appendChild(vis);
