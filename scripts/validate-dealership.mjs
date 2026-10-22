@@ -165,7 +165,7 @@ if (d && a) {
   const walk = (dir) => fs.readdirSync(dir, { withFileTypes: true }).flatMap((e) => skip.has(e.name) ? [] : e.isDirectory() ? walk(path.join(dir, e.name)) : [path.join(dir, e.name)]);
   for (const f of walk(root)) {
     const rel = path.relative(root, f);
-    if (!/\.(html|js|mjs|json|md|xml|txt|webmanifest|svg|yml|css)$/.test(rel) || rel === 'scripts/validate-dealership.mjs') continue;
+    if (!/\.(html|js|mjs|json|md|xml|txt|webmanifest|svg|yml|css)$/.test(rel) || rel.split(path.sep).join('/') === 'scripts/validate-dealership.mjs') continue;
     if (legacy.test(fs.readFileSync(f, 'utf8'))) err(`${rel}: quedan restos de otro proyecto`);
   }
 
