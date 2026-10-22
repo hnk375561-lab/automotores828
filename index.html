@@ -1469,6 +1469,13 @@ dialog.ficha::backdrop{background:rgba(3,3,4,.82)}
 .fi-vs .btn{width:100%}
 .fi-trust{margin-top:16px;padding-top:14px;border-top:1px solid rgba(255,255,255,.14)}
 .fi-trust .fi-sv{gap:6px}
+.fi-proof{margin-top:16px;padding-top:14px;border-top:1px solid rgba(255,255,255,.14)}
+.fi-proof-lead{margin:0 0 10px;color:#bdbdbd;font-size:13px;line-height:1.4}
+.fi-proof-g{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:7px}
+.fi-proof-c{min-width:0;padding:10px 9px 9px;border:1px solid rgba(238,28,34,.38);background:rgba(238,28,34,.06)}
+.fi-proof-c b{display:block;margin-bottom:8px;color:var(--y);font:italic 800 18px/1 var(--h)}
+.fi-proof-c strong{display:block;margin-bottom:4px;color:#fff;font:700 11px/1.15 var(--b);letter-spacing:.05em;text-transform:uppercase}
+.fi-proof-c span{display:block;color:#cecece;font-size:11px;line-height:1.35}
 .fi-path{margin-top:16px;padding-top:14px;border-top:1px solid rgba(255,255,255,.14)}
 .fi-path-l{display:grid;gap:9px;margin:0;padding:0;list-style:none;counter-reset:fi-step}
 .fi-path-l li{counter-increment:fi-step;position:relative;min-height:30px;padding:5px 0 5px 42px;color:#e8e8e8;font-size:14px;line-height:1.35}
@@ -2122,7 +2129,7 @@ section[id]::after{content:"";position:absolute;inset:0 auto 0 0;width:3px;backg
 
 /* ===== Capa final editorial 828 · aplicada después de las capas históricas ===== */
 .car-ph{position:relative;isolation:isolate;overflow:hidden}
-.car-badge{position:absolute;z-index:2;top:12px;right:12px;width:58px;height:58px;border:2px solid rgba(255,255,255,.9);border-radius:50%;background:#f7f7f5 url('images/logo-circle.png') center/82% no-repeat;box-shadow:0 5px 18px rgba(0,0,0,.28)}
+.car-badge{position:absolute;z-index:2;top:12px;right:12px;width:58px;height:58px;border:0;border-radius:50%;background:transparent url('images/logo-circle.png') center/100% no-repeat;box-shadow:0 5px 18px rgba(0,0,0,.28)}
 .cars{grid-template-columns:repeat(3,minmax(0,1fr))}
 .hero-carousel-controls{display:flex!important;position:absolute;z-index:5;right:clamp(16px,4vw,64px);bottom:clamp(18px,4vw,48px);align-items:center;gap:8px;padding:8px 10px;border:1px solid rgba(255,255,255,.3);border-radius:999px;background:rgba(6,6,7,.9)}
 .hero-carousel-btn,.hero-carousel-toggle{min-height:32px;border:1px solid rgba(255,255,255,.28);border-radius:999px;background:transparent;color:#fff;cursor:pointer;font:700 11px/1 var(--hero-copy);letter-spacing:.08em}

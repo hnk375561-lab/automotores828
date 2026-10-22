@@ -814,6 +814,20 @@
          'Consulta directa para confirmar precio y disponibilidad.',
          'Permutas, consignaciones y financiación por consulta.'].forEach(function (t) { tl.appendChild(el('li', t)); });
         trust.appendChild(tl); pn.appendChild(trust);
+        var proof = el('section', null, 'fi-proof'); proof.setAttribute('aria-label', 'Claves de una compra segura');
+        proof.appendChild(el('p', 'Claves de una compra segura', 'fi-s-k'));
+        proof.appendChild(el('p', 'La información justa para decidir mejor, sin vueltas ni promesas vacías.', 'fi-proof-lead'));
+        var proofGrid = el('div', null, 'fi-proof-g');
+        [['01', 'Datos visibles', 'Año, kilometraje y características publicados para comparar con criterio.'],
+         ['02', 'Atención directa', 'Confirmá precio y disponibilidad con la agencia antes de moverte.'],
+         ['03', 'Visita coordinada', 'Elegí un horario y conocé la unidad con tiempo para revisarla.']].forEach(function (item) {
+          var card = el('article', null, 'fi-proof-c');
+          card.appendChild(el('b', item[0]));
+          card.appendChild(el('strong', item[1]));
+          card.appendChild(el('span', item[2]));
+          proofGrid.appendChild(card);
+        });
+        proof.appendChild(proofGrid); pn.appendChild(proof);
         var path = el('section', null, 'fi-path'); path.setAttribute('aria-label', 'Tu próxima visita');
         path.appendChild(el('p', 'Tu próxima visita', 'fi-s-k'));
         var steps = el('ol', null, 'fi-path-l');
