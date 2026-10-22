@@ -75,22 +75,22 @@
     function pintar() {
       started.add(root); root.classList.add('is-open'); if (ph) ph.hidden = true;
       var movil = !!(L.Browser && L.Browser.mobile);
-      mapa = L.map(view, { scrollWheelZoom: false, dragging: !movil, zoomControl: true, attributionControl: true, zoomSnap: 1, minZoom: 12, maxZoom: 19, fadeAnimation: false, zoomAnimation: false, markerZoomAnimation: false, inertia: !movil, preferCanvas: true }).setView([lat, lng], 17);
+      mapa = L.map(view, { scrollWheelZoom: false, dragging: !movil, zoomControl: true, attributionControl: true, zoomSnap: 1, minZoom: 12, maxZoom: 19, fadeAnimation: false, zoomAnimation: false, markerZoomAnimation: false, inertia: !movil, preferCanvas: true }).setView([lat, lng], 16);
       var attr = '&copy; <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener noreferrer">OpenStreetMap</a> contributors';
       var tiles = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 19, attribution: attr, keepBuffer: 1, updateWhenIdle: true, updateWhenZooming: false, noWrap: true });
       var errores = 0, cargado = false;
       tiles.on('tileload', function () { cargado = true; });
       tiles.on('tileerror', function () { if (++errores >= 4 && !cargado) respaldo(); });
       tiles.addTo(mapa);
-      var icono = L.divIcon({ className: 'dr-pin', html: '<span class="dr-pin-r" aria-hidden="true"></span><span class="dr-pin-b"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 17h16M7 17a5 5 0 0 1 10 0M12 6v2.5M5.6 9.6l1.8 1.8M18.4 9.6l-1.8 1.8"/></svg></span>', iconSize: [44, 44], iconAnchor: [22, 53], popupAnchor: [0, -50] });
+      var icono = L.divIcon({ className: 'dr-pin', html: '<span class="dr-pin-r" aria-hidden="true"></span><span class="dr-pin-b"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 17h16M7 17a5 5 0 0 1 10 0M12 6v2.5M5.6 9.6l1.8 1.8M18.4 9.6l-1.8 1.8"/></svg></span>', iconSize: [56, 56], iconAnchor: [28, 54], popupAnchor: [0, -54] });
       var marca = L.marker([lat, lng], { icon: icono, title: nombre, keyboard: true, alt: nombre }).addTo(mapa);
       marca.bindPopup(popup(), { closeButton: false, minWidth: 210, maxWidth: 260 });
       marca.bindTooltip(nombre, { permanent: true, direction: 'right', offset: [24, -26], className: 'dr-tt' });
-      var Centrar = L.Control.extend({ options: { position: 'topright' }, onAdd: function () { var b = L.DomUtil.create('button', 'dr-ctr'); b.type = 'button'; b.textContent = 'Centrar'; b.setAttribute('aria-label', 'Volver a centrar el mapa en ' + nombre); L.DomEvent.disableClickPropagation(b); L.DomEvent.on(b, 'click', function () { mapa.setView([lat, lng], 17); }); return b; } });
+      var Centrar = L.Control.extend({ options: { position: 'topright' }, onAdd: function () { var b = L.DomUtil.create('button', 'dr-ctr'); b.type = 'button'; b.textContent = 'Centrar'; b.setAttribute('aria-label', 'Volver a centrar el mapa en ' + nombre); L.DomEvent.disableClickPropagation(b); L.DomEvent.on(b, 'click', function () { mapa.setView([lat, lng], 16); }); return b; } });
       mapa.addControl(new Centrar());
       if (movil) { var cand = el('button', 'Tocá para mover el mapa', 'dr-lock'); cand.type = 'button'; cand.addEventListener('click', function () { mapa.dragging.enable(); cand.remove(); }); root.appendChild(cand); }
       else { mapa.on('click', function () { mapa.scrollWheelZoom.enable(); }); view.addEventListener('mouseleave', function () { if (mapa) mapa.scrollWheelZoom.disable(); }); }
-      requestAnimationFrame(function () { if (mapa) mapa.invalidateSize({ pan: false }); });
+      requestAnimationFrame(function () { if (mapa) { mapa.invalidateSize({ pan: false }); mapa.panInside([lat, lng], { padding: [80, 80] }); } });
     }
     function iniciar() {
       if (started.has(root)) return;
@@ -100,6 +100,7 @@
     }
     if (trigger) { trigger.hidden = false; trigger.addEventListener('click', function () { if (!started.has(root)) { cancelIdle(); iniciar(); } }); }
     if (immediate) iniciar();
+    else if (root.dataset.manualMap === '1' && trigger) { trigger.hidden = false; dijo('Mapa desactivado hasta que quieras explorarlo.'); }
     else {
       defer(root, iniciar);
       if ('IntersectionObserver' in window) {

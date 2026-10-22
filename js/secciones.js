@@ -327,18 +327,32 @@
         return c * dir || a.i - b.i;
       }
       function aplicar(escribirUrl) {
-        var n = 0, quitados = podar();
+        var n = 0, visibles = 0, quitados = podar();
+        var paso = window.innerWidth <= 700 ? 5 : 20;
+        if (window._drCatalogoPaso !== paso) { window._drCatalogoPaso = paso; window._drCatalogoMostradas = paso; }
+        var limite = window._drCatalogoMostradas || paso;
         if (quitados.length) {
           ajuste.textContent = 'Se quitó ' + quitados.map(function (t) { return '«' + t + '»'; }).join(', ') + ' porque ninguna unidad coincide con esa combinación.';
           ajuste.hidden = false;
         } else { ajuste.textContent = ''; ajuste.hidden = true; }
         list.forEach(function (a) {
           var ok = coincide(a, null), li = items[a.i];
+          if (ok) n++;
           li.hidden = !ok;
-          if (ok) { li.style.removeProperty('display'); n++; } else li.style.setProperty('display', 'none', 'important');
+          if (!ok) li.style.setProperty('display', 'none', 'important');
         });
         list.slice().sort(ordenar).forEach(function (a) { ul.appendChild(items[a.i]); });
+        visibles = 0;
+        list.slice().sort(ordenar).forEach(function (a) {
+          var li = items[a.i], ok = coincide(a, null);
+          li.hidden = !ok || visibles >= limite;
+          if (ok && visibles < limite) { li.style.removeProperty('display'); visibles++; }
+          else li.style.setProperty('display', 'none', 'important');
+        });
         ul.hidden = n === 0; if (sinres) sinres.hidden = n > 0;
+        var more = document.getElementById('inventory-more'), moreNote = document.getElementById('inventory-more-note');
+        if (more) { more.hidden = n <= visibles; more.textContent = paso === 5 ? 'Mostrar 5 unidades más' : 'Mostrar 20 unidades más'; }
+        if (moreNote) moreNote.textContent = n ? ('Viendo ' + visibles + ' de ' + n + ' unidades disponibles') : '';
         /* opciones y cantidades según lo que ya está elegido en los demás filtros */
         GR.forEach(function (g) {
           var r = refs[g.k];
@@ -383,6 +397,14 @@
         nAct = act2.length; etiquetaTg();
         if (escribirUrl) aUrl();
       }
+
+      window._drCatalogoPaso = window.innerWidth <= 700 ? 5 : 20;
+      window._drCatalogoMostradas = window._drCatalogoPaso;
+      var moreBtn = document.getElementById('inventory-more');
+      if (moreBtn) moreBtn.addEventListener('click', function () {
+        window._drCatalogoMostradas += window.innerWidth <= 700 ? 5 : 20;
+        aplicar(false);
+      });
 
       /* ----- URL ----- */
       function aUrl() {
@@ -727,7 +749,7 @@
 
         /* acciones */
         var ac = el('div', null, 'fi-ac');
-        ac.appendChild(enlace(a.vendida ? 'Consultar por similares' : ctx.wa ? 'Consultar por WhatsApp' : 'Consultar por Facebook', a.href, 'btn p sm', true));
+        ac.appendChild(enlace(a.vendida ? 'Consultar por similares' : ctx.wa ? 'Consultar por WhatsApp' : 'Consultar en Mercado Libre', a.href, 'btn p sm', true));
         ac.appendChild(enlace('Agendar visita y prueba de manejo', 'reserva.html', 'btn sm', false));
         info.appendChild(ac);
         var ac2 = el('div', null, 'fi-ac2');
@@ -788,8 +810,6 @@
 
         /* panel de marca bajo la foto: logotipo, qué ofrece la agencia y cómo visitarla (no repite lo de la derecha) */
         var pn = el('aside', null, 'fi-s'); pn.setAttribute('aria-label', 'Sobre ' + (ctx.nombre || 'la agencia'));
-        var plate = el('div', null, 'fi-lg'), lg = el('img'); lg.src = 'images/logo-sm.png'; lg.width = 160; lg.height = 160; lg.alt = ctx.nombre || ''; lg.decoding = 'async'; lg.loading = 'lazy';
-        plate.appendChild(lg); pn.appendChild(plate);
         if (ctx.ciudad) pn.appendChild(el('p', 'Compra y venta de usados en ' + ctx.ciudad, 'fi-s-t'));
         if (ctx.servicios && ctx.servicios.length) {
           pn.appendChild(el('p', 'Qué ofrece la agencia', 'fi-s-k'));
