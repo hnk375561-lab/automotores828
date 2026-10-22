@@ -1020,7 +1020,7 @@ section.conversion:not(.ct) .conversion-form-head .ey{background:none;padding:0 
 @media(max-width:900px){.bar li,.bar li:first-child{padding:12px 10px 12px 66px}.bar li svg{width:38px;height:38px;left:12px}.bar b,.bar a,.bar b[data-estado]{font-size:21px}}
 
 /* ===== Tarjetas de unidades: logotipo en lugar de numeración ===== */
-.inventory-section .car::before{content:""!important;counter-increment:none;z-index:0;top:12px;right:28px;width:60px;height:24px;padding:2px;box-sizing:border-box;background:#fefefe url("images/logo-sm.png") center/contain no-repeat;border:0;opacity:.95}
+.inventory-section .car::before{content:""!important;counter-increment:none;z-index:0;top:12px;right:28px;width:60px;height:24px;padding:2px;box-sizing:border-box;background:transparent url("images/logo-sm.png") center/contain no-repeat;border:0;opacity:.95}
 .inventory-section .fx,.inventory-section .filter-bar{z-index:30;background-color:rgba(6,6,7,.97)}
 
 /* ===== Fondos de sección: imágenes a plena nitidez ===== */
@@ -1467,6 +1467,12 @@ dialog.ficha::backdrop{background:rgba(3,3,4,.82)}
 .fi-vs .fi-e{margin:0 0 12px;font:700 13.5px/1.3 var(--b);letter-spacing:0;text-transform:none;color:#d2d2d2}
 .fi-vs .fi-e[data-abierto="1"]{color:var(--y)}
 .fi-vs .btn{width:100%}
+.fi-trust{margin-top:16px;padding-top:14px;border-top:1px solid rgba(255,255,255,.14)}
+.fi-trust .fi-sv{gap:6px}
+.fi-path{margin-top:16px;padding-top:14px;border-top:1px solid rgba(255,255,255,.14)}
+.fi-path-l{display:grid;gap:9px;margin:0;padding:0;list-style:none;counter-reset:fi-step}
+.fi-path-l li{counter-increment:fi-step;position:relative;min-height:30px;padding:5px 0 5px 42px;color:#e8e8e8;font-size:14px;line-height:1.35}
+.fi-path-l li::before{content:counter(fi-step);position:absolute;left:0;top:0;display:grid;place-items:center;width:30px;height:30px;background:var(--y);color:var(--ink);font:italic 800 16px/1 var(--h)}
 @media(max-width:800px){.fi-l{display:contents}.fi-l .fi-m{order:1}.fi-i{order:2}.fi-s{order:3;border-top:1px solid rgba(238,28,34,.4)}}
 
 /* ===== Responsive de las secciones nuevas ===== */
@@ -2171,6 +2177,7 @@ dialog.ficha .fi-d dt{font-size:9.5px;line-height:1.15;letter-spacing:.1em}
 dialog.ficha .fi-d dd{margin-top:3px;font-size:14px}
 dialog.ficha .fi-t img{max-height:54dvh}
 dialog.ficha .fi-s{gap:10px;padding:16px}
+dialog.ficha .fi-vs{margin-top:0}
 dialog.ficha .fi-lg img{width:clamp(104px,13vw,156px)}
 dialog.ficha .fi-sv{gap:4px}
 dialog.ficha .fi-vs{margin-top:4px;padding-top:10px}

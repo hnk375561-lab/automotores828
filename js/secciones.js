@@ -807,6 +807,20 @@
           vis.appendChild(hl);
         }
         pn.appendChild(vis);
+        var trust = el('section', null, 'fi-trust'); trust.setAttribute('aria-label', 'Cómo te ayudamos');
+        trust.appendChild(el('p', 'Una compra más clara', 'fi-s-k'));
+        var tl = el('ul', null, 'fi-sv');
+        ['Fotos y datos publicados para comparar unidades.',
+         'Consulta directa para confirmar precio y disponibilidad.',
+         'Permutas, consignaciones y financiación por consulta.'].forEach(function (t) { tl.appendChild(el('li', t)); });
+        trust.appendChild(tl); pn.appendChild(trust);
+        var path = el('section', null, 'fi-path'); path.setAttribute('aria-label', 'Tu próxima visita');
+        path.appendChild(el('p', 'Tu próxima visita', 'fi-s-k'));
+        var steps = el('ol', null, 'fi-path-l');
+        ['Elegí una unidad y revisá sus datos publicados.',
+         'Escribinos para confirmar precio y disponibilidad.',
+         'Coordiná tu visita en Monte Grande con la agencia.'].forEach(function (t) { steps.appendChild(el('li', t)); });
+        path.appendChild(steps); pn.appendChild(path);
         left.appendChild(pn);
         g.appendChild(info);
         fdlg.appendChild(x); fdlg.appendChild(g);
