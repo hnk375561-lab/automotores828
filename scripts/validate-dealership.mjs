@@ -100,7 +100,7 @@ if (d && a) {
     [/permut|parte de pago|tom[aá]mos tu usado/i, 'permuta sin fuente', 'permuta'],
     [/tasaci[oó]n/i, 'tasación sin fuente', 'tasacion'],
     [/garant[ií]a/i, 'garantía sin fuente', 'garantia'],
-    [/\b0 ?km\b/i, '0 km sin fuente', null],
+    [/\b0 ?km\b/i, '0 km sin fuente', '0km'],
     [/rese[ñn]as?|estrellas|opiniones|\b\d[.,]\d\s?\/\s?(5|10)\b/i, 'valoración o reseñas sin verificar', 'resenas'],
     [/\$\s?\d|US\$\s?\d|\d{1,3}(\.\d{3})+ ?km/i, 'precio o kilometraje fuera de una tarjeta de unidad', null],
     [/c[aá]mara del comercio automotor|\bCCA\b/i, 'afiliación a la CCA no verificada', null],

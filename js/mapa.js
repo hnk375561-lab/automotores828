@@ -75,7 +75,7 @@
     function pintar() {
       started.add(root); root.classList.add('is-open'); if (ph) ph.hidden = true;
       var movil = !!(L.Browser && L.Browser.mobile);
-      mapa = L.map(view, { scrollWheelZoom: false, dragging: !movil, zoomControl: true, attributionControl: true, zoomSnap: 1, minZoom: 12, maxZoom: 19, fadeAnimation: false, zoomAnimation: false, markerZoomAnimation: false, inertia: !movil, preferCanvas: true }).setView([lat, lng], 16);
+      mapa = L.map(view, { scrollWheelZoom: false, dragging: !movil, zoomControl: true, attributionControl: true, zoomSnap: 1, minZoom: 12, maxZoom: 19, fadeAnimation: false, zoomAnimation: false, markerZoomAnimation: false, inertia: !movil, preferCanvas: true }).setView([lat, lng], 15);
       var attr = '&copy; <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener noreferrer">OpenStreetMap</a> contributors';
       var tiles = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 19, attribution: attr, keepBuffer: 1, updateWhenIdle: true, updateWhenZooming: false, noWrap: true });
       var errores = 0, cargado = false;
@@ -86,11 +86,11 @@
       var marca = L.marker([lat, lng], { icon: icono, title: nombre, keyboard: true, alt: nombre }).addTo(mapa);
       marca.bindPopup(popup(), { closeButton: false, minWidth: 210, maxWidth: 260 });
       marca.bindTooltip(nombre, { permanent: true, direction: 'right', offset: [24, -26], className: 'dr-tt' });
-      var Centrar = L.Control.extend({ options: { position: 'topright' }, onAdd: function () { var b = L.DomUtil.create('button', 'dr-ctr'); b.type = 'button'; b.textContent = 'Centrar'; b.setAttribute('aria-label', 'Volver a centrar el mapa en ' + nombre); L.DomEvent.disableClickPropagation(b); L.DomEvent.on(b, 'click', function () { mapa.setView([lat, lng], 16); }); return b; } });
+      var Centrar = L.Control.extend({ options: { position: 'topright' }, onAdd: function () { var b = L.DomUtil.create('button', 'dr-ctr'); b.type = 'button'; b.textContent = 'Centrar'; b.setAttribute('aria-label', 'Volver a centrar el mapa en ' + nombre); L.DomEvent.disableClickPropagation(b); L.DomEvent.on(b, 'click', function () { mapa.setView([lat, lng], 15); }); return b; } });
       mapa.addControl(new Centrar());
       if (movil) { var cand = el('button', 'Tocá para mover el mapa', 'dr-lock'); cand.type = 'button'; cand.addEventListener('click', function () { mapa.dragging.enable(); cand.remove(); }); root.appendChild(cand); }
       else { mapa.on('click', function () { mapa.scrollWheelZoom.enable(); }); view.addEventListener('mouseleave', function () { if (mapa) mapa.scrollWheelZoom.disable(); }); }
-      requestAnimationFrame(function () { if (mapa) { mapa.invalidateSize({ pan: false }); mapa.panInside([lat, lng], { padding: [80, 80] }); } });
+      requestAnimationFrame(function () { if (mapa) { mapa.invalidateSize({ pan: false }); mapa.setView([lat, lng], 15, { animate: false }); } });
     }
     function iniciar() {
       if (started.has(root)) return;

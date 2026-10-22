@@ -5,3 +5,62 @@ section[id]::before{content:"";position:absolute;left:0;right:0;top:0;height:14p
 section[id]::after{content:"";position:absolute;left:0;right:0;bottom:0;height:8px;z-index:6;pointer-events:none;background:repeating-conic-gradient(#ee1c22 0 25%,#060607 0 50%) 0 0/14px 14px;box-shadow:0 0 16px rgba(238,28,34,.28)}
 @supports (animation-timeline:view()){section[id]::before{animation:dr-flag-run 3.2s linear infinite,dr-flag-in linear both;animation-timeline:auto,view();animation-range:normal,entry 0% entry 55%}}
 @media(prefers-reduced-motion:reduce){section[id]::before{animation:none}}
+
+
+/* Separadores de competición: una banda marcada en cada inicio de sección con contenido. */
+main > section[id]::before, main > section[id]::after{background:repeating-conic-gradient(#ee1c22 0 25%,#060607 0 50%) 0 0/18px 18px!important}
+main > section[id]::before{height:18px!important;box-shadow:0 0 24px rgba(238,28,34,.42)!important}
+main > section[id]::after{height:7px!important}
+/* Inventario: veinte unidades visibles en una cuadrícula 5 × 4; el expansor conserva el resto. */
+#unidades .cars{grid-template-columns:repeat(5,minmax(0,1fr))!important;gap:14px!important}
+#unidades .cars .car{padding:0 0 10px!important}
+#unidades .cars .car h3{font-size:clamp(15px,1.15vw,19px)!important;line-height:1.15!important;margin:5px 10px!important}
+#unidades .cars .car .car-s{gap:6px!important;margin:4px 10px!important}
+#unidades .cars .car .sp{gap:3px 8px!important;margin:4px 10px!important}
+#unidades .cars .car .car-f{gap:6px!important;padding:8px 10px!important}
+#unidades .cars .car .pr{display:inline-block;width:fit-content;margin:2px 0 4px!important;padding:7px 10px!important;border-left:4px solid #ee1c22!important;border-radius:2px;background:linear-gradient(90deg,rgba(238,28,34,.18),rgba(238,28,34,.04))!important;color:#fff!important;font-size:clamp(18px,1.45vw,23px)!important;font-weight:900!important;line-height:1.1!important;font-variant-numeric:tabular-nums;text-decoration:underline;text-decoration-color:#ee1c22;text-decoration-thickness:2px;text-underline-offset:4px}
+#unidades .cars .car .n{margin:0!important;line-height:1.3!important}
+#unidades .cars .car .btn{min-height:36px!important;padding:7px 9px!important;font-size:11px!important}
+@media(max-width:1100px){#unidades .cars{grid-template-columns:repeat(4,minmax(0,1fr))!important;gap:12px!important}}
+@media(max-width:900px){#unidades .cars{grid-template-columns:repeat(3,minmax(0,1fr))!important}}
+@media(max-width:700px){#unidades .cars{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:10px!important}#unidades .cars .car .pr{font-size:18px!important}}
+@media(max-width:380px){#unidades .cars{grid-template-columns:1fr!important}}
+/* Comparador: jerarquía clara, encabezado de marca y resumen de ventajas. */
+dialog.cmp-lux{border:1px solid rgba(238,28,34,.72)!important;box-shadow:0 28px 100px rgba(0,0,0,.72)!important}
+dialog.cmp-lux .cmp-hd{background:linear-gradient(120deg,#171717,#080808)!important;border-bottom:1px solid rgba(238,28,34,.4)!important}
+dialog.cmp-lux .cmp-tt{align-items:center}
+dialog.cmp-lux .cmp-flag{filter:drop-shadow(0 0 8px rgba(238,28,34,.35))}
+dialog.cmp-lux .cmp-win li{border:1px solid rgba(238,28,34,.36)!important;border-left:4px solid #ee1c22!important;background:linear-gradient(130deg,#181818,#0d0d0d)!important}
+dialog.cmp-lux .cmp-win-p{border:1px solid rgba(255,255,255,.14)}
+dialog.cmp-lux .cmpx thead th{background:#111!important}
+dialog.cmp-lux .cmpx .cmp-ph{border-bottom:3px solid #ee1c22}
+dialog.cmp-lux .cmpx td.win{box-shadow:inset 0 0 0 1px rgba(238,28,34,.45);background:rgba(238,28,34,.08)}
+dialog.cmp-lux .cmpx .big:not(.nd){display:inline-block;padding:5px 8px;background:rgba(238,28,34,.12);border-bottom:2px solid #ee1c22}
+/* Sección institucional: relato editorial y contactos de lectura inmediata. */
+#nosotros.nz .nz-top{background:linear-gradient(125deg,#fff 0%,#f2f2ee 58%,#e7e7e3 100%)}
+#nosotros.nz .nz-w{grid-template-columns:minmax(0,1.1fr) minmax(270px,.9fr);gap:clamp(28px,5vw,74px)}
+#nosotros.nz .nz-big{min-height:clamp(230px,28vw,360px);background:radial-gradient(circle at 82% 14%,rgba(238,28,34,.18),transparent 36%),#060607!important}
+#nosotros.nz .nz-big .nz-iso{display:none!important}
+#nosotros.nz .nz-num{font-size:clamp(88px,12vw,160px)!important}
+#nosotros.nz .nz-contactos{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-top:24px;max-width:640px}
+#nosotros.nz .nz-contactos a{display:flex;flex-direction:column;gap:4px;padding:13px 15px;border:1px solid rgba(6,6,7,.17);border-left:4px solid #ee1c22;background:rgba(255,255,255,.7);color:#060607;text-decoration:none;transition:transform .2s,border-color .2s}
+#nosotros.nz .nz-contactos a:hover{transform:translateY(-2px);border-color:#ee1c22}
+#nosotros.nz .nz-contactos span{font-size:11px;font-weight:800;letter-spacing:.15em;text-transform:uppercase;color:#666}
+#nosotros.nz .nz-contactos b{font-size:clamp(16px,1.4vw,20px);font-variant-numeric:tabular-nums}
+#nosotros.nz .nz-net--mapa{padding-top:28px}
+#nosotros.nz .nz-mapa{margin-top:20px}
+#nosotros.nz .nz-mapa .dr-map{min-height:clamp(260px,34vw,420px)!important}
+@media(max-width:700px){#nosotros.nz .nz-w{grid-template-columns:1fr}#nosotros.nz .nz-big{min-height:220px}#nosotros.nz .nz-contactos{gap:8px}#nosotros.nz .nz-contactos a{padding:11px 10px}}
+/* Una sola marca por tarjeta: conservar el sello pequeño del vehículo y retirar el círculo grande duplicado. */
+#unidades .car-ph .car-badge{display:none!important}
+/* Filtros: misma información y controles, con jerarquía más compacta y fácil de recorrer. */
+#unidades .fx,#unidades .fx.is-open{padding:14px 16px!important;margin-bottom:20px!important;border-radius:8px!important}
+#unidades .fx .fx-top{gap:10px 16px!important}
+#unidades .fx .fx-body{gap:14px 18px!important;margin-top:12px!important;padding-top:14px!important}
+#unidades .fx label,#unidades .fx legend{font-size:11px!important;letter-spacing:.08em!important}
+#unidades .fx input[type=search],#unidades .fx select{min-height:40px!important;padding:7px 10px!important}
+#unidades .fx .chips{gap:6px!important}
+@media(max-width:700px){#unidades .fx,#unidades .fx.is-open{padding:12px!important}#unidades .fx .fx-top,#unidades .fx .fx-body{gap:9px!important}}
+
+#horarios .dr-hr-lead{max-width:66ch;margin:12px 0 0;color:#d7d7d7;font-size:clamp(15px,1.35vw,18px);line-height:1.55}
+@media(max-width:700px){#horarios .dr-hr-lead{font-size:15px;line-height:1.48}}

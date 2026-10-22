@@ -5,13 +5,13 @@ html body .hero-media{position:absolute;inset:0;z-index:0;overflow:hidden;backgr
 html body .hero-slide{position:absolute;inset:0;margin:0;overflow:hidden;opacity:0;visibility:hidden;z-index:0;transition:opacity .9s ease,visibility 0s linear .9s}
 html body .hero-slide.is-leaving{opacity:0;visibility:visible;z-index:1}
 html body .hero-slide.is-active{opacity:1;visibility:visible;z-index:2;transition:opacity .9s ease,visibility 0s}
-html body .hero-slide img{display:block;width:100%;height:100%;object-fit:cover;object-position:50% 64%;transform:translate3d(0,0,0) scale(1.05);transform-origin:50% 62%;will-change:transform;transition:none!important}
+html body .hero-slide img{display:block;width:100%;height:100%;object-fit:cover;object-position:50% 64%;transform:translate3d(0,0,0) scale(1.015);transform-origin:50% 62%;will-change:transform;transition:none!important}
 html body .hero-slide.is-active img,html body .hero-slide.is-leaving img{animation:drZoom 4.5s cubic-bezier(.2,.6,.3,1) both}
 /* el punto de zoom varía por foto para que no se sienta repetido */
 html body .hero-slide--01 img,html body .hero-slide--03 img,html body .hero-slide--05 img,html body .hero-slide--07 img{transform-origin:50% 70%}
 html body .hero-slide--02 img,html body .hero-slide--04 img,html body .hero-slide--06 img,html body .hero-slide--08 img{transform-origin:50% 55%}
 /* zoom perceptible (+11 %) con un leve desplazamiento hacia la derecha: el auto queda libre del texto */
-@keyframes drZoom{from{transform:translate3d(0,0,0) scale(1.05)}to{transform:translate3d(1%,0,0) scale(1.12)}}
+@keyframes drZoom{from{transform:translate3d(0,0,0) scale(1.015)}to{transform:translate3d(1%,0,0) scale(1.055)}}
 
 /* velo: texto legible a la izquierda, foto limpia a la derecha, base más oscura */
 html body .hero::before{content:"";position:absolute;inset:0;z-index:3;opacity:1;mask:none;pointer-events:none;background:linear-gradient(90deg,rgba(6,6,7,.86) 0%,rgba(6,6,7,.62) 32%,rgba(6,6,7,.2) 62%,rgba(6,6,7,.04) 100%),linear-gradient(0deg,rgba(6,6,7,.55) 0%,rgba(6,6,7,0) 36%)!important}
@@ -27,7 +27,7 @@ html body .hero .hx-copy,html body .hero .hx-down{z-index:4}
 }
 /* sin movimiento: queda la primera foto, quieta */
 @media(prefers-reduced-motion:reduce){
-  html body .hero-slide img{animation:none!important;transform:scale(1.04)}
+  html body .hero-slide img{animation:none!important;transform:scale(1.015)}
   html body .hero-slide{transition:none}
 }
 html.save-data .hero-slide img{animation-duration:0s!important}

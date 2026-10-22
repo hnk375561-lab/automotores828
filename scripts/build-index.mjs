@@ -171,7 +171,7 @@ ${mediaTag(a)}
 <h3>${esc(sinMarca(a))}</h3>
 <div class="car-s"><p><b${a.anio == null ? ' class="nd"' : ''}>${a.anio != null ? a.anio : 'Sin dato'}</b><small>Año</small></p><p><b${a.km == null ? ' class="nd"' : ''}>${a.km != null ? fmt(a.km) : 'Consultar'}</b><small>Kilómetros</small></p></div>
 <dl class="sp">${fila('Caja', a.transmision ? esc(a.transmision) : '')}${fila('Combustible', a.combustible ? esc(a.combustible) : '')}${fila('Color', a.color ? `${sw ? `<i class="sw" style="--sw:${sw}"></i>` : ''}${esc(a.color)}` : '')}</dl>
-<div class="car-f">${pr}${a.nota ? `<p class="n">${esc(a.nota)}</p>` : ''}<button class="btn sm ficha-trigger" type="button" data-ficha="${i}" aria-label="Ver la ficha completa de ${esc(a.titulo)}">Ver la ficha completa</button><button class="btn sm gallery-trigger" type="button" data-gallery="${i}" hidden>Ver galería</button><a class="btn sm" href="${esc(consultaHref(a))}" ${EXT} aria-label="Consultar por ${esc(a.titulo)}">${a.vendida ? 'Consultar por similares' : WA ? 'Reservar esta unidad' : 'Consultar por Facebook'}</a>${quick(a, i)}</div>
+<div class="car-f">${pr}${a.nota ? `<p class="n">${esc(a.nota)}</p>` : ''}<button class="btn sm ficha-trigger" type="button" data-ficha="${i}" aria-label="Ver la ficha completa de ${esc(a.titulo)}">Ver la ficha completa</button><button class="btn sm gallery-trigger" type="button" data-gallery="${i}" hidden>Ver galería</button><a class="btn sm" href="${esc(consultaHref(a))}" ${EXT} aria-label="Consultar por ${esc(a.titulo)}">${a.vendida ? 'Consultar por similares' : WA ? 'Reservar esta unidad' : 'Ver publicación en Mercado Libre'}</a>${quick(a, i)}</div>
 </li>`;
 };
 const catData = autos.map((a, i) => ({
@@ -395,7 +395,7 @@ const hrAddr = H.display ? `<div class="dr-addr"><div class="dr-addr-t"><span cl
 <div class="row"><a class="btn p sm" href="${L.mapsUrl}" ${EXT}>Cómo llegar</a>${COORD ? `<a class="btn sm" href="https://waze.com/ul?ll=${COORD.lat},${COORD.lng}&amp;navigate=yes" ${EXT}>Abrir en Waze</a>` : ''}<button class="btn sm" type="button" data-copiar="${esc(DIR_COMPLETA)}" hidden>Copiar dirección</button></div></div>` : '';
 const secHorarios = H.display ? `
 <section id="horarios" class="dr-hr dr-lux dr-v71" aria-labelledby="hor-t" data-semana="${esc(JSON.stringify(H.semana))}"><div class="w">
-<div class="dr-hr-head"><p class="ey"><span class="ey-brand">828</span> · Horarios y ubicación</p><h2 id="hor-t">Cuándo y dónde <em>visitarnos</em></h2></div>
+<div class="dr-hr-head"><p class="ey"><span class="ey-brand">828</span> · Horarios y ubicación</p><h2 id="hor-t">Cuándo y dónde <em>visitarnos</em></h2><p class="dr-hr-lead">Consultá los días y horarios antes de salir, ubicá la agencia en el mapa y elegí cómo llegar. Si ya tenés una unidad en mente, verificá su disponibilidad con el equipo para aprovechar la visita.</p></div>
 <div class="dr-stage">
 <div class="dr-panel">
 <div class="dr-now" data-live data-abierto="0">
@@ -413,14 +413,14 @@ ${mapaHr}
 ${hrAddr}
 </div>
 </div>
-<p class="src dr-src">Te esperamos en el horario indicado. Ante cualquier duda, escribinos por nuestros canales de contacto.</p>
+<p class="src dr-src">Organizá tu recorrido con anticipación: el estado de atención y las franjas horarias te ayudan a planificar. La disponibilidad de cada unidad puede cambiar; consultala antes de viajar.</p>
 </div></section>` : '';
 
 const visHr = H.display ? `<ul class="vz-hrs">${H.semana.map((g) => `<li data-dias="${g.dias.join(',')}"><span>${esc(g.etiqueta)}</span><b>${g.rangos.map((r) => `${fh(r[0])} a ${fh(r[1])}`).join(' y ')}</b></li>`).join('')}${H.domingo ? `<li data-dias="0"><span>Domingos</span><b>${esc(H.domingo)}</b></li>` : ''}</ul>` : '';
 const secVisita = `
 <section id="visita" class="visita-s vz" aria-labelledby="vis-t"><div class="w vis-w">
 <div class="vz-head"><p class="ey"><span class="ey-brand">828</span> · Visita<h2 id="vis-t">Coordiná tu <em>visita</em></h2>
-<p class="sec-p">Pasá a conocer las unidades. Armá la consulta en un minuto y la agencia acuerda con vos el día y la hora.</p></div>
+<p class="sec-p">Conocé las unidades con tiempo y coordiná una visita a la agencia. Elegí una fecha y franja horaria para enviar tu consulta; el equipo confirmará disponibilidad y acordará con vos el día y la hora antes de que viajes.</p></div>
 <div class="vz-grid">
 <div class="vz-main"><h3>Agendá una visita y prueba de manejo</h3>
 <ol class="vz-steps"><li><b>Elegí día y franja</b><span>En la página de reserva, desde el celular o la computadora.</span></li><li><b>Se arma tu consulta</b><span>Queda lista para enviarla a la agencia por el canal que prefieras.</span></li><li><b>La agencia te confirma</b><span>Es una consulta, no un turno: el día y la hora se acuerdan con la agencia.</span></li></ol>
@@ -460,11 +460,12 @@ const secNosotros = `
 <p class="ey"><span class="ey-brand">828</span> · Nosotros</p>
 <span class="nz-logo"><img src="images/logo-sm.png" width="320" height="320" alt=""></span>
 <h2 id="nos-t">Quiénes <em>somos</em></h2>
-<p class="nz-lead">${esc(NAME)} compra y vende vehículos usados en ${esc(L.city)}, partido de ${esc(L.partido)}.</p>
-<p class="nz-p">${esc(D.presentacion.antiguedad)}</p>
-<div class="row nz-cta"><a class="btn p" href="#unidades">Ver unidades</a><a class="btn" href="#contacto">Hablar con un asesor</a></div>
+<p class="nz-lead">Multimarcas · 0 km · Usados</p>
+<p class="nz-p">Más de 19 años en el rubro. Una propuesta para encontrar tu próximo vehículo, evaluar una permuta y consultar alternativas de financiación con atención directa en Monte Grande.</p>
+<div class="row nz-cta"><a class="btn p" href="#unidades">Explorar unidades</a><a class="btn" href="#contacto">Hablar con el equipo</a></div>
+<div class="nz-contactos" aria-label="Contactos de Automotores 828"><a href="#contacto"><span>Adriano</span><b>11 4993-8719</b></a><a href="#contacto"><span>Rubén</span><b>11 5249-0262</b></a><a href="#contacto"><span>Atención</span><b>4290-7300</b></a><a href="#contacto"><span>Contacto</span><b>11 6023-9259</b></a></div>
 </div>
-<div class="nz-side"><div class="nz-big"><span class="nz-flag" aria-hidden="true"></span><p class="nz-num">${esc(trayectoriaNumero)}</p><p class="nz-num-l">${esc(trayectoriaEtiqueta)}</p>${trayectoriaSub ? `<p class="nz-num-s">${esc(trayectoriaSub)}</p>` : ''}</div>${GREVIEWS}</div>
+<div class="nz-side"><div class="nz-big"><span class="nz-flag" aria-hidden="true"></span><p class="nz-num">19+</p><p class="nz-num-l">años en el rubro</p><p class="nz-num-s">Experiencia, atención cercana y alternativas para acompañar tu próxima decisión.</p></div>${GREVIEWS}</div>
 </div></div>
 <div class="nz-body"><div class="w">
 <h3 class="nz-h">Qué podés resolver con nosotros</h3>
@@ -475,10 +476,10 @@ ${hasSvc('permuta') ? `<li class="nz-tile"><span class="nz-ic">${ICN.swap}</span
 ${hasSvc('consignacion') ? `<li class="nz-tile"><span class="nz-ic">${ICN.shield}</span><h4>Consignaciones</h4><p>Podés dejar tu vehículo en consignación. Las condiciones se coordinan con ${esc(NAME)}.</p><a href="#contacto">Consultar</a></li>` : ''}
 </ul>
 </div></div>
-<div class="nz-net nz-net--mapa" id="donde"><div class="w"><h3 class="nz-h">Dónde encontrarnos</h3><p class="nz-net-p">Esta es la dirección de ${esc(NAME)}.</p>
+<div class="nz-net nz-net--mapa" id="donde"><div class="w"><h3 class="nz-h">Dónde encontrarnos</h3><p class="nz-net-p">Estamos en ${esc(L.address)}, en ${esc(L.city)}. Consultá el horario antes de acercarte y abrí las indicaciones para planificar tu recorrido.</p>
 <ul><li class="is-here">${ICX.pin}<div><b>${esc(NAME)}</b><span>${esc(DIR_COMPLETA)}</span></div></li></ul>
 ${L.mapsUrl ? `<p class="nz-net-acc"><a class="btn p sm" href="${L.mapsUrl}" ${EXT}>Abrir en Google Maps</a></p>` : ''}</div>
-${COORD ? `<div class="nz-mapa"><div class="dr-map" id="mapa-nosotros" data-lat="${COORD.lat}" data-lng="${COORD.lng}" data-nombre="${esc(NAME)}" data-dir="${esc(DIR_COMPLETA)}" data-gmaps="${esc(L.mapsUrl)}" data-leaflet="js/vendor/leaflet.js" data-css="js/vendor/leaflet.css"><div class="dr-map-v" role="region" aria-label="Mapa con la ubicación de ${esc(NAME)}"></div><div class="dr-map-ph" data-mapa-ph><span class="dr-map-ic">${ICX.pin}</span><p>Mapa de ${esc(L.city)}</p><p class="map-m src" role="status" aria-live="polite">Cargando el mapa…</p></div></div></div>` : ''}</div>
+${COORD ? `<div class="nz-mapa"><div class="dr-map" id="mapa-nosotros" data-lat="${COORD.lat}" data-lng="${COORD.lng}" data-nombre="${esc(NAME)}" data-dir="${esc(DIR_COMPLETA)}" data-gmaps="${esc(L.mapsUrl)}" data-leaflet="js/vendor/leaflet.js" data-css="js/vendor/leaflet.css" data-manual-map="1"><div class="dr-map-v" role="region" aria-label="Mapa con la ubicación de ${esc(NAME)}"></div><div class="dr-map-ph" data-mapa-ph><span class="dr-map-ic">${ICX.pin}</span><p>Mapa de ${esc(L.city)}</p><p class="map-m src" role="status" aria-live="polite">El mapa interactivo se carga solo cuando lo solicites.</p><div class="row"><button class="btn p sm" type="button" data-mapa-abrir>Ver mapa interactivo</button></div></div></div>` : ''}</div>
 </section>`;
 
 const ld = {
@@ -508,7 +509,7 @@ const index = page({
   title: `${NAME} · Autos y motos en ${L.city}, ${L.province}`,
   desc: `${NAME} en ${L.city}, ${L.partido}: compra y venta de autos y motos usados, permutas y consignaciones. Visitanos en ${L.address} o escribinos por redes o correo.`,
   file: 'index.html',
-  extraHead: `<link rel="stylesheet" href="css/hero-carousel.css">\n<link rel="stylesheet" href="css/fondos-secciones.css">\n<link rel="stylesheet" href="css/damero-secciones.css">\n<script type="application/ld+json">${JSON.stringify(ld)}</script>\n<script defer src="js/hero-carousel.js"></script>\n<script defer src="js/fondos-secciones.js"></script>\n<script defer src="js/secciones.js"></script>\n<script defer src="js/mapa.js?v=20261021-3"></script>\n<script defer src="js/horarios.js"></script>\n<script defer src="js/site.js"></script>\n<script defer src="js/reserva-inline.js"></script>\n`,
+  extraHead: `<link rel="stylesheet" href="css/hero-carousel.css?v=20261022-2">\n<link rel="stylesheet" href="css/fondos-secciones.css">\n<link rel="stylesheet" href="css/damero-secciones.css?v=20261022-2">\n<script type="application/ld+json">${JSON.stringify(ld)}</script>\n<script defer src="js/hero-carousel.js"></script>\n<script defer src="js/fondos-secciones.js"></script>\n<script defer src="js/secciones.js"></script>\n<script defer src="js/mapa.js?v=20261021-3"></script>\n<script defer src="js/horarios.js"></script>\n<script defer src="js/site.js"></script>\n<script defer src="js/reserva-inline.js"></script>\n`,
   body: `${header()}
 <main id="top">
 <div class="hero" role="region" aria-label="${esc(NAME)}">

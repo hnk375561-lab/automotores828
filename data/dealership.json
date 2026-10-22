@@ -84,7 +84,26 @@
         "fuente": "https://www.instagram.com/automotores828/reels/",
         "estado": "dudoso_no_publicar"
       }
-    ]
+    ],
+    "contactosIndicadosPorSolicitante": [
+      {
+        "nombre": "Adriano",
+        "telefono": "11 4993-8719"
+      },
+      {
+        "nombre": "Rubén",
+        "telefono": "11 5249-0262"
+      },
+      {
+        "nombre": "Atención",
+        "telefono": "4290-7300"
+      },
+      {
+        "nombre": "Contacto",
+        "telefono": "11 6023-9259"
+      }
+    ],
+    "notaContactos": "Números textuales aportados expresamente en la solicitud del sitio el 2026-10-22; no presentarlos como confirmación del titular ni convertir en enlaces telefónicos hasta verificar titularidad y vigencia."
   },
   "hours": {
     "display": true,
