@@ -1,0 +1,6 @@
+@keyframes dr-flag-run{to{background-position:28px 0}}
+@keyframes dr-flag-in{from{transform:scaleX(.04);opacity:.2}to{transform:none;opacity:1}}
+section[id]{position:relative}
+section[id]::before{content:"";position:absolute;left:0;right:0;top:0;height:14px;z-index:6;pointer-events:none;background:repeating-conic-gradient(#ee1c22 0 25%,#060607 0 50%) 0 0/14px 14px;box-shadow:0 0 22px rgba(238,28,34,.45);animation:dr-flag-run 3.2s linear infinite;transform-origin:left}
+@supports (animation-timeline:view()){section[id]::before{animation:dr-flag-run 3.2s linear infinite,dr-flag-in linear both;animation-timeline:auto,view();animation-range:normal,entry 0% entry 55%}}
+@media(prefers-reduced-motion:reduce){section[id]::before{animation:none}}
