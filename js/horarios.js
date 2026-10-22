@@ -95,7 +95,18 @@
     if (clave !== ultimo) { ultimo = clave; pintar(e, a); }
     numeros(e, a);
   }
-  function bucle() { tick(); setTimeout(bucle, 1000 - (Date.now() % 1000) + 5); }
-  bucle();
-  document.addEventListener('visibilitychange', function () { if (!document.hidden) tick(); });
+  /* Un solo reloj para todo: se alinea al segundo y se detiene por completo cuando la pestaña está oculta. */
+  var timer = 0;
+  function bucle() {
+    tick();
+    timer = window.setTimeout(bucle, 1000 - (Date.now() % 1000) + 5);
+  }
+  function arrancar() { if (!timer) bucle(); }
+  function parar() { if (timer) { window.clearTimeout(timer); timer = 0; } }
+  arrancar();
+  document.addEventListener('visibilitychange', function () {
+    if (document.hidden) { parar(); return; }
+    ultimo = '';   /* al volver, el estado se repinta por si cambió mientras la pestaña estaba oculta */
+    arrancar();
+  });
 })();

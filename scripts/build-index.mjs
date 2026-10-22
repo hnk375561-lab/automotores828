@@ -86,7 +86,7 @@ ${body}
 }
 
 const footer = (fuentes) => `<footer><div class="w">
-<div class="ft"><div class="ft-m"><img class="lg-ft" src="images/logo-sm.png" width="1254" height="1254" alt=""><p class="ft-b">${esc(NAME)}</p><p>${esc(L.address)}, ${esc(L.city)}, ${esc(L.province)}</p></div>
+<div class="ft"><div class="ft-m"><img class="lg-ft" src="images/logo-sm.png" width="320" height="320" alt=""><p class="ft-b">${esc(NAME)}</p><p>${esc(L.address)}, ${esc(L.city)}, ${esc(L.province)}</p></div>
 <div><p class="ft-k">Contacto</p>${C.phoneTel ? `<p><a href="tel:${C.phoneTel}">${esc(C.phone)}</a></p>` : ''}${C.whatsApp ? `<p><a href="${WA}" ${EXT}>WhatsApp ${esc(C.whatsAppDisplay)}</a></p>` : ''}${C.email ? `<p><a href="mailto:${esc(C.email)}">${esc(C.email)}</a></p>` : ''}</div>
 <div><p class="ft-k">Redes</p><p><a href="${FB}" ${EXT}>Facebook</a></p><p><a href="${IG}" ${EXT}>Instagram</a></p>${TT ? `<p><a href="${TT}" ${EXT}>TikTok</a></p>` : ''}${YT ? `<p><a href="${YT}" ${EXT}>YouTube</a></p>` : ''}</div></div>
 <p class="ft-c">© 2026 ${esc(NAME)}</p>${demo ? `<p class="demo-note" data-demo-note>${esc(LEYENDA)}</p>` : ''}${fuentes ? `<p>Fuentes: <a href="${FB}" ${EXT}>Facebook</a> · <a href="${IG}" ${EXT}>Instagram</a>${TT ? ` · <a href="${TT}" ${EXT}>TikTok</a>` : ''}${D.reviews.googleUrl ? ` · <a href="${D.reviews.googleUrl}" ${EXT}>Ficha de Google</a>` : ''}</p>` : ''}<p><a href="privacidad.html">Privacidad y avisos</a></p></div></footer>`;
@@ -96,7 +96,7 @@ const cantidadMotos = autos.filter((a) => a.tipoVehiculo === 'Moto').length;
 const cantidadAutos = autos.length - cantidadMotos;
 const ctaHead = WA ? { href: WA, t: 'WhatsApp' } : { href: FB, t: 'Facebook' };
 const header = (pre = '', skip = '#unidades') => `<a class="skip" href="${skip}">Saltar al contenido</a>
-<header class="site-header${pre ? ' site-header--inner' : ' site-header--home'}"><div class="w"><a class="mark" href="./" aria-label="${esc(NAME)}, inicio"><img class="lg-img" src="images/logo.png" width="1254" height="1254" alt="${esc(NAME)}"></a>
+<header class="site-header${pre ? ' site-header--inner' : ' site-header--home'}"><div class="w"><a class="mark" href="./" aria-label="${esc(NAME)}, inicio"><img class="lg-img" src="images/logo.png" width="320" height="320" alt="${esc(NAME)}"></a>
 <nav class="site-nav" id="site-nav" aria-label="Principal"><a href="${pre}#horarios">Horarios</a><a href="${pre}#unidades">Unidades</a><a href="${pre}#financiacion">Financiación</a><a href="${pre}#guia">Guía</a><a href="${pre}#preguntas">Preguntas</a><a href="${pre}#nosotros">Nosotros</a><a href="${pre}#contacto">Contacto</a><a href="${pre}#tu-usado">Tu usado</a><a href="${pre}#busqueda">Tu búsqueda</a><a href="${pre}#visita">Visita</a></nav>
 <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="site-nav" data-menu-toggle><span class="menu-icon" aria-hidden="true"></span><span>Menú</span></button>
 <div class="hc"><a class="btn p sm" href="${ctaHead.href}" ${EXT}>${ctaHead.t}</a></div></div></header>
@@ -113,6 +113,20 @@ const SERV_FICHA = [
 const fmt = (n) => n.toLocaleString('es-AR');
 const norm = (t) => String(t).normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
 const jsonSafe = (o) => JSON.stringify(o).replace(/</g, '\\u003c');
+/* Los datos del catálogo van aparte, en js/units.min.json: el HTML pesa menos y el JSON queda cacheable
+   entre visitas (antes iba embebido y se volvía a bajar con cada cambio de la página).
+   Ojo: /data/* está bloqueado en netlify.toml, por eso el archivo vive en js/ (que sí se publica). */
+const UNITS_URL = 'js/units.min.json';
+/* Quita claves vacías (null, undefined, '') sin perder 0 ni false: el cliente ya las chequea con == null. */
+const slim = (v) => {
+  if (Array.isArray(v)) return v.map(slim);
+  if (v && typeof v === 'object') {
+    const o = {};
+    for (const k of Object.keys(v)) { const x = slim(v[k]); if (x !== null && x !== undefined && x !== '') o[k] = x; }
+    return o;
+  }
+  return v;
+};
 // Muestra de color solo para dibujar el punto junto al nombre del color publicado; no es un dato de la ficha.
 const SW = { blanco: '#f1f1ee', negro: '#161b1d', rojo: '#c21f1f', 'gris plata': '#b4bbbe', 'gris oscuro': '#4b5256', plata: '#b4bbbe', gris: '#8a9296', azul: '#1e4a8c', verde: '#2f6b45', bordo: '#6d1a2a', beige: '#cdbb98', dorado: '#b99a45', naranja: '#d9742a', amarillo: '#e5c717', marron: '#6b4a32' };
 const swatch = (c) => SW[norm(c || '')] || null;
@@ -122,7 +136,9 @@ const consultaHref = (a) => wa(a.vendida ? `Hola! Vi que el ${a.titulo}${a.anio 
 // Fotos opcionales: no se inventan ni se toman de terceros; solo se publican si data/ las autoriza.
 const mediaDe = (a) => (Array.isArray(a.fotos) ? a.fotos : Array.isArray(a.imagenes) ? a.imagenes : Array.isArray(a.galeria) ? a.galeria : []).map((x) => typeof x === 'string' ? { src: x, alt: a.titulo } : x).filter((x) => x && (x.src || x.url)).map((x) => ({ src: x.src || x.url, srcset: x.srcset || '', card: x.card || '', cardWidth: x.cardWidth || null, cardHeight: x.cardHeight || null, thumb: x.thumb || '', width: x.width || null, height: x.height || null, alt: x.alt || a.titulo, tipo: x.tipo || '' }));
 const cardSrcset = (m) => { if (m.srcset) return m.srcset; if (m.card) return `${m.card} ${m.cardWidth || 600}w, ${m.src} ${m.width || 900}w`; const k = /^(images\/stock\/unidad-\d+)\.webp$/.exec(m.src || ''); return k && fs.existsSync(new URL('../' + k[1] + '-640.webp', import.meta.url)) && fs.existsSync(new URL('../' + k[1] + '-1000.webp', import.meta.url)) ? `${k[1]}-640.webp 640w, ${k[1]}-1000.webp 1000w` : ''; };
-  const mediaTag = (a, i) => { const m = mediaDe(a)[0]; const ss = m ? cardSrcset(m) : ''; return m ? `<figure class="car-ph"><img src="${esc(m.card || m.src)}"${ss ? ` srcset="${esc(ss)}"` : ''} sizes="(max-width: 600px) calc(100vw - 48px), 360px" width="${m.cardWidth || m.width || 900}" height="${m.cardHeight || m.height || 600}" loading="${i === 0 ? 'eager' : 'lazy'}"${i === 0 ? ' fetchpriority="high"' : ''} decoding="async" alt="${esc(m.alt)}"><span class="car-badge" aria-hidden="true"></span></figure>` : ''; };
+/* sizes del grid de tarjetas (.w.wide: 5/4/3/2/1 columnas según el ancho) */
+const CARD_SIZES = '(min-width:1200px) 300px, (min-width:961px) 280px, (min-width:701px) 300px, (min-width:521px) 330px, calc(100vw - 40px)';
+const mediaTag = (a) => { const m = mediaDe(a)[0]; const ss = m ? cardSrcset(m) : ''; return m ? `<figure class="car-ph"><img src="${esc(m.card || m.src)}"${ss ? ` srcset="${esc(ss)}"` : ''} sizes="${CARD_SIZES}" width="${m.cardWidth || m.width || 900}" height="${m.cardHeight || m.height || 600}" loading="lazy" decoding="async" alt="${esc(m.alt)}"><span class="car-badge" aria-hidden="true"></span></figure>` : ''; };
 const IC = {
   wa: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20l1.3-4A8 8 0 1 1 8 18.7z"/><path d="M9 9c0 3 3 6 6 6l1-1.5-2-1-1 .8a4 4 0 0 1-2-2l.8-1-1-2z"/></svg>',
   ig: '<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3.5" y="3.5" width="17" height="17" rx="5"/><circle cx="12" cy="12" r="4"/><path d="M17.4 6.6h.01"/></svg>',
@@ -150,7 +166,7 @@ const card = (a) => {
   const pr = a.precio ? `<p class="pr">${a.precio.moneda === 'USD' ? 'US$ ' : '$ '}${fmt(a.precio.monto)}</p><p class="n">Precio publicado el ${esc(fdate(a.precio.fecha))}; puede haber cambiado.</p>` : '<p class="pr">Consultar precio</p>';
   const busca = norm([a.titulo, a.tipoVehiculo, a.tipoMoto, marca, a.modelo, a.version, a.cilindrada, a.color, a.anio].filter((x) => x !== undefined && x !== null && x !== '').join(' '));
   return `<li class="car reveal${a.vendida ? ' car--vendida' : ''}" style="--reveal-delay:${Math.min(i,5)*60}ms" data-t="${esc(busca)}" data-i="${i}">
-${mediaTag(a, i)}
+${mediaTag(a)}
 <div class="car-h"><span class="car-b">${esc(marca)}</span>${a.tipoVehiculo === 'Moto' ? '<span class="car-b">Moto</span>' : ''}${a.vendida ? '<span class="car-v">Vendida</span>' : ''}<label class="car-c" hidden><input type="checkbox" value="${i}" aria-label="Comparar ${esc(a.titulo)}"><span>Comparar</span></label></div>
 <h3>${esc(sinMarca(a))}</h3>
 <div class="car-s"><p><b${a.anio == null ? ' class="nd"' : ''}>${a.anio != null ? a.anio : 'Sin dato'}</b><small>Año</small></p><p><b${a.km == null ? ' class="nd"' : ''}>${a.km != null ? fmt(a.km) : 'Consultar'}</b><small>Kilómetros</small></p></div>
@@ -170,7 +186,7 @@ const catData = autos.map((a, i) => ({
   sw: swatch(a.color), precio: a.precio || null, anticipo: a.anticipo || null, url: a.url, href: consultaHref(a)
 }));
 const unidades = autos.length
-  ? `${autos.length > 1 ? '<div class="fx" id="tools" hidden></div>\n' : ''}<p id="sinres" class="vacio" hidden>Ninguna unidad coincide con los filtros. Sacá alguno o limpiá todos para ver las ${autos.length} unidades.</p><ul class="cars" id="cars">\n${autos.map(card).join('\n')}\n</ul>\n<script type="application/json" id="cat-data">${jsonSafe(catData)}</script>\n<script type="application/json" id="cat-ctx">${jsonSafe({ nombre: NAME, tel: C.phoneTel || null, telTxt: C.phone || null, wa: C.whatsApp ? WA : null, waTxt: C.whatsAppDisplay || null, email: C.email || null, maps: L.mapsUrl || null, dir: `${L.address}, ${L.city}, ${L.province}`, horario: D.hours.corto || null, ig: IG, fb: FB, ciudad: L.city, servicios: SERV_FICHA, coordenadas: L.coordenadas ? { lat: L.coordenadas.lat, lng: L.coordenadas.lng } : null })}</script>\n<p class="src">${A.relevadoEl ? `Stock al ${esc(fdate(A.relevadoEl))}. ` : ''}Consultá precio y disponibilidad actualizados por nuestros canales de contacto.</p>\n<div class="row mt"><a class="btn p" href="${IG}" ${EXT}>Ver más en Instagram</a><a class="btn" href="${FB}" ${EXT}>Ver más en Facebook</a>${TT ? `<a class="btn" href="${TT}" ${EXT}>Ver más en TikTok</a>` : ''}</div>`
+  ? `${autos.length > 1 ? '<div class="fx" id="tools" hidden></div>\n' : ''}<p id="sinres" class="vacio" hidden>Ninguna unidad coincide con los filtros. Sacá alguno o limpiá todos para ver las ${autos.length} unidades.</p><ul class="cars" id="cars">\n${autos.map(card).join('\n')}\n</ul>\n<script type="application/json" id="cat-data" data-src="${UNITS_URL}"></script>\n<script type="application/json" id="cat-ctx">${jsonSafe({ nombre: NAME, tel: C.phoneTel || null, telTxt: C.phone || null, wa: C.whatsApp ? WA : null, waTxt: C.whatsAppDisplay || null, email: C.email || null, maps: L.mapsUrl || null, dir: `${L.address}, ${L.city}, ${L.province}`, horario: D.hours.corto || null, ig: IG, fb: FB, ciudad: L.city, servicios: SERV_FICHA, coordenadas: L.coordenadas ? { lat: L.coordenadas.lat, lng: L.coordenadas.lng } : null })}</script>\n<p class="src">${A.relevadoEl ? `Stock al ${esc(fdate(A.relevadoEl))}. ` : ''}Consultá precio y disponibilidad actualizados por nuestros canales de contacto.</p>\n<div class="row mt"><a class="btn p" href="${IG}" ${EXT}>Ver más en Instagram</a><a class="btn" href="${FB}" ${EXT}>Ver más en Facebook</a>${TT ? `<a class="btn" href="${TT}" ${EXT}>Ver más en TikTok</a>` : ''}</div>`
   : `<div class="vacio"><p>Las unidades disponibles se publican en nuestro Instagram, TikTok y Facebook. Escribinos y te contamos disponibilidad y precio.</p><div class="row"><a class="btn p" href="${IG}" ${EXT}>Ver Instagram</a>${TT ? `<a class="btn" href="${TT}" ${EXT}>Ver TikTok</a>` : ''}<a class="btn" href="${FB}" ${EXT}>Ver Facebook</a></div></div>`;
 
 // ---- contacto ----
@@ -442,7 +458,7 @@ const secNosotros = `
 <div class="nz-top"><div class="w nz-w">
 <div class="nz-intro">
 <p class="ey"><span class="ey-brand">828</span> · Nosotros</p>
-<span class="nz-logo"><img src="images/logo-sm.png" width="1254" height="1254" alt=""></span>
+<span class="nz-logo"><img src="images/logo-sm.png" width="320" height="320" alt=""></span>
 <h2 id="nos-t">Quiénes <em>somos</em></h2>
 <p class="nz-lead">${esc(NAME)} compra y vende vehículos usados en ${esc(L.city)}, partido de ${esc(L.partido)}.</p>
 <p class="nz-p">${esc(D.presentacion.antiguedad)}</p>
@@ -574,7 +590,7 @@ const nf = page({
   desc: `La página que buscás no existe. Volvé al inicio de ${NAME}.`,
   file: '404.html', withFonts: false,
   extraHead: nf404Head,
-  body: `<main class="nf"><div><img class="lg-404" src="${logo404}" width="1254" height="1254" alt="${esc(NAME)}"><p class="ey">Error 404</p><h1>No encontramos <em>esa página</em></h1><p>Puede que el enlace esté mal escrito o que la página ya no exista.</p><a id="home" class="btn p" href="${home404}">Volver al inicio</a></div></main>`,
+  body: `<main class="nf"><div><img class="lg-404" src="${logo404}" width="320" height="320" alt="${esc(NAME)}"><p class="ey">Error 404</p><h1>No encontramos <em>esa página</em></h1><p>Puede que el enlace esté mal escrito o que la página ya no exista.</p><a id="home" class="btn p" href="${home404}">Volver al inicio</a></div></main>`,
 });
 
 
@@ -602,7 +618,7 @@ ${ogTags('reserva.html', `Coordiná tu visita · ${NAME}`, 'Elegí un día y una
 <body>
 <main id="booking" data-step="month" data-closed="${closedDays.join(',')}" data-morning-only="${morningOnly.join(',')}">
   <header class="booking-nav">
-    <a class="brand" href="index.html" aria-label="Volver a ${esc(NAME)}"><img class="lg-bk" src="images/logo-sm.png" width="1254" height="1254" alt="${esc(NAME)}"></a>
+    <a class="brand" href="index.html" aria-label="Volver a ${esc(NAME)}"><img class="lg-bk" src="images/logo-sm.png" width="320" height="320" alt="${esc(NAME)}"></a>
     <p class="eyebrow">Coordiná tu visita <span aria-hidden="true">/</span> consulta</p>
     <button class="back" id="back" type="button" aria-label="Volver" hidden>← Atrás</button>
   </header>
@@ -651,6 +667,9 @@ write('index.html', index);
 write('reserva.html', reserva);
 write('privacidad.html', privacidad);
 write('404.html', nf);
+/* Datos del catálogo en archivo aparte y cacheable: el HTML deja de pesar 300 KB y el JSON se reutiliza. */
+const unitsJson = jsonSafe(slim(catData));
+write(UNITS_URL, unitsJson);
 write('robots.txt', demo ? 'User-agent: *\nDisallow: /\n' : `User-agent: *\nAllow: /\n${siteUrl ? `Sitemap: ${siteUrl}sitemap.xml\n` : ''}`);
 const smPath = path.join(root, 'sitemap.xml');
 if (!demo && siteUrl) write('sitemap.xml', `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n  <url><loc>${siteUrl}</loc></url>\n  <url><loc>${siteUrl}reserva.html</loc></url>\n  <url><loc>${siteUrl}privacidad.html</loc></url>\n</urlset>\n`);
@@ -658,4 +677,4 @@ else if (fs.existsSync(smPath)) fs.rmSync(smPath);
 write('site.webmanifest', JSON.stringify({ name: NAME, short_name: 'Automotores 828', description: `Autos y motos usados en ${L.city}, ${L.province}.`, lang: 'es-AR', start_url: './', scope: './', display: 'standalone', background_color: '#060607', theme_color: '#060607', icons: [{ src: 'images/icon-192.png', sizes: '192x192', type: 'image/png', purpose: 'any' }, { src: 'images/icon-512.png', sizes: '512x512', type: 'image/png', purpose: 'any' }] }, null, 2) + '\n');
 write('favicon.svg', read('favicon.svg'));
 
-console.log(`Generado: index.html (${(index.length / 1024).toFixed(1)} KB), privacidad.html, reserva.html, 404.html · ${autos.length} unidades · modo ${demo ? 'demo (noindex)' : 'producción'}`);
+console.log(`Generado: index.html (${(index.length / 1024).toFixed(1)} KB), privacidad.html, reserva.html, 404.html · ${autos.length} unidades · ${UNITS_URL} (${(unitsJson.length / 1024).toFixed(1)} KB) · modo ${demo ? 'demo (noindex)' : 'producción'}`);
