@@ -47,6 +47,9 @@ dialog.cmp-lux .cmpx .big:not(.nd){display:inline-block;padding:5px 8px;backgrou
 #nosotros.nz .nz-contactos a:hover{transform:translateY(-2px);border-color:#ee1c22}
 #nosotros.nz .nz-contactos span{font-size:11px;font-weight:800;letter-spacing:.15em;text-transform:uppercase;color:#666}
 #nosotros.nz .nz-contactos b{font-size:clamp(16px,1.4vw,20px);font-variant-numeric:tabular-nums}
+#nosotros.nz .nz-offer{display:flex;flex-wrap:wrap;align-items:center;gap:9px;margin:10px 0 3px;color:#333;font-size:13px;font-weight:800;letter-spacing:.05em;text-transform:uppercase}
+#nosotros.nz .nz-offer strong{display:inline-flex;align-items:center;min-height:32px;padding:6px 10px;background:#ee1c22;color:#060607;letter-spacing:.08em}
+#nosotros.nz .nz-offer-note{margin:0 0 12px;color:#666;font-size:12px;line-height:1.45}
 #nosotros.nz .nz-net--mapa{padding-top:28px}
 #nosotros.nz .nz-mapa{margin-top:20px}
 #nosotros.nz .nz-mapa .dr-map{min-height:clamp(260px,34vw,420px)!important}
@@ -64,3 +67,13 @@ dialog.cmp-lux .cmpx .big:not(.nd){display:inline-block;padding:5px 8px;backgrou
 
 #horarios .dr-hr-lead{max-width:66ch;margin:12px 0 0;color:#d7d7d7;font-size:clamp(15px,1.35vw,18px);line-height:1.55}
 @media(max-width:700px){#horarios .dr-hr-lead{font-size:15px;line-height:1.48}}
+
+/* Expansor real del inventario: control visible, accesible y con el ritmo de la marca. */
+#unidades .inventory-more-wrap{display:grid;justify-items:center;gap:10px;margin:22px auto 18px;padding:18px 12px 20px;border-top:1px solid rgba(238,28,34,.42);text-align:center}
+#unidades .inventory-more-note{margin:0;color:#c9c9c9;font-size:13px;line-height:1.4;font-variant-numeric:tabular-nums}
+#unidades .inventory-more-btn{min-width:min(100%,280px);min-height:50px!important;padding:12px 22px!important;border:1px solid #ee1c22!important;background:#ee1c22!important;color:#060607!important;font-size:13px!important;font-weight:900!important;letter-spacing:.09em;text-transform:uppercase;box-shadow:0 5px 0 rgba(238,28,34,.18);transition:transform .18s,box-shadow .18s,background .18s}
+#unidades .inventory-more-btn:hover{transform:translateY(-2px);box-shadow:0 7px 0 rgba(238,28,34,.2);background:#ff3338!important}
+#unidades .inventory-more-btn:focus-visible{outline:3px solid #fff!important;outline-offset:4px}
+#unidades .inventory-more-btn[hidden],#unidades .inventory-more-wrap[hidden]{display:none!important}
+@media(max-width:700px){#unidades .inventory-more-wrap{margin:16px auto 14px;padding:14px 8px 16px}#unidades .inventory-more-btn{width:min(100%,320px);min-height:52px!important}}
+@media(prefers-reduced-motion:reduce){#unidades .inventory-more-btn{transition:none}}

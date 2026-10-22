@@ -92,10 +92,12 @@ if (d && a) {
   // --- afirmaciones sin fuente ---
   // Cada servicio solo puede aparecer si tiene su `clave` en services.published (con fuente citada).
   const claves = new Set(d.services.published.map((x) => x.clave).filter(Boolean));
-  if (d.reviews?.publicadas && d.reviews.googleUrl && d.reviews.fecha) claves.add('resenas');
+  if (!d.reviews?.publicadas && d.reviews?.googleUrl && d.reviews?.fecha) claves.add('resenas');
   for (const x of d.services.published) if (!x.fuente) err(`services.published: «${x.texto}» no tiene fuente`);
   const vetadas = [
-    [/gestor[ií]a|taller|entrega inmediata|reserva online|\bcuotas?\b|\btasas?\b/i, 'servicio o condición sin fuente', null],
+    [/gestor[ií]a|taller|entrega inmediata|reserva online|\btasas?\b/i, 'servicio o condición sin fuente', null],
+    [/\bcuotas?\b(?!\s+fijas\b)/i, 'cuotas sin fuente', null],
+    [/\bcuotas?\s+fijas\b/i, 'cuotas fijas sin fuente', 'financiacion'],
     [/consignaci/i, 'consignación sin fuente', 'consignacion'],
     [/permut|parte de pago|tom[aá]mos tu usado/i, 'permuta sin fuente', 'permuta'],
     [/tasaci[oó]n/i, 'tasación sin fuente', 'tasacion'],

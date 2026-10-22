@@ -330,6 +330,7 @@
         var n = 0, visibles = 0, quitados = podar();
         var paso = window.innerWidth <= 700 ? 5 : 20;
         if (window._drCatalogoPaso !== paso) { window._drCatalogoPaso = paso; window._drCatalogoMostradas = paso; }
+        else if (escribirUrl) { window._drCatalogoMostradas = paso; }
         var limite = window._drCatalogoMostradas || paso;
         if (quitados.length) {
           ajuste.textContent = 'Se quitó ' + quitados.map(function (t) { return '«' + t + '»'; }).join(', ') + ' porque ninguna unidad coincide con esa combinación.';
@@ -351,8 +352,13 @@
         });
         ul.hidden = n === 0; if (sinres) sinres.hidden = n > 0;
         var more = document.getElementById('inventory-more'), moreNote = document.getElementById('inventory-more-note');
-        if (more) { more.hidden = n <= visibles; more.textContent = paso === 5 ? 'Mostrar 5 unidades más' : 'Mostrar 20 unidades más'; }
-        if (moreNote) moreNote.textContent = n ? ('Viendo ' + visibles + ' de ' + n + ' unidades disponibles') : '';
+        if (more) {
+          var restantes = Math.max(0, n - visibles), cantidad = Math.min(paso, restantes);
+          more.hidden = restantes === 0;
+          more.textContent = restantes ? ('Mostrar ' + cantidad + ' unidades más') : 'Todas las unidades están visibles';
+          more.setAttribute('aria-label', restantes ? ('Mostrar las siguientes ' + cantidad + ' unidades; ' + restantes + ' restantes') : 'Todas las unidades están visibles');
+        }
+        if (moreNote) moreNote.textContent = n ? ('Viendo ' + visibles + ' de ' + n + ' unidades disponibles') : 'No hay unidades que coincidan con estos filtros.';
         /* opciones y cantidades según lo que ya está elegido en los demás filtros */
         GR.forEach(function (g) {
           var r = refs[g.k];
@@ -405,6 +411,18 @@
         window._drCatalogoMostradas += window.innerWidth <= 700 ? 5 : 20;
         aplicar(false);
       });
+      var catalogoResizeTimer = 0;
+      window.addEventListener('resize', function () {
+        window.clearTimeout(catalogoResizeTimer);
+        catalogoResizeTimer = window.setTimeout(function () {
+          var nuevoPaso = window.innerWidth <= 700 ? 5 : 20;
+          if (nuevoPaso !== window._drCatalogoPaso) {
+            window._drCatalogoPaso = nuevoPaso;
+            window._drCatalogoMostradas = nuevoPaso;
+            aplicar(false);
+          }
+        }, 120);
+      }, { passive: true });
 
       /* ----- URL ----- */
       function aUrl() {
