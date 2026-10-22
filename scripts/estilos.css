@@ -488,7 +488,7 @@ header .w{min-height:var(--hdr)}
 .quick-number{color:var(--gold);font-style:italic;font-family:var(--h);font-weight:400}
 #unidades{background:var(--ink);background-image:radial-gradient(60% 50% at 70% 20%,rgba(238,28,34,.1),transparent),none}
 #unidades h2{font-size:clamp(42px,6vw,76px)}
-.fx{position:sticky;top:calc(var(--hdr) + 12px);z-index:20;margin:0 auto 28px;width:fit-content;max-width:100%;border:1px solid rgba(238,28,34,.24);border-top:1px solid rgba(238,28,34,.24);border-radius:999px;background:rgba(6,6,7,.55);backdrop-filter:blur(18px) saturate(140%);box-shadow:none}
+.fx{position:sticky;top:calc(var(--hdr) + 12px);z-index:20;margin:0 auto 28px;width:fit-content;max-width:100%;border:1px solid rgba(238,28,34,.24);border-top:1px solid rgba(238,28,34,.24);border-radius:999px;background:rgba(6,6,7,.96);box-shadow:none}
 .fx-top{padding:8px 10px;grid-template-columns:minmax(180px,1.2fr) minmax(150px,.8fr) auto;align-items:center}.fx-top .f label{display:none}
 .fx input[type=search],.fx select{min-height:40px;border:1px solid rgba(238,28,34,.35);background:transparent;color:var(--ivory);border-radius:999px;font-size:14px}
 .fx-tg{min-height:40px;border-radius:999px;padding-inline:16px}.fx-body{border-top:1px solid rgba(238,28,34,.18);background:rgba(6,6,7,.94);border-radius:0 0 20px 20px}.fx-act{background:transparent;border-top:1px solid rgba(238,28,34,.18)}
@@ -532,8 +532,8 @@ footer{background:var(--ink);border-top:1px solid rgba(238,28,34,.25)}footer a{c
 
 
 /* Contacto y visita: vidrio reservado para los bloques de conversión. */
-.glass{background:rgba(6,6,7,.55);backdrop-filter:blur(18px) saturate(140%);border:1px solid rgba(238,28,34,.18)}
-@supports not (backdrop-filter:blur(1px)){.glass{background:rgba(6,6,7,.94)}}
+.glass{background:rgba(6,6,7,.95);border:1px solid rgba(238,28,34,.18)}
+
 .visit-card{max-width:760px;margin-top:28px;padding:clamp(24px,4vw,42px);border-radius:2px}
 .visit-card-kicker{margin:0 0 14px;color:var(--gold);font:500 11px/1 var(--b);letter-spacing:.2em;text-transform:uppercase}
 .visit-card h3{margin:0 0 12px;color:var(--ivory);font:italic 400 clamp(28px,4vw,48px)/1.05 var(--h)}
@@ -588,7 +588,7 @@ html.save-data .hero{animation:none!important}
 .hero .lead{max-width:31em;color:var(--ivory);font-size:clamp(17px,1.5vw,20px)}
 .hero .row{gap:11px}
 .hero .row .btn{min-height:54px}.hero .hx-down{position:absolute;z-index:4;left:max(24px,calc((100vw - 1200px)/2));bottom:20px;color:#e6e6e6;font:500 10px/1 var(--b);letter-spacing:.2em;text-transform:uppercase;text-decoration:none;border-bottom:1px solid var(--gold);padding:0 0 8px}
-.hero-carousel-controls{position:absolute;z-index:4;right:clamp(14px,3vw,34px);bottom:clamp(16px,3vw,30px);display:flex;align-items:center;gap:9px;padding:8px 10px;border:1px solid rgba(248,248,248,.25);background:rgba(6,6,7,.76);backdrop-filter:blur(14px);color:#fff}
+.hero-carousel-controls{position:absolute;z-index:4;right:clamp(14px,3vw,34px);bottom:clamp(16px,3vw,30px);display:flex;align-items:center;gap:9px;padding:8px 10px;border:1px solid rgba(248,248,248,.25);background:rgba(6,6,7,.9);color:#fff}
 .hero-carousel-count{min-width:56px;color:var(--gold-hi);font:700 10px/1 var(--b);letter-spacing:.16em;text-align:center;white-space:nowrap}
 .hero-carousel-btn,.hero-carousel-toggle{display:inline-flex;align-items:center;justify-content:center;min-width:38px;height:38px;padding:0 10px;border:1px solid rgba(248,248,248,.32);background:transparent;color:#fff;font:500 13px/1 var(--b);cursor:pointer;transition:background .2s,border-color .2s,color .2s}
 .hero-carousel-btn{font:italic 400 26px/1 var(--h)}
@@ -619,7 +619,7 @@ html.save-data .hero{animation:none!important}
 .inventory-rule span{height:1px;flex:1;background:linear-gradient(90deg,rgba(238,28,34,.7),rgba(255,255,255,.1))}
 .inventory-rule span:last-child{transform:scaleX(-1)}
 .inventory-rule small{font:800 10px/1 var(--b);letter-spacing:.26em;text-transform:uppercase;white-space:nowrap}
-.inventory-section .fx{position:relative;margin:0 0 26px;padding:10px 14px;border:1px solid rgba(238,28,34,.3);border-radius:999px;background:rgba(6,6,7,.68);box-shadow:0 18px 60px rgba(0,0,0,.2);backdrop-filter:blur(16px)}
+.inventory-section .fx{position:relative;margin:0 0 26px;padding:10px 14px;border:1px solid rgba(238,28,34,.3);border-radius:999px;background:rgba(6,6,7,.96);box-shadow:0 18px 60px rgba(0,0,0,.2)}
 .inventory-section .fx::before{content:"EXPLORAR INVENTARIO";display:block;flex:0 0 auto;margin-right:8px;color:var(--y);font:800 10px/1 var(--b);letter-spacing:.2em;white-space:nowrap}
 .inventory-section .fx input,.inventory-section .fx select,.inventory-section .fx button,.inventory-section .fx label{border-color:rgba(255,255,255,.2);border-radius:999px;background:#131313;color:#e6e6e6}
 .inventory-section .fx input:focus,.inventory-section .fx select:focus,.inventory-section .fx button:focus{border-color:var(--y);outline:none}
@@ -728,7 +728,7 @@ section.conversion--search.lt .ey{border-left-color:#ee1c22;background:var(--ink
 .conversion-focus-ring{position:absolute;right:40px;bottom:28px;width:206px;aspect-ratio:1;border:1px solid rgba(238,28,34,.22);border-radius:50%;pointer-events:none}
 .conversion-focus-ring--inner{right:83px;bottom:71px;width:120px;border-color:rgba(238,28,34,.18)}
 .conversion-panel{width:100%}
-.conversion-form{width:100%;max-width:none;grid-template-columns:repeat(2,minmax(0,1fr));gap:17px 16px;padding:clamp(22px,3vw,38px);border:1px solid rgba(238,28,34,.24);border-top:1px solid var(--gold);border-left:1px solid rgba(238,28,34,.24);background:rgba(6,6,7,.76);box-shadow:0 24px 80px rgba(0,0,0,.18);backdrop-filter:blur(12px)}
+.conversion-form{width:100%;max-width:none;grid-template-columns:repeat(2,minmax(0,1fr));gap:17px 16px;padding:clamp(22px,3vw,38px);border:1px solid rgba(238,28,34,.24);border-top:1px solid var(--gold);border-left:1px solid rgba(238,28,34,.24);background:rgba(6,6,7,.96);box-shadow:0 24px 80px rgba(0,0,0,.18)}
 .conversion-form-head{grid-column:1/-1;display:flex;align-items:end;justify-content:space-between;gap:16px;padding-bottom:19px;border-bottom:1px solid rgba(238,28,34,.2)}
 .conversion-form-head .ey{margin-bottom:9px;font-size:9px}
 .conversion-form-head h3{color:var(--ivory);font:italic 400 clamp(25px,3vw,35px)/1.05 var(--h)}
@@ -827,7 +827,7 @@ header.site-header--home+.demo{display:none}
   .site-header--home .mark .lg-img{height:52px;padding:2px 7px}
   .site-header--home .menu-toggle{display:inline-flex;margin-left:auto}
   .site-header--home .hc{display:none}
-  .site-header--home .site-nav{top:100%;left:12px;right:12px;display:flex;flex-direction:column;align-items:stretch;gap:0;padding:8px 16px;background:rgba(6,6,7,.97);border:1px solid rgba(255,255,255,.18);backdrop-filter:blur(16px)}
+  .site-header--home .site-nav{top:100%;left:12px;right:12px;display:flex;flex-direction:column;align-items:stretch;gap:0;padding:8px 16px;background:rgba(6,6,7,.97);border:1px solid rgba(255,255,255,.18)}
   .site-header--home .site-nav a{padding:13px 0;border-bottom:1px solid rgba(255,255,255,.1)}
   .site-header--home .site-nav a:last-child{border-bottom:0}
   .hero{min-height:max(760px,108svh)}
@@ -856,7 +856,7 @@ header.site-header--home+.demo{display:none}
 html,body{background:#060607;color:#f8f8f8}
 
 /* Filtros del inventario: expansión en flujo, sin barra fija ni panel sobre las fichas. */
-.inventory-section .filter-bar{position:static!important;inset:auto!important;z-index:1!important;display:block!important;width:100%;max-width:none;margin:0 0 28px;padding:14px 16px;border:1px solid rgba(238,28,34,.34);border-radius:16px;background:rgba(6,6,7,.94);box-shadow:0 12px 34px rgba(0,0,0,.2);backdrop-filter:blur(12px);transform:none!important}
+.inventory-section .filter-bar{position:static!important;inset:auto!important;z-index:1!important;display:block!important;width:100%;max-width:none;margin:0 0 28px;padding:14px 16px;border:1px solid rgba(238,28,34,.34);border-radius:16px;background:rgba(6,6,7,.94);box-shadow:0 12px 34px rgba(0,0,0,.2);transform:none!important}
 .inventory-section .filter-bar::before{margin:0 0 12px;color:#ee1c22}
 .inventory-section .filter-bar .fx-top{display:flex;flex-wrap:wrap;gap:10px;align-items:center;padding:0}
 .inventory-section .filter-bar .fx-top>.f{flex:1 1 190px}
@@ -872,7 +872,7 @@ html,body{background:#060607;color:#f8f8f8}
 .finance-section{isolation:isolate;background-color:#060607;background-image:linear-gradient(90deg,rgba(6,6,7,.97) 0%,rgba(6,6,7,.92) 40%,rgba(6,6,7,.76) 72%,rgba(6,6,7,.68) 100%);background-size:cover;background-position:center,62% 54%;background-repeat:no-repeat;border-block-color:rgba(238,28,34,.36)}
 .finance-section::before{opacity:.08;mask-image:linear-gradient(115deg,#000,transparent 78%)}
 .finance-section .finance-aside{border-color:rgba(238,28,34,.58)}
-.finance-section .finance-card{border:1px solid rgba(248,248,248,.2);border-left:2px solid rgba(238,28,34,.72);background:linear-gradient(145deg,rgba(6,6,7,.9),rgba(6,6,7,.74));backdrop-filter:blur(8px)}
+.finance-section .finance-card{border:1px solid rgba(248,248,248,.2);border-left:2px solid rgba(238,28,34,.72);background:linear-gradient(145deg,rgba(6,6,7,.94),rgba(6,6,7,.88))}
 .finance-section .finance-card:hover{border-color:rgba(238,28,34,.72);background:linear-gradient(145deg,rgba(6,6,7,.94),rgba(6,6,7,.88))}
 .finance-section .finance-card h3{color:#f8f8f8}
 .finance-section .finance-card p{color:#e6e6e6}
@@ -898,7 +898,7 @@ section.conversion--search::before{background-image:linear-gradient(90deg,rgba(6
 .conversion-art svg path,.conversion-art svg circle{stroke:#ee1c22}
 .conversion-art-caption,.conversion--search .conversion-art-caption{color:#ff4a4a}
 .conversion-focus-ring,.conversion-focus-ring--inner{border-color:rgba(238,28,34,.32)}
-.conversion-form,.conversion--search .conversion-form{border:1px solid rgba(238,28,34,.36);border-top:2px solid #ee1c22;background:rgba(6,6,7,.91);box-shadow:0 24px 78px rgba(0,0,0,.35);backdrop-filter:blur(16px)}
+.conversion-form,.conversion--search .conversion-form{border:1px solid rgba(238,28,34,.36);border-top:2px solid #ee1c22;background:rgba(6,6,7,.95);box-shadow:0 24px 78px rgba(0,0,0,.35)}
 .conversion-form-head,.conversion--search .conversion-form-head{border-color:rgba(248,248,248,.16)}
 .conversion-form-head h3,.conversion--search .conversion-form-head h3{color:#f8f8f8}
 .conversion-form-tag,.conversion--search .conversion-form-tag{border-color:rgba(238,28,34,.42);color:#ff4a4a}
@@ -1171,9 +1171,11 @@ section.conversion::before,.finance-section{image-rendering:auto}
 #unidades .fx.is-open .fx-body{align-items:start!important}
 .finance-section{background-position:center,50% 60%!important}
 
-/* ===== v68 · rendimiento: sin desenfoques de fondo en bloques grandes (provocaban lag al hacer scroll) ===== */
-header,header.site-header,.glass,.conversion-form,.conversion--search .conversion-form,.finance-section .finance-card,.inventory-section .fx{-webkit-backdrop-filter:none!important;backdrop-filter:none!important}
-header,header.site-header--inner{background:rgba(6,6,7,.97)}
+/* ===== v69 · rendimiento: el desenfoque queda solo en el header (superficie chica y fija).
+   En el resto se usa fondo casi opaco: desenfocar bloques grandesiba haciendo lag al hacer scroll. ===== */
+.glass,.conversion-form,.conversion--search .conversion-form,.finance-section .finance-card,.inventory-section .fx,header.site-header--home{-webkit-backdrop-filter:none!important;backdrop-filter:none!important}
+header,header.site-header{-webkit-backdrop-filter:blur(18px) saturate(140%);backdrop-filter:blur(18px) saturate(140%)}
+header,header.site-header--inner{background:rgba(6,6,7,.82)}
 .finance-section .finance-card,.conversion-form{box-shadow:none!important}
 
 /* ===== v68 · tarjetas: contacto rápido ===== */
@@ -2083,7 +2085,7 @@ section[id]::after{content:"";position:absolute;inset:0 auto 0 0;width:3px;backg
 .car-ph{position:relative;isolation:isolate;overflow:hidden}
 .car-badge{position:absolute;z-index:2;top:12px;right:12px;width:58px;height:58px;border:2px solid rgba(255,255,255,.9);border-radius:50%;background:#f7f7f5 url('images/logo-circle.png') center/82% no-repeat;box-shadow:0 5px 18px rgba(0,0,0,.28)}
 .cars{grid-template-columns:repeat(3,minmax(0,1fr))}
-.hero-carousel-controls{display:flex!important;position:absolute;z-index:5;right:clamp(16px,4vw,64px);bottom:clamp(18px,4vw,48px);align-items:center;gap:8px;padding:8px 10px;border:1px solid rgba(255,255,255,.3);border-radius:999px;background:rgba(6,6,7,.7);backdrop-filter:blur(12px)}
+.hero-carousel-controls{display:flex!important;position:absolute;z-index:5;right:clamp(16px,4vw,64px);bottom:clamp(18px,4vw,48px);align-items:center;gap:8px;padding:8px 10px;border:1px solid rgba(255,255,255,.3);border-radius:999px;background:rgba(6,6,7,.9)}
 .hero-carousel-btn,.hero-carousel-toggle{min-height:32px;border:1px solid rgba(255,255,255,.28);border-radius:999px;background:transparent;color:#fff;cursor:pointer;font:700 11px/1 var(--hero-copy);letter-spacing:.08em}
 .hero-carousel-btn{width:32px;font-size:20px}.hero-carousel-toggle{padding:0 12px}.hero-carousel-count{min-width:54px;color:#fff;text-align:center;font:700 10px/1 var(--hero-copy);letter-spacing:.13em}
 .hero-carousel-btn:hover,.hero-carousel-toggle:hover,.hero-carousel-btn:focus-visible,.hero-carousel-toggle:focus-visible{border-color:#ee1c22;background:#ee1c22;color:#060607;outline:2px solid #ee1c22;outline-offset:2px}
@@ -2093,7 +2095,7 @@ section[id]::after{content:"";position:absolute;inset:0 auto 0 0;width:3px;backg
 #financiacion::before,#tu-usado::before,#busqueda::before,#guia::before,#visita::before,#contacto::before{position:absolute;z-index:-1;inset:0;background:linear-gradient(90deg,rgba(6,6,7,.94),rgba(6,6,7,.76) 48%,rgba(6,6,7,.87)),linear-gradient(0deg,rgba(6,6,7,.72),rgba(6,6,7,.35));content:"";pointer-events:none}
 #financiacion{--section-bg-desktop:url('images/fondos/fondo-financiacion.webp')}#tu-usado{--section-bg-desktop:url('images/fondos/fondo-tu-usado.webp')}#busqueda{--section-bg-desktop:url('images/fondos/fondo-busqueda.webp')}#guia{--section-bg-desktop:url('images/fondos/fondo-guia.webp')}#visita{--section-bg-desktop:url('images/fondos/fondo-visita.webp')}#contacto{--section-bg-desktop:url('images/fondos/fondo-contacto.webp')}
 #financiacion>.w,#tu-usado>.w,#busqueda>.w,#guia>.w,#visita>.w,#contacto>.w{position:relative;z-index:1}
-#financiacion .card,#tu-usado .card,#busqueda .conversion-form,#guia .gd,#visita .vz-panel,#contacto .dr-ch a{background-color:rgba(6,6,7,.74);backdrop-filter:blur(8px)}
+#financiacion .card,#tu-usado .card,#busqueda .conversion-form,#guia .gd,#visita .vz-panel,#contacto .dr-ch a{background-color:rgba(6,6,7,.92)}
 #financiacion.has-fondo,#tu-usado.has-fondo,#busqueda.has-fondo,#guia.has-fondo,#visita.has-fondo,#contacto.has-fondo{background-image:none!important}
 @media(max-width:960px){.cars{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-width:700px){.cars{grid-template-columns:1fr}.car-badge{width:50px;height:50px;top:9px;right:9px}.hero-carousel-controls{left:12px;right:auto;bottom:12px}#financiacion,#tu-usado,#busqueda,#guia,#visita,#contacto{background-image:var(--section-bg-mobile)}#financiacion{--section-bg-mobile:url('images/fondos/fondo-financiacion-800.webp')}#tu-usado{--section-bg-mobile:url('images/fondos/fondo-tu-usado-800.webp')}#busqueda{--section-bg-mobile:url('images/fondos/fondo-busqueda-800.webp')}#guia{--section-bg-mobile:url('images/fondos/fondo-guia-800.webp')}#visita{--section-bg-mobile:url('images/fondos/fondo-visita-800.webp')}#contacto{--section-bg-mobile:url('images/fondos/fondo-contacto-800.webp')}}
