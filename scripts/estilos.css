@@ -1849,8 +1849,8 @@ html body .sb>.src{margin-top:18px;color:#cbcbcb}
 .nz-top{padding-block:clamp(52px,8vw,112px);background:linear-gradient(180deg,#f8f8f8,#efefea)}
 .nz-w{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,.9fr);gap:clamp(28px,5vw,80px);align-items:center}
 .nz .ey{margin:0 0 16px}
-.nz-logo{display:inline-block;margin:0 0 18px;background:#fefefe;border:1px solid #060607;line-height:0}
-.nz-logo img{display:block;width:auto;height:clamp(64px,7vw,88px)}
+.nz-logo{display:inline-block;margin:0 0 18px;background:none!important;border:0!important;box-shadow:none!important;border-radius:50%;line-height:0}
+.nz-logo img{display:block;width:auto;height:clamp(64px,7vw,88px);border-radius:50%;box-shadow:none!important;background:transparent!important}
 #nosotros.nz h2{max-width:none;margin:0;color:#060607;font:italic 800 clamp(54px,9vw,132px)/.9 var(--hero-title,var(--b));letter-spacing:-.05em}
 #nosotros.nz h2 em{display:block;width:fit-content;margin-top:.04em;padding:0 .1em;background:#ee1c22;color:#060607;font-style:normal}
 #nosotros.nz h2::after{content:none}

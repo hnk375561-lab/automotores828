@@ -6,14 +6,14 @@
 ::selection{background:var(--dr-red);color:#fff}
 
 /* Logo circular sobre negro: sin placa blanca ni recuadro */
-html body .lg-img,html body .lg-ft,html body .lg-404,html body .lg-bk{background:transparent!important;padding:0!important;box-shadow:0 0 0 1.5px rgba(255,255,255,.22)!important;border-radius:50%;width:auto!important;aspect-ratio:1/1;object-fit:contain}
+html body .lg-img,html body .lg-ft,html body .lg-404,html body .lg-bk{background:transparent!important;padding:0!important;box-shadow:none!important;border-radius:50%;width:auto!important;aspect-ratio:1/1;object-fit:contain}
 html body .mark .lg-img{height:48px!important}
 html body .site-header--home .mark .lg-img{height:68px!important}
 html body .lg-ft{height:92px!important;margin:0 0 14px}
 html body .lg-404{height:150px!important;max-width:none!important}
 html body .lg-bk{height:44px!important}
 html body .dr-v71 .dr-brand{background:transparent;border:0;clip-path:none;padding:0;justify-content:flex-start}
-html body .dr-v71 .dr-brand img{width:min(100%,200px);border-radius:50%}
+html body .dr-v71 .dr-brand img{width:min(100%,200px);border-radius:50%;box-shadow:none!important}
 @media(max-width:980px){html body .mark .lg-img{height:42px!important}html body .site-header--home .mark .lg-img{height:52px!important}}
 
 /* Los énfasis de los títulos siguen la cursiva del logo */
@@ -64,6 +64,8 @@ footer::before{content:"";position:absolute;left:0;right:0;top:0;height:7px;back
 .gr-cta:focus-visible{outline:2px solid #fff;outline-offset:3px}
 @media(max-width:480px){.gr-in{grid-template-columns:minmax(0,1fr);justify-items:start}.gr-foot{flex-direction:column;align-items:flex-start}}
 @media(prefers-reduced-motion:reduce){.gr-cta{transition:none}}
+
+.nz-logo{background:none!important;border:0!important;box-shadow:none!important;border-radius:50%}
 
 /* Unidad vendida */
 .car-v,.fi-v{display:inline-block;margin-left:.5rem;padding:.15rem .55rem;border-radius:2px;background:#ee1c22;color:#fff;font:700 .72rem/1.2 "Exo 2",system-ui,sans-serif;letter-spacing:.08em;text-transform:uppercase;vertical-align:middle}

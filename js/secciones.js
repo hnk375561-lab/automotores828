@@ -788,7 +788,7 @@
 
         /* panel de marca bajo la foto: logotipo, qué ofrece la agencia y cómo visitarla (no repite lo de la derecha) */
         var pn = el('aside', null, 'fi-s'); pn.setAttribute('aria-label', 'Sobre ' + (ctx.nombre || 'la agencia'));
-        var plate = el('div', null, 'fi-lg'), lg = el('img'); lg.src = 'images/logo-sm.png'; lg.width = 320; lg.height = 320; lg.alt = ctx.nombre || ''; lg.decoding = 'async';
+        var plate = el('div', null, 'fi-lg'), lg = el('img'); lg.src = 'images/logo-sm.png'; lg.width = 160; lg.height = 160; lg.alt = ctx.nombre || ''; lg.decoding = 'async'; lg.loading = 'lazy';
         plate.appendChild(lg); pn.appendChild(plate);
         if (ctx.ciudad) pn.appendChild(el('p', 'Compra y venta de usados en ' + ctx.ciudad, 'fi-s-t'));
         if (ctx.servicios && ctx.servicios.length) {
