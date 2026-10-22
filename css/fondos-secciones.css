@@ -1,6 +1,6 @@
 /* Automotores 828 · fotos de fondo en las secciones (se cargan solas al acercarse; js/fondos-secciones.js)
    La capa va debajo del contenido (z-index:-1) y encima del color de la sección (isolation:isolate). */
 .has-fondo{position:relative;isolation:isolate}
-.dr-fondo{position:absolute;inset:0;z-index:-1;pointer-events:none;opacity:0;background-repeat:no-repeat;background-size:cover;transition:opacity 1s ease}
+.dr-fondo{position:absolute;inset:0;z-index:-1;pointer-events:none;opacity:0;background-repeat:no-repeat;background-size:cover;background-position:center;transition:opacity 1s ease;will-change:opacity}
 .dr-fondo.is-on{opacity:1}
 @media(prefers-reduced-motion:reduce){.dr-fondo{transition:none}}
