@@ -1191,7 +1191,7 @@ header,header.site-header--inner{background:rgba(6,6,7,.82)}
 html.has-dlg{overflow:hidden}
 dialog.ficha{width:min(1040px,100% - 24px);max-width:none;max-height:calc(100dvh - 24px);margin:auto;padding:0;border:0;border-top:3px solid var(--y);background:#131313;color:#f0f0f0;overflow:auto;overscroll-behavior:contain}
 dialog.ficha::backdrop{background:rgba(3,3,4,.82)}
-.fi-x{position:sticky;top:10px;float:right;z-index:3;margin:10px 10px 0 0;background:#131313}
+.fi-x{position:sticky;top:10px;display:flex;width:max-content;height:44px;z-index:3;margin:10px 10px -54px auto;background:#131313}
 .fi-g{display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,1fr);gap:0;clear:both}
 .fi-g.sin-foto{grid-template-columns:1fr}
 .fi-m{position:relative;background:#070707;min-width:0}
@@ -2249,3 +2249,13 @@ html body #tu-usado .photo-copy-panel .sec-p,html body #busqueda .photo-copy-pan
 @media(max-width:900px){.ft{grid-template-columns:repeat(2,minmax(0,1fr))}.ft-col{padding:4px 0}}
 @media(max-width:520px){.site-footer>.w{width:calc(100% - 32px)}.ft-cta{align-items:stretch;flex-direction:column;padding:22px 0}.ft-cta-btn{width:100%;box-sizing:border-box}.ft{grid-template-columns:minmax(0,1fr);gap:18px;padding-top:24px}.ft-col{padding-bottom:16px;border-bottom:1px solid rgba(255,255,255,.14)}.ft-col:last-child{border-bottom:0}.ft-bottom{align-items:flex-start;flex-direction:column;gap:7px}.ft-top{margin-left:0}.photo-copy-panel{padding:20px 18px}.ft-links a{min-height:38px}}
 @media(prefers-reduced-motion:reduce){.ft-cta-btn,.ft-social a,.ft-ctas a{transition:none!important;transform:none!important}}
+
+/* A2: «Claves de una compra segura» */
+dialog.ficha .fi-proof{margin-top:16px;padding-top:14px;border-top:1px solid rgba(255,255,255,.14)}
+dialog.ficha .fi-proof-lead{margin:0 0 14px;color:#d6d6d6;font-size:14.5px;line-height:1.5}
+dialog.ficha .fi-proof-g{display:grid;gap:12px}
+dialog.ficha .fi-proof-c{display:grid;grid-template-columns:auto minmax(0,1fr);column-gap:18px;row-gap:8px;align-items:start;padding:16px 18px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.1);border-left:3px solid var(--y)}
+dialog.ficha .fi-proof-c b{grid-row:1/span 2;min-width:1.4ch;color:var(--y);font:italic 800 clamp(44px,5vw,56px)/.9 var(--h);letter-spacing:-.02em}
+dialog.ficha .fi-proof-c strong{align-self:end;color:#fff;font:800 16px/1.25 var(--b);letter-spacing:.06em;text-transform:uppercase}
+dialog.ficha .fi-proof-c span{display:block;padding-top:8px;border-top:1px solid rgba(255,255,255,.14);color:#cfcfcf;font:400 14px/1.55 var(--b)}
+@media(max-width:400px){dialog.ficha .fi-proof-c{column-gap:14px;padding:14px}dialog.ficha .fi-proof-c b{font-size:40px}dialog.ficha .fi-proof-c strong{font-size:15px}}
