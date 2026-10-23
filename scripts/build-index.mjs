@@ -164,7 +164,7 @@ const card = (a) => {
   const marca = marcaDe(a);
   const sw = swatch(a.color);
   const fila = (k, v) => (v ? `<div><dt>${k}</dt><dd>${v}</dd></div>` : '');
-  const pr = a.precio ? `<p class="pr">${a.precio.moneda === 'USD' ? 'US$ ' : '$ '}${fmt(a.precio.monto)}</p><p class="n">Precio publicado el ${esc(fdate(a.precio.fecha))}; puede haber cambiado.</p>` : '<p class="pr">Consultar precio</p>';
+  const pr = a.precio ? `<p class="pr"><span class="price-currency">${esc(a.precio.moneda)}</span> ${fmt(a.precio.monto)}</p><p class="n">Precio publicado el ${esc(fdate(a.precio.fecha))}; puede haber cambiado.</p>` : '<p class="pr">Consultar precio</p>';
   const busca = norm([a.titulo, a.tipoVehiculo, a.tipoMoto, marca, a.modelo, a.version, a.cilindrada, a.color, a.anio].filter((x) => x !== undefined && x !== null && x !== '').join(' '));
   return `<li class="car reveal${a.vendida ? ' car--vendida' : ''}" style="--reveal-delay:${Math.min(i,5)*60}ms" data-t="${esc(busca)}" data-i="${i}">
 ${mediaTag(a)}

@@ -73,7 +73,7 @@
 
       var fmt = function (n) { return n.toLocaleString('es-AR'); };
       var norm = function (t) { return String(t).normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().trim(); };
-      var peso = function (a) { return (a.precio.moneda === 'USD' ? 'US$ ' : '$ ') + fmt(a.precio.monto); };
+      var peso = function (a) { return a.precio.moneda + ' ' + fmt(a.precio.monto); };
       var fecha = function (iso) { return iso.split('-').reverse().join('/'); };
       var alfa = function (x, y) { return String(x).localeCompare(String(y), 'es'); };
       var anioHoy = new Date().getFullYear();
@@ -728,13 +728,14 @@
         var mb = el('p', a.marca + (a.tipoVehiculo === 'Moto' ? ' · Moto' : ''), 'fi-b'); if (a.vendida) mb.appendChild(el('span', 'Vendida', 'fi-v')); info.appendChild(mb);
         var h = el('h2', a.modeloTxt); h.id = 'fi-ttl'; info.appendChild(h);
         info.appendChild(el('p', a.precio ? peso(a) : 'Consultar precio', 'fi-pr'));
-        if (a.anticipo && a.anticipo.monto != null) info.appendChild(el('p', 'Anticipo publicado: ' + (a.anticipo.moneda === 'USD' ? 'US$ ' : '$ ') + fmt(a.anticipo.monto), 'fi-n'));
+        if (a.anticipo && a.anticipo.monto != null) info.appendChild(el('p', 'Anticipo publicado: ' + a.anticipo.moneda + ' ' + fmt(a.anticipo.monto), 'fi-n'));
         if (a.precio && a.precio.fecha) info.appendChild(el('p', 'Precio al ' + fecha(a.precio.fecha) + '.', 'fi-n'));
         var dl = el('dl', null, 'fi-d');
         function dato(k, v, sw) {
           if (v == null || v === '') return;
           var d = el('div'), dd = el('dd');
           if (sw) { var p = el('i', null, 'sw'); p.style.setProperty('--sw', sw); dd.appendChild(p); }
+          if (String(v).trim().toLowerCase() === 'sí') dd.classList.add('fi-yes');
           dd.appendChild(document.createTextNode(String(v)));
           d.appendChild(el('dt', k)); d.appendChild(dd); dl.appendChild(d);
         }
@@ -752,7 +753,7 @@
           ep.open = true;
           ep.appendChild(el('summary', 'Más características publicadas (' + extras.length + ')', 'fi-s-k'));
           var edl = el('dl', null, 'fi-d');
-          extras.forEach(function (x) { var row = el('div'); row.appendChild(el('dt', x.nombre)); row.appendChild(el('dd', x.valor)); edl.appendChild(row); });
+          extras.forEach(function (x) { var row = el('div'), val = el('dd', x.valor); if (String(x.valor).trim().toLowerCase() === 'sí') val.className = 'fi-yes'; row.appendChild(el('dt', x.nombre)); row.appendChild(val); edl.appendChild(row); });
           ep.appendChild(edl); ep.appendChild(el('p', 'Datos declarados en la publicación de Mercado Libre; confirmalos con la agencia.', 'fi-n')); info.appendChild(ep);
         }
         if (a.nota) info.appendChild(el('p', a.nota, 'fi-n'));

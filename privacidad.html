@@ -2209,6 +2209,20 @@ dialog.ficha .fi-extra>.fi-d div{padding:5px 0}
 dialog.ficha .fi-extra>.fi-d dt{font-size:9.5px;line-height:1.15;letter-spacing:.1em}
 dialog.ficha .fi-extra>.fi-d dd{margin-top:3px;font-size:13.5px;line-height:1.2}
 @media(max-width:800px){dialog.ficha .fi-extra>.fi-d{grid-template-columns:repeat(2,minmax(0,1fr));gap:0 10px}}
+
+/* Correcciones de presentación solicitadas para la demo. */
+.price-currency{display:inline-block;margin-right:.18em;font:800 .5em/1 var(--b);letter-spacing:.08em;vertical-align:.16em;color:currentColor}
+dialog.ficha .fi-yes{font-weight:800;text-decoration-line:underline;text-decoration-color:var(--y);text-decoration-thickness:2px;text-underline-offset:3px}
+dialog.ficha .fi-d{row-gap:0}
+dialog.ficha .fi-i{padding-bottom:14px}
+dialog.ficha .fi-l{height:max-content;min-height:0}
+dialog.ficha .fi-s{flex:none}
+/* Pin consistente: gota roja, centro claro y halo sutil; sin círculo deformado. */
+.dr-pin{width:46px!important;height:52px!important;background:transparent!important;border:0!important}
+.dr-pin-b{position:absolute;left:4px;top:0;display:grid;place-items:center;width:38px;height:38px;border-radius:50% 50% 50% 0;transform:rotate(-45deg);background:linear-gradient(145deg,#ff4a4a 0%,#ee1c22 65%,#b3000c 100%);border:2px solid #060607;box-shadow:0 5px 12px rgba(0,0,0,.42)}
+.dr-pin-b::after{content:"";position:absolute;width:12px;height:12px;border-radius:50%;background:#fff;border:2px solid #060607}
+.dr-pin-b svg{position:relative;z-index:1;width:18px;height:18px;transform:rotate(45deg);stroke:#060607;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;opacity:.85}
+.dr-pin-r{position:absolute;left:10px;top:36px;width:28px;height:8px;border:0!important;border-radius:50%;background:rgba(6,6,7,.28);box-shadow:0 0 0 5px rgba(238,28,34,.12);animation:none!important}
 </style>
 <link rel="stylesheet" href="css/dr-identidad.css">
 </head>
