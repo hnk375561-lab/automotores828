@@ -3,7 +3,7 @@
 Uso:  python3 scripts/qa-browser.py      (levanta node scripts/serve.mjs por su cuenta)
 Falla (exit 1) si hay: overflow horizontal, errores de consola, titulares partidos a mitad de palabra,
 controles táctiles < 44px (en ≤980px), el FAB tapando controles, o contenido oculto con movimiento reducido."""
-import subprocess, sys, time, urllib.request, pathlib
+import shutil, subprocess, sys, time, urllib.request, pathlib
 from playwright.sync_api import sync_playwright
 
 ROOT = pathlib.Path(__file__).resolve().parent.parent
@@ -22,7 +22,10 @@ def main():
     problems = []
     try:
         with sync_playwright() as p:
-            b = p.chromium.launch()
+            chromium = shutil.which("chromium") or shutil.which("chromium-browser") or shutil.which("google-chrome")
+            launch = {"headless": True}
+            if chromium: launch["executable_path"] = chromium
+            b = p.chromium.launch(**launch)
             for w, h in SIZES:
                 pg = b.new_page(viewport={"width": w, "height": h}); errs = []
                 pg.on("pageerror", lambda e: errs.append(str(e)))
@@ -48,12 +51,10 @@ def main():
                     mini = pg.locator("dialog.ficha .fi-map[data-leaflet]")
                     if mini.count() != 1: problems.append(f"{tag}: la ficha no incluye el mini mapa del local")
                     elif not pg.locator("dialog.ficha .fi-map .dr-map-v[aria-label]").count(): problems.append(f"{tag}: el mini mapa no tiene región accesible")
-                    extra = pg.locator("dialog.ficha details.fi-extra")
+                    extra = pg.locator("dialog.ficha section.fi-extra")
                     if extra.count() != 1: problems.append(f"{tag}: no se conservó el bloque de características adicionales")
                     elif extra.locator("dd").count() < 1: problems.append(f"{tag}: el bloque de características adicionales está vacío")
-                    else:
-                        extra.locator("summary").click()
-                        if not extra.evaluate("e=>e.open"): problems.append(f"{tag}: no se puede desplegar el bloque adicional")
+                    elif not extra.is_visible(): problems.append(f"{tag}: el bloque de características adicionales no es visible")
                 if w <= 700:
                     H = pg.evaluate("document.documentElement.scrollHeight"); y = 0; bad = set()
                     while y < H:

@@ -68,7 +68,8 @@ function page({ title, desc, body, file, withFonts = true, extraHead = '' }) {
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-${robotsMeta}<title>${esc(title)}</title>
+${robotsMeta}<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<title>${esc(title)}</title>
 <meta name="description" content="${esc(desc)}">
 <meta name="theme-color" content="#060607">
 <meta property="og:type" content="website">
