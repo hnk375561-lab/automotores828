@@ -130,3 +130,22 @@ html body .cmp .cmpt tbody th{position:sticky;left:0;z-index:2;background:#10101
 html body .cmp .cmpt tbody td,html body .cmp .cmpt tbody th{padding:10px 12px;line-height:1.3}
 html body .cmp .cmpt .big{display:block;min-height:1.3em}
 @media(max-width:700px){html body .ficha .fi-g{grid-template-columns:1fr}html body .ficha .fi-t img{max-height:48dvh}html body .ficha .fi-pr{font-size:32px}html body .cmp{max-width:calc(100vw - 12px);max-height:calc(100dvh - 12px)}html body .cmp .cmp-hd{position:sticky;top:0;z-index:3}html body .cmp .cmpt{min-width:700px}html body .cmp .cmp-ph{height:128px}}
+
+/* Header desktop intermedio: compactar marca y navegación antes de que el CTA quede fuera del viewport. */
+@media (min-width: 981px) and (max-width: 1799px) {
+  html body header.site-header--home .w {
+    width: calc(100% - 32px);
+    min-height: 84px;
+    gap: 12px;
+  }
+  html body header.site-header--home .mark .lg-img { height: 44px !important; }
+  html body header.site-header--home .mark::after { display: none; }
+  html body header.site-header--home .site-nav {
+    min-width: 0;
+    gap: clamp(6px, .65vw, 10px);
+  }
+  html body header.site-header--home .site-nav a {
+    font-size: 10px;
+    letter-spacing: .04em;
+  }
+}
