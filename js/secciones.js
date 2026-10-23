@@ -394,7 +394,9 @@
           li.hidden = !ok;
           if (!ok) li.style.setProperty('display', 'none', 'important');
         });
-        list.slice().sort(ordenar).forEach(function (a) { ul.appendChild(items[a.i]); });
+        var frag = document.createDocumentFragment();
+list.slice().sort(ordenar).forEach(function (a) { frag.appendChild(items[a.i]); });
+ul.appendChild(frag);
         visibles = 0;
         list.slice().sort(ordenar).forEach(function (a) {
           var li = items[a.i], ok = coincide(a, null);
@@ -1073,9 +1075,9 @@
     var r = $('.ruta');
     if (!r || !('IntersectionObserver' in window) || (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches)) return;
     r.classList.add('js');
-    var io = new IntersectionObserver(function (es) {
-      if (es.some(function (e) { return e.isIntersecting; })) { r.classList.add('on'); io.disconnect(); }
-    }, { threshold: 0.35 });
+var io = new IntersectionObserver(function (es) {
+  if (es.some(function (e) { return e.isIntersecting; })) { r.classList.add('on'); io.unobserve(r); io.disconnect(); }
+}, { threshold: 0.35 });
     io.observe(r);
   })();
 
