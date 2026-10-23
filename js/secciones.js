@@ -840,7 +840,7 @@
         if (a.hrefFin) ac2.appendChild(enlace('Consultar financiación', a.hrefFin, 'btn sm', true));
         if (a.mail) ac2.appendChild(enlace('Enviar correo', a.mail, 'btn sm', false));
         if (ctx.tel) ac2.appendChild(enlace('Llamar' + (ctx.telTxt ? ' · ' + ctx.telTxt : ''), 'tel:' + ctx.tel, 'btn sm', false));
-        var tas = enlace('Tasar mi usado', '#tu-usado', 'btn sm', false); tas.addEventListener('click', function () { fdlg.close(); });
+        var tas = enlace('Tasar mi usado', '#tu-usado', 'btn sm', false); tas.addEventListener('click', function () { if (window.drTasarRef) window.drTasarRef(a); fdlg.close(); });
         if ($('#tu-usado')) ac2.appendChild(tas);
         ac2.appendChild(boton('Compartir', 'btn sm', function () { compartir(a); }));
         var fvb = boton('♡ Guardar en favoritos', 'btn sm fav-fi', function () { favToggle(a); });
@@ -862,6 +862,29 @@
         var pie = el('div', null, 'fi-p');
         pie.appendChild(el('p', 'Consultá precio y disponibilidad actualizados por WhatsApp.', 'fi-n'));
         info.appendChild(pie);
+
+        /* A3 · «Coordiná tu visita»: horarios reales (ctx.horario / drEstado) y WhatsApp prellenado con la unidad; no reserva ni confirma nada */
+        if (!a.vendida && (ctx.wa || ctx.horario)) {
+          var vi = el('section', null, 'fi-visit'); vi.setAttribute('aria-label', 'Coordiná tu visita');
+          vi.appendChild(el('p', 'Coordiná tu visita', 'fi-s-k'));
+          var evv = window.drEstado ? window.drEstado() : null;
+          if (ctx.horario) {
+            vi.appendChild(el('p', 'Horario de atención: ' + ctx.horario, 'fi-visit-h'));
+            if (evv && evv.txt) { var ee = el('p', evv.txt, 'fi-visit-e'); ee.setAttribute('data-abierto', evv.abierto ? '1' : '0'); vi.appendChild(ee); }
+          } else vi.appendChild(el('p', 'Consultá los horarios de atención por WhatsApp.', 'fi-visit-h'));
+          if (ctx.dir) vi.appendChild(el('p', ctx.dir, 'fi-visit-a'));
+          if (ctx.wa) {
+            var desc = String(a.titulo || ''), nd = norm(desc);
+            if (a.version && nd.indexOf(norm(a.version)) < 0) desc += ' ' + a.version;
+            if (a.anio != null && nd.indexOf(String(a.anio)) < 0) desc += ' ' + a.anio;
+            var msg = 'Hola! Quiero coordinar una visita para ver el ' + desc.trim() + '. ¿Qué día y horario me conviene?';
+            var wv = enlace('Coordinar visita por WhatsApp', ctx.wa.split('?')[0] + '?text=' + encodeURIComponent(msg), 'btn p sm', true);
+            wv.setAttribute('aria-label', 'Coordinar por WhatsApp una visita para ver ' + desc.trim());
+            vi.appendChild(wv);
+          }
+          vi.appendChild(el('p', 'Es una consulta por WhatsApp: no reserva la unidad ni confirma la visita. La agencia te responde para acordar día y horario.', 'fi-n'));
+          info.appendChild(vi);
+        }
 
         /* A3.1 · Calculadora de cuotas: usa el precio publicado (editable); la tasa la carga la persona, no se inventa ninguna */
         var cal = el('section', null, 'fi-calc'); cal.setAttribute('aria-label', 'Calculadora de cuotas');
@@ -1072,6 +1095,19 @@
       poblarSelects();
       pendientes.forEach(function (fn) { fn(); });
     });
+
+    /* A4 · «Tasá tu usado» desde una ficha: la unidad que se estaba viendo se carga en el campo existente
+       «¿Alguna unidad te interesa?» (referencia de la consulta, editable). No toca «Marca y modelo» ni «Año», que son
+       los del usado de la persona, y no pisa lo que ya eligió. Entrando directo a la sección no cambia nada. */
+    window.drTasarRef = function (a) {
+      var sel = $('#u-un'); if (!sel || !a || !a.titulo || sel.value) return;
+      var v = a.titulo + (a.anio ? ' ' + a.anio : ''), ok = [].slice.call(sel.options).some(function (o) { return o.value === v; });
+      if (!ok) { var o = el('option', v); o.value = v; sel.appendChild(o); }
+      sel.value = v;
+      var nota = $('#u-un-ref');
+      if (!nota) { nota = el('small', 'Unidad de referencia: la que estabas viendo. Podés cambiarla; los datos de tu usado se completan arriba.', 'fi-n'); nota.id = 'u-un-ref'; sel.parentNode.appendChild(nota); }
+      sel.dispatchEvent(new Event('change', { bubbles: true }));
+    };
 
     $$('form[data-msg]').forEach(function (f) {
       var vista = $('.msg-v', f), estado = $('.msg-s', f), btnCopiar = $('[data-copiar-msg]', f), wa = $('[data-wa-msg]', f);
