@@ -806,6 +806,48 @@
         pie.appendChild(el('p', 'Consultá precio y disponibilidad actualizados por WhatsApp.', 'fi-n'));
         info.appendChild(pie);
 
+        /* A3.1 · Calculadora de cuotas: usa el precio publicado (editable); la tasa la carga la persona, no se inventa ninguna */
+        var cal = el('section', null, 'fi-calc'); cal.setAttribute('aria-label', 'Calculadora de cuotas');
+        cal.appendChild(el('p', 'Calculá una cuota estimada', 'fi-s-k'));
+        var mon = a.precio && a.precio.moneda ? a.precio.moneda : 'ARS';
+        var campo = function (id, rotulo, valor, modo, ayuda) {
+          var w = el('div', null, 'fi-calc-f'), lb = el('label', rotulo); lb.setAttribute('for', id);
+          var inp = el('input'); inp.id = id; inp.type = 'text'; inp.inputMode = modo; inp.autocomplete = 'off'; inp.value = valor;
+          w.appendChild(lb); w.appendChild(inp);
+          if (ayuda) { var h2 = el('small', ayuda); h2.id = id + '-h'; inp.setAttribute('aria-describedby', h2.id); w.appendChild(h2); }
+          cal.appendChild(w); return inp;
+        };
+        var cgrid = el('div', null, 'fi-calc-g'); cal.appendChild(cgrid);
+        var cPrecio = campo('fi-c-precio', 'Precio (' + mon + ')', a.precio && a.precio.monto > 0 ? fmt(a.precio.monto) : '', 'numeric');
+        var cAnt = campo('fi-c-ant', 'Anticipo (' + mon + ')', a.anticipo && a.anticipo.monto != null && a.anticipo.moneda === mon ? fmt(a.anticipo.monto) : '', 'numeric');
+        var cN = campo('fi-c-n', 'Cantidad de cuotas', '12', 'numeric');
+        var cTna = campo('fi-c-tna', 'Tasa nominal anual (%)', '', 'decimal', 'Opcional. Si la dejás vacía, se calcula sin interés.');
+        [cPrecio, cAnt, cN, cTna].forEach(function (c) { cgrid.appendChild(c.parentNode); });
+        if (!(a.precio && a.precio.monto > 0)) cal.insertBefore(el('p', 'El precio de esta unidad no está publicado: ingresá un monto propio para simular.', 'fi-n'), cgrid);
+        var cOut = el('div', null, 'fi-calc-r'); cOut.setAttribute('role', 'status'); cOut.setAttribute('aria-live', 'polite'); cal.appendChild(cOut);
+        cal.appendChild(el('p', 'Resultado estimativo: depende de las condiciones reales de financiación, que se confirman con la agencia o la entidad. No constituye una oferta.', 'fi-n'));
+        var num = function (v) { return parseInt(String(v).replace(/\D/g, ''), 10) || 0; };
+        var calcular = function () {
+          var P = num(cPrecio.value), A = num(cAnt.value), n = num(cN.value), tTxt = String(cTna.value).replace(',', '.').trim();
+          var t = tTxt === '' ? 0 : Number(tTxt), err = '';
+          if (!P) err = 'Ingresá un precio mayor a cero.';
+          else if (A >= P) err = 'El anticipo debe ser menor al precio.';
+          else if (n < 1 || n > 120) err = 'Ingresá entre 1 y 120 cuotas.';
+          else if (!isFinite(t) || t < 0 || t > 500) err = 'La tasa debe estar entre 0 y 500 %.';
+          cOut.textContent = '';
+          if (err) { cOut.appendChild(el('p', err, 'fi-calc-e')); return; }
+          var S = P - A, r = t / 100 / 12, q = r === 0 ? S / n : S * r / (1 - Math.pow(1 + r, -n));
+          if (!isFinite(q) || q <= 0) { cOut.appendChild(el('p', 'No se pudo calcular con estos datos.', 'fi-calc-e')); return; }
+          q = Math.round(q);
+          var fila = function (k, v, g) { var d = el('div', null, g ? 'big' : ''); d.appendChild(el('span', k)); d.appendChild(el('strong', mon + ' ' + fmt(v))); cOut.appendChild(d); };
+          fila('Cuota estimada (' + n + ' cuotas)', q, true);
+          fila('Saldo a financiar', S);
+          fila('Total estimado (anticipo + cuotas)', A + q * n);
+        };
+        [cPrecio, cAnt].forEach(function (c) { c.addEventListener('blur', function () { var v = num(c.value); c.value = v ? fmt(v) : ''; }); });
+        [cPrecio, cAnt, cN, cTna].forEach(function (c) { c.addEventListener('input', calcular); });
+        calcular(); info.appendChild(cal);
+
         /* relleno útil de la columna derecha: unidades parecidas del catálogo (datos reales) + guía para ver un usado */
         var sim = list.filter(function (c) { return c !== a && c.media && c.media.length; }).map(function (c) {
           var sc = (c.marca === a.marca ? 4 : 0) + (c.vendida ? 0 : 3) + (c.carroceria && c.carroceria === a.carroceria ? 1 : 0)
@@ -831,11 +873,35 @@
         var gu = el('section', null, 'fi-gu'); gu.setAttribute('aria-label', 'Guía para ver un usado');
         gu.appendChild(el('p', 'Para ver esta unidad con tranquilidad', 'fi-s-k'));
         var gl = el('ul', null, 'fi-gu-l');
-        ['Pedí ver la documentación: título, cédula y verificación policial.',
+        /* A3.2 · checklist interactivo: mismos textos; el avance vive solo en esta ficha abierta */
+        var gItems = ['Pedí ver la documentación: título, cédula y verificación policial.',
          'Revisá que no registre deudas ni infracciones antes de transferir.',
          'Probalo en ruta: frenos, dirección, caja y ruidos.',
-         'Consultá por el historial de mantenimiento y los dueños anteriores.'].forEach(function (t) { gl.appendChild(el('li', t)); });
-        gu.appendChild(gl); info.appendChild(gu);
+         'Consultá por el historial de mantenimiento y los dueños anteriores.'];
+        var gProg = el('p', null, 'fi-gu-p'); gProg.setAttribute('role', 'status'); gProg.setAttribute('aria-live', 'polite');
+        var gBar = el('span', null, 'fi-gu-b'), gFill = el('i'); gBar.appendChild(gFill);
+        var gCuenta = function () {
+          var ok = $$('input:checked', gl).length;
+          gProg.textContent = ok + ' de ' + gItems.length + ' revisados';
+          gFill.style.width = (ok / gItems.length * 100) + '%';
+        };
+        gItems.forEach(function (t, k) {
+          var li = el('li'), lb = el('label'), cbx = el('input'); cbx.type = 'checkbox'; cbx.id = 'fi-gu-' + k;
+          cbx.addEventListener('change', function () { li.classList.toggle('on', cbx.checked); gCuenta(); });
+          lb.appendChild(cbx); lb.appendChild(el('span', t)); li.appendChild(lb); gl.appendChild(li);
+        });
+        gu.appendChild(gProg); gu.appendChild(gBar); gu.appendChild(gl); gCuenta(); info.appendChild(gu);
+
+        /* A3.3 · preguntas de la unidad en acordeón (reutiliza details.dd; solo con textos ya publicados en el sitio) */
+        var fq = el('section', null, 'fi-faq'); fq.setAttribute('aria-label', 'Preguntas sobre esta unidad');
+        fq.appendChild(el('p', 'Preguntas frecuentes sobre esta unidad', 'fi-s-k'));
+        [['¿Los datos y el precio están confirmados?', 'Son los datos publicados de la unidad. Consultá a la agencia para confirmar precio y disponibilidad antes de moverte.'],
+         ['¿Aceptan permutas o financiación?', 'Permutas, consignaciones y financiación se resuelven por consulta con la agencia.'],
+         ['¿Cómo coordino una visita?', 'Elegí un horario con «Agendar visita y prueba de manejo» y conocé la unidad con tiempo para revisarla.']].forEach(function (qa) {
+          var dt = el('details', null, 'dd'), sm = el('summary', qa[0]);
+          dt.appendChild(sm); dt.appendChild(el('p', qa[1])); fq.appendChild(dt);
+        });
+        info.appendChild(fq);
 
         /* panel de marca bajo la foto: logotipo, qué ofrece la agencia y cómo visitarla (no repite lo de la derecha) */
         var pn = el('aside', null, 'fi-s'); pn.setAttribute('aria-label', 'Sobre ' + (ctx.nombre || 'la agencia'));
