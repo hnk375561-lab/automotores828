@@ -36,7 +36,7 @@ html.save-data .hero-slide img{animation-duration:0s!important}
 /* Hero 2026 · cadena horizontal continua de frentes del inventario.
    Se utilizan las fuentes originales del hero; la segunda secuencia evita saltos al reiniciar. */
 html body .hero-chain{position:absolute;inset:0;z-index:0;overflow:hidden;background:#060607;display:flex;align-items:stretch}
-html body .hero-chain-track{display:flex;align-items:stretch;width:max-content;height:100%;min-width:200%;animation:dr-chain 16s linear infinite;will-change:transform}
+html body .hero-chain-track{display:flex;align-items:stretch;width:max-content;height:100%;min-width:200%;animation:dr-chain 13s linear infinite;will-change:transform}
 html body .hero-chain.is-paused .hero-chain-track{animation-play-state:paused}
 html body .hero-chain-car{position:relative;flex:0 0 clamp(210px,25vw,380px);height:100%;margin:0;overflow:hidden;background:#111;border-left:1px solid rgba(255,255,255,.08)}
 html body .hero-chain-car::after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,rgba(6,6,7,.08),transparent 35%,rgba(6,6,7,.18)),linear-gradient(0deg,rgba(6,6,7,.74),transparent 42%);pointer-events:none}
@@ -45,5 +45,5 @@ html body .hero-chain-car--02 img,html body .hero-chain-car--05 img,html body .h
 html body .hero-chain-car--03 img,html body .hero-chain-car--07 img,html body .hero-chain-car--10 img{object-position:50% 72%}
 @keyframes dr-chain{from{transform:translate3d(0,0,0)}to{transform:translate3d(-50%,0,0)}}
 html body .hero-chain+*{position:relative}
-@media(max-width:900px){html body .hero-chain{height:min(100vw + 56px,560px);inset:0 0 auto}html body .hero-chain-track{height:100%;animation-duration:17.333333s}html body .hero-chain-car{flex-basis:clamp(150px,47vw,250px)}html body .hero-chain-car img{object-position:50% 63%}}
+@media(max-width:900px){html body .hero-chain{height:min(100vw + 56px,560px);inset:0 0 auto}html body .hero-chain-track{height:100%;animation-duration:14.083333s}html body .hero-chain-car{flex-basis:clamp(150px,47vw,250px)}html body .hero-chain-car img{object-position:50% 63%}}
 @media(prefers-reduced-motion:reduce){html body .hero-chain-track{animation:none!important;transform:none!important}html body .hero-chain-car:nth-child(n+6){display:none}}
