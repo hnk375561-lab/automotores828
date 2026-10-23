@@ -627,7 +627,7 @@ html.save-data .hero{animation:none!important}
 .inventory-section .cars{position:relative;gap:14px;margin-top:0}
 .inventory-section .car{counter-increment:inventory-card;min-height:416px;padding:22px 22px 20px;background:linear-gradient(160deg,rgba(6,6,7,.9),rgba(6,6,7,.98));border:1px solid rgba(255,255,255,.12);border-top:0;border-left:0;clip-path:polygon(0 0,calc(100% - 18px) 0,100% 18px,100% 100%,0 100%);box-shadow:inset 0 1px 0 rgba(255,255,255,.05);transition:transform .35s cubic-bezier(.2,.7,.2,1),border-color .35s ease,background .35s ease}
 .inventory-section .car::before{content:counter(inventory-card,decimal-leading-zero);position:absolute;top:18px;right:20px;color:rgba(238,28,34,.72);font:italic 400 22px/1 var(--h);letter-spacing:-.04em}
-.inventory-section .car::after{content:"";position:absolute;left:0;top:0;width:3px;height:72px;background:var(--y);transform-origin:top;transition:height .35s ease}
+.inventory-section .car::after{content:"";position:absolute;left:0;top:0;width:3px;height:72px;background:var(--y);transform-origin:top;transition:height .35s ease;pointer-events:none}
 .inventory-section .car:hover{transform:translateY(-8px);border-color:rgba(238,28,34,.62);background:linear-gradient(160deg,rgba(6,6,7,.98),rgba(6,6,7,.98));box-shadow:0 22px 50px rgba(0,0,0,.28)}
 .inventory-section .car:hover::after{height:100%}
 .inventory-section .car-ph{height:160px;margin:-22px -22px 22px;overflow:hidden;background:linear-gradient(135deg,#1e1e1e,#060607);border-bottom:1px solid rgba(255,255,255,.12)}
@@ -1600,8 +1600,7 @@ dialog.ficha::backdrop{background:rgba(3,3,4,.82)}
 .dr-lux .dr-ctr:hover{background:#ee1c22;color:#060607}
 .dr-lux .dr-ctr--t{margin-top:8px}
 .dr-pin{position:absolute}
-.dr-pin-r{position:absolute;left:0;top:0;width:44px;height:44px;border:2px solid #ee1c22;border-radius:50%;animation:drRing 2.4s ease-out infinite;pointer-events:none}
-@keyframes drRing{0%{transform:scale(.9);opacity:.9}100%{transform:scale(2.4);opacity:0}}
+.dr-pin-r{position:absolute;left:0;top:0;width:44px;height:44px;border:2px solid #ee1c22;border-radius:50%;pointer-events:none}
 .dr-lux .dr-addr{position:absolute;left:clamp(12px,2vw,26px);bottom:clamp(12px,2vw,26px);z-index:6;width:min(430px,calc(100% - 24px));margin:0;padding:20px 22px 22px;border:1px solid rgba(238,28,34,.55);border-left:5px solid #ee1c22;background:rgba(6,6,7,.95)}
 .dr-lux .dr-k{margin:0 0 8px;color:#ee1c22;font:700 12px/1.2 var(--hero-copy);letter-spacing:.24em;text-transform:uppercase}
 .dr-lux .dr-a{margin:0;color:#fff;font:italic 800 clamp(22px,2.2vw,28px)/1.15 var(--hero-title);letter-spacing:-.02em}
@@ -2089,7 +2088,7 @@ section[id]::after{content:"";position:absolute;inset:0 auto 0 0;width:3px;backg
 
 /* ===== Capa final editorial 828 · aplicada después de las capas históricas ===== */
 .car-ph{position:relative;isolation:isolate;overflow:hidden}
-.car-badge{position:absolute;z-index:2;top:12px;right:12px;width:58px;height:58px;border:2px solid rgba(255,255,255,.9);border-radius:50%;background:#f7f7f5 url('images/logo-circle.png') center/82% no-repeat;box-shadow:0 5px 18px rgba(0,0,0,.28)}
+.car-badge{position:absolute;z-index:2;top:12px;right:12px;width:58px;height:58px;border:2px solid rgba(255,255,255,.9);border-radius:50%;background:#f7f7f5 url('images/logo-circle.png') center/82% no-repeat;box-shadow:0 5px 18px rgba(0,0,0,.28);pointer-events:none}
 .cars{grid-template-columns:repeat(3,minmax(0,1fr))}
 .hero-carousel-controls{display:flex!important;position:absolute;z-index:5;right:clamp(16px,4vw,64px);bottom:clamp(18px,4vw,48px);align-items:center;gap:8px;padding:8px 10px;border:1px solid rgba(255,255,255,.3);border-radius:999px;background:rgba(6,6,7,.9)}
 .hero-carousel-btn,.hero-carousel-toggle{min-height:32px;border:1px solid rgba(255,255,255,.28);border-radius:999px;background:transparent;color:#fff;cursor:pointer;font:700 11px/1 var(--hero-copy);letter-spacing:.08em}
@@ -2194,7 +2193,7 @@ dialog.ficha .fi-s{flex:none}
 
 /* Componentes de alto contraste para contenido narrativo sobre fondos fotográficos. */
 :root{--rojo:#e10600;--negro:#060607;--blanco:#fff}
-.photo-copy-panel{box-sizing:border-box;padding:clamp(20px,2vw,28px);border:1px solid rgba(255,255,255,.12);border-left:4px solid var(--rojo);border-radius:8px;background:rgba(0,0,0,.72);-webkit-backdrop-filter:blur(5px);backdrop-filter:blur(5px);box-shadow:0 12px 36px rgba(0,0,0,.3)}
+.photo-copy-panel{box-sizing:border-box;padding:clamp(20px,2vw,28px);border:1px solid rgba(255,255,255,.12);border-left:4px solid var(--rojo);border-radius:8px;background:rgba(0,0,0,.72);box-shadow:0 12px 36px rgba(0,0,0,.3)}
 .photo-copy-panel p,.photo-copy-panel li,.photo-copy-panel h2{color:var(--blanco);text-shadow:0 1px 2px rgba(0,0,0,.72)}
 html body #tu-usado .photo-copy-panel .sec-p,html body #busqueda .photo-copy-panel .sec-p,html body .photo-copy-panel .cv-steps span,html body #tu-usado .photo-copy-panel h2,html body #busqueda .photo-copy-panel h2{color:#fff;text-shadow:0 1px 2px rgba(0,0,0,.72)}
 .photo-copy-panel .cv-steps{margin-block:20px}
@@ -2259,6 +2258,17 @@ dialog.ficha .fi-proof-c b{grid-row:1/span 2;min-width:1.4ch;color:var(--y);font
 dialog.ficha .fi-proof-c strong{align-self:end;color:#fff;font:800 16px/1.25 var(--b);letter-spacing:.06em;text-transform:uppercase}
 dialog.ficha .fi-proof-c span{display:block;padding-top:8px;border-top:1px solid rgba(255,255,255,.14);color:#cfcfcf;font:400 14px/1.55 var(--b)}
 @media(max-width:400px){dialog.ficha .fi-proof-c{column-gap:14px;padding:14px}dialog.ficha .fi-proof-c b{font-size:40px}dialog.ficha .fi-proof-c strong{font-size:15px}}
+/* A3 · Coordiná tu visita (ficha) */
+.fi-visit{margin-top:16px;padding:14px 16px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.14)}
+.fi-visit .fi-visit-h{margin:0 0 4px;color:#e8e8e8;font:700 14px/1.35 var(--b)}
+.fi-visit .fi-visit-e{margin:0 0 4px;color:#d2d2d2;font:700 13px/1.3 var(--b)}
+.fi-visit .fi-visit-e[data-abierto="1"]{color:var(--y)}
+.fi-visit .fi-visit-a{margin:0 0 12px;color:#cfcfcf;font:400 13.5px/1.4 var(--b)}
+.fi-visit .btn{width:100%;min-height:44px;justify-content:center;text-align:center}
+.cv-f #u-un-ref{display:block;margin-top:6px}
+/* ===== D7 · content-visibility en secciones largas fuera de pantalla =====
+   No afecta a #unidades ni #horarios (tienen mapa/controles) ni a secciones con sticky interno. */
+#financiacion,#tu-usado,#busqueda,#preguntas,#visita,#contacto{content-visibility:auto;contain-intrinsic-size:auto 800px}
 
 /* A3: calculadora, checklist y preguntas dentro de la ficha */
 dialog.ficha .fi-calc,dialog.ficha .fi-faq{margin-top:16px;padding-top:14px;border-top:1px solid rgba(255,255,255,.14)}

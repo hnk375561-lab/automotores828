@@ -119,7 +119,7 @@ html body .ficha .fi-d{grid-template-columns:repeat(2,minmax(0,1fr));gap:0 14px;
 html body .ficha .fi-d div{padding:7px 0}
 html body .ficha .fi-ac{gap:6px;margin:3px 0 8px}
 html body .ficha .fi-sim,html body .ficha .fi-gu{margin-top:12px;padding-top:10px}
-html body .cmp{max-width:min(1500px,calc(100vw - 24px));max-height:calc(100dvh - 24px);overflow:hidden}
+html body .cmp{max-width:min(1500px,calc(100vw - 24px));max-height:calc(100dvh - 24px);overflow:auto;overscroll-behavior:contain}
 html body .cmp .cmp-sc{min-width:0;max-width:100%;overflow:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch}
 html body .cmp .cmpt{min-width:max(720px,calc(100% - 2px));table-layout:fixed;border-collapse:separate;border-spacing:0}
 html body .cmp .cmpt th,html body .cmp .cmpt td{vertical-align:top}

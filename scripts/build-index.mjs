@@ -100,7 +100,7 @@ const footer = (fuentes) => `<footer class="site-footer"><div class="w">
 const autos = A.autos;
 const cantidadMotos = autos.filter((a) => a.tipoVehiculo === 'Moto').length;
 const cantidadAutos = autos.length - cantidadMotos;
-const ctaHead = WA ? { href: WA, t: 'WhatsApp' } : { href: ML_PROFILE, t: 'Mercado Libre' };
+const ctaHead = { href: ML_PROFILE, t: 'Ver stock' };
 const header = (pre = '', skip = '#unidades') => `<a class="skip" href="${skip}">Saltar al contenido</a>
 <header class="site-header${pre ? ' site-header--inner' : ' site-header--home'}"><div class="w"><a class="mark" href="./" aria-label="${esc(NAME)}, inicio"><img class="lg-img" src="images/logo.png" width="320" height="320" alt="${esc(NAME)}"></a>
 <nav class="site-nav" id="site-nav" aria-label="Principal"><a href="${pre}#horarios">Horarios</a><a href="${pre}#unidades">Unidades</a><a href="${pre}#financiacion">Financiación</a><a href="${pre}#guia">Guía</a><a href="${pre}#preguntas">Preguntas</a><a href="${pre}#nosotros">Nosotros</a><a href="${pre}#contacto">Contacto</a><a href="${pre}#tu-usado">Tu usado</a><a href="${pre}#busqueda">Tu búsqueda</a><a href="${pre}#visita">Visita</a></nav>
@@ -138,7 +138,10 @@ const SW = { blanco: '#f1f1ee', negro: '#161b1d', rojo: '#c21f1f', 'gris plata':
 const swatch = (c) => SW[norm(c || '')] || null;
 const marcaDe = (a) => a.marca || a.titulo.split(' ')[0];
 const sinMarca = (a) => { const m = marcaDe(a); return a.tipoVehiculo === 'Moto' ? (a.modelo || a.titulo) : a.titulo.startsWith(m + ' ') ? a.titulo.slice(m.length + 1) : a.titulo; };
-const consultaHref = (a) => wa(a.vendida ? `Hola! Vi que el ${a.titulo}${a.anio ? ' ' + a.anio : ''} está vendido. ¿Tienen unidades similares?` : `Hola! Me interesa el ${a.titulo}${a.anio ? ' ' + a.anio : ''}.`) || a.url;
+const consultaHref = (a) => {
+  const desc = a.anio && !String(a.titulo).includes(String(a.anio)) ? `${a.titulo} ${a.anio}` : a.titulo;
+  return wa(a.vendida ? `Hola! Vi que el ${desc} está vendido. ¿Tienen unidades similares?` : `Hola! Me interesa el ${desc}.`) || a.url;
+};
 // Fotos opcionales: no se inventan ni se toman de terceros; solo se publican si data/ las autoriza.
 const mediaDe = (a) => (Array.isArray(a.fotos) ? a.fotos : Array.isArray(a.imagenes) ? a.imagenes : Array.isArray(a.galeria) ? a.galeria : []).map((x) => typeof x === 'string' ? { src: x, alt: a.titulo } : x).filter((x) => x && (x.src || x.url)).map((x) => ({ src: x.src || x.url, srcset: x.srcset || '', card: x.card || '', cardWidth: x.cardWidth || null, cardHeight: x.cardHeight || null, thumb: x.thumb || '', width: x.width || null, height: x.height || null, alt: x.alt || a.titulo, tipo: x.tipo || '' }));
 const cardSrcset = (m) => { if (m.srcset) return m.srcset; if (m.card) return `${m.card} ${m.cardWidth || 600}w, ${m.src} ${m.width || 900}w`; const k = /^(images\/stock\/unidad-\d+)\.webp$/.exec(m.src || ''); return k && fs.existsSync(new URL('../' + k[1] + '-640.webp', import.meta.url)) && fs.existsSync(new URL('../' + k[1] + '-1000.webp', import.meta.url)) ? `${k[1]}-640.webp 640w, ${k[1]}-1000.webp 1000w` : ''; };

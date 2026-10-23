@@ -2088,7 +2088,7 @@ section[id]::after{content:"";position:absolute;inset:0 auto 0 0;width:3px;backg
 
 /* ===== Capa final editorial 828 · aplicada después de las capas históricas ===== */
 .car-ph{position:relative;isolation:isolate;overflow:hidden}
-.car-badge{position:absolute;z-index:2;top:12px;right:12px;width:58px;height:58px;border:2px solid rgba(255,255,255,.9);border-radius:50%;background:#f7f7f5 url('images/logo-circle.png') center/82% no-repeat;box-shadow:0 5px 18px rgba(0,0,0,.28)}
+.car-badge{position:absolute;z-index:2;top:12px;right:12px;width:58px;height:58px;border:2px solid rgba(255,255,255,.9);border-radius:50%;background:#f7f7f5 url('images/logo-circle.png') center/82% no-repeat;box-shadow:0 5px 18px rgba(0,0,0,.28);pointer-events:none}
 .cars{grid-template-columns:repeat(3,minmax(0,1fr))}
 .hero-carousel-controls{display:flex!important;position:absolute;z-index:5;right:clamp(16px,4vw,64px);bottom:clamp(18px,4vw,48px);align-items:center;gap:8px;padding:8px 10px;border:1px solid rgba(255,255,255,.3);border-radius:999px;background:rgba(6,6,7,.9)}
 .hero-carousel-btn,.hero-carousel-toggle{min-height:32px;border:1px solid rgba(255,255,255,.28);border-radius:999px;background:transparent;color:#fff;cursor:pointer;font:700 11px/1 var(--hero-copy);letter-spacing:.08em}
@@ -2269,3 +2269,37 @@ dialog.ficha .fi-proof-c span{display:block;padding-top:8px;border-top:1px solid
 /* ===== D7 · content-visibility en secciones largas fuera de pantalla =====
    No afecta a #unidades ni #horarios (tienen mapa/controles) ni a secciones con sticky interno. */
 #financiacion,#tu-usado,#busqueda,#preguntas,#visita,#contacto{content-visibility:auto;contain-intrinsic-size:auto 800px}
+
+/* A3: calculadora, checklist y preguntas dentro de la ficha */
+dialog.ficha .fi-calc,dialog.ficha .fi-faq{margin-top:16px;padding-top:14px;border-top:1px solid rgba(255,255,255,.14)}
+dialog.ficha .fi-calc-g{display:grid;grid-template-columns:1fr 1fr;gap:10px 12px;margin:8px 0}
+dialog.ficha .fi-calc-f{display:grid;gap:4px;min-width:0}
+dialog.ficha .fi-calc-f label{color:#9e9e9e;font:700 10.5px/1.2 var(--b);letter-spacing:.12em;text-transform:uppercase}
+dialog.ficha .fi-calc-f input{width:100%;box-sizing:border-box;min-height:44px;padding:8px 10px;background:#070707;border:1px solid rgba(255,255,255,.22);color:#fff;font:400 16px var(--b)}
+dialog.ficha .fi-calc-f input:focus-visible{outline:2px solid var(--y);outline-offset:1px}
+dialog.ficha .fi-calc-f small{color:#9e9e9e;font-size:12px;line-height:1.35}
+dialog.ficha .fi-calc-r{display:grid;gap:6px;margin:10px 0;padding:12px 14px;background:rgba(255,255,255,.04);border-left:3px solid var(--y)}
+dialog.ficha .fi-calc-r div{display:flex;justify-content:space-between;gap:12px;color:#d6d6d6;font-size:14px}
+dialog.ficha .fi-calc-r strong{color:#fff}
+dialog.ficha .fi-calc-r .big strong{color:var(--y);font:italic 800 clamp(22px,2.4vw,28px)/1.1 var(--h)}
+dialog.ficha .fi-calc-e{margin:0;color:#ffb4b4;font-size:14px}
+dialog.ficha .fi-gu-p{margin:0 0 6px;color:#d6d6d6;font-size:13.5px;font-weight:700}
+dialog.ficha .fi-gu-b{display:block;height:6px;margin-bottom:10px;background:rgba(255,255,255,.14)}
+dialog.ficha .fi-gu-b i{display:block;height:100%;width:0;background:var(--y);transition:width .2s}
+dialog.ficha .fi-gu-l li label{display:flex;align-items:flex-start;gap:10px;min-height:44px;cursor:pointer}
+dialog.ficha .fi-gu-l li input{flex:none;width:20px;height:20px;margin:2px 0 0;accent-color:var(--y)}
+dialog.ficha .fi-gu-l li.on span{color:#9e9e9e;text-decoration:line-through}
+dialog.ficha .fi-faq details.dd summary{font-size:15px}
+dialog.ficha .fi-faq details.dd p{font-size:14.5px}
+@media(max-width:400px){dialog.ficha .fi-calc-g{grid-template-columns:1fr}}
+@media(prefers-reduced-motion:reduce){dialog.ficha .fi-gu-b i{transition:none}}
+
+/* A3.4: favoritos */
+.fav-b{flex:none;display:inline-grid;place-items:center;width:44px;height:44px;margin:0 6px 0 auto;padding:0;background:transparent;border:2px solid var(--g3);color:#fff;cursor:pointer}
+.fav-b svg{width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:2;stroke-linejoin:round}
+.fav-b:hover{border-color:var(--y);color:var(--y)}
+.fav-b.on{background:var(--y);border-color:var(--y);color:var(--ink)}
+.fav-b.on svg{fill:currentColor}
+.fav-b:focus-visible,.fx-fav:focus-visible{outline:3px solid var(--fo);outline-offset:2px}
+.fx-fav[aria-pressed="true"],.fav-fi.on{background:var(--y);border-color:var(--y);color:var(--ink)}
+.fx-favv{margin:12px 0;padding:14px 16px;border-left:3px solid var(--y);background:rgba(255,255,255,.04);color:#e8e8e8}

@@ -126,10 +126,6 @@
         var h = li.querySelector('.car-h') || li;
         h.insertBefore(b, h.querySelector('.car-c'));
       });
-      favBtn.addEventListener('click', function () { soloFav = !soloFav; favSync(); aplicar(true); });
-      favTodas.addEventListener('click', function () { soloFav = false; favSync(); aplicar(true); });
-      window.addEventListener('storage', function (e) { if (e.key === FAV_KEY) { favs = favLeer(); favSync(); aplicar(false); } });
-      favSync();
 
       /* ----- definición de los filtros (todo sale de los datos publicados) ----- */
       function uniq(f) {
@@ -287,6 +283,10 @@
       var favTodas = el('button', 'Ver todas las unidades', 'btn sm'); favTodas.type = 'button';
       favVacio.appendChild(document.createTextNode(' ')); favVacio.appendChild(favTodas);
       if (sinres && sinres.parentNode) sinres.parentNode.insertBefore(favVacio, sinres); else act.appendChild(favVacio);
+      favBtn.addEventListener('click', function () { soloFav = !soloFav; favSync(); aplicar(true); });
+      favTodas.addEventListener('click', function () { soloFav = false; favSync(); aplicar(true); });
+      window.addEventListener('storage', function (e) { if (e.key === FAV_KEY) { favs = favLeer(); favSync(); aplicar(false); } });
+      favSync();
 
       var refs = {};   /* k -> { g, inputs:[{o,input,n}], select, note, d, h } */
       GR.forEach(function (g) {
@@ -841,7 +841,7 @@ ul.appendChild(frag);
         if (ctx.wa) {
           var waB = enlace('', a.href || ctx.wa, 'btn sm fi-wa', true);
           waB.setAttribute('aria-label', 'WhatsApp ' + (ctx.waTxt || '') + ': consultar por ' + (a.titulo || 'esta unidad'));
-          waB.innerHTML = '<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="currentColor" d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm0 18.2c-1.5 0-3-.4-4.2-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2zm4.5-6.1c-.2-.1-1.5-.7-1.7-.8-.2-.1-.4-.1-.6.1l-.8 1c-.1.2-.3.2-.5.1a6.700 6.7 6.7 0 0 1-3.3-2.9c-.2-.4.2-.4.7-1.300.1-.2 0-.3 0-.5l-.8-1.800c-.2-.5-.4-.4-.6-.4h-.5c-.2 0-.5.1-.7.3-.2.300-.9.900-.9 2.200s.9 2.500 1.100 2.700c.1.200 1.800 2.800 4.400 3.900 1.600.7 2.300.7 3.100.6.500-.1 1.500-.6 1.700-1.200.2-.6.2-1.100.2-1.200-.1-.1-.2-.2-.5-.3z"/></svg><span></span>';
+          waB.innerHTML = '<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="currentColor" d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm0 18.2c-1.5 0-3-.4-4.2-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2zm4.5-6.1c-.2-.1-1.5-.7-1.7-.8-.2-.1-.4-.1-.6.1l-.8 1c-.1.2-.3.2-.5.1a6.7 6.7 0 0 1-3.3-2.9c-.2-.4.2-.4.7-1.300.1-.2 0-.3 0-.5l-.8-1.800c-.2-.5-.4-.4-.6-.4h-.5c-.2 0-.5.1-.7.3-.2.300-.9.900-.9 2.200s.9 2.500 1.100 2.700c.1.200 1.800 2.800 4.400 3.900 1.600.7 2.300.7 3.100.6.500-.1 1.500-.6 1.700-1.200.2-.6.2-1.100.2-1.200-.1-.1-.2-.2-.5-.3z"/></svg><span></span>';
           waB.lastChild.textContent = 'WhatsApp' + (ctx.waTxt ? ' · ' + ctx.waTxt : '');
           ac2.appendChild(waB);
         }
