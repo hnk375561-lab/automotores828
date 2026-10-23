@@ -747,6 +747,9 @@
         var extras = (a.atributosPublicados || []).filter(function (x) { return x && x.nombre && x.valor && !yaVisible[norm(x.nombre)]; });
         if (extras.length) {
           var ep = el('details', null, 'fi-extra');
+          /* Las fichas deben mostrar la información publicada completa al abrirse:
+             el contenido no se elimina ni queda oculto detrás de un acordeón. */
+          ep.open = true;
           ep.appendChild(el('summary', 'Más características publicadas (' + extras.length + ')', 'fi-s-k'));
           var edl = el('dl', null, 'fi-d');
           extras.forEach(function (x) { var row = el('div'); row.appendChild(el('dt', x.nombre)); row.appendChild(el('dd', x.valor)); edl.appendChild(row); });

@@ -2198,6 +2198,17 @@ dialog.ficha .fi-extra[open]>summary::after{content:"−"}
 dialog.ficha .fi-extra[open]>.fi-d{margin-top:6px}
 dialog.ficha .fi-map{height:156px;min-height:156px}
 @media(max-width:800px){dialog.ficha .fi-map{height:144px;min-height:144px}}
+
+/* Fichas: mostrar la información publicada completa y compactarla sin huecos. */
+dialog.ficha .fi-g{align-items:start}
+dialog.ficha .fi-l{align-self:start}
+dialog.ficha .fi-extra{display:block;margin:8px 0 12px;padding-top:6px;border-top:1px solid rgba(255,255,255,.14)}
+dialog.ficha .fi-extra>summary{margin-bottom:3px}
+dialog.ficha .fi-extra>.fi-d{grid-template-columns:repeat(3,minmax(0,1fr));gap:0 12px;margin:4px 0 0}
+dialog.ficha .fi-extra>.fi-d div{padding:5px 0}
+dialog.ficha .fi-extra>.fi-d dt{font-size:9.5px;line-height:1.15;letter-spacing:.1em}
+dialog.ficha .fi-extra>.fi-d dd{margin-top:3px;font-size:13.5px;line-height:1.2}
+@media(max-width:800px){dialog.ficha .fi-extra>.fi-d{grid-template-columns:repeat(2,minmax(0,1fr));gap:0 10px}}
 </style>
 <link rel="stylesheet" href="css/dr-identidad.css">
 <link rel="stylesheet" href="css/hero-carousel.css?v=20261022-2">
