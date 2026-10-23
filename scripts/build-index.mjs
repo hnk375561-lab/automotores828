@@ -511,7 +511,7 @@ const HERO_FOTOS = [
   ['10', 'images/hero/hero-10.webp', 'images/hero/hero-10-828.webp', 900, 1200, 621, 'Renault Duster 2018 en Automotores 828'],
 ];
 const HERO_VERSION = '?v=20261021-2';
-const HERO_CHAIN = HERO_FOTOS.map(([n, src, small, width, height, smallWidth, alt]) => `<figure class="hero-chain-car hero-chain-car--${n}"><img src="${src}${HERO_VERSION}" srcset="${small}${HERO_VERSION} ${smallWidth}w, ${src}${HERO_VERSION} ${width}w" sizes="25vw" width="${width}" height="${height}" alt="${esc(alt)}" decoding="async" loading="lazy"></figure>`).join('');
+const HERO_CHAIN = HERO_FOTOS.map(([n, src, small, width, height, smallWidth, alt], i) => `<figure class="hero-chain-car hero-chain-car--${n}"><img src="${src}${HERO_VERSION}" srcset="${small}${HERO_VERSION} ${smallWidth}w, ${src}${HERO_VERSION} ${width}w" sizes="25vw" width="${width}" height="${height}" alt="${esc(alt)}" decoding="async"${i === 0 ? ' fetchpriority="high"' : ' loading="lazy"'}></figure>`).join('');
 const HERO_CHAIN_DUP = HERO_FOTOS.map(([n, src, small, width, height, smallWidth, alt]) => `<figure class="hero-chain-car hero-chain-car--${n}" aria-hidden="true"><img src="${src}${HERO_VERSION}" srcset="${small}${HERO_VERSION} ${smallWidth}w, ${src}${HERO_VERSION} ${width}w" sizes="25vw" width="${width}" height="${height}" alt="" decoding="async" loading="lazy"></figure>`).join('');
 
 const index = page({
