@@ -59,8 +59,7 @@
     var lat = Number(root.dataset.lat), lng = Number(root.dataset.lng);
     var nombre = root.dataset.nombre || 'Automotores 828', dir = root.dataset.dir || '', gmaps = root.dataset.gmaps || '';
     var destination = encodeURIComponent(dir || (lat + ',' + lng));
-    var googleDirections = 'https://www.google.com/maps/dir/?api=1&destination=' + destination;
-    var wazeDirections = 'https://waze.com/ul?ll=' + encodeURIComponent(lat + ',' + lng) + '&navigate=yes';
+    var googleDirections = gmaps || ('https://www.google.com/maps/dir/?api=1&destination=' + destination);
     var mapa = null;
     function dijo(t) { if (status) status.textContent = t || ''; }
     function respaldo() {
@@ -74,7 +73,6 @@
       if (dir) w.appendChild(el('p', dir, 'dr-pop-a'));
       var links = el('div', null, 'dr-pop-actions');
       var maps = el('a', 'Cómo llegar', 'dr-pop-l'); maps.href = googleDirections; maps.target = '_blank'; maps.rel = 'noopener noreferrer'; links.appendChild(maps);
-      var waze = el('a', 'Abrir en Waze', 'dr-pop-l dr-pop-l--secondary'); waze.href = wazeDirections; waze.target = '_blank'; waze.rel = 'noopener noreferrer'; links.appendChild(waze);
       w.appendChild(links);
       return w;
     }

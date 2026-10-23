@@ -149,3 +149,10 @@ html body .cmp .cmpt .big{display:block;min-height:1.3em}
     letter-spacing: .04em;
   }
 }
+
+/* WhatsApp en ficha y footer */
+.fi-wa{display:inline-flex;align-items:center;gap:8px;background:#128c4a;border-color:#128c4a;color:#fff}
+.fi-wa:hover,.fi-wa:focus-visible{background:#0e703a;border-color:#fff;color:#fff}
+.fi-wa svg{width:18px;height:18px;flex:none}
+.ft-wa a{display:inline-flex;align-items:center;gap:8px}
+.ft-wa svg{width:18px;height:18px;flex:none;fill:none;stroke:currentColor;stroke-width:1.7}
