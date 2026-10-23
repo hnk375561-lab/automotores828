@@ -2225,17 +2225,75 @@ dialog.ficha .fi-s{flex:none}
 .dr-pin-b::after{content:"";position:absolute;width:12px;height:12px;border-radius:50%;background:#fff;border:2px solid #060607}
 .dr-pin-b svg{position:relative;z-index:1;width:18px;height:18px;transform:rotate(45deg);stroke:#060607;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;opacity:.85}
 .dr-pin-r{position:absolute;left:10px;top:36px;width:28px;height:8px;border:0!important;border-radius:50%;background:rgba(6,6,7,.28);box-shadow:0 0 0 5px rgba(238,28,34,.12);animation:none!important}
+
+/* Componentes de alto contraste para contenido narrativo sobre fondos fotográficos. */
+:root{--rojo:#e10600;--negro:#060607;--blanco:#fff}
+.photo-copy-panel{box-sizing:border-box;padding:clamp(20px,2vw,28px);border:1px solid rgba(255,255,255,.12);border-left:4px solid var(--rojo);border-radius:8px;background:rgba(0,0,0,.72);-webkit-backdrop-filter:blur(5px);backdrop-filter:blur(5px);box-shadow:0 12px 36px rgba(0,0,0,.3)}
+.photo-copy-panel p,.photo-copy-panel li,.photo-copy-panel h2{color:var(--blanco);text-shadow:0 1px 2px rgba(0,0,0,.72)}
+html body #tu-usado .photo-copy-panel .sec-p,html body #busqueda .photo-copy-panel .sec-p,html body .photo-copy-panel .cv-steps span,html body #tu-usado .photo-copy-panel h2,html body #busqueda .photo-copy-panel h2{color:#fff;text-shadow:0 1px 2px rgba(0,0,0,.72)}
+.photo-copy-panel .cv-steps{margin-block:20px}
+.photo-copy-panel .cv-steps li{padding:12px 14px 12px 58px;background:rgba(0,0,0,.54);border-left:2px solid var(--rojo)}
+.photo-copy-panel .cv-pills li{background:rgba(0,0,0,.86);border:1px solid rgba(255,255,255,.32);color:#fff}
+.photo-copy-panel a:focus-visible,.photo-copy-panel button:focus-visible{outline:3px solid #fff;outline-offset:3px}
+
+/* Footer editorial 828: marca, navegación, contacto y servicios en cuatro columnas. */
+.site-footer{padding:0 0 calc(28px + env(safe-area-inset-bottom,0px));background-color:#060607;background-image:linear-gradient(90deg,rgba(6,6,7,.97),rgba(6,6,7,.88)),url("images/fondos/fondo-contacto.webp");background-position:center;background-size:cover;color:#fff}
+.site-footer>.w{width:min(1200px,calc(100% - 40px));margin-inline:auto}
+.ft-cta{display:flex;align-items:center;justify-content:space-between;gap:24px;padding:28px 0;border-bottom:1px solid rgba(255,255,255,.2)}
+.ft-cta-k{margin:0 0 6px;color:#ff7777;font-size:11px;font-weight:800;letter-spacing:.16em}
+.ft-cta-t{margin:0;color:#fff;font-size:clamp(20px,2.5vw,30px);font-weight:800}
+.ft-cta-t em{color:#ff4a4a;font-style:italic}
+.ft-cta-btn{display:inline-flex;align-items:center;justify-content:center;gap:12px;min-height:48px;padding:0 18px;background:#e10600;color:#fff;text-decoration:none;font-weight:800;letter-spacing:.04em;transition:background .2s,transform .2s}
+.ft-cta-btn:hover{background:#ff2a20;transform:translateY(-2px)}
+.ft{display:grid;grid-template-columns:1.25fr 1fr 1.1fr 1.15fr;gap:clamp(18px,3vw,38px);padding:30px 0 24px;margin:0;border-bottom:1px solid rgba(255,255,255,.2)}
+.ft-col{min-width:0}
+.ft .lg-ft{width:64px;height:64px;object-fit:contain;border-radius:50%;background:transparent;padding:0;margin:0 0 12px}
+.ft-b{margin:0 0 9px;color:#fff;font-size:22px}
+.ft-desc,.ft-address,.ft-pending,.ft-contact-link{color:#f1f1f1;font-size:14px;line-height:1.55}
+.ft-address a,.ft-contact-link a,.ft-links a,.ft-bottom a{color:#fff;text-underline-offset:4px;text-decoration-color:rgba(225,6,0,.78);text-decoration-thickness:1px;transition:color .18s,text-decoration-color .18s}
+.site-footer a:hover{color:#ff7777;text-decoration-color:#ff7777}
+.ft-badge{display:inline-flex;margin-top:8px;padding:7px 10px;border:1px solid rgba(255,255,255,.28);border-left:3px solid #e10600;color:#fff;font-size:11px;font-weight:700;letter-spacing:.04em}
+.ft-k{margin:3px 0 14px!important;color:#ff4a4a!important;font-size:12px!important;font-weight:800!important;letter-spacing:.15em!important}
+.ft-links{display:grid;gap:2px;margin:0;padding:0;list-style:none}
+.ft-links a{display:inline-flex;align-items:center;min-height:30px;font-size:13px}
+.ft-pending{padding:9px 10px;border-left:2px solid #e10600;background:rgba(0,0,0,.55)}
+.ft-hours{margin-top:16px;padding:12px;background:rgba(0,0,0,.52);border:1px solid rgba(255,255,255,.14)}
+.ft-hours .ft-k{display:block;margin-bottom:7px!important}
+.ft-hours [data-estado]{margin:0;color:#fff;font-size:14px;font-weight:800}
+.ft-hours [data-abierto="1"]{color:#83e2a1}.ft-hours [data-abierto="0"]{color:#ff9a9a}
+.ft-social{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 14px;padding:0;list-style:none}
+.ft-social a{display:inline-flex;align-items:center;gap:8px;min-height:40px;padding:0 10px;border:1px solid rgba(255,255,255,.25);color:#fff;text-decoration:none;transition:border-color .18s,transform .18s}
+.ft-social a:hover{border-color:#e10600;transform:translateY(-2px)}
+.ft-social svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.ft-social li:first-child svg{fill:currentColor;stroke:none}
+.ft-ctas{display:grid;gap:7px}
+.ft-ctas a{display:flex;align-items:center;min-height:42px;padding:0 12px;background:#e10600;color:#fff;text-decoration:none;font-size:12px;font-weight:800;letter-spacing:.03em;transition:background .18s,transform .18s}
+.ft-ctas a:hover{background:#ff2a20;transform:translateX(3px)}
+.ft-services{display:flex;flex-wrap:wrap;gap:6px;margin-top:12px}
+.ft-services span{padding:6px 8px;border:1px solid rgba(255,255,255,.24);background:rgba(0,0,0,.4);color:#fff;font-size:11px}
+.ft-bottom{display:flex;flex-wrap:wrap;align-items:center;gap:8px 18px;padding-top:18px;color:#e4e4e4;font-size:12px;line-height:1.5}
+.ft-bottom p{margin:0}.ft-bottom .demo-note{flex-basis:100%;color:#ddd}.ft-copy{font-weight:700}.ft-top{margin-left:auto}
+.dr-pin{width:40px!important;height:52px!important;margin:0!important;border:0!important;background:transparent!important;box-shadow:none!important;filter:drop-shadow(0 2px 3px rgba(0,0,0,.65));pointer-events:auto}
+.dr-pin svg{display:block;width:40px!important;height:52px!important;max-width:none!important;transform:none!important;overflow:visible}
+.dr-pin-b::after,.dr-pin-r{display:none!important}
+.dr-map-v .dr-pop-actions{display:flex;flex-wrap:wrap;gap:7px}
+.dr-map-v .dr-pop-l{display:inline-flex;align-items:center;justify-content:center;min-height:38px;padding:0 10px;border:1px solid #b30000;background:#e10600;color:#fff!important;font-weight:800;text-decoration:none;border-radius:3px}
+.dr-map-v .dr-pop-l--secondary{border-color:#333;background:#111;color:#fff!important}
+.dr-map-v .dr-pop-l:focus-visible{outline:3px solid #e10600;outline-offset:2px}
+@media(max-width:900px){.ft{grid-template-columns:repeat(2,minmax(0,1fr))}.ft-col{padding:4px 0}}
+@media(max-width:520px){.site-footer>.w{width:calc(100% - 32px)}.ft-cta{align-items:stretch;flex-direction:column;padding:22px 0}.ft-cta-btn{width:100%;box-sizing:border-box}.ft{grid-template-columns:minmax(0,1fr);gap:18px;padding-top:24px}.ft-col{padding-bottom:16px;border-bottom:1px solid rgba(255,255,255,.14)}.ft-col:last-child{border-bottom:0}.ft-bottom{align-items:flex-start;flex-direction:column;gap:7px}.ft-top{margin-left:0}.photo-copy-panel{padding:20px 18px}.ft-links a{min-height:38px}}
+@media(prefers-reduced-motion:reduce){.ft-cta-btn,.ft-social a,.ft-ctas a{transition:none!important;transform:none!important}}
 </style>
 <link rel="stylesheet" href="css/dr-identidad.css">
 <link rel="stylesheet" href="css/hero-carousel.css?v=20261023-3">
 <link rel="stylesheet" href="css/fondos-secciones.css">
 <link rel="stylesheet" href="css/damero-secciones.css?v=20261022-7">
-<script type="application/ld+json">{"@context":"https://schema.org","@type":"AutoDealer","name":"Automotores 828","address":{"@type":"PostalAddress","streetAddress":"Blvd. Buenos Aires 828","postalCode":"B1842","addressLocality":"Monte Grande","addressRegion":"Buenos Aires","addressCountry":"AR"},"sameAs":["https://www.facebook.com/automotoressrl828/","https://www.instagram.com/automotores828/"],"email":"automotores828@live.com","hasMap":"https://www.google.com/maps/place/Automotores+828+SRL/@-34.8137588,-58.4555267,17z/data=!4m15!1m8!3m7!1s0x95bcd3dc6c2273fd:0xf9dc7d0717e644c1!2sBlvd.+Buenos+Aires+828,+B1842+Monte+Grande,+Provincia+de+Buenos+Aires!3b1!8m2!3d-34.8137588!4d-58.4555267!16s%2Fg%2F11s3ldxgn0!3m5!1s0x95bcd3dc6bd3f11f:0x23494f2381c7b3b5!8m2!3d-34.8137588!4d-58.4555267!16s%2Fg%2F1hc32h2qs?entry=ttu&g_ep=EgoyMDI2MTAyMC4wIKXMDSoASAFQAw%3D%3D","geo":{"@type":"GeoCoordinates","latitude":-34.8137588,"longitude":-58.4555267},"openingHoursSpecification":[{"@type":"OpeningHoursSpecification","dayOfWeek":["Monday","Tuesday","Wednesday","Thursday","Friday"],"opens":"09:00","closes":"13:00"},{"@type":"OpeningHoursSpecification","dayOfWeek":["Monday","Tuesday","Wednesday","Thursday","Friday"],"opens":"15:00","closes":"19:00"},{"@type":"OpeningHoursSpecification","dayOfWeek":["Saturday"],"opens":"09:00","closes":"13:00"}]}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"AutoDealer","name":"Automotores 828","address":{"@type":"PostalAddress","streetAddress":"Blvd. Buenos Aires 828","postalCode":"B1842","addressLocality":"Monte Grande","addressRegion":"Buenos Aires","addressCountry":"AR"},"sameAs":["https://www.facebook.com/automotoressrl828/","https://www.instagram.com/automotores828/"],"email":"automotores828@live.com","hasMap":"https://www.google.com/maps/dir/?api=1&destination=Blvd.%20Buenos%20Aires%20828%2C%20B1842%20Monte%20Grande%2C%20Buenos%20Aires%2C%20Argentina","geo":{"@type":"GeoCoordinates","latitude":-34.8138439,"longitude":-58.455598},"openingHoursSpecification":[{"@type":"OpeningHoursSpecification","dayOfWeek":["Monday","Tuesday","Wednesday","Thursday","Friday"],"opens":"09:00","closes":"13:00"},{"@type":"OpeningHoursSpecification","dayOfWeek":["Monday","Tuesday","Wednesday","Thursday","Friday"],"opens":"15:00","closes":"19:00"},{"@type":"OpeningHoursSpecification","dayOfWeek":["Saturday"],"opens":"09:00","closes":"13:00"}]}</script>
 <script defer src="js/hero-carousel.js?v=20261022-3"></script>
 <script defer src="js/hero-motion.js?v=20261023-3"></script>
 <script defer src="js/fondos-secciones.js"></script>
 <script defer src="js/secciones.js"></script>
-<script defer src="js/mapa.js?v=20261022-4"></script>
+<script defer src="js/mapa.js?v=20261023-1"></script>
 <script defer src="js/horarios.js"></script>
 <script defer src="js/site.js?v=20261022-2"></script>
 <script defer src="js/reserva-inline.js"></script>
@@ -2254,7 +2312,7 @@ dialog.ficha .fi-s{flex:none}
 <p class="ey">Monte Grande · Esteban Echeverría</p>
 <h1><span class="sr">Automotores 828: </span>Autos y motos <em>en Monte Grande</em></h1>
 <p class="lead">Compra y venta de vehículos usados, permutas y consignaciones. Consultá por financiación.</p>
-<div class="row"><a class="btn p" href="#unidades">Ver unidades</a><a class="btn lnk" href="https://www.google.com/maps/place/Automotores+828+SRL/@-34.8137588,-58.4555267,17z/data=!4m15!1m8!3m7!1s0x95bcd3dc6c2273fd:0xf9dc7d0717e644c1!2sBlvd.+Buenos+Aires+828,+B1842+Monte+Grande,+Provincia+de+Buenos+Aires!3b1!8m2!3d-34.8137588!4d-58.4555267!16s%2Fg%2F11s3ldxgn0!3m5!1s0x95bcd3dc6bd3f11f:0x23494f2381c7b3b5!8m2!3d-34.8137588!4d-58.4555267!16s%2Fg%2F1hc32h2qs?entry=ttu&g_ep=EgoyMDI2MTAyMC4wIKXMDSoASAFQAw%3D%3D" target="_blank" rel="noopener noreferrer">Cómo llegar</a></div></div>
+<div class="row"><a class="btn p" href="#unidades">Ver unidades</a><a class="btn lnk" href="https://www.google.com/maps/dir/?api=1&destination=Blvd.%20Buenos%20Aires%20828%2C%20B1842%20Monte%20Grande%2C%20Buenos%20Aires%2C%20Argentina" target="_blank" rel="noopener noreferrer">Cómo llegar</a></div></div>
 <a class="hx-down" href="#unidades">Explorá las unidades</a>
 </div>
 </div>
@@ -2274,12 +2332,12 @@ dialog.ficha .fi-s{flex:none}
 <p class="dr-tz">Hora de Argentina: ahora son las <b data-reloj>--:--:--</b></p>
 </div>
 <div class="dr-mapwrap">
-<div class="dr-map" id="mapa" data-lat="-34.8137588" data-lng="-58.4555267" data-nombre="Automotores 828" data-dir="Blvd. Buenos Aires 828, Monte Grande, Buenos Aires" data-gmaps="https://www.google.com/maps/place/Automotores+828+SRL/@-34.8137588,-58.4555267,17z/data=!4m15!1m8!3m7!1s0x95bcd3dc6c2273fd:0xf9dc7d0717e644c1!2sBlvd.+Buenos+Aires+828,+B1842+Monte+Grande,+Provincia+de+Buenos+Aires!3b1!8m2!3d-34.8137588!4d-58.4555267!16s%2Fg%2F11s3ldxgn0!3m5!1s0x95bcd3dc6bd3f11f:0x23494f2381c7b3b5!8m2!3d-34.8137588!4d-58.4555267!16s%2Fg%2F1hc32h2qs?entry=ttu&amp;g_ep=EgoyMDI2MTAyMC4wIKXMDSoASAFQAw%3D%3D" data-leaflet="js/vendor/leaflet.js" data-css="js/vendor/leaflet.css" data-manual-map="1">
+<div class="dr-map" id="mapa" data-lat="-34.8138439" data-lng="-58.455598" data-nombre="Automotores 828" data-dir="Blvd. Buenos Aires 828, Monte Grande, Buenos Aires" data-gmaps="https://www.google.com/maps/dir/?api=1&amp;destination=Blvd.%20Buenos%20Aires%20828%2C%20B1842%20Monte%20Grande%2C%20Buenos%20Aires%2C%20Argentina" data-leaflet="js/vendor/leaflet.js" data-css="js/vendor/leaflet.css" data-manual-map="1">
 <div class="dr-map-v" role="region" aria-label="Mapa con la ubicación de Automotores 828"></div>
-<div class="dr-map-ph" data-mapa-ph><span class="dr-map-ic"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s-7-6.2-7-11a7 7 0 0 1 14 0c0 4.8-7 11-7 11z"/><circle cx="12" cy="10" r="2.5"/></svg></span><p>Mapa de Monte Grande</p><div class="row"><button class="btn p sm" type="button" data-mapa-abrir hidden>Ver mapa</button><a class="btn sm" href="https://www.google.com/maps/place/Automotores+828+SRL/@-34.8137588,-58.4555267,17z/data=!4m15!1m8!3m7!1s0x95bcd3dc6c2273fd:0xf9dc7d0717e644c1!2sBlvd.+Buenos+Aires+828,+B1842+Monte+Grande,+Provincia+de+Buenos+Aires!3b1!8m2!3d-34.8137588!4d-58.4555267!16s%2Fg%2F11s3ldxgn0!3m5!1s0x95bcd3dc6bd3f11f:0x23494f2381c7b3b5!8m2!3d-34.8137588!4d-58.4555267!16s%2Fg%2F1hc32h2qs?entry=ttu&g_ep=EgoyMDI2MTAyMC4wIKXMDSoASAFQAw%3D%3D" target="_blank" rel="noopener noreferrer">Abrir en Google Maps</a></div><p class="map-m src" role="status" aria-live="polite"></p></div>
+<div class="dr-map-ph" data-mapa-ph><span class="dr-map-ic"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s-7-6.2-7-11a7 7 0 0 1 14 0c0 4.8-7 11-7 11z"/><circle cx="12" cy="10" r="2.5"/></svg></span><p>Mapa de Monte Grande</p><div class="row"><button class="btn p sm" type="button" data-mapa-abrir hidden>Ver mapa</button><a class="btn sm" href="https://www.google.com/maps/dir/?api=1&destination=Blvd.%20Buenos%20Aires%20828%2C%20B1842%20Monte%20Grande%2C%20Buenos%20Aires%2C%20Argentina" target="_blank" rel="noopener noreferrer">Abrir en Google Maps</a></div><p class="map-m src" role="status" aria-live="polite"></p></div>
 </div>
 <div class="dr-addr"><div class="dr-addr-t"><span class="dr-addr-i"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s-7-6.2-7-11a7 7 0 0 1 14 0c0 4.8-7 11-7 11z"/><circle cx="12" cy="10" r="2.5"/></svg></span><div><p class="dr-k">Dónde estamos</p><p class="dr-a">Blvd. Buenos Aires 828, Monte Grande, Buenos Aires</p></div></div>
-<div class="row"><a class="btn p sm" href="https://www.google.com/maps/place/Automotores+828+SRL/@-34.8137588,-58.4555267,17z/data=!4m15!1m8!3m7!1s0x95bcd3dc6c2273fd:0xf9dc7d0717e644c1!2sBlvd.+Buenos+Aires+828,+B1842+Monte+Grande,+Provincia+de+Buenos+Aires!3b1!8m2!3d-34.8137588!4d-58.4555267!16s%2Fg%2F11s3ldxgn0!3m5!1s0x95bcd3dc6bd3f11f:0x23494f2381c7b3b5!8m2!3d-34.8137588!4d-58.4555267!16s%2Fg%2F1hc32h2qs?entry=ttu&g_ep=EgoyMDI2MTAyMC4wIKXMDSoASAFQAw%3D%3D" target="_blank" rel="noopener noreferrer">Cómo llegar</a><a class="btn sm" href="https://waze.com/ul?ll=-34.8137588,-58.4555267&amp;navigate=yes" target="_blank" rel="noopener noreferrer">Abrir en Waze</a><button class="btn sm" type="button" data-copiar="Blvd. Buenos Aires 828, Monte Grande, Buenos Aires" hidden>Copiar dirección</button></div></div>
+<div class="row"><a class="btn p sm" href="https://www.google.com/maps/dir/?api=1&destination=Blvd.%20Buenos%20Aires%20828%2C%20B1842%20Monte%20Grande%2C%20Buenos%20Aires%2C%20Argentina" target="_blank" rel="noopener noreferrer">Cómo llegar</a><a class="btn sm" href="https://waze.com/ul?ll=-34.8138439,-58.455598&amp;navigate=yes" target="_blank" rel="noopener noreferrer">Abrir en Waze</a><button class="btn sm" type="button" data-copiar="Blvd. Buenos Aires 828, Monte Grande, Buenos Aires" hidden>Copiar dirección</button></div></div>
 </div>
 </div>
 <p class="src dr-src">Las franjas indican el horario general de atención. La disponibilidad de los vehículos puede cambiar y una consulta no reserva por sí sola una unidad; confirmá ambos puntos con el equipo antes de salir. Las indicaciones de Google Maps y Waze están disponibles junto al mapa, que solo carga cuando elegís verlo.</p>
@@ -2759,7 +2817,7 @@ dialog.ficha .fi-s{flex:none}
 </ul>
 <div class="inventory-more-wrap" id="inventory-more-wrap"><p class="inventory-more-note" id="inventory-more-note" role="status" aria-live="polite">Cargando unidades…</p><button class="btn p inventory-more-btn" id="inventory-more" type="button" aria-controls="cars" aria-label="Mostrar más unidades" hidden>Mostrar más unidades</button></div>
 <script type="application/json" id="cat-data" data-src="js/units.min.json"></script>
-<script type="application/json" id="cat-ctx">{"nombre":"Automotores 828","tel":null,"telTxt":null,"wa":null,"waTxt":null,"email":"automotores828@live.com","maps":"https://www.google.com/maps/place/Automotores+828+SRL/@-34.8137588,-58.4555267,17z/data=!4m15!1m8!3m7!1s0x95bcd3dc6c2273fd:0xf9dc7d0717e644c1!2sBlvd.+Buenos+Aires+828,+B1842+Monte+Grande,+Provincia+de+Buenos+Aires!3b1!8m2!3d-34.8137588!4d-58.4555267!16s%2Fg%2F11s3ldxgn0!3m5!1s0x95bcd3dc6bd3f11f:0x23494f2381c7b3b5!8m2!3d-34.8137588!4d-58.4555267!16s%2Fg%2F1hc32h2qs?entry=ttu&g_ep=EgoyMDI2MTAyMC4wIKXMDSoASAFQAw%3D%3D","dir":"Blvd. Buenos Aires 828, Monte Grande, Buenos Aires","horario":"L-V 9–13 y 15–19 · S 9–13","ig":"https://www.instagram.com/automotores828/","fb":"https://www.facebook.com/automotoressrl828/","ciudad":"Monte Grande","servicios":["Permutas","Consignaciones","Consultá por financiación"],"coordenadas":{"lat":-34.8137588,"lng":-58.4555267}}</script>
+<script type="application/json" id="cat-ctx">{"nombre":"Automotores 828","tel":null,"telTxt":null,"wa":null,"waTxt":null,"email":"automotores828@live.com","maps":"https://www.google.com/maps/dir/?api=1&destination=Blvd.%20Buenos%20Aires%20828%2C%20B1842%20Monte%20Grande%2C%20Buenos%20Aires%2C%20Argentina","dir":"Blvd. Buenos Aires 828, Monte Grande, Buenos Aires","horario":"L-V 9–13 y 15–19 · S 9–13","ig":"https://www.instagram.com/automotores828/","fb":"https://www.facebook.com/automotoressrl828/","ciudad":"Monte Grande","servicios":["Permutas","Consignaciones","Consultá por financiación"],"coordenadas":{"lat":-34.8138439,"lng":-58.455598}}</script>
 <p class="src">Stock al 21/10/2026. Consultá precio y disponibilidad actualizados por nuestros canales de contacto.</p>
 <div class="row mt"><a class="btn p" href="https://www.instagram.com/automotores828/" target="_blank" rel="noopener noreferrer">Ver más en Instagram</a><a class="btn" href="https://www.facebook.com/automotoressrl828/" target="_blank" rel="noopener noreferrer">Ver más en Facebook</a></div>
 </div></section>
@@ -2775,7 +2833,7 @@ dialog.ficha .fi-s{flex:none}
 
 <section class="conversion conversion--trade" id="tu-usado" aria-labelledby="usado-t"><div class="w">
 <div class="conversion-layout">
-<div class="conversion-story">
+<div class="conversion-story photo-copy-panel">
 <p class="ey"><span class="ey-brand">828</span> · Tu próximo paso</p><h2 id="usado-t">Entregá tu usado como <em>parte de pago</em></h2>
 <p class="sec-p">Tomamos permutas. Contanos cuál es y armá el mensaje para enviárselo a Automotores 828 por el canal que prefieras.</p>
 <ol class="cv-steps"><li><b>Contanos qué tenés</b><span>Marca, modelo, año y kilometraje alcanzan para empezar.</span></li><li><b>Mirá tu mensaje armarse</b><span>Se escribe solo a medida que completás los datos.</span></li><li><b>Envialo a Automotores 828</b><span>Por el canal que prefieras. Las condiciones se acuerdan con ellos.</span></li></ol>
@@ -2810,7 +2868,7 @@ dialog.ficha .fi-s{flex:none}
 
 <section class="conversion conversion--search lt" id="busqueda" aria-labelledby="bus-t"><div class="w">
 <div class="conversion-layout">
-<div class="conversion-story">
+<div class="conversion-story photo-copy-panel">
 <p class="ey"><span class="ey-brand">828</span> · Del otro lado del volante</p><h2 id="bus-t">Contanos qué auto <em>buscás</em></h2>
 <p class="sec-p">Armá un mensaje con lo que tenés en mente y enviáselo a Automotores 828 por el canal que prefieras.</p>
 <ol class="cv-steps"><li><b>Decinos qué buscás</b><span>Una marca o un modelo alcanza; el resto afina la búsqueda.</span></li><li><b>Mirá qué hay publicado</b><span>Mientras escribís, te mostramos las unidades del catálogo que encajan.</span></li><li><b>Enviá la consulta</b><span>Por el canal que prefieras, sin registrarte ni dejar datos en el sitio.</span></li></ol>
@@ -2888,7 +2946,7 @@ dialog.ficha .fi-s{flex:none}
 <div class="vz-grid">
 <div class="vz-main"><h3>Agendá una visita y prueba de manejo</h3>
 <ol class="vz-steps"><li><b>Elegí día y franja</b><span>En la página de reserva, desde el celular o la computadora.</span></li><li><b>Se arma tu consulta</b><span>Queda lista para enviarla a la agencia por el canal que prefieras.</span></li><li><b>La agencia te confirma</b><span>Es una consulta, no un turno: el día y la hora se acuerdan con la agencia.</span></li></ol>
-<div class="vz-cta"><a class="btn p vz-go" href="reserva.html">Agendar visita</a><a class="btn" href="https://www.google.com/maps/place/Automotores+828+SRL/@-34.8137588,-58.4555267,17z/data=!4m15!1m8!3m7!1s0x95bcd3dc6c2273fd:0xf9dc7d0717e644c1!2sBlvd.+Buenos+Aires+828,+B1842+Monte+Grande,+Provincia+de+Buenos+Aires!3b1!8m2!3d-34.8137588!4d-58.4555267!16s%2Fg%2F11s3ldxgn0!3m5!1s0x95bcd3dc6bd3f11f:0x23494f2381c7b3b5!8m2!3d-34.8137588!4d-58.4555267!16s%2Fg%2F1hc32h2qs?entry=ttu&g_ep=EgoyMDI2MTAyMC4wIKXMDSoASAFQAw%3D%3D" target="_blank" rel="noopener noreferrer">Cómo llegar</a></div></div>
+<div class="vz-cta"><a class="btn p vz-go" href="reserva.html">Agendar visita</a><a class="btn" href="https://www.google.com/maps/dir/?api=1&destination=Blvd.%20Buenos%20Aires%20828%2C%20B1842%20Monte%20Grande%2C%20Buenos%20Aires%2C%20Argentina" target="_blank" rel="noopener noreferrer">Cómo llegar</a></div></div>
 <aside class="vz-side" aria-label="Antes de venir"><p class="vz-side-k">Antes de venir</p>
 <div class="vz-live" data-live data-abierto="0"><span class="dr-dot" aria-hidden="true"></span><div><p class="vz-live-t" data-estado-t>Horario de atención</p><p class="vz-live-c" data-cd-full></p></div></div>
 <ul class="vz-hrs"><li data-dias="1,2,3,4,5"><span>Lunes a viernes</span><b>9:00 a 13:00 y 15:00 a 19:00</b></li><li data-dias="6"><span>Sábados</span><b>9:00 a 13:00</b></li><li data-dias="0"><span>Domingos</span><b>Cerrado</b></li></ul>
@@ -2924,8 +2982,8 @@ dialog.ficha .fi-s{flex:none}
 </div></div>
 <div class="nz-net nz-net--mapa" id="donde"><div class="w"><h3 class="nz-h">Dónde encontrarnos</h3><p class="nz-net-p">Nuestro salón está en Blvd. Buenos Aires 828, Monte Grande. Revisá el horario general, confirmá previamente la unidad que querés ver y elegí «Abrir en Google Maps» para planificar el trayecto. El mapa interactivo de esta página queda disponible solo si decidís abrirlo.</p>
 <ul><li class="is-here"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s-7-6.2-7-11a7 7 0 0 1 14 0c0 4.8-7 11-7 11z"/><circle cx="12" cy="10" r="2.5"/></svg><div><b>Automotores 828</b><span>Blvd. Buenos Aires 828, Monte Grande, Buenos Aires</span></div></li></ul>
-<p class="nz-net-acc"><a class="btn p sm" href="https://www.google.com/maps/place/Automotores+828+SRL/@-34.8137588,-58.4555267,17z/data=!4m15!1m8!3m7!1s0x95bcd3dc6c2273fd:0xf9dc7d0717e644c1!2sBlvd.+Buenos+Aires+828,+B1842+Monte+Grande,+Provincia+de+Buenos+Aires!3b1!8m2!3d-34.8137588!4d-58.4555267!16s%2Fg%2F11s3ldxgn0!3m5!1s0x95bcd3dc6bd3f11f:0x23494f2381c7b3b5!8m2!3d-34.8137588!4d-58.4555267!16s%2Fg%2F1hc32h2qs?entry=ttu&g_ep=EgoyMDI2MTAyMC4wIKXMDSoASAFQAw%3D%3D" target="_blank" rel="noopener noreferrer">Abrir en Google Maps</a></p></div>
-<div class="nz-mapa"><div class="dr-map" id="mapa-nosotros" data-lat="-34.8137588" data-lng="-58.4555267" data-nombre="Automotores 828" data-dir="Blvd. Buenos Aires 828, Monte Grande, Buenos Aires" data-gmaps="https://www.google.com/maps/place/Automotores+828+SRL/@-34.8137588,-58.4555267,17z/data=!4m15!1m8!3m7!1s0x95bcd3dc6c2273fd:0xf9dc7d0717e644c1!2sBlvd.+Buenos+Aires+828,+B1842+Monte+Grande,+Provincia+de+Buenos+Aires!3b1!8m2!3d-34.8137588!4d-58.4555267!16s%2Fg%2F11s3ldxgn0!3m5!1s0x95bcd3dc6bd3f11f:0x23494f2381c7b3b5!8m2!3d-34.8137588!4d-58.4555267!16s%2Fg%2F1hc32h2qs?entry=ttu&amp;g_ep=EgoyMDI2MTAyMC4wIKXMDSoASAFQAw%3D%3D" data-leaflet="js/vendor/leaflet.js" data-css="js/vendor/leaflet.css" data-manual-map="1"><div class="dr-map-v" role="region" aria-label="Mapa con la ubicación de Automotores 828"></div><div class="dr-map-ph" data-mapa-ph><span class="dr-map-ic"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s-7-6.2-7-11a7 7 0 0 1 14 0c0 4.8-7 11-7 11z"/><circle cx="12" cy="10" r="2.5"/></svg></span><p>Mapa de Monte Grande</p><p class="map-m src" role="status" aria-live="polite">El mapa interactivo se carga solo cuando lo solicites.</p><div class="row"><button class="btn p sm" type="button" data-mapa-abrir>Ver mapa interactivo</button></div></div></div></div>
+<p class="nz-net-acc"><a class="btn p sm" href="https://www.google.com/maps/dir/?api=1&destination=Blvd.%20Buenos%20Aires%20828%2C%20B1842%20Monte%20Grande%2C%20Buenos%20Aires%2C%20Argentina" target="_blank" rel="noopener noreferrer">Abrir en Google Maps</a></p></div>
+<div class="nz-mapa"><div class="dr-map" id="mapa-nosotros" data-lat="-34.8138439" data-lng="-58.455598" data-nombre="Automotores 828" data-dir="Blvd. Buenos Aires 828, Monte Grande, Buenos Aires" data-gmaps="https://www.google.com/maps/dir/?api=1&amp;destination=Blvd.%20Buenos%20Aires%20828%2C%20B1842%20Monte%20Grande%2C%20Buenos%20Aires%2C%20Argentina" data-leaflet="js/vendor/leaflet.js" data-css="js/vendor/leaflet.css" data-manual-map="1"><div class="dr-map-v" role="region" aria-label="Mapa con la ubicación de Automotores 828"></div><div class="dr-map-ph" data-mapa-ph><span class="dr-map-ic"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s-7-6.2-7-11a7 7 0 0 1 14 0c0 4.8-7 11-7 11z"/><circle cx="12" cy="10" r="2.5"/></svg></span><p>Mapa de Monte Grande</p><p class="map-m src" role="status" aria-live="polite">El mapa interactivo se carga solo cuando lo solicites.</p><div class="row"><button class="btn p sm" type="button" data-mapa-abrir>Ver mapa interactivo</button></div></div></div></div>
 </section>
 
 <section id="contacto" class="ct dr-ct" aria-labelledby="contacto-t"><div class="w">
@@ -2937,11 +2995,16 @@ dialog.ficha .fi-s{flex:none}
 </div>
 </div></section>
 </main>
-<footer><div class="w">
-<div class="ft"><div class="ft-m"><img class="lg-ft" src="images/logo-sm.png" width="320" height="320" alt=""><p class="ft-b">Automotores 828</p><p>Blvd. Buenos Aires 828, Monte Grande, Buenos Aires</p></div>
-<div><p class="ft-k">Contacto</p><p><a href="mailto:automotores828@live.com">automotores828@live.com</a></p></div>
-<div><p class="ft-k">Redes</p><p><a href="https://www.facebook.com/automotoressrl828/" target="_blank" rel="noopener noreferrer">Facebook</a></p><p><a href="https://www.instagram.com/automotores828/" target="_blank" rel="noopener noreferrer">Instagram</a></p></div></div>
-<p class="ft-c">© 2026 Automotores 828</p><p class="demo-note" data-demo-note>Demo ilustrativa. Consultá disponibilidad y precios con Automotores 828. No es el sitio oficial.</p><p>Fuentes: <a href="https://www.facebook.com/automotoressrl828/" target="_blank" rel="noopener noreferrer">Facebook</a> · <a href="https://www.instagram.com/automotores828/" target="_blank" rel="noopener noreferrer">Instagram</a></p><p><a href="privacidad.html">Privacidad y avisos</a></p></div></footer>
+<footer class="site-footer"><div class="w">
+<div class="ft-cta"><div><p class="ft-cta-k">AUTOMOTORES 828 · MONTE GRANDE</p><p class="ft-cta-t">¿Buscás tu próximo auto? <em>Escribinos.</em></p></div><a class="ft-cta-btn" href="mailto:automotores828@live.com?subject=Consulta%20por%20unidades" aria-label="Escribir a Automotores 828 por correo">Escribir por correo <span aria-hidden="true">↗</span></a></div>
+<div class="ft">
+<section class="ft-col ft-brand" aria-label="Automotores 828"><img class="lg-ft" src="images/logo-sm.png" width="320" height="320" alt="Logo de Automotores 828"><p class="ft-b">Automotores 828</p><p class="ft-desc">Autos usados, permutas y financiación en Monte Grande.</p><p class="ft-address"><a href="https://www.google.com/maps/dir/?api=1&amp;destination=Blvd.%20Buenos%20Aires%20828%2C%20B1842%20Monte%20Grande%2C%20Buenos%20Aires%2C%20Argentina" target="_blank" rel="noopener noreferrer">Blvd. Buenos Aires 828, Monte Grande, Buenos Aires · Cómo llegar</a></p><span class="ft-badge">Atención en Monte Grande</span></section>
+<nav class="ft-col" aria-label="Navegación del pie"><p class="ft-k">Explorá</p><ul class="ft-links"><li><a href="#top">Inicio</a></li><li><a href="#unidades">Catálogo / stock</a></li><li><a href="#busqueda">Buscás</a></li><li><a href="#tu-usado">Permutas</a></li><li><a href="#financiacion">Financiación</a></li><li><a href="#financiacion">Consignaciones</a></li><li><a href="#financiacion">Compra y venta</a></li><li><a href="#nosotros">Nosotros</a></li><li><a href="#contacto">Contacto</a></li></ul></nav>
+<section class="ft-col" aria-label="Contacto y horarios"><p class="ft-k">Contacto</p><p class="ft-contact-link"><a href="mailto:automotores828@live.com">automotores828@live.com</a></p><p class="ft-pending">Teléfono / WhatsApp: pendiente de confirmar</p><p class="ft-contact-link"><a href="https://www.google.com/maps/dir/?api=1&amp;destination=Blvd.%20Buenos%20Aires%20828%2C%20B1842%20Monte%20Grande%2C%20Buenos%20Aires%2C%20Argentina" target="_blank" rel="noopener noreferrer">Blvd. Buenos Aires 828, Monte Grande · Mapa</a></p><div class="ft-hours"><span class="ft-k">Horario de atención</span><p data-estado data-horario-footer hidden>L-V 9–13 y 15–19 · S 9–13</p><noscript><p>L-V 9–13 y 15–19 · S 9–13</p></noscript></div></section>
+<section class="ft-col" aria-label="Redes y servicios"><p class="ft-k">Redes y servicios</p><ul class="ft-social"><li><a href="https://www.facebook.com/automotoressrl828/" target="_blank" rel="noopener noreferrer" aria-label="Facebook de Automotores 828"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14 8h3V4h-3c-3 0-5 2-5 5v2H6v4h3v5h4v-5h3l1-4h-4V9c0-.7.3-1 1-1z"/></svg><span>Facebook</span></a></li><li><a href="https://www.instagram.com/automotores828/" target="_blank" rel="noopener noreferrer" aria-label="Instagram de Automotores 828"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3.5" y="3.5" width="17" height="17" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.8" r=".8"/></svg><span>Instagram</span></a></li></ul><div class="ft-ctas"><a href="#tu-usado">Quiero vender mi auto</a><a href="#financiacion">Consultá financiación</a><a href="#tu-usado">Cotizá tu permuta</a></div><div class="ft-services" aria-label="Servicios publicados"><span>Permutas</span><span>Financiación</span><span>Consignaciones</span></div></section>
+</div>
+<div class="ft-bottom"><p class="ft-copy">© 2026 Automotores 828</p><p class="demo-note" data-demo-note>Demo ilustrativa. Consultá disponibilidad y precios con Automotores 828. No es el sitio oficial.</p><p class="ft-sources">Fuentes: <a href="https://www.facebook.com/automotoressrl828/" target="_blank" rel="noopener noreferrer">Facebook</a> · <a href="https://www.instagram.com/automotores828/" target="_blank" rel="noopener noreferrer">Instagram</a></p><a class="ft-privacy" href="privacidad.html">Privacidad y avisos</a><a class="ft-top" href="#top">Volver arriba ↑</a></div>
+</div></footer>
 <nav class="cta-bar" aria-label="Acciones rápidas"><a href="https://vehiculos.mercadolibre.com.ar/_CustId_121360385" target="_blank" rel="noopener noreferrer" aria-label="Ver publicaciones en Mercado Libre">Mercado Libre</a><a href="reserva.html">Agendar visita</a></nav>
 
 </body>

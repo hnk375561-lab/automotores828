@@ -58,6 +58,9 @@
     var status = root.querySelector('.map-m');
     var lat = Number(root.dataset.lat), lng = Number(root.dataset.lng);
     var nombre = root.dataset.nombre || 'Automotores 828', dir = root.dataset.dir || '', gmaps = root.dataset.gmaps || '';
+    var destination = encodeURIComponent(dir || (lat + ',' + lng));
+    var googleDirections = 'https://www.google.com/maps/dir/?api=1&destination=' + destination;
+    var wazeDirections = 'https://waze.com/ul?ll=' + encodeURIComponent(lat + ',' + lng) + '&navigate=yes';
     var mapa = null;
     function dijo(t) { if (status) status.textContent = t || ''; }
     function respaldo() {
@@ -69,28 +72,31 @@
     function popup() {
       var w = el('div', null, 'dr-pop'); w.appendChild(el('p', nombre, 'dr-pop-t'));
       if (dir) w.appendChild(el('p', dir, 'dr-pop-a'));
-      if (gmaps) { var a = el('a', 'Cómo llegar', 'dr-pop-l'); a.href = gmaps; a.target = '_blank'; a.rel = 'noopener noreferrer'; w.appendChild(a); }
+      var links = el('div', null, 'dr-pop-actions');
+      var maps = el('a', 'Cómo llegar', 'dr-pop-l'); maps.href = googleDirections; maps.target = '_blank'; maps.rel = 'noopener noreferrer'; links.appendChild(maps);
+      var waze = el('a', 'Abrir en Waze', 'dr-pop-l dr-pop-l--secondary'); waze.href = wazeDirections; waze.target = '_blank'; waze.rel = 'noopener noreferrer'; links.appendChild(waze);
+      w.appendChild(links);
       return w;
     }
     function pintar() {
       started.add(root); root.classList.add('is-open'); if (ph) ph.hidden = true;
       var movil = !!(L.Browser && L.Browser.mobile);
-      mapa = L.map(view, { scrollWheelZoom: false, dragging: !movil, zoomControl: true, attributionControl: true, zoomSnap: 1, minZoom: 12, maxZoom: 19, fadeAnimation: false, zoomAnimation: false, markerZoomAnimation: false, inertia: !movil, preferCanvas: true }).setView([lat, lng], 15);
+      mapa = L.map(view, { scrollWheelZoom: false, dragging: !movil, zoomControl: true, attributionControl: true, zoomSnap: 1, minZoom: 12, maxZoom: 19, fadeAnimation: false, zoomAnimation: false, markerZoomAnimation: false, inertia: !movil, preferCanvas: true }).setView([lat, lng], 17);
       var attr = '&copy; <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener noreferrer">OpenStreetMap</a> contributors';
       var tiles = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 19, attribution: attr, keepBuffer: 1, updateWhenIdle: true, updateWhenZooming: false, noWrap: true });
       var errores = 0, cargado = false;
       tiles.on('tileload', function () { cargado = true; });
       tiles.on('tileerror', function () { if (++errores >= 4 && !cargado) respaldo(); });
       tiles.addTo(mapa);
-      var icono = L.divIcon({ className: 'dr-pin', html: '<span class="dr-pin-r" aria-hidden="true"></span><span class="dr-pin-b"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 17h16M7 17a5 5 0 0 1 10 0M12 6v2.5M5.6 9.6l1.8 1.8M18.4 9.6l-1.8 1.8"/></svg></span>', iconSize: [46, 46], iconAnchor: [23, 44], popupAnchor: [0, -44] });
+      var icono = L.divIcon({ className: 'dr-pin', html: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 52" width="40" height="52" role="img" aria-label="Automotores 828"><path d="M20 50C16 44 3 30 3 19a17 17 0 1 1 34 0c0 11-13 25-17 31Z" fill="#E10600" stroke="#fff" stroke-width="2.5" stroke-linejoin="round"/><circle cx="20" cy="19" r="11.5" fill="#fff"/><text x="20" y="22.5" text-anchor="middle" font-family="Arial,sans-serif" font-size="9" font-weight="800" fill="#E10600">828</text></svg>', iconSize: [40, 52], iconAnchor: [20, 52], popupAnchor: [0, -48] });
       var marca = L.marker([lat, lng], { icon: icono, title: nombre, keyboard: true, alt: nombre }).addTo(mapa);
       marca.bindPopup(popup(), { closeButton: false, minWidth: 210, maxWidth: 260 });
-      marca.bindTooltip(nombre, { permanent: true, direction: 'top', offset: [0, -42], className: 'dr-tt' });
-      var Centrar = L.Control.extend({ options: { position: 'topright' }, onAdd: function () { var b = L.DomUtil.create('button', 'dr-ctr'); b.type = 'button'; b.textContent = 'Centrar'; b.setAttribute('aria-label', 'Volver a centrar el mapa en ' + nombre); L.DomEvent.disableClickPropagation(b); L.DomEvent.on(b, 'click', function () { mapa.setView([lat, lng], 15); }); return b; } });
+      marca.bindTooltip(nombre, { permanent: true, direction: 'top', offset: [0, -50], className: 'dr-tt' });
+      var Centrar = L.Control.extend({ options: { position: 'topright' }, onAdd: function () { var b = L.DomUtil.create('button', 'dr-ctr'); b.type = 'button'; b.textContent = 'Centrar'; b.setAttribute('aria-label', 'Volver a centrar el mapa en ' + nombre); L.DomEvent.disableClickPropagation(b); L.DomEvent.on(b, 'click', function () { mapa.setView([lat, lng], 17); }); return b; } });
       mapa.addControl(new Centrar());
       if (movil) { var cand = el('button', 'Tocá para mover el mapa', 'dr-lock'); cand.type = 'button'; cand.addEventListener('click', function () { mapa.dragging.enable(); cand.remove(); }); root.appendChild(cand); }
       else { mapa.on('click', function () { mapa.scrollWheelZoom.enable(); }); view.addEventListener('mouseleave', function () { if (mapa) mapa.scrollWheelZoom.disable(); }); }
-      requestAnimationFrame(function () { requestAnimationFrame(function () { if (mapa) { mapa.invalidateSize({ pan: false }); mapa.setView([lat, lng], 15, { animate: false }); } }); });
+      requestAnimationFrame(function () { requestAnimationFrame(function () { if (mapa) { mapa.invalidateSize({ pan: false }); mapa.setView([lat, lng], 17, { animate: false }); } }); });
     }
     function iniciar() {
       if (started.has(root)) return;

@@ -87,12 +87,16 @@ ${body}
 `;
 }
 
-const footer = (fuentes) => `<footer><div class="w">
-<div class="ft"><div class="ft-m"><img class="lg-ft" src="images/logo-sm.png" width="320" height="320" alt=""><p class="ft-b">${esc(NAME)}</p><p>${esc(L.address)}, ${esc(L.city)}, ${esc(L.province)}</p></div>
-<div><p class="ft-k">Contacto</p>${C.phoneTel ? `<p><a href="tel:${C.phoneTel}">${esc(C.phone)}</a></p>` : ''}${C.whatsApp ? `<p><a href="${WA}" ${EXT}>WhatsApp ${esc(C.whatsAppDisplay)}</a></p>` : ''}${C.email ? `<p><a href="mailto:${esc(C.email)}">${esc(C.email)}</a></p>` : ''}</div>
-<div><p class="ft-k">Redes</p><p><a href="${FB}" ${EXT}>Facebook</a></p><p><a href="${IG}" ${EXT}>Instagram</a></p>${TT ? `<p><a href="${TT}" ${EXT}>TikTok</a></p>` : ''}${YT ? `<p><a href="${YT}" ${EXT}>YouTube</a></p>` : ''}</div></div>
-<p class="ft-c">© 2026 ${esc(NAME)}</p>${demo ? `<p class="demo-note" data-demo-note>${esc(LEYENDA)}</p>` : ''}${fuentes ? `<p>Fuentes: <a href="${FB}" ${EXT}>Facebook</a> · <a href="${IG}" ${EXT}>Instagram</a>${TT ? ` · <a href="${TT}" ${EXT}>TikTok</a>` : ''}${D.reviews.googleUrl ? ` · <a href="${D.reviews.googleUrl}" ${EXT}>Ficha de Google</a>` : ''}</p>` : ''}<p><a href="privacidad.html">Privacidad y avisos</a></p></div></footer>`;
-
+const footer = (fuentes) => `<footer class="site-footer"><div class="w">
+<div class="ft-cta"><div><p class="ft-cta-k">AUTOMOTORES 828 · MONTE GRANDE</p><p class="ft-cta-t">¿Buscás tu próximo auto? <em>Escribinos.</em></p></div><a class="ft-cta-btn" href="mailto:${esc(C.email || '')}?subject=${encodeURIComponent('Consulta por unidades')}" aria-label="Escribir a Automotores 828 por correo">Escribir por correo <span aria-hidden="true">↗</span></a></div>
+<div class="ft">
+<section class="ft-col ft-brand" aria-label="Automotores 828"><img class="lg-ft" src="images/logo-sm.png" width="320" height="320" alt="Logo de Automotores 828"><p class="ft-b">${esc(NAME)}</p><p class="ft-desc">Autos usados, permutas y financiación en ${esc(L.city)}.</p><p class="ft-address"><a href="${esc(L.mapsUrl)}" ${EXT}>${esc(L.address)}, ${esc(L.city)}, ${esc(L.province)} · Cómo llegar</a></p><span class="ft-badge">Atención en Monte Grande</span></section>
+<nav class="ft-col" aria-label="Navegación del pie"><p class="ft-k">Explorá</p><ul class="ft-links"><li><a href="#top">Inicio</a></li><li><a href="${fuentes ? '' : './'}#unidades">Catálogo / stock</a></li><li><a href="${fuentes ? '' : './'}#busqueda">Buscás</a></li><li><a href="${fuentes ? '' : './'}#tu-usado">Permutas</a></li><li><a href="${fuentes ? '' : './'}#financiacion">Financiación</a></li><li><a href="${fuentes ? '' : './'}#financiacion">Consignaciones</a></li><li><a href="${fuentes ? '' : './'}#financiacion">Compra y venta</a></li><li><a href="${fuentes ? '' : './'}#nosotros">Nosotros</a></li><li><a href="${fuentes ? '' : './'}#contacto">Contacto</a></li></ul></nav>
+<section class="ft-col" aria-label="Contacto y horarios"><p class="ft-k">Contacto</p>${C.email ? `<p class="ft-contact-link"><a href="mailto:${esc(C.email)}">${esc(C.email)}</a></p>` : ''}${C.phoneTel ? `<p class="ft-contact-link"><a href="tel:${esc(C.phoneTel)}">${esc(C.phone || C.phoneTel)}</a></p>` : `<p class="ft-pending">Teléfono / WhatsApp: pendiente de confirmar</p>`}<p class="ft-contact-link"><a href="${esc(L.mapsUrl)}" ${EXT}>${esc(L.address)}, ${esc(L.city)} · Mapa</a></p>${H.display ? `<div class="ft-hours"><span class="ft-k">Horario de atención</span><p data-estado data-horario-footer hidden>${esc(H.corto)}</p><noscript><p>${esc(H.corto)}</p></noscript></div>` : ''}</section>
+<section class="ft-col" aria-label="Redes y servicios"><p class="ft-k">Redes y servicios</p><ul class="ft-social"><li><a href="${FB}" ${EXT} aria-label="Facebook de Automotores 828"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14 8h3V4h-3c-3 0-5 2-5 5v2H6v4h3v5h4v-5h3l1-4h-4V9c0-.7.3-1 1-1z"/></svg><span>Facebook</span></a></li><li><a href="${IG}" ${EXT} aria-label="Instagram de Automotores 828"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3.5" y="3.5" width="17" height="17" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.8" r=".8"/></svg><span>Instagram</span></a></li></ul><div class="ft-ctas"><a href="${fuentes ? '' : './'}#tu-usado">Quiero vender mi auto</a><a href="${fuentes ? '' : './'}#financiacion">Consultá financiación</a><a href="${fuentes ? '' : './'}#tu-usado">Cotizá tu permuta</a></div><div class="ft-services" aria-label="Servicios publicados"><span>Permutas</span><span>Financiación</span><span>Consignaciones</span></div></section>
+</div>
+<div class="ft-bottom"><p class="ft-copy">© 2026 ${esc(NAME)}</p>${demo ? `<p class="demo-note" data-demo-note>${esc(LEYENDA)}</p>` : ''}<p class="ft-sources">${fuentes ? `Fuentes: <a href="${FB}" ${EXT}>Facebook</a> · <a href="${IG}" ${EXT}>Instagram</a>${TT ? ` · <a href="${TT}" ${EXT}>TikTok</a>` : ''}` : `<a href="${FB}" ${EXT}>Facebook</a> · <a href="${IG}" ${EXT}>Instagram</a>`}</p><a class="ft-privacy" href="${fuentes ? 'privacidad.html' : './privacidad.html'}">Privacidad y avisos</a><a class="ft-top" href="#top">Volver arriba ↑</a></div>
+</div></footer>`;
 const autos = A.autos;
 const cantidadMotos = autos.filter((a) => a.tipoVehiculo === 'Moto').length;
 const cantidadAutos = autos.length - cantidadMotos;
@@ -289,7 +293,7 @@ ${extra}
 const secUsado = hasSvc('permuta') ? `
 <section class="conversion conversion--trade" id="tu-usado" aria-labelledby="usado-t"><div class="w">
 <div class="conversion-layout">
-<div class="conversion-story">
+<div class="conversion-story photo-copy-panel">
 <p class="ey"><span class="ey-brand">828</span> · Tu próximo paso</p><h2 id="usado-t">Entregá tu usado como <em>parte de pago</em></h2>
 <p class="sec-p">Tomamos permutas. Contanos cuál es y armá el mensaje para enviárselo a ${esc(NAME)} por el canal que prefieras.</p>
 <ol class="cv-steps"><li><b>Contanos qué tenés</b><span>Marca, modelo, año y kilometraje alcanzan para empezar.</span></li><li><b>Mirá tu mensaje armarse</b><span>Se escribe solo a medida que completás los datos.</span></li><li><b>Envialo a ${esc(NAME)}</b><span>Por el canal que prefieras. Las condiciones se acuerdan con ellos.</span></li></ol>
@@ -320,7 +324,7 @@ const MARCAS = [...new Set([...A.autos.map((a) => a.marca), 'Chevrolet', 'Volksw
 const secBusqueda = `
 <section class="conversion conversion--search lt" id="busqueda" aria-labelledby="bus-t"><div class="w">
 <div class="conversion-layout">
-<div class="conversion-story">
+<div class="conversion-story photo-copy-panel">
 <p class="ey"><span class="ey-brand">828</span> · Del otro lado del volante</p><h2 id="bus-t">Contanos qué auto <em>buscás</em></h2>
 <p class="sec-p">Armá un mensaje con lo que tenés en mente y enviáselo a ${esc(NAME)} por el canal que prefieras.</p>
 <ol class="cv-steps"><li><b>Decinos qué buscás</b><span>Una marca o un modelo alcanza; el resto afina la búsqueda.</span></li><li><b>${autos.length ? 'Mirá qué hay publicado' : 'Revisá nuestras redes'}</b><span>${autos.length ? 'Mientras escribís, te mostramos las unidades del catálogo que encajan.' : 'Las unidades se publican en Instagram, TikTok y Facebook.'}</span></li><li><b>Enviá la consulta</b><span>Por el canal que prefieras, sin registrarte ni dejar datos en el sitio.</span></li></ol>
@@ -514,7 +518,7 @@ const index = page({
   title: `${NAME} · Autos y motos en ${L.city}, ${L.province}`,
   desc: `${NAME} en ${L.city}, ${L.partido}: compra y venta de autos y motos usados, permutas y consignaciones. Visitanos en ${L.address} o escribinos por redes o correo.`,
   file: 'index.html',
-  extraHead: `<link rel="stylesheet" href="css/hero-carousel.css?v=20261023-3">\n<link rel="stylesheet" href="css/fondos-secciones.css">\n<link rel="stylesheet" href="css/damero-secciones.css?v=20261022-7">\n<script type="application/ld+json">${JSON.stringify(ld)}</script>\n<script defer src="js/hero-carousel.js?v=20261022-3"></script>\n<script defer src="js/hero-motion.js?v=20261023-3"></script>\n<script defer src="js/fondos-secciones.js"></script>\n<script defer src="js/secciones.js"></script>\n<script defer src="js/mapa.js?v=20261022-4"></script>\n<script defer src="js/horarios.js"></script>\n<script defer src="js/site.js?v=20261022-2"></script>\n<script defer src="js/reserva-inline.js"></script>\n`,
+  extraHead: `<link rel="stylesheet" href="css/hero-carousel.css?v=20261023-3">\n<link rel="stylesheet" href="css/fondos-secciones.css">\n<link rel="stylesheet" href="css/damero-secciones.css?v=20261022-7">\n<script type="application/ld+json">${JSON.stringify(ld)}</script>\n<script defer src="js/hero-carousel.js?v=20261022-3"></script>\n<script defer src="js/hero-motion.js?v=20261023-3"></script>\n<script defer src="js/fondos-secciones.js"></script>\n<script defer src="js/secciones.js"></script>\n<script defer src="js/mapa.js?v=20261023-1"></script>\n<script defer src="js/horarios.js"></script>\n<script defer src="js/site.js?v=20261022-2"></script>\n<script defer src="js/reserva-inline.js"></script>\n`,
   body: `${header()}
 <main id="top">
 <div class="hero" role="region" aria-label="${esc(NAME)}">

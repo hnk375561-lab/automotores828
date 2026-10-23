@@ -2225,6 +2225,64 @@ dialog.ficha .fi-s{flex:none}
 .dr-pin-b::after{content:"";position:absolute;width:12px;height:12px;border-radius:50%;background:#fff;border:2px solid #060607}
 .dr-pin-b svg{position:relative;z-index:1;width:18px;height:18px;transform:rotate(45deg);stroke:#060607;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;opacity:.85}
 .dr-pin-r{position:absolute;left:10px;top:36px;width:28px;height:8px;border:0!important;border-radius:50%;background:rgba(6,6,7,.28);box-shadow:0 0 0 5px rgba(238,28,34,.12);animation:none!important}
+
+/* Componentes de alto contraste para contenido narrativo sobre fondos fotográficos. */
+:root{--rojo:#e10600;--negro:#060607;--blanco:#fff}
+.photo-copy-panel{box-sizing:border-box;padding:clamp(20px,2vw,28px);border:1px solid rgba(255,255,255,.12);border-left:4px solid var(--rojo);border-radius:8px;background:rgba(0,0,0,.72);-webkit-backdrop-filter:blur(5px);backdrop-filter:blur(5px);box-shadow:0 12px 36px rgba(0,0,0,.3)}
+.photo-copy-panel p,.photo-copy-panel li,.photo-copy-panel h2{color:var(--blanco);text-shadow:0 1px 2px rgba(0,0,0,.72)}
+html body #tu-usado .photo-copy-panel .sec-p,html body #busqueda .photo-copy-panel .sec-p,html body .photo-copy-panel .cv-steps span,html body #tu-usado .photo-copy-panel h2,html body #busqueda .photo-copy-panel h2{color:#fff;text-shadow:0 1px 2px rgba(0,0,0,.72)}
+.photo-copy-panel .cv-steps{margin-block:20px}
+.photo-copy-panel .cv-steps li{padding:12px 14px 12px 58px;background:rgba(0,0,0,.54);border-left:2px solid var(--rojo)}
+.photo-copy-panel .cv-pills li{background:rgba(0,0,0,.86);border:1px solid rgba(255,255,255,.32);color:#fff}
+.photo-copy-panel a:focus-visible,.photo-copy-panel button:focus-visible{outline:3px solid #fff;outline-offset:3px}
+
+/* Footer editorial 828: marca, navegación, contacto y servicios en cuatro columnas. */
+.site-footer{padding:0 0 calc(28px + env(safe-area-inset-bottom,0px));background-color:#060607;background-image:linear-gradient(90deg,rgba(6,6,7,.97),rgba(6,6,7,.88)),url("images/fondos/fondo-contacto.webp");background-position:center;background-size:cover;color:#fff}
+.site-footer>.w{width:min(1200px,calc(100% - 40px));margin-inline:auto}
+.ft-cta{display:flex;align-items:center;justify-content:space-between;gap:24px;padding:28px 0;border-bottom:1px solid rgba(255,255,255,.2)}
+.ft-cta-k{margin:0 0 6px;color:#ff7777;font-size:11px;font-weight:800;letter-spacing:.16em}
+.ft-cta-t{margin:0;color:#fff;font-size:clamp(20px,2.5vw,30px);font-weight:800}
+.ft-cta-t em{color:#ff4a4a;font-style:italic}
+.ft-cta-btn{display:inline-flex;align-items:center;justify-content:center;gap:12px;min-height:48px;padding:0 18px;background:#e10600;color:#fff;text-decoration:none;font-weight:800;letter-spacing:.04em;transition:background .2s,transform .2s}
+.ft-cta-btn:hover{background:#ff2a20;transform:translateY(-2px)}
+.ft{display:grid;grid-template-columns:1.25fr 1fr 1.1fr 1.15fr;gap:clamp(18px,3vw,38px);padding:30px 0 24px;margin:0;border-bottom:1px solid rgba(255,255,255,.2)}
+.ft-col{min-width:0}
+.ft .lg-ft{width:64px;height:64px;object-fit:contain;border-radius:50%;background:transparent;padding:0;margin:0 0 12px}
+.ft-b{margin:0 0 9px;color:#fff;font-size:22px}
+.ft-desc,.ft-address,.ft-pending,.ft-contact-link{color:#f1f1f1;font-size:14px;line-height:1.55}
+.ft-address a,.ft-contact-link a,.ft-links a,.ft-bottom a{color:#fff;text-underline-offset:4px;text-decoration-color:rgba(225,6,0,.78);text-decoration-thickness:1px;transition:color .18s,text-decoration-color .18s}
+.site-footer a:hover{color:#ff7777;text-decoration-color:#ff7777}
+.ft-badge{display:inline-flex;margin-top:8px;padding:7px 10px;border:1px solid rgba(255,255,255,.28);border-left:3px solid #e10600;color:#fff;font-size:11px;font-weight:700;letter-spacing:.04em}
+.ft-k{margin:3px 0 14px!important;color:#ff4a4a!important;font-size:12px!important;font-weight:800!important;letter-spacing:.15em!important}
+.ft-links{display:grid;gap:2px;margin:0;padding:0;list-style:none}
+.ft-links a{display:inline-flex;align-items:center;min-height:30px;font-size:13px}
+.ft-pending{padding:9px 10px;border-left:2px solid #e10600;background:rgba(0,0,0,.55)}
+.ft-hours{margin-top:16px;padding:12px;background:rgba(0,0,0,.52);border:1px solid rgba(255,255,255,.14)}
+.ft-hours .ft-k{display:block;margin-bottom:7px!important}
+.ft-hours [data-estado]{margin:0;color:#fff;font-size:14px;font-weight:800}
+.ft-hours [data-abierto="1"]{color:#83e2a1}.ft-hours [data-abierto="0"]{color:#ff9a9a}
+.ft-social{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 14px;padding:0;list-style:none}
+.ft-social a{display:inline-flex;align-items:center;gap:8px;min-height:40px;padding:0 10px;border:1px solid rgba(255,255,255,.25);color:#fff;text-decoration:none;transition:border-color .18s,transform .18s}
+.ft-social a:hover{border-color:#e10600;transform:translateY(-2px)}
+.ft-social svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.ft-social li:first-child svg{fill:currentColor;stroke:none}
+.ft-ctas{display:grid;gap:7px}
+.ft-ctas a{display:flex;align-items:center;min-height:42px;padding:0 12px;background:#e10600;color:#fff;text-decoration:none;font-size:12px;font-weight:800;letter-spacing:.03em;transition:background .18s,transform .18s}
+.ft-ctas a:hover{background:#ff2a20;transform:translateX(3px)}
+.ft-services{display:flex;flex-wrap:wrap;gap:6px;margin-top:12px}
+.ft-services span{padding:6px 8px;border:1px solid rgba(255,255,255,.24);background:rgba(0,0,0,.4);color:#fff;font-size:11px}
+.ft-bottom{display:flex;flex-wrap:wrap;align-items:center;gap:8px 18px;padding-top:18px;color:#e4e4e4;font-size:12px;line-height:1.5}
+.ft-bottom p{margin:0}.ft-bottom .demo-note{flex-basis:100%;color:#ddd}.ft-copy{font-weight:700}.ft-top{margin-left:auto}
+.dr-pin{width:40px!important;height:52px!important;margin:0!important;border:0!important;background:transparent!important;box-shadow:none!important;filter:drop-shadow(0 2px 3px rgba(0,0,0,.65));pointer-events:auto}
+.dr-pin svg{display:block;width:40px!important;height:52px!important;max-width:none!important;transform:none!important;overflow:visible}
+.dr-pin-b::after,.dr-pin-r{display:none!important}
+.dr-map-v .dr-pop-actions{display:flex;flex-wrap:wrap;gap:7px}
+.dr-map-v .dr-pop-l{display:inline-flex;align-items:center;justify-content:center;min-height:38px;padding:0 10px;border:1px solid #b30000;background:#e10600;color:#fff!important;font-weight:800;text-decoration:none;border-radius:3px}
+.dr-map-v .dr-pop-l--secondary{border-color:#333;background:#111;color:#fff!important}
+.dr-map-v .dr-pop-l:focus-visible{outline:3px solid #e10600;outline-offset:2px}
+@media(max-width:900px){.ft{grid-template-columns:repeat(2,minmax(0,1fr))}.ft-col{padding:4px 0}}
+@media(max-width:520px){.site-footer>.w{width:calc(100% - 32px)}.ft-cta{align-items:stretch;flex-direction:column;padding:22px 0}.ft-cta-btn{width:100%;box-sizing:border-box}.ft{grid-template-columns:minmax(0,1fr);gap:18px;padding-top:24px}.ft-col{padding-bottom:16px;border-bottom:1px solid rgba(255,255,255,.14)}.ft-col:last-child{border-bottom:0}.ft-bottom{align-items:flex-start;flex-direction:column;gap:7px}.ft-top{margin-left:0}.photo-copy-panel{padding:20px 18px}.ft-links a{min-height:38px}}
+@media(prefers-reduced-motion:reduce){.ft-cta-btn,.ft-social a,.ft-ctas a{transition:none!important;transform:none!important}}
 </style>
 <link rel="stylesheet" href="css/dr-identidad.css">
 </head>
@@ -2245,10 +2303,15 @@ dialog.ficha .fi-s{flex:none}
 <p>Este texto es preliminar y debe revisarse profesionalmente antes de la publicación definitiva.</p>
 <p><a class="btn sm" href="./">Volver al inicio</a></p>
 </div></section></main>
-<footer><div class="w">
-<div class="ft"><div class="ft-m"><img class="lg-ft" src="images/logo-sm.png" width="320" height="320" alt=""><p class="ft-b">Automotores 828</p><p>Blvd. Buenos Aires 828, Monte Grande, Buenos Aires</p></div>
-<div><p class="ft-k">Contacto</p><p><a href="mailto:automotores828@live.com">automotores828@live.com</a></p></div>
-<div><p class="ft-k">Redes</p><p><a href="https://www.facebook.com/automotoressrl828/" target="_blank" rel="noopener noreferrer">Facebook</a></p><p><a href="https://www.instagram.com/automotores828/" target="_blank" rel="noopener noreferrer">Instagram</a></p></div></div>
-<p class="ft-c">© 2026 Automotores 828</p><p class="demo-note" data-demo-note>Demo ilustrativa. Consultá disponibilidad y precios con Automotores 828. No es el sitio oficial.</p><p><a href="privacidad.html">Privacidad y avisos</a></p></div></footer>
+<footer class="site-footer"><div class="w">
+<div class="ft-cta"><div><p class="ft-cta-k">AUTOMOTORES 828 · MONTE GRANDE</p><p class="ft-cta-t">¿Buscás tu próximo auto? <em>Escribinos.</em></p></div><a class="ft-cta-btn" href="mailto:automotores828@live.com?subject=Consulta%20por%20unidades" aria-label="Escribir a Automotores 828 por correo">Escribir por correo <span aria-hidden="true">↗</span></a></div>
+<div class="ft">
+<section class="ft-col ft-brand" aria-label="Automotores 828"><img class="lg-ft" src="images/logo-sm.png" width="320" height="320" alt="Logo de Automotores 828"><p class="ft-b">Automotores 828</p><p class="ft-desc">Autos usados, permutas y financiación en Monte Grande.</p><p class="ft-address"><a href="https://www.google.com/maps/dir/?api=1&amp;destination=Blvd.%20Buenos%20Aires%20828%2C%20B1842%20Monte%20Grande%2C%20Buenos%20Aires%2C%20Argentina" target="_blank" rel="noopener noreferrer">Blvd. Buenos Aires 828, Monte Grande, Buenos Aires · Cómo llegar</a></p><span class="ft-badge">Atención en Monte Grande</span></section>
+<nav class="ft-col" aria-label="Navegación del pie"><p class="ft-k">Explorá</p><ul class="ft-links"><li><a href="#top">Inicio</a></li><li><a href="./#unidades">Catálogo / stock</a></li><li><a href="./#busqueda">Buscás</a></li><li><a href="./#tu-usado">Permutas</a></li><li><a href="./#financiacion">Financiación</a></li><li><a href="./#financiacion">Consignaciones</a></li><li><a href="./#financiacion">Compra y venta</a></li><li><a href="./#nosotros">Nosotros</a></li><li><a href="./#contacto">Contacto</a></li></ul></nav>
+<section class="ft-col" aria-label="Contacto y horarios"><p class="ft-k">Contacto</p><p class="ft-contact-link"><a href="mailto:automotores828@live.com">automotores828@live.com</a></p><p class="ft-pending">Teléfono / WhatsApp: pendiente de confirmar</p><p class="ft-contact-link"><a href="https://www.google.com/maps/dir/?api=1&amp;destination=Blvd.%20Buenos%20Aires%20828%2C%20B1842%20Monte%20Grande%2C%20Buenos%20Aires%2C%20Argentina" target="_blank" rel="noopener noreferrer">Blvd. Buenos Aires 828, Monte Grande · Mapa</a></p><div class="ft-hours"><span class="ft-k">Horario de atención</span><p data-estado data-horario-footer hidden>L-V 9–13 y 15–19 · S 9–13</p><noscript><p>L-V 9–13 y 15–19 · S 9–13</p></noscript></div></section>
+<section class="ft-col" aria-label="Redes y servicios"><p class="ft-k">Redes y servicios</p><ul class="ft-social"><li><a href="https://www.facebook.com/automotoressrl828/" target="_blank" rel="noopener noreferrer" aria-label="Facebook de Automotores 828"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14 8h3V4h-3c-3 0-5 2-5 5v2H6v4h3v5h4v-5h3l1-4h-4V9c0-.7.3-1 1-1z"/></svg><span>Facebook</span></a></li><li><a href="https://www.instagram.com/automotores828/" target="_blank" rel="noopener noreferrer" aria-label="Instagram de Automotores 828"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3.5" y="3.5" width="17" height="17" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.8" r=".8"/></svg><span>Instagram</span></a></li></ul><div class="ft-ctas"><a href="./#tu-usado">Quiero vender mi auto</a><a href="./#financiacion">Consultá financiación</a><a href="./#tu-usado">Cotizá tu permuta</a></div><div class="ft-services" aria-label="Servicios publicados"><span>Permutas</span><span>Financiación</span><span>Consignaciones</span></div></section>
+</div>
+<div class="ft-bottom"><p class="ft-copy">© 2026 Automotores 828</p><p class="demo-note" data-demo-note>Demo ilustrativa. Consultá disponibilidad y precios con Automotores 828. No es el sitio oficial.</p><p class="ft-sources"><a href="https://www.facebook.com/automotoressrl828/" target="_blank" rel="noopener noreferrer">Facebook</a> · <a href="https://www.instagram.com/automotores828/" target="_blank" rel="noopener noreferrer">Instagram</a></p><a class="ft-privacy" href="./privacidad.html">Privacidad y avisos</a><a class="ft-top" href="#top">Volver arriba ↑</a></div>
+</div></footer>
 </body>
 </html>
