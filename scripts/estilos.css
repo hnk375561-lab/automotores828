@@ -2266,3 +2266,6 @@ dialog.ficha .fi-proof-c span{display:block;padding-top:8px;border-top:1px solid
 .fi-visit .fi-visit-a{margin:0 0 12px;color:#cfcfcf;font:400 13.5px/1.4 var(--b)}
 .fi-visit .btn{width:100%;min-height:44px;justify-content:center;text-align:center}
 .cv-f #u-un-ref{display:block;margin-top:6px}
+/* ===== D7 · content-visibility en secciones largas fuera de pantalla =====
+   No afecta a #unidades ni #horarios (tienen mapa/controles) ni a secciones con sticky interno. */
+#financiacion,#tu-usado,#busqueda,#preguntas,#visita,#contacto{content-visibility:auto;contain-intrinsic-size:auto 800px}
