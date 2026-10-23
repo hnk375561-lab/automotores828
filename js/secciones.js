@@ -747,11 +747,10 @@
         var yaVisible = { 'año': 1, 'marca': 1, 'modelo': 1, 'versión': 1, 'kilómetros': 1, 'color': 1, 'tipo de combustible': 1, 'combustible': 1, 'transmisión': 1, 'motor': 1, 'cilindrada': 1, 'tipo de carrocería': 1, 'carrocería': 1, 'puertas': 1, 'potencia': 1, 'control de tracción': 1, 'tipo de moto': 1, 'numero de velocidades': 1, 'número de velocidades': 1 };
         var extras = (a.atributosPublicados || []).filter(function (x) { return x && x.nombre && x.valor && !yaVisible[norm(x.nombre)]; });
         if (extras.length) {
-          var ep = el('details', null, 'fi-extra');
-          /* Las fichas deben mostrar la información publicada completa al abrirse:
-             el contenido no se elimina ni queda oculto detrás de un acordeón. */
-          ep.open = true;
-          ep.appendChild(el('summary', 'Más características publicadas (' + extras.length + ')', 'fi-s-k'));
+          /* Bloque permanente: las características publicadas no se esconden detrás
+             de un acordeón ni generan un estado visual distinto entre unidades. */
+          var ep = el('section', null, 'fi-extra');
+          ep.appendChild(el('h3', 'Características publicadas (' + extras.length + ')', 'fi-s-k'));
           var edl = el('dl', null, 'fi-d');
           extras.forEach(function (x) { var row = el('div'), val = el('dd', x.valor); if (String(x.valor).trim().toLowerCase() === 'sí') val.className = 'fi-yes'; row.appendChild(el('dt', x.nombre)); row.appendChild(val); edl.appendChild(row); });
           ep.appendChild(edl); ep.appendChild(el('p', 'Datos declarados en la publicación de Mercado Libre; confirmalos con la agencia.', 'fi-n')); info.appendChild(ep);
