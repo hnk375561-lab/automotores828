@@ -3,6 +3,14 @@
   'use strict';
   var saveData = !!(navigator.connection && navigator.connection.saveData);
   document.documentElement.classList.toggle('save-data', saveData);
+  /* Banda de inicio real (no ::before, reservado por algunas secciones para sus fondos). */
+  Array.prototype.forEach.call(document.querySelectorAll('main>section[id]'), function (section) {
+    if (section.querySelector(':scope > .section-damero')) return;
+    var banda = document.createElement('span');
+    banda.className = 'section-damero';
+    banda.setAttribute('aria-hidden', 'true');
+    section.insertBefore(banda, section.firstChild);
+  });
   /* Entrada editorial: reveal progresivo sin bloquear el contenido. */
   if ('IntersectionObserver' in window && !saveData && !(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches)) {
     var revealObserver = new IntersectionObserver(function (entries) { entries.forEach(function (entry) { if (entry.isIntersecting) { entry.target.classList.add('in'); revealObserver.unobserve(entry.target); } }); }, { threshold: 0.15 });

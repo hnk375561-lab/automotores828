@@ -82,15 +82,15 @@
       tiles.on('tileload', function () { cargado = true; });
       tiles.on('tileerror', function () { if (++errores >= 4 && !cargado) respaldo(); });
       tiles.addTo(mapa);
-      var icono = L.divIcon({ className: 'dr-pin', html: '<span class="dr-pin-r" aria-hidden="true"></span><span class="dr-pin-b"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 17h16M7 17a5 5 0 0 1 10 0M12 6v2.5M5.6 9.6l1.8 1.8M18.4 9.6l-1.8 1.8"/></svg></span>', iconSize: [56, 56], iconAnchor: [28, 54], popupAnchor: [0, -54] });
+      var icono = L.divIcon({ className: 'dr-pin', html: '<span class="dr-pin-r" aria-hidden="true"></span><span class="dr-pin-b"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 17h16M7 17a5 5 0 0 1 10 0M12 6v2.5M5.6 9.6l1.8 1.8M18.4 9.6l-1.8 1.8"/></svg></span>', iconSize: [46, 46], iconAnchor: [23, 44], popupAnchor: [0, -44] });
       var marca = L.marker([lat, lng], { icon: icono, title: nombre, keyboard: true, alt: nombre }).addTo(mapa);
       marca.bindPopup(popup(), { closeButton: false, minWidth: 210, maxWidth: 260 });
-      marca.bindTooltip(nombre, { permanent: true, direction: 'right', offset: [24, -26], className: 'dr-tt' });
+      marca.bindTooltip(nombre, { permanent: true, direction: 'top', offset: [0, -42], className: 'dr-tt' });
       var Centrar = L.Control.extend({ options: { position: 'topright' }, onAdd: function () { var b = L.DomUtil.create('button', 'dr-ctr'); b.type = 'button'; b.textContent = 'Centrar'; b.setAttribute('aria-label', 'Volver a centrar el mapa en ' + nombre); L.DomEvent.disableClickPropagation(b); L.DomEvent.on(b, 'click', function () { mapa.setView([lat, lng], 15); }); return b; } });
       mapa.addControl(new Centrar());
       if (movil) { var cand = el('button', 'Tocá para mover el mapa', 'dr-lock'); cand.type = 'button'; cand.addEventListener('click', function () { mapa.dragging.enable(); cand.remove(); }); root.appendChild(cand); }
       else { mapa.on('click', function () { mapa.scrollWheelZoom.enable(); }); view.addEventListener('mouseleave', function () { if (mapa) mapa.scrollWheelZoom.disable(); }); }
-      requestAnimationFrame(function () { if (mapa) { mapa.invalidateSize({ pan: false }); mapa.setView([lat, lng], 15, { animate: false }); } });
+      requestAnimationFrame(function () { requestAnimationFrame(function () { if (mapa) { mapa.invalidateSize({ pan: false }); mapa.setView([lat, lng], 15, { animate: false }); } }); });
     }
     function iniciar() {
       if (started.has(root)) return;
@@ -111,8 +111,8 @@
       } else flushIdle(root);
     }
   }
-  function scan(node) { if (!node || node.nodeType !== 1) return; if (node.matches('[data-leaflet]')) init(node); node.querySelectorAll('[data-leaflet]').forEach(init); }
-  document.querySelectorAll('[data-leaflet]').forEach(init);
+  function scan(node) { if (!node || node.nodeType !== 1) return; if (node.matches('[data-leaflet]')) init(node); node.querySelectorAll('[data-leaflet]').forEach(function (root) { init(root); }); }
+  document.querySelectorAll('[data-leaflet]').forEach(function (root) { init(root); });
   if (window.MutationObserver) new MutationObserver(function (ms) { ms.forEach(function (m) { m.addedNodes.forEach(scan); }); }).observe(document.body, { childList: true, subtree: true });
   window.drCrearMapa = function (root) { init(root, true); };
 }());

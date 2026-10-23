@@ -6,6 +6,10 @@
   var hero = root.closest('.hero') || root.parentNode;
   var slides = [].slice.call(root.querySelectorAll('[data-hero-slide]'));
   var controls = hero.querySelector('[data-hero-controls]');
+  slides.forEach(function (slide) {
+    var img = slide.querySelector('img');
+    if (img && img.src) slide.style.setProperty('--hero-image', 'url("' + img.src.replace(/"/g, '%22') + '")');
+  });
   if (slides.length < 2) return;
   var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   var INTERVAL = 2000, i = 0, timer = null, inView = true, userPaused = false;

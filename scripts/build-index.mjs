@@ -25,6 +25,7 @@ const NAME = D.identity.tradeName;
 const L = D.location;
 const C = D.contact;
 const FB = C.facebook;
+const ML_PROFILE = 'https://vehiculos.mercadolibre.com.ar/_CustId_121360385';
 const IG = `https://www.instagram.com/${C.instagram}/`;
 const TT = C.tiktok;
 const YT = C.youtube;
@@ -94,7 +95,7 @@ const footer = (fuentes) => `<footer><div class="w">
 const autos = A.autos;
 const cantidadMotos = autos.filter((a) => a.tipoVehiculo === 'Moto').length;
 const cantidadAutos = autos.length - cantidadMotos;
-const ctaHead = WA ? { href: WA, t: 'WhatsApp' } : { href: FB, t: 'Facebook' };
+const ctaHead = WA ? { href: WA, t: 'WhatsApp' } : { href: ML_PROFILE, t: 'Mercado Libre' };
 const header = (pre = '', skip = '#unidades') => `<a class="skip" href="${skip}">Saltar al contenido</a>
 <header class="site-header${pre ? ' site-header--inner' : ' site-header--home'}"><div class="w"><a class="mark" href="./" aria-label="${esc(NAME)}, inicio"><img class="lg-img" src="images/logo.png" width="320" height="320" alt="${esc(NAME)}"></a>
 <nav class="site-nav" id="site-nav" aria-label="Principal"><a href="${pre}#horarios">Horarios</a><a href="${pre}#unidades">Unidades</a><a href="${pre}#financiacion">Financiación</a><a href="${pre}#guia">Guía</a><a href="${pre}#preguntas">Preguntas</a><a href="${pre}#nosotros">Nosotros</a><a href="${pre}#contacto">Contacto</a><a href="${pre}#tu-usado">Tu usado</a><a href="${pre}#busqueda">Tu búsqueda</a><a href="${pre}#visita">Visita</a></nav>
@@ -387,7 +388,7 @@ const mapaDidactico = `<div class="dr-map dr-map--didactic" id="mapa" data-mapa-
 <div class="dr-didactic-art" aria-hidden="true"><svg viewBox="0 0 720 360" role="img"><path class="dr-road dr-road-a" d="M-20 275C130 250 175 125 320 145s205 135 420 78"/><path class="dr-road dr-road-b" d="M125 -20c28 108 98 134 144 180s45 108 50 220"/><path class="dr-road dr-road-c" d="M445 -20c-10 105-20 165 38 218s124 62 247 64"/><path class="dr-route" d="M120 270C210 230 230 176 318 175s105 66 192 55"/><circle class="dr-route-node" cx="120" cy="270" r="9"/><circle class="dr-route-node" cx="510" cy="230" r="9"/><g class="dr-pin" transform="translate(318 112)"><path d="M0 44S-25 22-25 0a25 25 0 1 1 50 0C25 22 0 44 0 44Z"/><circle cx="0" cy="0" r="8"/></g></svg><span class="dr-didactic-label dr-didactic-label--from">Tu recorrido</span><span class="dr-didactic-label dr-didactic-label--to">828</span></div>
 <div class="dr-map-ph dr-map-ph--didactic"><span class="dr-map-ic">${ICX.pin}</span><p>Mapa didáctico de referencia</p><p class="map-m">Llegá a ${esc(NAME)} · ${esc(DIR_COMPLETA)}</p><div class="row"><a class="btn p sm" href="${L.mapsUrl}" ${EXT}>Abrir indicaciones</a></div></div>
 </div>`;
-const mapaHr = COORD ? `<div class="dr-map" id="mapa" data-lat="${COORD.lat}" data-lng="${COORD.lng}" data-nombre="${esc(NAME)}" data-dir="${esc(DIR_COMPLETA)}" data-gmaps="${esc(L.mapsUrl)}" data-leaflet="js/vendor/leaflet.js" data-css="js/vendor/leaflet.css">
+const mapaHr = COORD ? `<div class="dr-map" id="mapa" data-lat="${COORD.lat}" data-lng="${COORD.lng}" data-nombre="${esc(NAME)}" data-dir="${esc(DIR_COMPLETA)}" data-gmaps="${esc(L.mapsUrl)}" data-leaflet="js/vendor/leaflet.js" data-css="js/vendor/leaflet.css" data-manual-map="1">
 <div class="dr-map-v" role="region" aria-label="Mapa con la ubicación de ${esc(NAME)}"></div>
 <div class="dr-map-ph" data-mapa-ph><span class="dr-map-ic">${ICX.pin}</span><p>Mapa de ${esc(L.city)}</p><div class="row"><button class="btn p sm" type="button" data-mapa-abrir hidden>Ver mapa</button><a class="btn sm" href="${L.mapsUrl}" ${EXT}>Abrir en Google Maps</a></div><p class="map-m src" role="status" aria-live="polite"></p></div>
 </div>` : mapaDidactico;
@@ -395,7 +396,7 @@ const hrAddr = H.display ? `<div class="dr-addr"><div class="dr-addr-t"><span cl
 <div class="row"><a class="btn p sm" href="${L.mapsUrl}" ${EXT}>Cómo llegar</a>${COORD ? `<a class="btn sm" href="https://waze.com/ul?ll=${COORD.lat},${COORD.lng}&amp;navigate=yes" ${EXT}>Abrir en Waze</a>` : ''}<button class="btn sm" type="button" data-copiar="${esc(DIR_COMPLETA)}" hidden>Copiar dirección</button></div></div>` : '';
 const secHorarios = H.display ? `
 <section id="horarios" class="dr-hr dr-lux dr-v71" aria-labelledby="hor-t" data-semana="${esc(JSON.stringify(H.semana))}"><div class="w">
-<div class="dr-hr-head"><p class="ey"><span class="ey-brand">828</span> · Horarios y ubicación</p><h2 id="hor-t">Cuándo y dónde <em>visitarnos</em></h2><p class="dr-hr-lead">Consultá los días y horarios antes de salir, ubicá la agencia en el mapa y elegí cómo llegar. Si ya tenés una unidad en mente, verificá su disponibilidad con el equipo para aprovechar la visita.</p></div>
+<div class="dr-hr-head"><p class="ey"><span class="ey-brand">828</span> · Horarios y ubicación</p><h2 id="hor-t">Cuándo y dónde <em>visitarnos</em></h2><p class="dr-hr-lead">Te esperamos en ${esc(L.address)}, Monte Grande. En la agencia podés conocer las unidades, conversar sobre permutas y consultar alternativas de financiación. Revisá los horarios y, si venís por un vehículo en particular, escribinos o llamanos antes para confirmar su disponibilidad y coordinar la atención.</p></div>
 <div class="dr-stage">
 <div class="dr-panel">
 <div class="dr-now" data-live data-abierto="0">
@@ -413,14 +414,14 @@ ${mapaHr}
 ${hrAddr}
 </div>
 </div>
-<p class="src dr-src">Organizá tu recorrido con anticipación: el estado de atención y las franjas horarias te ayudan a planificar. La disponibilidad de cada unidad puede cambiar; consultala antes de viajar.</p>
+<p class="src dr-src">Las franjas indican el horario general de atención. La disponibilidad de los vehículos puede cambiar y una consulta no reserva por sí sola una unidad; confirmá ambos puntos con el equipo antes de salir. Las indicaciones de Google Maps y Waze están disponibles junto al mapa, que solo carga cuando elegís verlo.</p>
 </div></section>` : '';
 
 const visHr = H.display ? `<ul class="vz-hrs">${H.semana.map((g) => `<li data-dias="${g.dias.join(',')}"><span>${esc(g.etiqueta)}</span><b>${g.rangos.map((r) => `${fh(r[0])} a ${fh(r[1])}`).join(' y ')}</b></li>`).join('')}${H.domingo ? `<li data-dias="0"><span>Domingos</span><b>${esc(H.domingo)}</b></li>` : ''}</ul>` : '';
 const secVisita = `
 <section id="visita" class="visita-s vz" aria-labelledby="vis-t"><div class="w vis-w">
 <div class="vz-head"><p class="ey"><span class="ey-brand">828</span> · Visita<h2 id="vis-t">Coordiná tu <em>visita</em></h2>
-<p class="sec-p">Conocé las unidades con tiempo y coordiná una visita a la agencia. Elegí una fecha y franja horaria para enviar tu consulta; el equipo confirmará disponibilidad y acordará con vos el día y la hora antes de que viajes.</p></div>
+<p class="sec-p">Elegí una fecha y una franja para consultar por una visita o una prueba de manejo. La solicitud no es un turno automático: el equipo verifica la disponibilidad de la unidad y confirma con vos el día y el horario antes de que viajes.</p></div>
 <div class="vz-grid">
 <div class="vz-main"><h3>Agendá una visita y prueba de manejo</h3>
 <ol class="vz-steps"><li><b>Elegí día y franja</b><span>En la página de reserva, desde el celular o la computadora.</span></li><li><b>Se arma tu consulta</b><span>Queda lista para enviarla a la agencia por el canal que prefieras.</span></li><li><b>La agencia te confirma</b><span>Es una consulta, no un turno: el día y la hora se acuerdan con la agencia.</span></li></ol>
@@ -458,16 +459,16 @@ const secNosotros = `
 <div class="nz-top"><div class="w nz-w">
 <div class="nz-intro">
 <p class="ey"><span class="ey-brand">828</span> · Nosotros</p>
-<span class="nz-logo"><img src="images/logo-sm.png" width="320" height="320" alt=""></span>
+<span class="nz-logo"><img src="images/logo-sm.png" width="320" height="320" alt="${esc(NAME)}"></span>
 <h2 id="nos-t">Quiénes <em>somos</em></h2>
 <p class="nz-lead">Multimarcas · 0 km · Usados</p>
 <p class="nz-offer">Financiación <strong>Cuotas fijas</strong></p>
-<p class="nz-offer-note">Consultá vigencia, requisitos y modalidad disponibles para cada unidad.</p>
-<p class="nz-p">Más de 19 años en el rubro. Una propuesta para encontrar tu próximo vehículo, evaluar una permuta y consultar alternativas de financiación con atención directa en Monte Grande.</p>
+<p class="nz-offer-note">Las alternativas, requisitos y condiciones se confirman directamente con el equipo para cada unidad.</p>
+<p class="nz-p">Hace más de 19 años acompañamos a quienes buscan su próximo vehículo en Monte Grande. Reunimos opciones de distintas marcas, unidades 0 km y usados; te ayudamos a evaluar alternativas, consultar financiación en cuotas fijas y considerar una permuta. La disponibilidad y las condiciones de cada operación se confirman de manera directa y transparente con el equipo.</p>
 <div class="row nz-cta"><a class="btn p" href="#unidades">Explorar unidades</a><a class="btn" href="#contacto">Hablar con el equipo</a></div>
-<div class="nz-contactos" aria-label="Contactos de Automotores 828"><a href="#contacto"><span>Adriano</span><b>11 4993-8719</b></a><a href="#contacto"><span>Rubén</span><b>11 5249-0262</b></a><a href="#contacto"><span>Atención</span><b>4290-7300</b></a><a href="#contacto"><span>Contacto</span><b>11 6023-9259</b></a></div>
+<div class="nz-contactos" aria-label="Contactos de Automotores 828"><a href="#contacto"><span>Adriano · asesor</span><b>11 4993 8719</b><small>Contacto directo</small></a><a href="#contacto"><span>Rubén · asesor</span><b>11 5249 0262</b><small>Contacto directo</small></a><a href="#contacto"><span>Línea de atención</span><b>4290-7300</b><small>Atención comercial</small></a><a href="#contacto"><span>Contacto</span><b>11 6023 9259</b><small>Atención comercial</small></a></div>
 </div>
-<div class="nz-side"><div class="nz-big"><span class="nz-flag" aria-hidden="true"></span><p class="nz-num">19+</p><p class="nz-num-l">años en el rubro</p><p class="nz-num-s">Experiencia, atención cercana y alternativas para acompañar tu próxima decisión.</p></div>${GREVIEWS}</div>
+<div class="nz-side"><div class="nz-big"><span class="nz-flag" aria-hidden="true"></span><p class="nz-proof">TRAYECTORIA · MONTE GRANDE</p><p class="nz-num">19+</p><p class="nz-num-l">años en el rubro</p><p class="nz-num-s">Atención directa para conocer opciones, resolver consultas y avanzar a tu ritmo.</p></div>${GREVIEWS}</div>
 </div></div>
 <div class="nz-body"><div class="w">
 <h3 class="nz-h">Qué podés resolver con nosotros</h3>
@@ -478,7 +479,7 @@ ${hasSvc('permuta') ? `<li class="nz-tile"><span class="nz-ic">${ICN.swap}</span
 ${hasSvc('consignacion') ? `<li class="nz-tile"><span class="nz-ic">${ICN.shield}</span><h4>Consignaciones</h4><p>Podés dejar tu vehículo en consignación. Las condiciones se coordinan con ${esc(NAME)}.</p><a href="#contacto">Consultar</a></li>` : ''}
 </ul>
 </div></div>
-<div class="nz-net nz-net--mapa" id="donde"><div class="w"><h3 class="nz-h">Dónde encontrarnos</h3><p class="nz-net-p">Estamos en ${esc(L.address)}, en ${esc(L.city)}. Consultá el horario antes de acercarte y abrí las indicaciones para planificar tu recorrido.</p>
+<div class="nz-net nz-net--mapa" id="donde"><div class="w"><h3 class="nz-h">Dónde encontrarnos</h3><p class="nz-net-p">Nuestro salón está en ${esc(L.address)}, ${esc(L.city)}. Revisá el horario general, confirmá previamente la unidad que querés ver y elegí «Abrir en Google Maps» para planificar el trayecto. El mapa interactivo de esta página queda disponible solo si decidís abrirlo.</p>
 <ul><li class="is-here">${ICX.pin}<div><b>${esc(NAME)}</b><span>${esc(DIR_COMPLETA)}</span></div></li></ul>
 ${L.mapsUrl ? `<p class="nz-net-acc"><a class="btn p sm" href="${L.mapsUrl}" ${EXT}>Abrir en Google Maps</a></p>` : ''}</div>
 ${COORD ? `<div class="nz-mapa"><div class="dr-map" id="mapa-nosotros" data-lat="${COORD.lat}" data-lng="${COORD.lng}" data-nombre="${esc(NAME)}" data-dir="${esc(DIR_COMPLETA)}" data-gmaps="${esc(L.mapsUrl)}" data-leaflet="js/vendor/leaflet.js" data-css="js/vendor/leaflet.css" data-manual-map="1"><div class="dr-map-v" role="region" aria-label="Mapa con la ubicación de ${esc(NAME)}"></div><div class="dr-map-ph" data-mapa-ph><span class="dr-map-ic">${ICX.pin}</span><p>Mapa de ${esc(L.city)}</p><p class="map-m src" role="status" aria-live="polite">El mapa interactivo se carga solo cuando lo solicites.</p><div class="row"><button class="btn p sm" type="button" data-mapa-abrir>Ver mapa interactivo</button></div></div></div>` : ''}</div>
@@ -511,7 +512,7 @@ const index = page({
   title: `${NAME} · Autos y motos en ${L.city}, ${L.province}`,
   desc: `${NAME} en ${L.city}, ${L.partido}: compra y venta de autos y motos usados, permutas y consignaciones. Visitanos en ${L.address} o escribinos por redes o correo.`,
   file: 'index.html',
-  extraHead: `<link rel="stylesheet" href="css/hero-carousel.css?v=20261022-2">\n<link rel="stylesheet" href="css/fondos-secciones.css">\n<link rel="stylesheet" href="css/damero-secciones.css?v=20261022-2">\n<script type="application/ld+json">${JSON.stringify(ld)}</script>\n<script defer src="js/hero-carousel.js"></script>\n<script defer src="js/fondos-secciones.js"></script>\n<script defer src="js/secciones.js"></script>\n<script defer src="js/mapa.js?v=20261021-3"></script>\n<script defer src="js/horarios.js"></script>\n<script defer src="js/site.js"></script>\n<script defer src="js/reserva-inline.js"></script>\n`,
+  extraHead: `<link rel="stylesheet" href="css/hero-carousel.css?v=20261022-2">\n<link rel="stylesheet" href="css/fondos-secciones.css">\n<link rel="stylesheet" href="css/damero-secciones.css?v=20261022-7">\n<script type="application/ld+json">${JSON.stringify(ld)}</script>\n<script defer src="js/hero-carousel.js?v=20261022-3"></script>\n<script defer src="js/fondos-secciones.js"></script>\n<script defer src="js/secciones.js"></script>\n<script defer src="js/mapa.js?v=20261022-4"></script>\n<script defer src="js/horarios.js"></script>\n<script defer src="js/site.js?v=20261022-2"></script>\n<script defer src="js/reserva-inline.js"></script>\n`,
   body: `${header()}
 <main id="top">
 <div class="hero" role="region" aria-label="${esc(NAME)}">
@@ -538,7 +539,7 @@ ${unidades}
 <div class="finance-head"><div><p class="ey"><span class="ey-brand">828</span> · Financiación y servicios</p><h2 id="fin-t">Financiá tu <em>próximo vehículo</em></h2><p class="sec-p">Consultanos por financiación. Las condiciones se informan por consulta: este sitio no publica condiciones de financiación.</p></div><aside class="finance-aside"><span>${esc(NAME)}</span><p>Encontrá una forma de avanzar hacia tu próxima unidad.</p></aside></div>
 <div class="finance-rule" aria-hidden="true"><span></span><small>Servicios para moverte mejor</small><span></span></div>
 <div class="cards finance-cards">${hasSvc('financiacion') ? `<div class="card finance-card"><span class="finance-card-no">Financiación</span><h3>Consultá por financiación</h3><p>Escribinos y te contamos cómo avanzar con la unidad que te interese. Las condiciones dependen de la unidad y de cada solicitante.</p></div>` : ''}${hasSvc('permuta') ? `<div class="card finance-card"><span class="finance-card-no">Tu usado</span><h3>Permutas</h3><p>Tomamos permutas. Contanos qué tenés y armá el mensaje desde la sección «Tu usado».</p></div>` : ''}${hasSvc('consignacion') ? `<div class="card finance-card"><span class="finance-card-no">Consignación</span><h3>Consignaciones</h3><p>Podés dejar tu vehículo en consignación. Las condiciones se coordinan con ${esc(NAME)}.</p></div>` : ''}${hasSvc('compra-venta') ? `<div class="card finance-card"><span class="finance-card-no">Compra y venta</span><h3>Vehículos usados</h3><p>Compra y venta de vehículos usados en ${esc(L.city)}.</p></div>` : ''}</div>
-<div class="row fin-cta"><a class="btn p" href="${wa('Hola! Quiero consultar por financiación.') || FB}" ${EXT}>${C.whatsApp ? 'Consultar por financiación' : 'Consultar por Facebook'}</a>${hasSvc('permuta') ? '<a class="btn" href="#tu-usado">Consultar por mi usado</a>' : ''}</div>
+<div class="row fin-cta"><a class="btn p" href="${wa('Hola! Quiero consultar por financiación.') || ML_PROFILE}" ${EXT}>${C.whatsApp ? 'Consultar por financiación' : 'Ver publicaciones en Mercado Libre'}</a>${hasSvc('permuta') ? '<a class="btn" href="#tu-usado">Consultar por mi usado</a>' : ''}</div>
 <p class="src">¿Buscás algo más? Escribinos por nuestros canales y lo vemos juntos.</p>
 </div></section>
 
@@ -554,13 +555,13 @@ ${secNosotros}
 <div class="dr-ct-head"><p class="ey"><span class="ey-brand">828</span> · Contacto</p><h2 id="contacto-t">Hablá con <em>un asesor</em></h2><p class="sec-p">Escribinos o llamanos y te contamos disponibilidad, precio y formas de pago de la unidad que te interese.</p></div>
 <div class="dr-ct-grid">
 <ul class="dr-ch">${canales}</ul>
-<aside class="dr-ct-side" aria-label="Consultar y redes"><p class="dr-ct-t">¿Buscás un vehículo?</p><p>Contanos qué estás buscando y te ayudamos a encontrarlo.</p><div class="row"><a class="btn p" href="${ctaHead.href}" ${EXT}>${WA ? 'Consultar con un asesor' : 'Consultar por Facebook'}</a><a class="btn" href="reserva.html">Agendar visita</a></div>
+<aside class="dr-ct-side" aria-label="Consultar y redes"><p class="dr-ct-t">¿Buscás un vehículo?</p><p>Contanos qué estás buscando y te ayudamos a encontrarlo.</p><div class="row"><a class="btn p" href="${ctaHead.href}" ${EXT}>${WA ? 'Consultar con un asesor' : 'Ver publicaciones en Mercado Libre'}</a><a class="btn" href="reserva.html">Agendar visita</a></div>
 <div class="dr-soc"><p class="dr-k">En la web</p><ul>${redes}</ul></div></aside>
 </div>
 </div></section>
 </main>
 ${footer(true)}
-${C.whatsApp ? `<nav class="cta-bar" aria-label="Acciones rápidas"><a href="${WA}" ${EXT}>Consultar</a><a href="reserva.html">Agendar visita</a></nav>` : `<nav class="cta-bar" aria-label="Acciones rápidas"><a href="${FB}" ${EXT}>Consultar</a><a href="reserva.html">Agendar visita</a></nav>`}
+${C.whatsApp ? `<nav class="cta-bar" aria-label="Acciones rápidas"><a href="${WA}" ${EXT}>Consultar por WhatsApp</a><a href="reserva.html">Agendar visita</a></nav>` : `<nav class="cta-bar" aria-label="Acciones rápidas"><a href="${ML_PROFILE}" ${EXT} aria-label="Ver publicaciones en Mercado Libre">Mercado Libre</a><a href="reserva.html">Agendar visita</a></nav>`}
 `,
 });
 
@@ -572,7 +573,7 @@ const privacidad = page({
 <main id="top"><section><div class="w doc">
 <p class="ey">Avisos</p><h1>Privacidad y <em>avisos</em></h1>
 <h2>Datos personales</h2>
-<p>Este sitio no tiene cuentas ni cookies propias y no guarda datos de quienes lo visitan. Los formularios «Tu usado» y «Contanos qué auto buscás» solo arman un mensaje en tu navegador, que podés copiar y enviar vos: no se transmite nada a este sitio. El mapa de «Horarios y ubicación» se carga solo si lo pedís y trae mosaicos de OpenStreetMap; el mapa de «Dónde encontrarnos» lo provee Google Maps y se carga al llegar a esa sección. Ambos reciben tu dirección IP como cualquier sitio que se visita. Los botones de contacto abren Facebook, Instagram, TikTok${C.whatsApp ? ', WhatsApp' : ''} o Google Maps, que tienen sus propias políticas de privacidad.</p>
+<p>Este sitio no tiene cuentas ni cookies propias y no guarda datos de quienes lo visitan. Los formularios «Tu usado» y «Contanos qué auto buscás» solo arman un mensaje en tu navegador, que podés copiar y enviar vos: no se transmite nada a este sitio. Los mapas de «Horarios y ubicación» y «Dónde encontrarnos» cargan sus mosaicos de OpenStreetMap solo cuando los solicitás; al abrirlos, el proveedor recibe tu dirección IP. Los botones y enlaces externos abren Mercado Libre, Facebook, Instagram, TikTok${C.whatsApp ? ', WhatsApp' : ''} o Google Maps, que tienen sus propias políticas de privacidad.</p>
 <h2>Información de las unidades</h2>
 <p>Los datos de las unidades (año, kilometraje, precio y anticipo cuando aparecen) provienen de publicaciones públicas consultadas en Mercado Libre y pueden haber cambiado. Confirmá siempre con ${esc(NAME)} antes de decidir.</p>
 <h2>Documento preliminar</h2>
