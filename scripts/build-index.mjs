@@ -425,7 +425,7 @@ ${hrAddr}
 const visHr = H.display ? `<ul class="vz-hrs">${H.semana.map((g) => `<li data-dias="${g.dias.join(',')}"><span>${esc(g.etiqueta)}</span><b>${g.rangos.map((r) => `${fh(r[0])} a ${fh(r[1])}`).join(' y ')}</b></li>`).join('')}${H.domingo ? `<li data-dias="0"><span>Domingos</span><b>${esc(H.domingo)}</b></li>` : ''}</ul>` : '';
 const secVisita = `
 <section id="visita" class="visita-s vz" aria-labelledby="vis-t"><div class="w vis-w">
-<div class="vz-head"><p class="ey"><span class="ey-brand">828</span> · Visita<h2 id="vis-t">Coordiná tu <em>visita</em></h2>
+<div class="vz-head"><p class="ey"><span class="ey-brand">828</span> · Visita</p><h2 id="vis-t">Coordiná tu <em>visita</em></h2>
 <p class="sec-p">Elegí una fecha y una franja para consultar por una visita o una prueba de manejo. La solicitud no es un turno automático: el equipo verifica la disponibilidad de la unidad y confirma con vos el día y el horario antes de que viajes.</p></div>
 <div class="vz-grid">
 <div class="vz-main"><h3>Agendá una visita y prueba de manejo</h3>
