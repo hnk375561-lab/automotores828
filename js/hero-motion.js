@@ -1,23 +1,20 @@
-/* Pausa automática de la cinta del hero al interactuar y cuando no está visible. */
+/* Pausa automática solo cuando el hero no está visible o el sistema pide movimiento reducido. */
 (function () {
   'use strict';
   var chain = document.querySelector('[data-hero-chain]');
   if (!chain) return;
-  var interactionArea = chain.closest('.hero') || chain;
 
+  var interactionArea = chain.closest('.hero') || chain;
   var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)');
-  var hovering = false;
   var focused = false;
   var inView = true;
 
   function sync() {
     var reduced = !!(reduce && reduce.matches);
     var saveData = document.documentElement.classList.contains('save-data');
-    chain.classList.toggle('is-paused', reduced || saveData || document.hidden || !inView || hovering || focused);
+    chain.classList.toggle('is-paused', reduced || saveData || document.hidden || !inView || focused);
   }
 
-  interactionArea.addEventListener('pointerenter', function () { hovering = true; sync(); });
-  interactionArea.addEventListener('pointerleave', function () { hovering = false; sync(); });
   interactionArea.addEventListener('focusin', function () { focused = true; sync(); });
   interactionArea.addEventListener('focusout', function (event) {
     if (!interactionArea.contains(event.relatedTarget)) { focused = false; sync(); }
