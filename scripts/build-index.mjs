@@ -492,7 +492,7 @@ const ld = {
   ...(siteUrl ? { url: siteUrl } : {}), ...(C.phoneTel ? { telephone: C.phoneTel } : {}), ...(C.email ? { email: C.email } : {}), ...(L.mapsUrl ? { hasMap: L.mapsUrl } : {}), ...(COORD ? { geo: { '@type': 'GeoCoordinates', latitude: COORD.lat, longitude: COORD.lng } } : {}), ...(openSpec.length ? { openingHoursSpecification: openSpec } : {}),
 };
 
-// Carrusel del hero: primeras fotos de diez unidades ya integradas en data/vehicles.json.
+// Cadena horizontal del hero: frentes de diez unidades ya integradas en data/vehicles.json.
 const HERO_FOTOS = [
   ['01', 'images/hero/hero-01.webp', 'images/hero/hero-01-828.webp', 900, 1200, 621, 'Honda Fit 2014 en Automotores 828'],
   ['02', 'images/hero/hero-02.webp', 'images/hero/hero-02-828.webp', 902, 902, 828, 'Peugeot 208 2021 en Automotores 828'],
@@ -506,7 +506,8 @@ const HERO_FOTOS = [
   ['10', 'images/hero/hero-10.webp', 'images/hero/hero-10-828.webp', 900, 1200, 621, 'Renault Duster 2018 en Automotores 828'],
 ];
 const HERO_VERSION = '?v=20261021-2';
-const HERO_SLIDES = HERO_FOTOS.map(([n, src, small, width, height, smallWidth, alt], k) => `<figure class="hero-slide hero-slide--${n}${k === 0 ? ' is-active' : ''}" data-hero-slide><img src="${src}${HERO_VERSION}" srcset="${small}${HERO_VERSION} ${smallWidth}w, ${src}${HERO_VERSION} ${width}w" sizes="100vw" width="${width}" height="${height}" alt="${esc(alt)}" decoding="async"${k === 0 ? ' fetchpriority="high"' : ' loading="lazy"'}></figure>`).join('');
+const HERO_CHAIN = HERO_FOTOS.map(([n, src, small, width, height, smallWidth, alt]) => `<figure class="hero-chain-car hero-chain-car--${n}"><img src="${src}${HERO_VERSION}" srcset="${small}${HERO_VERSION} ${smallWidth}w, ${src}${HERO_VERSION} ${width}w" sizes="25vw" width="${width}" height="${height}" alt="${esc(alt)}" decoding="async" loading="lazy"></figure>`).join('');
+const HERO_CHAIN_DUP = HERO_FOTOS.map(([n, src, small, width, height, smallWidth, alt]) => `<figure class="hero-chain-car hero-chain-car--${n}" aria-hidden="true"><img src="${src}${HERO_VERSION}" srcset="${small}${HERO_VERSION} ${smallWidth}w, ${src}${HERO_VERSION} ${width}w" sizes="25vw" width="${width}" height="${height}" alt="" decoding="async" loading="lazy"></figure>`).join('');
 
 const index = page({
   title: `${NAME} · Autos y motos en ${L.city}, ${L.province}`,
@@ -516,7 +517,7 @@ const index = page({
   body: `${header()}
 <main id="top">
 <div class="hero" role="region" aria-label="${esc(NAME)}">
-<div class="hero-media" data-hero-carousel>${HERO_SLIDES}</div>
+	<div class="hero-media hero-chain" data-hero-chain aria-label="Frentes de vehículos del inventario"><div class="hero-chain-track">${HERO_CHAIN}${HERO_CHAIN_DUP}</div></div>
 <div class="hx-copy">
 <p class="ey">${esc(L.city)} · ${esc(L.partido)}</p>
 <h1><span class="sr">${esc(NAME)}: </span>Autos y motos <em>en ${esc(L.city)}</em></h1>
