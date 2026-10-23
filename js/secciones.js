@@ -512,10 +512,17 @@
         q.value = st.q;
       }
 
-      q.addEventListener('input', function () { st.q = q.value; aplicar(true); });
-      q.addEventListener('search', function () { st.q = q.value; aplicar(true); });
+      /* D1 · debounce 120 ms para la búsqueda del catálogo */
+      var qDebounce = 0;
+      q.addEventListener('input', function () {
+        st.q = q.value;
+        clearTimeout(qDebounce);
+        qDebounce = setTimeout(function () { aplicar(true); }, 120);
+      });
+      q.addEventListener('search', function () { st.q = q.value; clearTimeout(qDebounce); aplicar(true); });
       ord.addEventListener('change', function () { st.orden = ord.value; aplicar(true); });
       lim.addEventListener('click', function () {
+        clearTimeout(qDebounce);
         st.q = ''; q.value = ''; st.orden = '';
         GR.forEach(function (g) {
           if (g.tipo === 'chips') st[g.k] = []; else if (g.tipo === 'select') st[g.k] = ''; else { st[g.k + 'D'] = ''; st[g.k + 'H'] = ''; }
