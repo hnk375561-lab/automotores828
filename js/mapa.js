@@ -92,7 +92,23 @@
       marca.bindTooltip(nombre, { permanent: true, direction: 'top', offset: [0, -50], className: 'dr-tt' });
       var Centrar = L.Control.extend({ options: { position: 'topright' }, onAdd: function () { var b = L.DomUtil.create('button', 'dr-ctr'); b.type = 'button'; b.textContent = 'Centrar'; b.setAttribute('aria-label', 'Volver a centrar el mapa en ' + nombre); L.DomEvent.disableClickPropagation(b); L.DomEvent.on(b, 'click', function () { mapa.setView([lat, lng], 17); }); return b; } });
       mapa.addControl(new Centrar());
-      if (movil) { var cand = el('button', 'Tocá para mover el mapa', 'dr-lock'); cand.type = 'button'; cand.addEventListener('click', function () { mapa.dragging.enable(); cand.remove(); }); root.appendChild(cand); }
+      if (movil) {
+        var cand = el('button', 'Tocá para mover el mapa', 'dr-lock'); cand.type = 'button';
+        var activarDrag = function () {
+          if (!mapa) return;
+          mapa.dragging.enable();
+          if (cand && cand.parentNode) { cand.parentNode.removeChild(cand); cand = null; }
+        };
+        cand.addEventListener('click', activarDrag);
+        root.appendChild(cand);
+        /* B5 · gesto de dos dedos: activa el arrastre sin bloquear el scroll de la página.
+           Se engancha en fase de captura para habilitar dragging antes de que Leaflet procese
+           el touchstart. Un solo dedo no activa nada: si el mapa aún no está activo, el
+           navegador sigue scrolleando la página con normalidad. */
+        view.addEventListener('touchstart', function (e) {
+          if (e.touches.length >= 2) activarDrag();
+        }, { capture: true, passive: true });
+      }
       else { mapa.on('click', function () { mapa.scrollWheelZoom.enable(); }); view.addEventListener('mouseleave', function () { if (mapa) mapa.scrollWheelZoom.disable(); }); }
       requestAnimationFrame(function () { requestAnimationFrame(function () { if (mapa) { mapa.invalidateSize({ pan: false }); mapa.setView([lat, lng], 17, { animate: false }); } }); });
     }
