@@ -2283,3 +2283,13 @@ dialog.ficha .fi-faq details.dd summary{font-size:15px}
 dialog.ficha .fi-faq details.dd p{font-size:14.5px}
 @media(max-width:400px){dialog.ficha .fi-calc-g{grid-template-columns:1fr}}
 @media(prefers-reduced-motion:reduce){dialog.ficha .fi-gu-b i{transition:none}}
+
+/* A3.4: favoritos */
+.fav-b{flex:none;display:inline-grid;place-items:center;width:44px;height:44px;margin:0 6px 0 auto;padding:0;background:transparent;border:2px solid var(--g3);color:#fff;cursor:pointer}
+.fav-b svg{width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:2;stroke-linejoin:round}
+.fav-b:hover{border-color:var(--y);color:var(--y)}
+.fav-b.on{background:var(--y);border-color:var(--y);color:var(--ink)}
+.fav-b.on svg{fill:currentColor}
+.fav-b:focus-visible,.fx-fav:focus-visible{outline:3px solid var(--fo);outline-offset:2px}
+.fx-fav[aria-pressed="true"],.fav-fi.on{background:var(--y);border-color:var(--y);color:var(--ink)}
+.fx-favv{margin:12px 0;padding:14px 16px;border-left:3px solid var(--y);background:rgba(255,255,255,.04);color:#e8e8e8}

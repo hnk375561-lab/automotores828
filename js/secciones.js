@@ -50,6 +50,17 @@
     var tools = $('#tools'), ul = $('#cars'), dataEl = $('#cat-data'), sinres = $('#sinres');
     if (!tools || !ul || !dataEl) return;
     var list = [];
+    /* A3.4 · favoritos: ids reales de las unidades guardados en localStorage (si no está disponible, siguen en memoria) */
+    var FAV_KEY = 'automotores828:favoritos';
+    function favKey(a) { return String(a.id != null ? a.id : (a.url || a.titulo)); }
+    function favLeer() {
+      try {
+        var v = JSON.parse(window.localStorage.getItem(FAV_KEY) || '[]');
+        return Array.isArray(v) ? v.filter(function (k, n) { return typeof k === 'string' && k && v.indexOf(k) === n; }) : [];
+      } catch (e) { return []; }
+    }
+    var favs = favLeer();
+    function favGuardar() { try { window.localStorage.setItem(FAV_KEY, JSON.stringify(favs)); } catch (e) {} }
     /* El clic en una tarjeta se atiende desde el primer momento. Si los datos del catálogo todavía no
        llegaron, se espera a que lleguen y se abre la ficha recién ahí. */
     var accion = null;
@@ -87,6 +98,38 @@
         a.pub = a.publicado ? Math.floor((Date.now() - new Date(a.publicado + 'T12:00:00').getTime()) / 864e5) : null;
         a.modeloTxt = a.titulo.indexOf(a.marca + ' ') === 0 ? a.titulo.slice(a.marca.length + 1) : a.titulo;
       });
+
+      /* A3.4 · favoritos: botón en cada tarjeta, sincronizado con la ficha y el acceso del panel */
+      function favN() { return list.filter(function (a) { return favs.indexOf(favKey(a)) > -1; }).length; }
+      function favSync() {
+        $$('[data-fav]').forEach(function (b) {
+          var on = favs.indexOf(b.getAttribute('data-fav')) > -1;
+          b.setAttribute('aria-pressed', on ? 'true' : 'false'); b.classList.toggle('on', on);
+          if (b.classList.contains('fav-fi')) b.textContent = on ? '♥ Quitar de favoritos' : '♡ Guardar en favoritos';
+          else b.setAttribute('aria-label', (on ? 'Quitar de favoritos: ' : 'Guardar en favoritos: ') + (b.getAttribute('data-t') || ''));
+        });
+        var n = favN();
+        favBtn.textContent = '♥ Favoritos' + (n ? ' (' + n + ')' : '');
+        favBtn.setAttribute('aria-pressed', soloFav ? 'true' : 'false'); favBtn.classList.toggle('is-on', soloFav);
+      }
+      function favToggle(a) {
+        var k = favKey(a), i = favs.indexOf(k);
+        if (i > -1) favs.splice(i, 1); else favs.push(k);
+        favGuardar(); favSync();
+        if (soloFav) aplicar(false);
+      }
+      list.forEach(function (a) {
+        var li = items[a.i]; if (!li) return;
+        var b = el('button', null, 'fav-b'); b.type = 'button'; b.setAttribute('data-fav', favKey(a)); b.setAttribute('data-t', a.titulo || '');
+        b.innerHTML = '<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 20.5s-8-4.9-8-11A4.5 4.5 0 0 1 12 6.8 4.5 4.5 0 0 1 20 9.5c0 6.100-8 11-8 11z"/></svg>';
+        b.addEventListener('click', function (e) { e.preventDefault(); e.stopPropagation(); favToggle(a); });
+        var h = li.querySelector('.car-h') || li;
+        h.insertBefore(b, h.querySelector('.car-c'));
+      });
+      favBtn.addEventListener('click', function () { soloFav = !soloFav; favSync(); aplicar(true); });
+      favTodas.addEventListener('click', function () { soloFav = false; favSync(); aplicar(true); });
+      window.addEventListener('storage', function (e) { if (e.key === FAV_KEY) { favs = favLeer(); favSync(); aplicar(false); } });
+      favSync();
 
       /* ----- definición de los filtros (todo sale de los datos publicados) ----- */
       function uniq(f) {
@@ -163,6 +206,7 @@
 
       /* ----- estado ----- */
       var st = { q: '', orden: '' };
+      var soloFav = false;
       GR.forEach(function (g) {
         if (g.tipo === 'chips') st[g.k] = [];
         else if (g.tipo === 'select') st[g.k] = '';
@@ -183,6 +227,7 @@
         return (d === '' || x >= +d) && (h === '' || x <= +h);
       }
       function coincide(a, salto, sinQ) {
+        if (soloFav && favs.indexOf(favKey(a)) < 0) return false;
         if (!sinQ) {
           var ws = norm(st.q).split(/\s+/).filter(Boolean);
           if (!ws.every(function (w) { return a.t.indexOf(w) > -1; })) return false;
@@ -235,6 +280,13 @@
       fo.appendChild(lo); fo.appendChild(ord);
       var tg = el('button', 'Ocultar filtros', 'btn sm fx-tg'); tg.type = 'button'; tg.setAttribute('aria-controls', 'fx-body');
       top.appendChild(fq); top.appendChild(fo); top.appendChild(tg);
+      var favBtn = el('button', null, 'btn sm fx-fav'); favBtn.type = 'button'; favBtn.setAttribute('aria-pressed', 'false');
+      top.appendChild(favBtn);
+      var favVacio = el('p', 'Todavía no guardaste favoritos. Tocá el corazón de una unidad para guardarla y verla acá.', 'fx-favv');
+      favVacio.setAttribute('role', 'status'); favVacio.hidden = true;
+      var favTodas = el('button', 'Ver todas las unidades', 'btn sm'); favTodas.type = 'button';
+      favVacio.appendChild(document.createTextNode(' ')); favVacio.appendChild(favTodas);
+      if (sinres && sinres.parentNode) sinres.parentNode.insertBefore(favVacio, sinres); else act.appendChild(favVacio);
 
       var refs = {};   /* k -> { g, inputs:[{o,input,n}], select, note, d, h } */
       GR.forEach(function (g) {
@@ -350,7 +402,10 @@
           if (ok && visibles < limite) { li.style.removeProperty('display'); visibles++; }
           else li.style.setProperty('display', 'none', 'important');
         });
-        ul.hidden = n === 0; if (sinres) sinres.hidden = n > 0;
+        ul.hidden = n === 0;
+        var sinFav = soloFav && favN() === 0;
+        if (sinres) sinres.hidden = n > 0 || sinFav;
+        favVacio.hidden = !sinFav;
         var more = document.getElementById('inventory-more'), moreNote = document.getElementById('inventory-more-note');
         if (more) {
           var restantes = Math.max(0, n - visibles), cantidad = Math.min(paso, restantes);
@@ -788,6 +843,8 @@
         var tas = enlace('Tasar mi usado', '#tu-usado', 'btn sm', false); tas.addEventListener('click', function () { fdlg.close(); });
         if ($('#tu-usado')) ac2.appendChild(tas);
         ac2.appendChild(boton('Compartir', 'btn sm', function () { compartir(a); }));
+        var fvb = boton('♡ Guardar en favoritos', 'btn sm fav-fi', function () { favToggle(a); });
+        fvb.setAttribute('data-fav', favKey(a)); fvb.setAttribute('aria-pressed', 'false'); ac2.appendChild(fvb); favSync();
         ac2.appendChild(boton('Copiar enlace', 'btn sm', function () { copiar((urlUnidad() || a.url), function (ok) { aviso(ok ? 'Enlace copiado' : 'No se pudo copiar el enlace'); }); }));
         var cb = cbs.filter(function (c) { return +c.value === a.i; })[0];
         if (cb) {
