@@ -156,7 +156,7 @@ dialog.cmp-lux .cmp-ft{border-top:1px solid rgba(255,255,255,.1)}
 @media(max-width:900px){#nosotros.nz .nz-w{grid-template-columns:1fr!important;gap:28px!important}#nosotros.nz .nz-big{min-height:280px!important}#nosotros.nz .nz-side{display:grid;grid-template-columns:minmax(0,1fr);gap:14px}}
 @media(max-width:700px){#nosotros.nz .nz-top{padding-block:42px!important}#nosotros.nz .nz-w{gap:22px!important}#nosotros.nz .nz-logo{width:58px;height:58px}#nosotros.nz h2{font-size:clamp(46px,13vw,68px)!important}#nosotros.nz .nz-contactos{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:7px!important}#nosotros.nz .nz-contactos a{min-height:78px;padding:9px 8px!important}#nosotros.nz .nz-contactos b{font-size:15px!important;overflow-wrap:anywhere}#nosotros.nz .nz-contactos small{font-size:9px}#nosotros.nz .nz-big{min-height:245px!important;padding:24px!important}#nosotros.nz .nz-num{font-size:clamp(104px,30vw,150px)!important}#nosotros.nz .nz-tiles{grid-template-columns:1fr!important;gap:10px!important}#nosotros.nz .nz-tile{min-height:unset!important;padding:18px!important}#nosotros.nz .nz-net--mapa{padding-top:32px!important}}
 /* Mapa: no se inicializa al scroll; al abrirlo queda centrado y con tamaño contenido. */
-#horarios .dr-map,#donde .dr-map{min-height:clamp(250px,28vw,360px)!important;height:clamp(250px,28vw,360px)!important;contain:layout paint;content-visibility:auto;contain-intrinsic-size:320px}
+#horarios .dr-map,#donde .dr-map{min-height:clamp(250px,28vw,360px)!important;height:clamp(250px,28vw,360px)!important;contain:layout paint style;content-visibility:auto;contain-intrinsic-size:320px}
 #horarios .dr-map-v,#donde .dr-map-v{inset:0!important;overflow:hidden!important}
 #horarios .dr-map .leaflet-container,#donde .dr-map .leaflet-container{width:100%;height:100%;font:13px/1.4 var(--hero-copy,var(--b))}
 #horarios .dr-map .dr-tt,#donde .dr-map .dr-tt{white-space:nowrap;max-width:calc(100vw - 100px);overflow:hidden;text-overflow:ellipsis}
@@ -164,7 +164,7 @@ dialog.cmp-lux .cmp-ft{border-top:1px solid rgba(255,255,255,.1)}
 #horarios .dr-map-ph p,#donde .dr-map-ph p{max-width:52ch}
 #horarios .dr-hr-lead{max-width:74ch!important;font-size:clamp(16px,1.45vw,19px)!important;line-height:1.65!important}
 #horarios .dr-src{max-width:84ch;line-height:1.55}
-#nosotros.nz .nz-mapa .dr-map{height:clamp(260px,30vw,380px)!important;min-height:260px!important;contain:layout paint;content-visibility:auto;contain-intrinsic-size:320px}
+#nosotros.nz .nz-mapa .dr-map{height:clamp(260px,30vw,380px)!important;min-height:260px!important;contain:layout paint style;content-visibility:auto;contain-intrinsic-size:320px}
 @media(max-width:700px){#unidades .cars{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:9px!important}#unidades .cars .car .car-ph{aspect-ratio:4/3}#unidades .cars .car h3{font-size:14px!important}#unidades .cars .car .car-f .btn{min-height:40px!important;font-size:9px!important}#unidades .cars .car .pr{font-size:17px!important}#horarios .dr-map,#donde .dr-map{height:260px!important;min-height:260px!important}}
 @media(max-width:380px){#unidades .cars{grid-template-columns:1fr!important}#unidades .cars .car h3{font-size:16px!important}#unidades .cars .car .car-f .btn{font-size:11px!important}}
 /* El hero usa una foto nítida contenida y la misma toma suavizada llena el fondo. */
