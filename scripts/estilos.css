@@ -1600,8 +1600,7 @@ dialog.ficha::backdrop{background:rgba(3,3,4,.82)}
 .dr-lux .dr-ctr:hover{background:#ee1c22;color:#060607}
 .dr-lux .dr-ctr--t{margin-top:8px}
 .dr-pin{position:absolute}
-.dr-pin-r{position:absolute;left:0;top:0;width:44px;height:44px;border:2px solid #ee1c22;border-radius:50%;animation:drRing 2.4s ease-out infinite;pointer-events:none}
-@keyframes drRing{0%{transform:scale(.9);opacity:.9}100%{transform:scale(2.4);opacity:0}}
+.dr-pin-r{position:absolute;left:0;top:0;width:44px;height:44px;border:2px solid #ee1c22;border-radius:50%;pointer-events:none}
 .dr-lux .dr-addr{position:absolute;left:clamp(12px,2vw,26px);bottom:clamp(12px,2vw,26px);z-index:6;width:min(430px,calc(100% - 24px));margin:0;padding:20px 22px 22px;border:1px solid rgba(238,28,34,.55);border-left:5px solid #ee1c22;background:rgba(6,6,7,.95)}
 .dr-lux .dr-k{margin:0 0 8px;color:#ee1c22;font:700 12px/1.2 var(--hero-copy);letter-spacing:.24em;text-transform:uppercase}
 .dr-lux .dr-a{margin:0;color:#fff;font:italic 800 clamp(22px,2.2vw,28px)/1.15 var(--hero-title);letter-spacing:-.02em}
