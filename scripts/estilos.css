@@ -2193,7 +2193,7 @@ dialog.ficha .fi-s{flex:none}
 
 /* Componentes de alto contraste para contenido narrativo sobre fondos fotográficos. */
 :root{--rojo:#e10600;--negro:#060607;--blanco:#fff}
-.photo-copy-panel{box-sizing:border-box;padding:clamp(20px,2vw,28px);border:1px solid rgba(255,255,255,.12);border-left:4px solid var(--rojo);border-radius:8px;background:rgba(0,0,0,.72);-webkit-backdrop-filter:blur(5px);backdrop-filter:blur(5px);box-shadow:0 12px 36px rgba(0,0,0,.3)}
+.photo-copy-panel{box-sizing:border-box;padding:clamp(20px,2vw,28px);border:1px solid rgba(255,255,255,.12);border-left:4px solid var(--rojo);border-radius:8px;background:rgba(0,0,0,.72);box-shadow:0 12px 36px rgba(0,0,0,.3)}
 .photo-copy-panel p,.photo-copy-panel li,.photo-copy-panel h2{color:var(--blanco);text-shadow:0 1px 2px rgba(0,0,0,.72)}
 html body #tu-usado .photo-copy-panel .sec-p,html body #busqueda .photo-copy-panel .sec-p,html body .photo-copy-panel .cv-steps span,html body #tu-usado .photo-copy-panel h2,html body #busqueda .photo-copy-panel h2{color:#fff;text-shadow:0 1px 2px rgba(0,0,0,.72)}
 .photo-copy-panel .cv-steps{margin-block:20px}
