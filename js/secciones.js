@@ -658,7 +658,7 @@
       /* ----- ficha completa (diálogo), compartir y aviso breve ----- */
       var ctx = {};
       try { ctx = JSON.parse(($('#cat-ctx') || {}).textContent || '{}'); } catch (e) {}
-      var fdlg = null, fOrigen = null, toast = null, toastT = 0;
+      var fdlg = null, fOrigen = null, toast = null, toastT = 0, fRO = null;
       function aviso(msg) {
         if (!toast) { toast = el('div', null, 'toast'); toast.setAttribute('role', 'status'); toast.setAttribute('aria-live', 'polite'); document.body.appendChild(toast); }
         toast.textContent = msg; toast.classList.add('on');
@@ -890,6 +890,20 @@
         document.documentElement.classList.add('has-dlg');
         if (fdlg.open) { fdlg.scrollTop = 0; } else if (typeof fdlg.showModal === 'function') fdlg.showModal(); else fdlg.setAttribute('open', '');
         x.focus({ preventScroll: true });
+        /* A1: la columna más corta queda fija (sticky) mientras se recorre la más larga, para que no quede un hueco debajo */
+        if (fRO) { fRO.disconnect(); fRO = null; }
+        var pegar = function () {
+          left.style.position = ''; left.style.top = ''; info.style.position = ''; info.style.top = '';
+          if (!fdlg.open || window.innerWidth <= 800 || getComputedStyle(g).gridTemplateColumns.split(' ').length < 2) return;
+          var hl = left.offsetHeight, hi = info.offsetHeight;
+          if (hl === hi) return;
+          var s = hl < hi ? left : info;
+          s.style.position = 'sticky';
+          s.style.top = Math.min(0, fdlg.clientHeight - s.offsetHeight) + 'px';
+        };
+        pegar();
+        if (window.ResizeObserver) { fRO = new ResizeObserver(pegar); fRO.observe(left); fRO.observe(info); fRO.observe(fdlg); }
+        else window.addEventListener('resize', pegar);
       }
       $$('[data-share]', ul).forEach(function (b) { b.hidden = false; });
 
