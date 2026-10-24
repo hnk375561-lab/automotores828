@@ -5,6 +5,12 @@
   if (!chain) return;
 
   var interactionArea = chain.closest('.hero') || chain;
+
+  /* la segunda tanda de fotos era lazy: al llegar el reinicio aparecían de golpe. Se cargan y decodifican de antemano. */
+  [].forEach.call(chain.querySelectorAll('img'), function (img) {
+    if (img.loading === 'lazy') img.loading = 'eager';
+    if (img.decode) img.decode().catch(function () {});
+  });
   var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)');
   var focused = false;
   var inView = true;

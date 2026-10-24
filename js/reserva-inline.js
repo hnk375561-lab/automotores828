@@ -5,7 +5,8 @@
   var sec = document.getElementById('visita'), grid = sec && sec.querySelector('.vz-grid');
   if (!grid) return;
   var waA = sec.querySelector('a[href^="https://wa.me/"]'), mapA = sec.querySelector('a[href*="google.com/maps"]');
-  var wa = ''; if (waA) { var mm = waA.getAttribute('href').match(/wa\.me\/(\d+)/); if (mm) wa = mm[1]; }
+  var wa = '5491160239259'; /* número verificado de la agencia; si la sección trae otro wa.me, se usa ese */
+  if (waA) { var mm = waA.getAttribute('href').match(/wa\.me\/(\d+)/); if (mm) wa = mm[1]; }
   var maps = mapA ? mapA.href : '';
   var adEl = sec.querySelector('.vz-addr span'), addr = adEl ? adEl.textContent.replace(/,\s*Buenos Aires\s*$/, '') : '';
   var MES = ['enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio', 'julio', 'agosto', 'septiembre', 'octubre', 'noviembre', 'diciembre'];

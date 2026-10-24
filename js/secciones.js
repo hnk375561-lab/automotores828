@@ -771,6 +771,8 @@ ul.appendChild(frag);
       /* ----- ficha completa (diálogo), compartir y aviso breve ----- */
       var ctx = {};
       try { ctx = JSON.parse(($('#cat-ctx') || {}).textContent || '{}'); } catch (e) {}
+      /* número verificado de la agencia (+54 9 11 6023-9259); si el catálogo trae uno propio, tiene prioridad */
+      var WA_BASE = ctx.wa ? String(ctx.wa).split('?')[0] : 'https://wa.me/5491160239259';
       var fdlg = null, fOrigen = null, toast = null, toastT = 0, fRO = null;
       function aviso(msg) {
         if (!toast) { toast = el('div', null, 'toast'); toast.setAttribute('role', 'status'); toast.setAttribute('aria-live', 'polite'); document.body.appendChild(toast); }
@@ -915,6 +917,17 @@ ul.appendChild(frag);
         }
         if (a.url) ac2.appendChild(enlace('Ver publicación original', a.url, 'btn sm', true));
         if (ctx.maps) ac2.appendChild(enlace('Cómo llegar', ctx.maps, 'btn sm', true));
+        if (!ctx.wa) {
+          var wd = String(a.titulo || ''), nwd = norm(wd);
+          if (a.version && nwd.indexOf(norm(a.version)) < 0) wd += ' ' + a.version;
+          if (a.anio != null && nwd.indexOf(String(a.anio)) < 0) wd += ' ' + a.anio;
+          wd = wd.trim();
+          var wmsg = a.vendida ? 'Hola! Vi el ' + wd + ' publicado como vendido. ¿Tienen unidades similares?' : 'Hola! Quiero consultar por el ' + wd + '. ¿Sigue disponible?';
+          var waN = enlace('', WA_BASE + '?text=' + encodeURIComponent(wmsg), 'btn sm fi-wa', true);
+          waN.setAttribute('aria-label', 'Consultar por WhatsApp: ' + wd);
+          waN.innerHTML = '<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="currentColor" d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm0 18.2c-1.5 0-3-.4-4.2-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2zm4.5-6.1c-.2-.1-1.5-.7-1.7-.8-.2-.1-.4-.1-.6.1l-.8 1c-.1.2-.3.2-.5.1a6.7 6.7 0 0 1-3.3-2.9c-.2-.4.2-.4.7-1.300.1-.2 0-.3 0-.5l-.8-1.800c-.2-.5-.4-.4-.6-.4h-.5c-.2 0-.5.1-.7.3-.2.300-.9.900-.9 2.200s.9 2.500 1.100 2.700c.1.200 1.800 2.800 4.400 3.900 1.600.7 2.300.7 3.100.6.500-.1 1.500-.6 1.700-1.200.2-.6.2-1.100.2-1.200-.1-.1-.2-.2-.5-.3z"/></svg><span>WhatsApp</span>';
+          ac2.appendChild(waN);
+        }
         info.appendChild(ac2);
 
         var pie = el('div', null, 'fi-p');
@@ -922,7 +935,7 @@ ul.appendChild(frag);
         info.appendChild(pie);
 
         /* A3 · «Coordiná tu visita»: horarios reales (ctx.horario / drEstado) y WhatsApp prellenado con la unidad; no reserva ni confirma nada */
-        if (!a.vendida && (ctx.wa || ctx.horario)) {
+        if (!a.vendida) {
           var vi = el('section', null, 'fi-visit'); vi.setAttribute('aria-label', 'Coordiná tu visita');
           vi.appendChild(el('p', 'Coordiná tu visita', 'fi-s-k'));
           var evv = window.drEstado ? window.drEstado() : null;
@@ -931,12 +944,12 @@ ul.appendChild(frag);
             if (evv && evv.txt) { var ee = el('p', evv.txt, 'fi-visit-e'); ee.setAttribute('data-abierto', evv.abierto ? '1' : '0'); vi.appendChild(ee); }
           } else vi.appendChild(el('p', 'Consultá los horarios de atención por WhatsApp.', 'fi-visit-h'));
           if (ctx.dir) vi.appendChild(el('p', ctx.dir, 'fi-visit-a'));
-          if (ctx.wa) {
+          {
             var desc = String(a.titulo || ''), nd = norm(desc);
             if (a.version && nd.indexOf(norm(a.version)) < 0) desc += ' ' + a.version;
             if (a.anio != null && nd.indexOf(String(a.anio)) < 0) desc += ' ' + a.anio;
             var msg = 'Hola! Quiero coordinar una visita para ver el ' + desc.trim() + '. ¿Qué día y horario me conviene?';
-            var wv = enlace('Coordinar visita por WhatsApp', ctx.wa.split('?')[0] + '?text=' + encodeURIComponent(msg), 'btn p sm', true);
+            var wv = enlace('Coordinar visita por WhatsApp', WA_BASE + '?text=' + encodeURIComponent(msg), 'btn p sm', true);
             wv.setAttribute('aria-label', 'Coordinar por WhatsApp una visita para ver ' + desc.trim());
             vi.appendChild(wv);
           }
@@ -1075,7 +1088,9 @@ ul.appendChild(frag);
          ['02', 'Atención directa', 'Confirmá precio y disponibilidad con la agencia antes de moverte.'],
          ['03', 'Visita coordinada', 'Elegí un horario y conocé la unidad con tiempo para revisarla.']].forEach(function (item) {
           var card = el('article', null, 'fi-proof-c');
-          card.appendChild(el('b', item[0]));
+          var lgw = el('b', null, 'fi-proof-logo'); lgw.setAttribute('aria-hidden', 'true');
+          var lgi = document.createElement('img'); lgi.src = 'images/logo-circle.png'; lgi.alt = ''; lgi.width = 60; lgi.height = 60; lgi.decoding = 'async';
+          lgw.appendChild(lgi); card.appendChild(lgw);
           card.appendChild(el('strong', item[1]));
           card.appendChild(el('span', item[2]));
           proofGrid.appendChild(card);
