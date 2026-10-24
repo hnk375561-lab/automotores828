@@ -1116,6 +1116,8 @@ ul.appendChild(frag);
         pegar();
         if (window.ResizeObserver) { fRO = new ResizeObserver(pegar); fRO.observe(left); fRO.observe(info); fRO.observe(fdlg); }
         else window.addEventListener('resize', pegar);
+        /* transición tarjeta → ficha (js/ficha-flip.js); si ese archivo no carga, la ficha abre como siempre */
+        if (window.drFichaFlip) window.drFichaFlip.open(fdlg, fOrigen);
       }
       $$('[data-share]', ul).forEach(function (b) { b.hidden = false; });
 

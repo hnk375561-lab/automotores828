@@ -108,6 +108,7 @@ try:
             cmp.check()
             assert cmp.is_checked(), 'comparador no agrega la unidad'
         dialog.locator('button[aria-label*=Cerrar]').click()
+        dialog.wait_for(state='hidden')   # el cierre ahora se anima (~0,4 s): hasta entonces la página sigue inerte
         filter_controls = page.locator('#cars input, #cars select')
         if filter_controls.count():
             first = filter_controls.first
