@@ -764,7 +764,7 @@ ul.appendChild(frag);
         dlg.appendChild(el('p', 'Precios y kilometrajes' + (f.length ? ' al ' + fecha(f[0]) : '') + '. Consultá disponibilidad actualizada por WhatsApp.', 'src cmp-ft'));
         document.documentElement.classList.add('has-dlg');
         if (typeof dlg.showModal === 'function') { if (!dlg.open) dlg.showModal(); } else dlg.setAttribute('open', '');
-        estado();
+        estado(); dlg.scrollTop = 0; sc.scrollTop = 0; sc.scrollLeft = 0;
         x.focus();
       }
 
@@ -795,7 +795,7 @@ ul.appendChild(frag);
         if (!fdlg) {
           fdlg = el('dialog', null, 'ficha'); fdlg.setAttribute('aria-labelledby', 'fi-ttl');
           fdlg.addEventListener('click', function (e) { if (e.target === fdlg) fdlg.close(); });
-          fdlg.addEventListener('close', function () { document.documentElement.classList.remove('has-dlg'); if (fOrigen && fOrigen.focus) { try { fOrigen.focus({ preventScroll: true }); } catch (e) {} } });
+          fdlg.addEventListener('close', function () { fdlg.scrollTop = 0; document.documentElement.classList.remove('has-dlg'); if (fOrigen && fOrigen.focus) { try { fOrigen.focus({ preventScroll: true }); } catch (e) {} } });
           document.body.appendChild(fdlg);
         }
         fdlg.textContent = '';
@@ -1092,7 +1092,10 @@ ul.appendChild(frag);
         g.appendChild(info);
         fdlg.appendChild(x); fdlg.appendChild(g);
         document.documentElement.classList.add('has-dlg');
-        if (fdlg.open) { fdlg.scrollTop = 0; } else if (typeof fdlg.showModal === 'function') fdlg.showModal(); else fdlg.setAttribute('open', '');
+        if (typeof fdlg.showModal === 'function') { if (!fdlg.open) fdlg.showModal(); } else fdlg.setAttribute('open', '');
+        /* siempre desde el principio: el diálogo se reutiliza y recordaba el scroll de la ficha anterior */
+        var arriba = function () { fdlg.scrollTop = 0; fdlg.scrollLeft = 0; [].forEach.call(fdlg.querySelectorAll('*'), function (n) { if (n.scrollTop) n.scrollTop = 0; }); };
+        arriba(); window.requestAnimationFrame(arriba); window.setTimeout(arriba, 80);
         x.focus({ preventScroll: true });
         /* A1: la columna más corta queda fija (sticky) mientras se recorre la más larga, para que no quede un hueco debajo */
         if (fRO) { fRO.disconnect(); fRO = null; }
