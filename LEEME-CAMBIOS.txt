@@ -12,7 +12,7 @@ Implementación incluida
 - Correcciones de contenido no respaldado en la fuente del generador; financiación queda a consultar y 0 km no se presenta como oferta confirmada.
 - Se eliminó el botón redundante «Ver galería» de las tarjetas; se conserva la galería de la ficha.
 - Estado accesible en favoritos/comparador y límite actual de cuatro unidades expuesto al usuario.
-- Pausa de la cadena del hero con mouse y toque, además de los frenos existentes.
+- La cadena del hero continúa moviéndose al pasar el cursor o tocarla; solo pausa por fuera de vista, pestaña oculta, foco, movimiento reducido o ahorro de datos. El ciclo se acortó 3 s: 10 s escritorio y 11,0833 s móvil.
 - Placeholder de imágenes con estado de carga/error y respeto por movimiento reducido/ahorro de datos.
 - Búsqueda en vivo FAQ/glosario, enlaces hash a preguntas, checklist persistente y enlaces cruzados a destinos existentes.
 - Progreso de formularios basado en validez de campos obligatorios y realce breve del mensaje generado.
@@ -27,6 +27,8 @@ Bloqueos de autorización/dato no resueltos
 - No se incorpora segunda fotografía a tarjetas sin autorización verificable.
 - WhatsApp no se habilita como nuevo contacto comercial/mensaje contextual mientras el dato del generador y las pendientes del proyecto no tengan confirmación coherente.
 - No se agregan cifras de reseñas ni contadores comerciales no verificados.
-- Los diez elementos del hero no se enlazan como unidades hasta contar con correspondencias inequívocas para todos.
+- Las diez fotos del hero abren su ficha correspondiente. La asociación se verificó con marca/modelo/año y la foto fuente del inventario; el generador falla si una asignación deja de ser única.
 
-Para reconstruir el HTML compilado, ejecutar `npm run build`. La fuente de estilos de la página principal sigue siendo scripts/estilos.css, leída por scripts/build-index.mjs.
+Los recursos de movimiento/GSAP se conservaron porque siguen referenciados: `js/hero-carousel.js` y `css/hero-carousel.css` por la portada; `js/motion.js`, `js/motion/core.js`, `js/motion/vendor.js`, `js/vendor/gsap-stack.js` y `css/motion.css` por la página de reserva.
+
+Para reconstruir el HTML compilado, ejecutar `npm run build`. La fuente única de estilos es scripts/estilos.css, leída por scripts/build-index.mjs; css/estilos.css queda como import de compatibilidad a esa fuente.
