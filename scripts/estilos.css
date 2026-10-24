@@ -2088,6 +2088,14 @@ section[id]::after{content:"";position:absolute;inset:0 auto 0 0;width:3px;backg
 
 /* ===== Capa final editorial 828 · aplicada después de las capas históricas ===== */
 .car-ph{position:relative;isolation:isolate;overflow:hidden}
+.car-ph:before{content:"";position:absolute;inset:0;z-index:0;background:linear-gradient(100deg,transparent 20%,rgba(217,219,221,.12) 42%,transparent 64%),linear-gradient(135deg,#111214,#202124,#111214);background-size:220% 100%,100% 100%;animation:car-ph-shimmer 1.25s linear infinite;pointer-events:none}
+.car-ph img{position:relative;z-index:1;opacity:0;transition:opacity .2s ease}
+.car-ph[data-image-state="loaded"]:before,.car-ph[data-image-state="error"]:before{display:none}
+.car-ph[data-image-state="loaded"] img{opacity:1}
+.car-ph[data-image-state="error"] img{opacity:0}
+@keyframes car-ph-shimmer{to{background-position:-220% 0,0 0}}
+@media(prefers-reduced-motion:reduce){.car-ph:before{animation:none;background:#17181a}}
+.save-data .car-ph:before{animation:none;background:#17181a}
 .car-badge{position:absolute;z-index:2;top:12px;right:12px;width:58px;height:58px;border:2px solid rgba(255,255,255,.9);border-radius:50%;background:#f7f7f5 url('images/logo-circle.png') center/82% no-repeat;box-shadow:0 5px 18px rgba(0,0,0,.28);pointer-events:none}
 .cars{grid-template-columns:repeat(3,minmax(0,1fr))}
 .hero-carousel-controls{display:flex!important;position:absolute;z-index:5;right:clamp(16px,4vw,64px);bottom:clamp(18px,4vw,48px);align-items:center;gap:8px;padding:8px 10px;border:1px solid rgba(255,255,255,.3);border-radius:999px;background:rgba(6,6,7,.9)}

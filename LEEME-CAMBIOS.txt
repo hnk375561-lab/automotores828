@@ -1,27 +1,32 @@
-CAMBIOS (auditoría 13/10/2026)
+Paquete de cambios incrementales Automotores 828
 
-Copiar estos archivos sobre el repo (misma ruta):
-  404.html
-  index.html
-  privacidad.html
-  js/secciones.js
-  scripts/build-index.mjs
+Aplicar los archivos incluidos en sus rutas relativas, desde la raíz del proyecto. No reemplazar el repositorio completo. Después de copiar, ejecutar:
 
-BORRAR del repo (no se pueden incluir en un zip):
-  js/app.js
-  js/lugar.js
-  css/lugar.css
-(opcional: borrar también ARCHIVOS-A-BORRAR.txt, ya cumplido)
+  npm run build
+  npm test
+  npm run check:links
+  npm run check:browser
 
-Qué se hizo
-  H-05  Eliminados los restos de agencias anteriores. npm test queda en verde.
-  H-11  Formularios "Tu usado" y "Tu búsqueda": botón "Enviar por WhatsApp"
-        (usa el número de data/dealership.json; el texto se actualiza mientras se escribe;
-        con campos obligatorios vacíos no abre WhatsApp y muestra la validación).
-        "Copiar mensaje" queda como alternativa.
-  H-14  Sección Visita: texto acorde a lo que hay (botón "Elegir día y franja").
-  H-16  Aviso de demo: franja superior corta ("Demo ilustrativa · No es el sitio oficial")
-        y una sola leyenda en el pie (antes 3 repeticiones).
-  H-17  404 con las fuentes del sitio, también en rutas anidadas.
+Implementación incluida
 
-index.html, privacidad.html y 404.html son generados: salen de scripts/build-index.mjs (npm run build).
+- Correcciones de contenido no respaldado en la fuente del generador; financiación queda a consultar y 0 km no se presenta como oferta confirmada.
+- Se eliminó el botón redundante «Ver galería» de las tarjetas; se conserva la galería de la ficha.
+- Estado accesible en favoritos/comparador y límite actual de cuatro unidades expuesto al usuario.
+- Pausa de la cadena del hero con mouse y toque, además de los frenos existentes.
+- Placeholder de imágenes con estado de carga/error y respeto por movimiento reducido/ahorro de datos.
+- Búsqueda en vivo FAQ/glosario, enlaces hash a preguntas, checklist persistente y enlaces cruzados a destinos existentes.
+- Progreso de formularios basado en validez de campos obligatorios y realce breve del mensaje generado.
+- Reordenamiento FLIP limitado a 240 ms, con exclusión de movimiento reducido/ahorro de datos.
+- Nota de horarios basada en información pública.
+- E2E real de catálogo agregado al comando npm test, más mejoras de QA de ficha/galería/favoritos/comparador.
+- Se mantiene index.html en modo demo no indexable.
+
+Bloqueos de autorización/dato no resueltos
+
+- No se fija nueva dirección o fachada por la discrepancia 828/831.
+- No se incorpora segunda fotografía a tarjetas sin autorización verificable.
+- WhatsApp no se habilita como nuevo contacto comercial/mensaje contextual mientras el dato del generador y las pendientes del proyecto no tengan confirmación coherente.
+- No se agregan cifras de reseñas ni contadores comerciales no verificados.
+- Los diez elementos del hero no se enlazan como unidades hasta contar con correspondencias inequívocas para todos.
+
+Para reconstruir el HTML compilado, ejecutar `npm run build`. La fuente de estilos de la página principal sigue siendo scripts/estilos.css, leída por scripts/build-index.mjs.

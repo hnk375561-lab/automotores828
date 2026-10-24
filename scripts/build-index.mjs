@@ -31,7 +31,7 @@ const TT = C.tiktok;
 const YT = C.youtube;
 const hasSvc = (k) => D.services.published.some((x) => x.clave === k);
 const fdate = (iso) => iso.split('-').reverse().join('/');
-const wa = (txt) => (C.whatsApp ? `https://wa.me/${C.whatsApp}?text=${encodeURIComponent(txt)}` : null);
+const wa = (txt) => (C.whatsApp && D.contact.whatsAppConfirmed === true ? `https://wa.me/${C.whatsApp}?text=${encodeURIComponent(txt)}` : null);
 const WA = wa('Hola! Quiero consultar por las unidades disponibles.');
 const EXT = 'target="_blank" rel="noopener noreferrer"';
 const SCORE = String(D.reviews.puntaje).replace('.', ',');
@@ -39,8 +39,8 @@ const FECHA_RV = String(D.reviews.fecha || '').split('-').reverse().join('/');
 /* Tarjeta de opiniones de Google (solo puntaje, cantidad, fecha y enlace; sin reseñas ni nombres) */
 const GREVIEWS = D.reviews.publicadas && D.reviews.googleUrl && D.reviews.puntaje && D.reviews.cantidad ? `<aside class="gr" aria-label="Opiniones de Google de Automotores 828"><div class="gr-in"><p class="gr-top"><span class="gr-g"><svg viewBox="0 0 48 48" aria-hidden="true"><path fill="#EA4335" d="M24 9.5c3.5 0 6.6 1.2 9.1 3.6l6.8-6.8C35.8 2.4 30.3 0 24 0 14.6 0 6.5 5.4 2.6 13.2l7.9 6.1C12.4 13.6 17.7 9.5 24 9.5z"/><path fill="#4285F4" d="M46.5 24.5c0-1.6-.1-3.1-.4-4.5H24v9h12.7c-.6 3-2.3 5.5-4.8 7.2l7.5 5.8c4.4-4.1 7.1-10.1 7.1-17.5z"/><path fill="#FBBC05" d="M10.5 28.7a14.5 14.5 0 0 1 0-9.4l-7.9-6.1a24 24 0 0 0 0 21.6l7.9-6.1z"/><path fill="#34A853" d="M24 48c6.5 0 11.9-2.1 15.9-5.8l-7.5-5.8c-2.1 1.4-4.8 2.3-8.4 2.3-6.3 0-11.6-4.1-13.5-9.8l-7.9 6.1C6.5 42.6 14.6 48 24 48z"/></svg></span>Opiniones en Google</p><p class="gr-score">${SCORE}<small>/5</small></p><div class="gr-meta"><span class="gr-stars" style="--p:${Math.round(D.reviews.puntaje / (D.reviews.escala || 5) * 100)}%" role="img" aria-label="${SCORE} de 5 estrellas"></span><p class="gr-n"><b>${D.reviews.cantidad}</b> opiniones</p></div><div class="gr-foot"><p class="gr-src">Puntaje de Google Maps al ${FECHA_RV}.</p><a class="gr-cta" href="${esc(D.reviews.googleUrl)}" target="_blank" rel="noopener noreferrer">Ver opiniones en Google<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 17L17 7M9 7h8v8"/></svg></a></div></div></aside>` : '';
 const DNRPA = 'https://www.dnrpa.gov.ar/portal_dnrpa/', LEY24449 = 'https://www.argentina.gob.ar/normativa/nacional/ley-24449-818';
-const WAFORM = C.whatsApp ? `<a class="btn p" data-wa-msg data-wa="${C.whatsApp}" href="https://wa.me/${C.whatsApp}" ${EXT}>Enviar por WhatsApp</a>` : '';
-const CPBTN = `<button class="btn${C.whatsApp ? '' : ' p'}" type="submit" data-copiar-msg hidden>Copiar mensaje</button>`;
+const WAFORM = C.whatsApp && D.contact.whatsAppConfirmed === true ? `<a class="btn p" data-wa-msg data-wa="${C.whatsApp}" href="https://wa.me/${C.whatsApp}" ${EXT}>Enviar por WhatsApp</a>` : '';
+const CPBTN = `<button class="btn${C.whatsApp && D.contact.whatsAppConfirmed === true ? '' : ' p'}" type="submit" data-copiar-msg hidden>Copiar mensaje</button>`;
 const LEYENDA_CORTA = 'Demo ilustrativa · No es el sitio oficial';
 const LEYENDA = `Demo ilustrativa. Consultá disponibilidad y precios con ${NAME}. No es el sitio oficial.`;
 const FONTS = '@font-face{font-family:"Exo 2";font-style:italic;font-weight:100 900;font-display:swap;src:url(fonts/exo-2-latin-italic.woff2) format("woff2")}\n@font-face{font-family:"Exo 2";font-style:normal;font-weight:100 900;font-display:swap;src:url(fonts/exo-2-latin.woff2) format("woff2")}\n@font-face{font-family:"Inter";font-style:normal;font-weight:100 900;font-display:swap;src:url(fonts/inter-latin-var.woff2) format("woff2")}\n';
@@ -77,7 +77,15 @@ ${robotsMeta}<link rel="icon" type="image/svg+xml" href="favicon.svg">
 <meta property="og:description" content="${esc(desc)}">
 <meta property="og:locale" content="es_AR">
 ${ogTags(file === 'index.html' ? '' : file, title, desc)}${canon(file === 'index.html' ? '' : file)}${withFonts ? '<link rel="manifest" href="site.webmanifest">\n<link rel="icon" type="image/png" sizes="192x192" href="images/icon-192.png">\n<link rel="apple-touch-icon" href="images/icon-180.png">\n<link rel="preload" href="fonts/exo-2-latin-italic.woff2" as="font" type="font/woff2" crossorigin>\n<link rel="preload" href="fonts/inter-latin-var.woff2" as="font" type="font/woff2" crossorigin>\n' : ''}<style>
-${withFonts ? FONTS : ''}${CSS}${withFonts ? '' : '\n' + DRID}
+${withFonts ? FONTS : ''}${CSS}
+.msg-updated{animation:msg-updated .28s ease-out}@keyframes msg-updated{from{opacity:.68;transform:translateY(2px)}to{opacity:1;transform:translateY(0)}}
+.guia-progress{color:#d9dbdd;font-size:.9rem;margin:.25rem 0}
+.qa-search-label{display:block;margin:.6rem 0 .25rem;color:#d9dbdd}.qa-search{display:block;min-height:44px;width:min(100%,32rem);padding:.65rem .8rem;border:1px solid #6b6d70;border-radius:.4rem;background:#111214;color:#fff;font:inherit}.qa-search:focus-visible{outline:3px solid #ee1c22;outline-offset:2px}
+.qa-search-status{min-height:1.4em;color:#d9dbdd;font-size:.9rem}
+.gd [data-guide-checklist] label{display:flex;align-items:flex-start;gap:.65rem;cursor:pointer;padding:.3rem 0}.gd [data-guide-item]{inline-size:44px;block-size:44px;min-inline-size:44px;min-block-size:44px;flex:0 0 44px;margin:0;accent-color:#ee1c22}
+.dr-hr-note{font-size:.9rem;color:#d9dbdd;margin-top:.6rem}
+@media(prefers-reduced-motion:reduce){.msg-updated{animation:none}}
+${withFonts ? '' : '\n' + DRID}
 </style>
 ${withFonts ? '<link rel="stylesheet" href="css/dr-identidad.css">\n' : ''}${extraHead}</head>
 <body>
@@ -92,7 +100,7 @@ const footer = (fuentes) => `<footer class="site-footer"><div class="w">
 <div class="ft">
 <section class="ft-col ft-brand" aria-label="Automotores 828"><img class="lg-ft" src="images/logo-sm.png" width="320" height="320" alt="Logo de Automotores 828"><p class="ft-b">${esc(NAME)}</p><p class="ft-desc">Autos usados, permutas y financiación en ${esc(L.city)}.</p><p class="ft-address"><a href="${esc(L.mapsUrl)}" ${EXT}>${esc(L.address)}, ${esc(L.city)}, ${esc(L.province)} · Cómo llegar</a></p><span class="ft-badge">Atención en Monte Grande</span></section>
 <nav class="ft-col" aria-label="Navegación del pie"><p class="ft-k">Explorá</p><ul class="ft-links"><li><a href="#top">Inicio</a></li><li><a href="${fuentes ? '' : './'}#unidades">Catálogo / stock</a></li><li><a href="${fuentes ? '' : './'}#busqueda">Buscás</a></li><li><a href="${fuentes ? '' : './'}#tu-usado">Permutas</a></li><li><a href="${fuentes ? '' : './'}#financiacion">Financiación</a></li><li><a href="${fuentes ? '' : './'}#financiacion">Consignaciones</a></li><li><a href="${fuentes ? '' : './'}#financiacion">Compra y venta</a></li><li><a href="${fuentes ? '' : './'}#nosotros">Nosotros</a></li><li><a href="${fuentes ? '' : './'}#contacto">Contacto</a></li></ul></nav>
-<section class="ft-col" aria-label="Contacto y horarios"><p class="ft-k">Contacto</p>${C.email ? `<p class="ft-contact-link"><a href="mailto:${esc(C.email)}">${esc(C.email)}</a></p>` : ''}${C.whatsApp ? `<p class="ft-contact-link ft-wa"><a href="${esc(WA)}" ${EXT} aria-label="WhatsApp ${esc(C.whatsAppDisplay)}">${IC.wa}<span>WhatsApp ${esc(C.whatsAppDisplay)}</span></a></p>` : ''}${C.phoneTel ? `<p class="ft-contact-link"><a href="tel:${esc(C.phoneTel)}">${esc(C.phone || C.phoneTel)}</a></p>` : (C.whatsApp ? '' : `<p class="ft-pending">Teléfono / WhatsApp: pendiente de confirmar</p>`)}<p class="ft-contact-link"><a href="${esc(L.mapsUrl)}" ${EXT}>${esc(L.address)}, ${esc(L.city)} · Mapa</a></p>${H.display ? `<div class="ft-hours"><span class="ft-k">Horario de atención</span><p data-estado data-horario-footer hidden>${esc(H.corto)}</p><noscript><p>${esc(H.corto)}</p></noscript></div>` : ''}</section>
+<section class="ft-col" aria-label="Contacto y horarios"><p class="ft-k">Contacto</p>${C.email ? `<p class="ft-contact-link"><a href="mailto:${esc(C.email)}">${esc(C.email)}</a></p>` : ''}${(C.whatsApp && D.contact.whatsAppConfirmed === true) ? `<p class="ft-contact-link ft-wa"><a href="${esc(WA)}" ${EXT} aria-label="WhatsApp ${esc(C.whatsAppDisplay)}">${IC.wa}<span>WhatsApp ${esc(C.whatsAppDisplay)}</span></a></p>` : ''}${C.phoneTel ? `<p class="ft-contact-link"><a href="tel:${esc(C.phoneTel)}">${esc(C.phone || C.phoneTel)}</a></p>` : (C.whatsApp ? '' : `<p class="ft-pending">Teléfono / WhatsApp: pendiente de confirmar</p>`)}<p class="ft-contact-link"><a href="${esc(L.mapsUrl)}" ${EXT}>${esc(L.address)}, ${esc(L.city)} · Mapa</a></p>${H.display ? `<div class="ft-hours"><span class="ft-k">Horario de atención</span><p data-estado data-horario-footer hidden>${esc(H.corto)}</p><noscript><p>${esc(H.corto)}</p></noscript></div>` : ''}</section>
 <section class="ft-col" aria-label="Redes y servicios"><p class="ft-k">Redes y servicios</p><ul class="ft-social"><li><a href="${FB}" ${EXT} aria-label="Facebook de Automotores 828"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14 8h3V4h-3c-3 0-5 2-5 5v2H6v4h3v5h4v-5h3l1-4h-4V9c0-.7.3-1 1-1z"/></svg><span>Facebook</span></a></li><li><a href="${IG}" ${EXT} aria-label="Instagram de Automotores 828"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3.5" y="3.5" width="17" height="17" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.8" r=".8"/></svg><span>Instagram</span></a></li></ul><div class="ft-ctas"><a href="${fuentes ? '' : './'}#tu-usado">Quiero vender mi auto</a><a href="${fuentes ? '' : './'}#financiacion">Consultá financiación</a><a href="${fuentes ? '' : './'}#tu-usado">Cotizá tu permuta</a></div><div class="ft-services" aria-label="Servicios publicados"><span>Permutas</span><span>Financiación</span><span>Consignaciones</span></div></section>
 </div>
 <div class="ft-bottom"><p class="ft-copy">© 2026 ${esc(NAME)}</p>${demo ? `<p class="demo-note" data-demo-note>${esc(LEYENDA)}</p>` : ''}<p class="ft-sources">${fuentes ? `Fuentes: <a href="${FB}" ${EXT}>Facebook</a> · <a href="${IG}" ${EXT}>Instagram</a>${TT ? ` · <a href="${TT}" ${EXT}>TikTok</a>` : ''}` : `<a href="${FB}" ${EXT}>Facebook</a> · <a href="${IG}" ${EXT}>Instagram</a>`}</p><a class="ft-privacy" href="${fuentes ? 'privacidad.html' : './privacidad.html'}">Privacidad y avisos</a><a class="ft-top" href="#top">Volver arriba ↑</a></div>
@@ -159,7 +167,7 @@ const mailHref = (a) => C.email ? `mailto:${C.email}?subject=${encodeURIComponen
 const quick = (a, i) => {
   const t = esc(a.titulo);
   const items = [
-    C.whatsApp ? `<a href="${esc(consultaHref(a))}" ${EXT} aria-label="WhatsApp ${esc(C.whatsAppDisplay)}: ${t}" title="WhatsApp ${esc(C.whatsAppDisplay)}">${IC.wa}<span>WhatsApp</span></a>` : '',
+    (C.whatsApp && D.contact.whatsAppConfirmed === true) ? `<a href="${esc(consultaHref(a))}" ${EXT} aria-label="WhatsApp ${esc(C.whatsAppDisplay)}: ${t}" title="WhatsApp ${esc(C.whatsAppDisplay)}">${IC.wa}<span>WhatsApp</span></a>` : '',
     C.instagram ? `<a href="${IG}" ${EXT} aria-label="Instagram de ${esc(C.nombre || 'Automotores 828')}" title="Instagram">${IC.ig}<span>Instagram</span></a>` : '',
     C.email ? `<a href="${esc(mailHref(a))}" aria-label="Correo: ${t}" title="Correo">${IC.mail}<span>Correo</span></a>` : '',
     C.phoneTel ? `<a href="tel:${C.phoneTel}" aria-label="Llamar por ${t}" title="Llamar">${IC.tel}<span>Llamar</span></a>` : '',
@@ -180,7 +188,7 @@ ${mediaTag(a)}
 <h3>${esc(sinMarca(a))}</h3>
 <div class="car-s"><p><b${a.anio == null ? ' class="nd"' : ''}>${a.anio != null ? a.anio : 'Sin dato'}</b><small>Año</small></p><p><b${a.km == null ? ' class="nd"' : ''}>${a.km != null ? fmt(a.km) : 'Consultar'}</b><small>Kilómetros</small></p></div>
 <dl class="sp">${fila('Caja', a.transmision ? esc(a.transmision) : '')}${fila('Combustible', a.combustible ? esc(a.combustible) : '')}${fila('Color', a.color ? `${sw ? `<i class="sw" style="--sw:${sw}"></i>` : ''}${esc(a.color)}` : '')}</dl>
-<div class="car-f">${pr}${a.nota ? `<p class="n">${esc(a.nota)}</p>` : ''}<button class="btn sm ficha-trigger" type="button" data-ficha="${i}" aria-label="Ver la ficha completa de ${esc(a.titulo)}">Ver la ficha completa</button><button class="btn sm gallery-trigger" type="button" data-gallery="${i}" hidden>Ver galería</button><a class="btn sm" href="${esc(consultaHref(a))}" ${EXT} aria-label="Consultar por ${esc(a.titulo)}">${a.vendida ? 'Consultar por similares' : WA ? 'Reservar esta unidad' : 'Ver publicación en Mercado Libre'}</a>${quick(a, i)}</div>
+<div class="car-f">${pr}${a.nota ? `<p class="n">${esc(a.nota)}</p>` : ''}<button class="btn sm ficha-trigger" type="button" data-ficha="${i}" aria-label="Ver la ficha completa de ${esc(a.titulo)}">Ver la ficha completa</button><a class="btn sm" href="${esc(consultaHref(a))}" ${EXT} aria-label="Consultar por ${esc(a.titulo)}">${a.vendida ? 'Consultar por similares' : WA ? 'Reservar esta unidad' : 'Ver publicación en Mercado Libre'}</a>${quick(a, i)}</div>
 </li>`;
 };
 const catData = autos.map((a, i) => ({
@@ -210,7 +218,7 @@ const dl = [
   ['Dirección', direccion],
   ['Cómo llegar', `<a href="${L.mapsUrl}" ${EXT}>Abrir en Google Maps</a>`],
   C.phone ? ['Teléfono', `<a href="tel:${C.phoneTel}">${esc(C.phone)}</a>`] : null,
-  C.whatsApp ? ['WhatsApp', `<a href="${WA}" ${EXT}>${esc(C.whatsAppDisplay)} · Escribinos</a>`] : null,
+  (C.whatsApp && D.contact.whatsAppConfirmed === true) ? ['WhatsApp', `<a href="${WA}" ${EXT}>${esc(C.whatsAppDisplay)} · Escribinos</a>`] : null,
   C.email ? ['Correo', `<a href="mailto:${esc(C.email)}">${esc(C.email)}</a>`] : null,
   H.display ? ['Horario', hrsTable] : null,
   D.reviews.googleUrl ? ['Ficha de Google', `<a href="${D.reviews.googleUrl}" ${EXT}>Abrir ficha en Google</a>`] : null,
@@ -221,11 +229,11 @@ const dl = [
 const bar = `<div class="bar" role="region" aria-label="Datos rápidos"><div class="w"><ul>
 <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s-7-6.2-7-11a7 7 0 0 1 14 0c0 4.8-7 11-7 11z"/><circle cx="12" cy="10" r="2.5"/></svg><span class="k">Dirección</span><b>${esc(L.address.replace('Avenida', 'Av.'))}</b><small>${esc(L.city)}${L.direccionAnterior ? ` · antes ${esc(L.direccionAnterior)}` : ''}</small></li>
 ${C.phoneTel ? `<li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A15 15 0 0 1 3 6a2 2 0 0 1 2-2z"/></svg><span class="k">Teléfono</span><a href="tel:${C.phoneTel}">${esc(C.phone)}</a><small>Llamanos</small></li>` : ''}
-${C.whatsApp ? `<li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20l1.3-4A8 8 0 1 1 8 18.7z"/><path d="M9 9c0 3 3 6 6 6l1-1.5-2-1-1 .8a4 4 0 0 1-2-2l.8-1-1-2z"/></svg><span class="k">WhatsApp</span><a href="${WA}" ${EXT}>${esc(C.whatsAppDisplay)}</a><small>Escribinos</small></li>` : ''}
+${C.whatsApp && D.contact.whatsAppConfirmed === true ? `<li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20l1.3-4A8 8 0 1 1 8 18.7z"/><path d="M9 9c0 3 3 6 6 6l1-1.5-2-1-1 .8a4 4 0 0 1-2-2l.8-1-1-2z"/></svg><span class="k">WhatsApp</span><a href="${WA}" ${EXT}>${esc(C.whatsAppDisplay)}</a><small>Escribinos</small></li>` : ''}
 ${H.display ? `<li><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><path d="M12 7v5l3 2"/></svg><span class="k">Horario</span><b data-estado>${esc(H.corto)}</b><small>${estadoP ? 'Hora de Argentina' : ''}</small></li>` : ''}
 </ul></div></div>`;
 
-const qa = (q, a) => `<details class="dd"><summary>${q}</summary><p>${a}</p></details>`;
+const qa = (q, a) => { const id = 'qa-' + q.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, ''); return `<details class="dd" id="${id}"><summary>${q}</summary><p>${a}</p></details>`; };
 const faq = [
   hasSvc('permuta') ? qa('¿Reciben mi usado como parte de pago?', `Sí, tomamos permutas. Armá el mensaje en la sección «Tu usado» y envialo por el canal que prefieras; las condiciones se acuerdan con ${esc(NAME)}.`) : '',
   hasSvc('consignacion') ? qa('¿Puedo dejar mi auto en consignación?', `Sí, trabajamos con consignaciones. Escribinos y coordinamos las condiciones.`) : '',
@@ -257,7 +265,7 @@ const secPreguntas = `
 <section class="lt" id="preguntas" aria-labelledby="preg-t"><div class="w">
 <p class="ey"><span class="ey-brand">828</span> · Preguntas</p><h2 id="preg-t">Lo que <em>conviene saber</em></h2>
 <p class="sec-p">Respuestas cortas y un glosario del comprador. Información general de octubre de 2026: no es una condición ni una promesa de ${esc(NAME)}.</p>
-<div class="qa" data-qa><div class="qa-tabs" role="tablist" aria-label="Preguntas y glosario" hidden><button type="button" role="tab" id="qa-t1" aria-controls="qa-p1" aria-selected="true">Preguntas frecuentes</button><button type="button" role="tab" id="qa-t2" aria-controls="qa-p2" aria-selected="false" tabindex="-1">Glosario del comprador</button></div>
+<div class="qa" data-qa><label class="qa-search-label" for="qa-search">Buscar en preguntas y glosario</label><input id="qa-search" class="qa-search" type="search" autocomplete="off" placeholder="Escribí una palabra…"><p class="qa-search-status" data-qa-search-status role="status" aria-live="polite"></p><div class="qa-tabs" role="tablist" aria-label="Preguntas y glosario" hidden><button type="button" role="tab" id="qa-t1" aria-controls="qa-p1" aria-selected="true">Preguntas frecuentes</button><button type="button" role="tab" id="qa-t2" aria-controls="qa-p2" aria-selected="false" tabindex="-1">Glosario del comprador</button></div>
 <div class="qa-p" id="qa-p1" role="tabpanel" aria-labelledby="qa-t1"><h3>Preguntas frecuentes</h3>${faq}</div><div class="qa-p" id="qa-p2" role="tabpanel" aria-labelledby="qa-t2"><h3>Glosario del comprador</h3>${glos}</div></div>
 </div></section>`;
 const semana = H.semana || [];
@@ -286,8 +294,8 @@ const cvForm = ({ uid, intro, aria, ey, h3, body, nota, extra = '', busca = fals
 ${extra}
 <div class="cv-bub" data-burbuja><p class="cv-bub-h"><span>Así llega tu mensaje</span><em>Se arma solo</em></p><div class="cv-bub-b" data-bub-b></div></div>
 <textarea class="msg-v cv-msgv" readonly hidden aria-label="Mensaje armado"></textarea>
-<div class="cv-acts">${C.whatsApp ? `<a class="cv-btn cv-btn--wa" data-wa-msg data-wa="${C.whatsApp}" href="https://wa.me/${C.whatsApp}" ${EXT}>${CVI.wa}<span>Enviar por WhatsApp</span></a>` : ''}
-<div class="cv-tools"><button class="cv-btn cv-btn--g${C.whatsApp ? '' : ' cv-btn--main'}" type="submit" data-copiar-msg hidden>${CVI.copy}<span>Copiar mensaje</span></button><button class="cv-btn cv-btn--g" type="button" data-ejemplo="${esc(JSON.stringify(ejemplo))}" hidden>${CVI.spark}<span>Completar con un ejemplo</span></button><button class="cv-btn cv-btn--g" type="button" data-limpiar hidden>${CVI.clear}<span>Limpiar</span></button></div>
+<div class="cv-acts">${C.whatsApp && D.contact.whatsAppConfirmed === true ? `<a class="cv-btn cv-btn--wa" data-wa-msg data-wa="${C.whatsApp}" href="https://wa.me/${C.whatsApp}" ${EXT}>${CVI.wa}<span>Enviar por WhatsApp</span></a>` : ''}
+<div class="cv-tools"><button class="cv-btn cv-btn--g${C.whatsApp && D.contact.whatsAppConfirmed === true ? '' : ' cv-btn--main'}" type="submit" data-copiar-msg hidden>${CVI.copy}<span>Copiar mensaje</span></button><button class="cv-btn cv-btn--g" type="button" data-ejemplo="${esc(JSON.stringify(ejemplo))}" hidden>${CVI.spark}<span>Completar con un ejemplo</span></button><button class="cv-btn cv-btn--g" type="button" data-limpiar hidden>${CVI.clear}<span>Limpiar</span></button></div>
 <p class="cv-soc">También podés escribirle a la agencia por <a href="${FB}" ${EXT}>Facebook</a> o <a href="${IG}" ${EXT}>Instagram</a>.</p></div>
 <p class="msg-s" role="status" aria-live="polite"></p>
 </form>
@@ -358,9 +366,9 @@ const secGuia = `
 <section id="guia" aria-labelledby="guia-t"><div class="w">
 <p class="ey"><span class="ey-brand">828</span> · Guía de compra</p><h2 id="guia-t">Antes de comprar un <em>usado</em></h2>
 <p class="sec-p">Información general para cualquier compra de un usado, de octubre de 2026. No es una condición ni una promesa de ${esc(NAME)}.</p>
-<div class="guia-bar"><button class="btn sm" type="button" data-guia-all hidden>Plegar todo</button></div>
+<div class="guia-bar"><p class="guia-progress" data-guide-progress role="status" aria-live="polite">0 de 6 puntos seleccionados</p><button class="btn sm" type="button" data-guia-all hidden>Plegar todo</button></div>
 <div class="guia">
-<details class="gd"><summary><h3>Qué mirar en el auto</h3><span class="gd-c">6 puntos</span></summary><div class="gd-b"><ul><li>Carrocería y pintura: diferencias de tono, juntas desparejas o signos de golpes.</li><li>Neumáticos, frenos y suspensión: desgaste parejo y ruidos al probarlo.</li><li>Motor y debajo del auto: fugas de aceite o líquidos.</li><li>Tablero y luces: que no queden testigos encendidos.</li><li>Kilometraje: que sea coherente con el desgaste de pedales, volante y asientos.</li><li>Probalo en marcha, en calle y en ruta si podés.</li></ul></div></details>
+<details class="gd"><summary><h3>Qué mirar en el auto</h3><span class="gd-c">6 puntos</span></summary><div class="gd-b"><ul data-guide-checklist><li><label><input type="checkbox" data-guide-item="carroceria">Carrocería y pintura: diferencias de tono, juntas desparejas o signos de golpes. Consultá la <a href="#preguntas">guía de preguntas</a>.</label></li><li><label><input type="checkbox" data-guide-item="neumaticos">Neumáticos, frenos y suspensión: desgaste parejo y ruidos al probarlo.</label></li><li><label><input type="checkbox" data-guide-item="motor">Motor y debajo del auto: fugas de aceite o líquidos.</label></li><li><label><input type="checkbox" data-guide-item="tablero">Tablero y luces: que no queden testigos encendidos.</label></li><li><label><input type="checkbox" data-guide-item="kilometraje">Kilometraje: que sea coherente con el desgaste de pedales, volante y asientos. Podés revisar unidades en <a href="#cars">el catálogo</a>.</label></li><li><label><input type="checkbox" data-guide-item="prueba">Probalo en marcha, en calle y en ruta si podés.</label></li></ul></div></details>
 <details class="gd"><summary><h3>Papeles que conviene pedir</h3><span class="gd-c">5 puntos</span></summary><div class="gd-b"><ul><li>Título y cédula del automotor, y que los datos coincidan con el auto (dominio, motor y chasis).</li><li>Informe de dominio del Registro del Automotor.</li><li>Libre deuda de patentes y de multas.</li><li>Verificación policial vigente.</li><li>Formulario 08 de transferencia, firmado por quien vende.</li></ul></div></details>
 <details class="gd"><summary><h3>Qué preguntarle a quien vende</h3><span class="gd-c">6 puntos</span></summary><div class="gd-b"><ul><li>¿Cuántos dueños tuvo y desde cuándo está a nombre de quien lo vende?</li><li>¿Hay facturas o registro de los services y reparaciones?</li><li>¿Tuvo choques o reparaciones importantes?</li><li>¿Pesa alguna prenda, embargo o restricción sobre el dominio?</li><li>¿Podés hacerlo revisar por un mecánico de tu confianza antes de decidir?</li><li>Dejá por escrito lo acordado: precio, forma de pago y fecha de entrega.</li></ul></div></details>
 </div>
@@ -404,7 +412,7 @@ const hrAddr = H.display ? `<div class="dr-addr"><div class="dr-addr-t"><span cl
 <div class="row"><a class="btn p sm" href="${L.mapsUrl}" ${EXT}>Cómo llegar</a><button class="btn sm" type="button" data-copiar="${esc(DIR_COMPLETA)}" hidden>Copiar dirección</button></div></div>` : '';
 const secHorarios = H.display ? `
 <section id="horarios" class="dr-hr dr-lux dr-v71" aria-labelledby="hor-t" data-semana="${esc(JSON.stringify(H.semana))}"><div class="w">
-<div class="dr-hr-head"><p class="ey"><span class="ey-brand">828</span> · Horarios y ubicación</p><h2 id="hor-t">Cuándo y dónde <em>visitarnos</em></h2><p class="dr-hr-lead">Te esperamos en ${esc(L.address)}, Monte Grande. En la agencia podés conocer las unidades, conversar sobre permutas y consultar alternativas de financiación. Revisá los horarios y, si venís por un vehículo en particular, escribinos o llamanos antes para confirmar su disponibilidad y coordinar la atención.</p></div>
+<div class="dr-hr-head"><p class="ey"><span class="ey-brand">828</span> · Horarios y ubicación</p><h2 id="hor-t">Cuándo y dónde <em>visitarnos</em></h2><p class="dr-hr-lead">Te esperamos en ${esc(L.address)}, Monte Grande. En la agencia podés conocer las unidades, conversar sobre permutas y consultar alternativas de financiación. Revisá los horarios y, si venís por un vehículo en particular, escribinos o llamanos antes para confirmar su disponibilidad y coordinar la atención.</p><p class="dr-hr-note">Los horarios se basan en datos públicos; te recomendamos confirmarlos antes de viajar.</p></div>
 <div class="dr-stage">
 <div class="dr-panel">
 <div class="dr-now" data-live data-abierto="0">
@@ -433,7 +441,7 @@ const secVisita = `
 <div class="vz-grid">
 <div class="vz-main"><h3>Agendá una visita y prueba de manejo</h3>
 <ol class="vz-steps"><li><b>Elegí día y franja</b><span>En la página de reserva, desde el celular o la computadora.</span></li><li><b>Se arma tu consulta</b><span>Queda lista para enviarla a la agencia por el canal que prefieras.</span></li><li><b>La agencia te confirma</b><span>Es una consulta, no un turno: el día y la hora se acuerdan con la agencia.</span></li></ol>
-<div class="vz-cta"><a class="btn p vz-go" href="reserva.html">Agendar visita</a>${C.whatsApp ? `<a class="btn" href="${wa('Hola! Quiero coordinar una visita y prueba de manejo.')}" ${EXT}>WhatsApp</a>` : ''}<a class="btn" href="${L.mapsUrl}" ${EXT}>Cómo llegar</a>${C.phoneTel ? `<a class="btn" href="tel:${C.phoneTel}">Llamar</a>` : ''}</div></div>
+<div class="vz-cta"><a class="btn p vz-go" href="reserva.html">Agendar visita</a>${C.whatsApp && D.contact.whatsAppConfirmed === true ? `<a class="btn" href="${wa('Hola! Quiero coordinar una visita y prueba de manejo.') }" ${EXT}>WhatsApp</a>` : ''}<a class="btn" href="${L.mapsUrl}" ${EXT}>Cómo llegar</a>${C.phoneTel ? `<a class="btn" href="tel:${C.phoneTel}">Llamar</a>` : ''}</div></div>
 ${H.display ? `<aside class="vz-side" aria-label="Antes de venir"><p class="vz-side-k">Antes de venir</p>
 <div class="vz-live" data-live data-abierto="0"><span class="dr-dot" aria-hidden="true"></span><div><p class="vz-live-t" data-estado-t>Horario de atención</p><p class="vz-live-c" data-cd-full></p></div></div>
 ${visHr}
@@ -444,7 +452,7 @@ ${visHr}
 
 const chan = (cls, icon, k, v, sub, href, ext) => `<li><a class="dr-chn${cls ? ' ' + cls : ''}" href="${href}"${ext ? ' ' + EXT : ''}><span class="dr-chn-i">${icon}</span><span class="dr-chn-t"><span class="dr-chn-k">${k}</span><span class="dr-chn-v">${v}</span><span class="dr-chn-s">${sub}</span></span></a></li>`;
 const canales = [
-  C.whatsApp ? chan('dr-chn--p', IC.wa, 'WhatsApp', esc(C.whatsAppDisplay), 'Escribinos y te respondemos', WA, true) : '',
+  C.whatsApp && D.contact.whatsAppConfirmed === true ? chan('dr-chn--p', IC.wa, 'WhatsApp', esc(C.whatsAppDisplay), 'Escribinos y te respondemos', WA, true) : '',
   C.phoneTel ? chan('', IC.tel, 'Teléfono', esc(C.phone), 'Llamanos en horario de atención', `tel:${C.phoneTel}`, false) : '',
   C.email ? chan('', IC.mail, 'Correo', esc(C.email), 'Consultas por escrito', `mailto:${esc(C.email)}`, false) : '',
   chan('', ICX.pin, 'Visitanos', esc(L.address), `${esc(L.city)} · ver horarios y mapa`, '#horarios', false),
@@ -469,14 +477,14 @@ const secNosotros = `
 <p class="ey"><span class="ey-brand">828</span> · Nosotros</p>
 <span class="nz-logo"><img src="images/logo-sm.png" width="320" height="320" alt="${esc(NAME)}"></span>
 <h2 id="nos-t">Quiénes <em>somos</em></h2>
-<p class="nz-lead">Multimarcas · 0 km · Usados</p>
-<p class="nz-offer">Financiación <strong>Cuotas fijas</strong></p>
+<p class="nz-lead">Vehículos usados</p>
+<p class="nz-offer">Financiación: consultar condiciones</p>
 <p class="nz-offer-note">Las alternativas, requisitos y condiciones se confirman directamente con el equipo para cada unidad.</p>
-<p class="nz-p">Hace más de 19 años acompañamos a quienes buscan su próximo vehículo en Monte Grande. Reunimos opciones de distintas marcas, unidades 0 km y usados; te ayudamos a evaluar alternativas, consultar financiación en cuotas fijas y considerar una permuta. La disponibilidad y las condiciones de cada operación se confirman de manera directa y transparente con el equipo.</p>
+<p class="nz-p">Reunimos opciones de distintas marcas y vehículos usados. Podés consultar por financiación y considerar una permuta. La disponibilidad y las condiciones de cada operación se confirman de manera directa con el equipo.</p>
 <div class="row nz-cta"><a class="btn p" href="#unidades">Explorar unidades</a><a class="btn" href="#contacto">Hablar con el equipo</a></div>
 <div class="nz-contactos" aria-label="Contactos de Automotores 828"><a href="#contacto"><span>Adriano · asesor</span><b>11 4993 8719</b><small>Contacto directo</small></a><a href="#contacto"><span>Rubén · asesor</span><b>11 5249 0262</b><small>Contacto directo</small></a><a href="#contacto"><span>Línea de atención</span><b>4290-7300</b><small>Atención comercial</small></a><a href="#contacto"><span>Contacto</span><b>11 6023 9259</b><small>Atención comercial</small></a></div>
 </div>
-<div class="nz-side"><div class="nz-big"><span class="nz-flag" aria-hidden="true"></span><p class="nz-proof">TRAYECTORIA · MONTE GRANDE</p><p class="nz-num">19+</p><p class="nz-num-l">años en el rubro</p><p class="nz-num-s">Atención directa para conocer opciones, resolver consultas y avanzar a tu ritmo.</p></div>${GREVIEWS}</div>
+<div class="nz-side"><div class="nz-big"><span class="nz-flag" aria-hidden="true"></span><p class="nz-proof">AUTOMOTORES 828 · MONTE GRANDE</p><p class="nz-num-l">Atención directa</p><p class="nz-num-s">Conocé opciones, resolvé consultas y avanzá a tu ritmo.</p></div>${GREVIEWS}</div>
 </div></div>
 <div class="nz-body"><div class="w">
 <h3 class="nz-h">Qué podés resolver con nosotros</h3>
@@ -530,7 +538,7 @@ const index = page({
 <p class="ey">${esc(L.city)} · ${esc(L.partido)}</p>
 <h1><span class="sr">${esc(NAME)}: </span>Autos y motos <em>en ${esc(L.city)}</em></h1>
 <p class="lead">Compra y venta de vehículos usados, permutas y consignaciones. Consultá por financiación.</p>
-<div class="row"><a class="btn p" href="#unidades">Ver unidades</a>${C.whatsApp ? `<a class="btn" href="${WA}" ${EXT}>Escribir por WhatsApp</a>` : ''}<a class="btn lnk" href="${L.mapsUrl}" ${EXT}>Cómo llegar</a></div></div>
+<div class="row"><a class="btn p" href="#unidades">Ver unidades</a>${C.whatsApp && D.contact.whatsAppConfirmed === true ? `<a class="btn" href="${WA}" ${EXT}>Escribir por WhatsApp</a>` : ''}<a class="btn lnk" href="${L.mapsUrl}" ${EXT}>Cómo llegar</a></div></div>
 <a class="hx-down" href="#unidades">Explorá las unidades</a>
 </div>
 </div>
@@ -538,7 +546,7 @@ ${secHorarios}
 <section id="unidades" class="inventory-section" aria-labelledby="unidades-t"><div class="w wide">
 <div class="inventory-head">
 <div class="inventory-title"><p class="ey reveal"><span class="ey-brand">828</span> · Compra y venta · ${esc(L.city)}</p><h2 id="unidades-t" class="reveal">Nuestras <em>unidades</em></h2><p class="sec-p">Catálogo relevado el ${A.relevadoEl ? esc(fdate(A.relevadoEl)) : 'último relevamiento'}: ${cantidadAutos} autos y camionetas y ${cantidadMotos} motos. Precios y disponibilidad pueden cambiar; confirmalos con la agencia.</p></div>
-<div class="inventory-meta" aria-label="Resumen del catálogo"><span class="inventory-meta-kicker">${esc(NAME)}</span><span>${autos.length} unidades · ${cantidadAutos} autos · ${cantidadMotos} motos</span><i aria-hidden="true"></i></div>
+<div class="inventory-meta" aria-label="Resumen del catálogo"><span class="inventory-meta-kicker">${esc(NAME)}</span><span>${autos.length} unidades relevadas al ${fdate(A.relevadoEl)} · ${cantidadAutos} autos · ${cantidadMotos} motos</span><i aria-hidden="true"></i></div>
 </div>
 <div class="inventory-rule" aria-hidden="true"><span></span><small>${esc(L.city)} · ${esc(L.province)}</small><span></span></div>
 ${unidades}
@@ -548,7 +556,7 @@ ${unidades}
 <div class="finance-head"><div><p class="ey"><span class="ey-brand">828</span> · Financiación y servicios</p><h2 id="fin-t">Financiá tu <em>próximo vehículo</em></h2><p class="sec-p">Consultanos por financiación. Las condiciones se informan por consulta: este sitio no publica condiciones de financiación.</p></div><aside class="finance-aside"><span>${esc(NAME)}</span><p>Encontrá una forma de avanzar hacia tu próxima unidad.</p></aside></div>
 <div class="finance-rule" aria-hidden="true"><span></span><small>Servicios para moverte mejor</small><span></span></div>
 <div class="cards finance-cards">${hasSvc('financiacion') ? `<div class="card finance-card"><span class="finance-card-no">Financiación</span><h3>Consultá por financiación</h3><p>Escribinos y te contamos cómo avanzar con la unidad que te interese. Las condiciones dependen de la unidad y de cada solicitante.</p></div>` : ''}${hasSvc('permuta') ? `<div class="card finance-card"><span class="finance-card-no">Tu usado</span><h3>Permutas</h3><p>Tomamos permutas. Contanos qué tenés y armá el mensaje desde la sección «Tu usado».</p></div>` : ''}${hasSvc('consignacion') ? `<div class="card finance-card"><span class="finance-card-no">Consignación</span><h3>Consignaciones</h3><p>Podés dejar tu vehículo en consignación. Las condiciones se coordinan con ${esc(NAME)}.</p></div>` : ''}${hasSvc('compra-venta') ? `<div class="card finance-card"><span class="finance-card-no">Compra y venta</span><h3>Vehículos usados</h3><p>Compra y venta de vehículos usados en ${esc(L.city)}.</p></div>` : ''}</div>
-<div class="row fin-cta"><a class="btn p" href="${wa('Hola! Quiero consultar por financiación.') || ML_PROFILE}" ${EXT}>${C.whatsApp ? 'Consultar por financiación' : 'Ver publicaciones en Mercado Libre'}</a>${hasSvc('permuta') ? '<a class="btn" href="#tu-usado">Consultar por mi usado</a>' : ''}</div>
+<div class="row fin-cta"><a class="btn p" href="${wa('Hola! Quiero consultar por financiación.') || ML_PROFILE}" ${EXT}>Consultar por financiación</a>${hasSvc('permuta') ? '<a class="btn" href="#tu-usado">Consultar por mi usado</a>' : ''}</div>
 <p class="src">¿Buscás algo más? Escribinos por nuestros canales y lo vemos juntos.</p>
 </div></section>
 
@@ -570,7 +578,7 @@ ${secNosotros}
 </div></section>
 </main>
 ${footer(true)}
-${C.whatsApp ? `<nav class="cta-bar" aria-label="Acciones rápidas"><a href="${WA}" ${EXT}>Consultar por WhatsApp</a><a href="reserva.html">Agendar visita</a></nav>` : `<nav class="cta-bar" aria-label="Acciones rápidas"><a href="${ML_PROFILE}" ${EXT} aria-label="Ver publicaciones en Mercado Libre">Mercado Libre</a><a href="reserva.html">Agendar visita</a></nav>`}
+${C.whatsApp && D.contact.whatsAppConfirmed === true ? `<nav class="cta-bar" aria-label="Acciones rápidas"><a href="${WA}" ${EXT}>Consultar por WhatsApp</a><a href="reserva.html">Agendar visita</a></nav>` : `<nav class="cta-bar" aria-label="Acciones rápidas"><a href="${ML_PROFILE}" ${EXT} aria-label="Ver publicaciones en Mercado Libre">Mercado Libre</a><a href="reserva.html">Agendar visita</a></nav>`}
 `,
 });
 
@@ -608,7 +616,7 @@ const nf = page({
 
 
 // ---- reserva.html: consulta de visita (ver docs/RESERVA.md). El número de WhatsApp viaja en data-wa, no en js/reserva.js ----
-const reservaBtn = C.whatsApp
+const reservaBtn = C.whatsApp && D.contact.whatsAppConfirmed === true
   ? `<a id="whatsapp" class="primary" href="https://wa.me/${C.whatsApp}" data-wa="${C.whatsApp}" ${EXT}>Escribir por WhatsApp <span>↗</span></a>`
   : `<button id="whatsapp" class="primary" type="button" data-wa="">Copiar consulta <span>↗</span></button>`;
 const reserva = `<!DOCTYPE html>

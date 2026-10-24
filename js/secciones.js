@@ -113,10 +113,11 @@
         favBtn.setAttribute('aria-pressed', soloFav ? 'true' : 'false'); favBtn.classList.toggle('is-on', soloFav);
       }
       function favToggle(a) {
-        var k = favKey(a), i = favs.indexOf(k);
+        var k = favKey(a), i = favs.indexOf(k), adding = i < 0;
         if (i > -1) favs.splice(i, 1); else favs.push(k);
         favGuardar(); favSync();
         if (soloFav) aplicar(false);
+        aviso(adding ? 'Unidad agregada a favoritos' : 'Unidad quitada de favoritos');
       }
       list.forEach(function (a) {
         var li = items[a.i]; if (!li) return;
@@ -379,6 +380,12 @@
         return c * dir || a.i - b.i;
       }
       function aplicar(escribirUrl) {
+        var flip = null;
+        var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        if (escribirUrl && !reduce && !document.documentElement.classList.contains('save-data') && typeof Element.prototype.animate === 'function') {
+          flip = new Map();
+          list.forEach(function (a) { var node = items[a.i]; if (!node.hidden) flip.set(node, node.getBoundingClientRect()); });
+        }
         var n = 0, visibles = 0, quitados = podar();
         var paso = window.innerWidth <= 700 ? 5 : 20;
         if (window._drCatalogoPaso !== paso) { window._drCatalogoPaso = paso; window._drCatalogoMostradas = paso; }
@@ -397,6 +404,12 @@
         var frag = document.createDocumentFragment();
 list.slice().sort(ordenar).forEach(function (a) { frag.appendChild(items[a.i]); });
 ul.appendChild(frag);
+        if (flip) flip.forEach(function (before, node) {
+          if (!node.isConnected || node.hidden) return;
+          var after = node.getBoundingClientRect(), dx = before.left - after.left, dy = before.top - after.top;
+          if (Math.abs(dx) < 1 && Math.abs(dy) < 1) return;
+          try { node.animate([{ transform: 'translate(' + dx + 'px,' + dy + 'px)', opacity: .88 }, { transform: 'translate(0,0)', opacity: 1 }], { duration: 240, easing: 'ease-out' }); } catch (e) {}
+        });
         visibles = 0;
         list.slice().sort(ordenar).forEach(function (a) {
           var li = items[a.i], ok = coincide(a, null);
@@ -551,11 +564,12 @@ ul.appendChild(frag);
         }
         tray.hidden = false; tray.textContent = '';
         var w = el('div', null, 'w'), lst = el('ul', null, 'tray-l');
+        var count = el('p', 'Unidades seleccionadas: ' + cmp.length + ' de ' + MAX, 'tray-count'); count.setAttribute('role', 'status'); count.setAttribute('aria-live', 'polite'); w.appendChild(count);
         cmp.forEach(function (i) {
           var a = list[i], li = el('li', null, 'tray-i'), b = el('button', '×'); b.type = 'button'; b.setAttribute('aria-label', 'Quitar de la comparación: ' + a.titulo);
           if (a.media && a.media[0]) { var th = el('img', null, 'tray-th'); th.src = a.media[0].thumb || a.media[0].card || a.media[0].src; th.alt = ''; th.decoding = 'async'; li.appendChild(th); }
           li.appendChild(el('span', a.marca + ' ' + a.modeloTxt)); li.appendChild(b); lst.appendChild(li);
-          b.addEventListener('click', function () { cmp.splice(cmp.indexOf(i), 1); pintarBandeja(); });
+          b.addEventListener('click', function () { cmp.splice(cmp.indexOf(i), 1); pintarBandeja(); aviso('Unidad quitada del comparador'); });
         });
         var ver = el('button', cmp.length < 2 ? 'Elegí una más para comparar' : 'Comparar ' + cmp.length + ' unidades', 'btn p sm'); ver.type = 'button'; ver.disabled = cmp.length < 2;
         var vac = el('button', 'Vaciar', 'btn sm'); vac.type = 'button';
@@ -569,6 +583,7 @@ ul.appendChild(frag);
           if (c.checked && k < 0 && cmp.length < MAX) cmp.push(i);
           if (!c.checked && k > -1) cmp.splice(k, 1);
           pintarBandeja();
+          aviso(c.checked ? 'Unidad agregada al comparador' : 'Unidad quitada del comparador');
         });
       });
 
@@ -1105,6 +1120,27 @@ var io = new IntersectionObserver(function (es) {
       pendientes.forEach(function (fn) { fn(); });
     });
 
+    /* Checklist de guía: persistencia aislada y fallo seguro si localStorage está bloqueado. */
+    (function () {
+      var items = $$('.gd [data-guide-item]'), progress = $('[data-guide-progress]');
+      if (!items.length || !progress) return;
+      var key = 'dr828-guide-checklist-v1', saved = {};
+      try { saved = JSON.parse(localStorage.getItem(key) || '{}') || {}; } catch (e) {}
+      function paint() {
+        var n = items.filter(function (i) { return i.checked; }).length;
+        progress.textContent = n + ' de ' + items.length + ' puntos seleccionados';
+      }
+      items.forEach(function (item) {
+        item.checked = saved[item.getAttribute('data-guide-item')] === true;
+        item.addEventListener('change', function () {
+          saved[item.getAttribute('data-guide-item')] = item.checked;
+          try { localStorage.setItem(key, JSON.stringify(saved)); } catch (e) {}
+          paint();
+        });
+      });
+      paint();
+    }());
+
     /* A4 · «Tasá tu usado» desde una ficha: la unidad que se estaba viendo se carga en el campo existente
        «¿Alguna unidad te interesa?» (referencia de la consulta, editable). No toca «Marca y modelo» ni «Año», que son
        los del usado de la persona, y no pisa lo que ya eligió. Entrando directo a la sección no cambia nada. */
@@ -1120,6 +1156,7 @@ var io = new IntersectionObserver(function (es) {
 
     $$('form[data-msg]').forEach(function (f) {
       var vista = $('.msg-v', f), estado = $('.msg-s', f), btnCopiar = $('[data-copiar-msg]', f), wa = $('[data-wa-msg]', f);
+      var lastMessage = '', messageBox = vista;
       var bub = $('[data-bub-b]', f), progT = $('[data-prog-t]', f), progB = $('[data-prog-b]', f), sol = $('[data-sun]', f);
       var panel = $('[data-match]', f), mH = $('[data-match-h]', f), mL = $('[data-match-l]', f);
       var byId = function (id) { return f.querySelector('#' + id); };
@@ -1159,11 +1196,14 @@ var io = new IntersectionObserver(function (es) {
       /* ----- progreso: el velocímetro avanza a medida que completás ----- */
       var trk = $$('[data-p]', f);
       function progreso() {
-        var n = trk.filter(function (c) { return (c.value || '').trim() !== ''; }).length, p = trk.length ? n / trk.length : 0;
+        var req = $$('[required]', f);
+        var fields = req.length ? req : trk;
+        var valid = fields.filter(function (c) { return (c.value || '').trim() !== '' && (!c.checkValidity || c.checkValidity()); }).length;
+        var n = fields.length ? valid : 0, p = fields.length ? n / fields.length : 0;
         if (sol) sol.style.setProperty('--p', p.toFixed(3));
         if (progB) progB.style.width = Math.round(p * 100) + '%';
-        if (progT) progT.textContent = !n ? 'Sin datos todavía' : n === trk.length ? 'Ficha completa' : n + ' de ' + trk.length + ' datos';
-        if (sol) sol.classList.toggle('is-full', n === trk.length && n > 0);
+        if (progT) progT.textContent = !n ? 'Sin datos obligatorios todavía' : n === fields.length ? 'Datos obligatorios completos' : n + ' de ' + fields.length + ' campos obligatorios';
+        if (sol) sol.classList.toggle('is-full', n === fields.length && n > 0);
       }
 
       /* ----- WhatsApp con el mensaje ya armado ----- */
@@ -1220,7 +1260,16 @@ var io = new IntersectionObserver(function (es) {
       var raf = 0, tMatch = 0;
       function ahoraTodo() {
         raf = 0;
-        if (vista) vista.value = texto();
+        if (vista) {
+          var freshMessage = texto();
+          if (vista.value !== freshMessage) {
+            vista.value = freshMessage;
+            if (!window.matchMedia || !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+              vista.classList.remove('msg-updated'); void vista.offsetWidth; vista.classList.add('msg-updated');
+              window.setTimeout(function () { vista.classList.remove('msg-updated'); }, 320);
+            }
+          }
+        }
         pintarBurbuja(); progreso(); actualizarWa();
         if (panel) { clearTimeout(tMatch); tMatch = setTimeout(pintarMatch, 180); }
       }
@@ -1317,6 +1366,40 @@ var io = new IntersectionObserver(function (es) {
       pendientes.push(function () { ultMatch = null; todo(); });
     });
   })();
+
+  /* ---------- buscador en preguntas y glosario ---------- */
+  (function () {
+    var root = $('[data-qa]'), input = $('#qa-search'), status = $('[data-qa-search-status]');
+    if (!root || !input) return;
+    var tabs = $$('.qa-tabs [role="tab"]', root), panels = $$('.qa-p[role="tabpanel"]', root);
+    function select(panel) {
+      panels.forEach(function (p) { p.hidden = p !== panel; });
+      tabs.forEach(function (t) { var active = t.getAttribute('aria-controls') === panel.id; t.setAttribute('aria-selected', active ? 'true' : 'false'); t.tabIndex = active ? 0 : -1; });
+    }
+    function applySearch() {
+      var term = input.value.trim().toLocaleLowerCase(), count = 0;
+      panels.forEach(function (panel) {
+        var found = 0;
+        $$('details', panel).forEach(function (row) {
+          var match = !term || row.textContent.toLocaleLowerCase().indexOf(term) !== -1;
+          row.hidden = !match; if (match) found++;
+        });
+        panel.dataset.emptySearch = term && !found ? 'true' : 'false';
+        count += found;
+      });
+      if (status) status.textContent = term ? (count ? count + ' resultados.' : 'No se encontraron coincidencias.') : '';
+      if (term) {
+        var active = panels.find(function (p) { return Array.from(p.querySelectorAll('details')).some(function (d) { return !d.hidden; }); });
+        if (active) select(active);
+      }
+    }
+    tabs.forEach(function (tab) { tab.addEventListener('click', function () { var panel = $('#' + tab.getAttribute('aria-controls')); if (panel) select(panel); }); });
+    tabs.forEach(function (tab, index) { tab.addEventListener('keydown', function (e) { if (e.key !== 'ArrowLeft' && e.key !== 'ArrowRight') return; e.preventDefault(); var next = tabs[(index + (e.key === 'ArrowRight' ? 1 : tabs.length - 1)) % tabs.length]; next.focus(); next.click(); }); });
+    input.addEventListener('input', applySearch);
+    panels.forEach(function (panel) { panel.querySelectorAll('details').forEach(function (row) { if (row.id) row.setAttribute('tabindex', '-1'); }); });
+    var hash = location.hash.slice(1), target = hash && document.getElementById(hash);
+    if (target && root.contains(target) && target.tagName === 'DETAILS') { select(target.closest('[role="tabpanel"]')); target.open = true; requestAnimationFrame(function () { target.scrollIntoView({ block: 'center' }); }); }
+  }());
 
   /* ---------- copiar dirección ---------- */
   $$('[data-copiar]').forEach(function (b) {

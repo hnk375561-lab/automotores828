@@ -2114,6 +2114,14 @@ section[id]::after{content:"";position:absolute;inset:0 auto 0 0;width:3px;backg
 
 /* ===== Capa final editorial 828 · aplicada después de las capas históricas ===== */
 .car-ph{position:relative;isolation:isolate;overflow:hidden}
+.car-ph:before{content:"";position:absolute;inset:0;z-index:0;background:linear-gradient(100deg,transparent 20%,rgba(217,219,221,.12) 42%,transparent 64%),linear-gradient(135deg,#111214,#202124,#111214);background-size:220% 100%,100% 100%;animation:car-ph-shimmer 1.25s linear infinite;pointer-events:none}
+.car-ph img{position:relative;z-index:1;opacity:0;transition:opacity .2s ease}
+.car-ph[data-image-state="loaded"]:before,.car-ph[data-image-state="error"]:before{display:none}
+.car-ph[data-image-state="loaded"] img{opacity:1}
+.car-ph[data-image-state="error"] img{opacity:0}
+@keyframes car-ph-shimmer{to{background-position:-220% 0,0 0}}
+@media(prefers-reduced-motion:reduce){.car-ph:before{animation:none;background:#17181a}}
+.save-data .car-ph:before{animation:none;background:#17181a}
 .car-badge{position:absolute;z-index:2;top:12px;right:12px;width:58px;height:58px;border:2px solid rgba(255,255,255,.9);border-radius:50%;background:#f7f7f5 url('images/logo-circle.png') center/82% no-repeat;box-shadow:0 5px 18px rgba(0,0,0,.28);pointer-events:none}
 .cars{grid-template-columns:repeat(3,minmax(0,1fr))}
 .hero-carousel-controls{display:flex!important;position:absolute;z-index:5;right:clamp(16px,4vw,64px);bottom:clamp(18px,4vw,48px);align-items:center;gap:8px;padding:8px 10px;border:1px solid rgba(255,255,255,.3);border-radius:999px;background:rgba(6,6,7,.9)}
@@ -2329,6 +2337,14 @@ dialog.ficha .fi-faq details.dd p{font-size:14.5px}
 .fav-b:focus-visible,.fx-fav:focus-visible{outline:3px solid var(--fo);outline-offset:2px}
 .fx-fav[aria-pressed="true"],.fav-fi.on{background:var(--y);border-color:var(--y);color:var(--ink)}
 .fx-favv{margin:12px 0;padding:14px 16px;border-left:3px solid var(--y);background:rgba(255,255,255,.04);color:#e8e8e8}
+.msg-updated{animation:msg-updated .28s ease-out}@keyframes msg-updated{from{opacity:.68;transform:translateY(2px)}to{opacity:1;transform:translateY(0)}}
+.guia-progress{color:#d9dbdd;font-size:.9rem;margin:.25rem 0}
+.qa-search-label{display:block;margin:.6rem 0 .25rem;color:#d9dbdd}.qa-search{display:block;min-height:44px;width:min(100%,32rem);padding:.65rem .8rem;border:1px solid #6b6d70;border-radius:.4rem;background:#111214;color:#fff;font:inherit}.qa-search:focus-visible{outline:3px solid #ee1c22;outline-offset:2px}
+.qa-search-status{min-height:1.4em;color:#d9dbdd;font-size:.9rem}
+.gd [data-guide-checklist] label{display:flex;align-items:flex-start;gap:.65rem;cursor:pointer;padding:.3rem 0}.gd [data-guide-item]{inline-size:44px;block-size:44px;min-inline-size:44px;min-block-size:44px;flex:0 0 44px;margin:0;accent-color:#ee1c22}
+.dr-hr-note{font-size:.9rem;color:#d9dbdd;margin-top:.6rem}
+@media(prefers-reduced-motion:reduce){.msg-updated{animation:none}}
+
 /* Automotores 828 · identidad visual
    Fuente: logo entregado por el responsable (captura del perfil de Instagram, 15/10/2026).
    Paleta: negro #060607 · rojo #ee1c22 (texto sobre negro: #ff4a4a · sobre claro: #b3000c) · plata #d9dbdd · gris damero #2a2a2c.
@@ -2450,7 +2466,7 @@ html body .ficha .fi-d{grid-template-columns:repeat(2,minmax(0,1fr));gap:0 14px;
 html body .ficha .fi-d div{padding:7px 0}
 html body .ficha .fi-ac{gap:6px;margin:3px 0 8px}
 html body .ficha .fi-sim,html body .ficha .fi-gu{margin-top:12px;padding-top:10px}
-html body .cmp{max-width:min(1500px,calc(100vw - 24px));max-height:calc(100dvh - 24px);overflow:hidden}
+html body .cmp{max-width:min(1500px,calc(100vw - 24px));max-height:calc(100dvh - 24px);overflow:auto;overscroll-behavior:contain}
 html body .cmp .cmp-sc{min-width:0;max-width:100%;overflow:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch}
 html body .cmp .cmpt{min-width:max(720px,calc(100% - 2px));table-layout:fixed;border-collapse:separate;border-spacing:0}
 html body .cmp .cmpt th,html body .cmp .cmpt td{vertical-align:top}

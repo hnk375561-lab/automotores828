@@ -48,6 +48,17 @@ def main():
                     if cols != 5: problems.append(f"{tag}: grilla de unidades con {cols} columnas; se esperaban 5")
                     pg.locator("button[data-ficha]").first.click()
                     pg.locator("dialog.ficha").wait_for(state="visible")
+                    gallery = pg.locator("dialog.ficha .fi-gal")
+                    if gallery.count() and gallery.locator("button").count() > 1:
+                        before = gallery.locator("img").first.get_attribute("src")
+                        gallery.locator("button").nth(1).click()
+                        if gallery.locator("img").first.get_attribute("src") == before: problems.append(f"{tag}: la galería no avanza")
+                    fav = pg.locator("dialog.ficha [data-fav]")
+                    if fav.count():
+                        fav.click()
+                        if not fav.get_attribute("aria-pressed") == "true": problems.append(f"{tag}: el favorito no cambia estado")
+                    cmp = pg.locator("dialog.ficha input[type=checkbox][data-cmp]")
+                    if cmp.count(): cmp.check()
                     mini = pg.locator("dialog.ficha .fi-map[data-leaflet]")
                     if mini.count() != 1: problems.append(f"{tag}: la ficha no incluye el mini mapa del local")
                     elif not pg.locator("dialog.ficha .fi-map .dr-map-v[aria-label]").count(): problems.append(f"{tag}: el mini mapa no tiene región accesible")
@@ -55,6 +66,7 @@ def main():
                     if extra.count() != 1: problems.append(f"{tag}: no se conservó el bloque de características adicionales")
                     elif extra.locator("dd").count() < 1: problems.append(f"{tag}: el bloque de características adicionales está vacío")
                     elif not extra.is_visible(): problems.append(f"{tag}: el bloque de características adicionales no es visible")
+                    pg.locator("dialog.ficha").locator("button[aria-label*=Cerrar]").click()
                 if w <= 700:
                     H = pg.evaluate("document.documentElement.scrollHeight"); y = 0; bad = set()
                     while y < H:

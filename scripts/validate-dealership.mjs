@@ -73,9 +73,10 @@ if (d && a) {
 
   // --- contacto: conflicto de teléfonos ---
   const c = d.contact;
-  if (c.whatsApp) {
+  if (c.whatsApp && c.whatsAppConfirmed === true && c.confirmadoPorDueno === true) {
     for (const p of ['index.html']) if (!html[p].includes(`wa.me/${c.whatsApp}`)) err(`${p}: WhatsApp no coincide con dealership.json`);
-    if (!c.confirmadoPorDueno) err('contact.whatsApp está cargado pero confirmadoPorDueno es false');
+  } else if (c.whatsApp) {
+    for (const p of pages) if (html[p].includes(`wa.me/${c.whatsApp}`)) err(`${p}: WhatsApp publicado sin confirmación documental coherente`);
   } else {
     for (const p of pages) if (/wa\.me|tel:/.test(html[p])) err(`${p}: hay teléfono o WhatsApp publicado sin confirmar`);
   }
