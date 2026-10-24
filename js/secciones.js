@@ -741,10 +741,30 @@ ul.appendChild(frag);
         tb.appendChild(fr);
         t.appendChild(tb);
         var sc = el('div', null, 'cmp-sc'); sc.appendChild(t); dlg.appendChild(sc);
+        /* navegación horizontal siempre visible: flechas fijas abajo + arrastre con el mouse */
+        var nav = el('div', null, 'cmp-nav'); nav.setAttribute('role', 'group'); nav.setAttribute('aria-label', 'Desplazar la comparación');
+        var bp = el('button', '‹', 'cmp-nav-b'), bn = el('button', '›', 'cmp-nav-b'), nt = el('span', 'Deslizá o usá las flechas para ver las otras unidades', 'cmp-nav-t');
+        bp.type = 'button'; bn.type = 'button'; bp.setAttribute('aria-label', 'Ver unidades anteriores'); bn.setAttribute('aria-label', 'Ver más unidades');
+        nav.appendChild(bp); nav.appendChild(nt); nav.appendChild(bn); dlg.appendChild(nav);
+        var paso = function () { var u = t.querySelector('thead th:nth-child(2)'); return (u && u.offsetWidth) || 280; };
+        var estado = function () { var max = sc.scrollWidth - sc.clientWidth; nav.hidden = max < 4; bp.disabled = sc.scrollLeft < 4; bn.disabled = sc.scrollLeft > max - 4; };
+        bp.addEventListener('click', function () { sc.scrollBy({ left: -paso(), behavior: 'smooth' }); });
+        bn.addEventListener('click', function () { sc.scrollBy({ left: paso(), behavior: 'smooth' }); });
+        sc.addEventListener('scroll', estado, { passive: true });
+        if (window.ResizeObserver) new ResizeObserver(estado).observe(sc);
+        var arr = null;
+        sc.addEventListener('pointerdown', function (e) {
+          if (e.pointerType !== 'mouse' || e.button !== 0 || e.target.closest('a,button,input,label')) return;
+          arr = { x: e.clientX, l: sc.scrollLeft }; sc.classList.add('arrastrando');
+          try { sc.setPointerCapture(e.pointerId); } catch (err) {}
+        });
+        sc.addEventListener('pointermove', function (e) { if (arr) sc.scrollLeft = arr.l - (e.clientX - arr.x); });
+        ['pointerup', 'pointercancel'].forEach(function (n) { sc.addEventListener(n, function () { arr = null; sc.classList.remove('arrastrando'); }); });
         var f = sel.map(function (a) { return a.precio && a.precio.fecha; }).filter(Boolean);
         dlg.appendChild(el('p', 'Precios y kilometrajes' + (f.length ? ' al ' + fecha(f[0]) : '') + '. Consultá disponibilidad actualizada por WhatsApp.', 'src cmp-ft'));
         document.documentElement.classList.add('has-dlg');
         if (typeof dlg.showModal === 'function') { if (!dlg.open) dlg.showModal(); } else dlg.setAttribute('open', '');
+        estado();
         x.focus();
       }
 

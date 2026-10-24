@@ -15,7 +15,13 @@
     chain.classList.toggle('is-paused', reduced || saveData || document.hidden || !inView || focused);
   }
 
-  interactionArea.addEventListener('focusin', function () { focused = true; sync(); });
+  interactionArea.addEventListener('focusin', function (event) {
+    var t = event.target, kb = false;
+    try { kb = !!(t && t.matches && t.matches(':focus-visible')); } catch (e) { kb = false; }
+    focused = kb; sync();
+  });
+  /* un clic o toque nunca congela la cinta: se limpia cualquier foco previo */
+  document.addEventListener('pointerdown', function () { if (focused) { focused = false; sync(); } }, true);
   interactionArea.addEventListener('focusout', function (event) {
     if (!interactionArea.contains(event.relatedTarget)) { focused = false; sync(); }
   });

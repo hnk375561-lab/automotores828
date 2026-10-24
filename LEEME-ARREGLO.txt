@@ -1,3 +1,3 @@
-Descomprimir en la raiz del proyecto, respetando las carpetas (css/, js/, scripts/), y reemplazar.
-Despues borrar los 6 archivos sueltos de la raiz que estaban de mas:
-  build-index.mjs, e2e-catalogo.py, estilos.css, hero-carousel.css, hero-motion.js, secciones.js
+Descomprimir en la raiz del proyecto respetando carpetas (css/, js/, scripts/) y reemplazar.
+Borrar los 6 archivos sueltos de la raiz: build-index.mjs, e2e-catalogo.py, estilos.css, hero-carousel.css, hero-motion.js, secciones.js
+Despues de publicar, abrir el sitio y apretar Ctrl+F5.
