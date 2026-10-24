@@ -3,6 +3,30 @@
   'use strict';
   var saveData = !!(navigator.connection && navigator.connection.saveData);
   document.documentElement.classList.toggle('save-data', saveData);
+  function imageState(img, state) {
+    var frame = img.closest('.car-ph');
+    if (frame) frame.setAttribute('data-image-state', state);
+  }
+  document.addEventListener('load', function (event) {
+    var img = event.target;
+    if (!img || !img.matches || !img.matches('.car-ph img')) return;
+    imageState(img, img.naturalWidth > 0 ? 'loaded' : 'error');
+  }, true);
+  document.addEventListener('error', function (event) {
+    var img = event.target;
+    if (img && img.matches && img.matches('.car-ph img')) imageState(img, 'error');
+  }, true);
+  document.querySelectorAll('.car-ph img').forEach(function (img) {
+    if (img.complete) imageState(img, img.naturalWidth > 0 ? 'loaded' : 'error');
+  });
+  /* Banda de inicio real (no ::before, reservado por algunas secciones para sus fondos). */
+  Array.prototype.forEach.call(document.querySelectorAll('main>section[id]'), function (section) {
+    if (section.querySelector(':scope > .section-damero')) return;
+    var banda = document.createElement('span');
+    banda.className = 'section-damero';
+    banda.setAttribute('aria-hidden', 'true');
+    section.insertBefore(banda, section.firstChild);
+  });
   /* Entrada editorial: reveal progresivo sin bloquear el contenido. */
   if ('IntersectionObserver' in window && !saveData && !(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches)) {
     var revealObserver = new IntersectionObserver(function (entries) { entries.forEach(function (entry) { if (entry.isIntersecting) { entry.target.classList.add('in'); revealObserver.unobserve(entry.target); } }); }, { threshold: 0.15 });
@@ -33,7 +57,37 @@
       tabs.forEach(function (t, j) { var on = j === k; t.setAttribute('aria-selected', on ? 'true' : 'false'); t.tabIndex = on ? 0 : -1; if (pan[j]) pan[j].hidden = !on; });
       if (foco) tabs[k].focus();
     }
+    var search = qa.querySelector('#qa-search'), status = qa.querySelector('[data-qa-search-status]');
+    function filter() {
+      var term = search ? search.value.trim().toLocaleLowerCase() : '', total = 0;
+      pan.forEach(function (panel) {
+        var count = 0;
+        [].slice.call(panel.querySelectorAll('details')).forEach(function (row) {
+          var visible = !term || row.textContent.toLocaleLowerCase().indexOf(term) !== -1;
+          row.hidden = !visible; if (visible) count++;
+        });
+        panel.dataset.noMatches = term && !count ? 'true' : 'false'; total += count;
+      });
+      if (status) status.textContent = term ? (total ? total + ' resultados.' : 'No se encontraron coincidencias.') : '';
+      if (term) {
+        var idx = pan.findIndex(function (panel) { return panel.querySelector('details:not([hidden])'); });
+        if (idx >= 0) ir(idx, false);
+      }
+    }
+    if (search) search.addEventListener('input', filter);
     bar.hidden = false; qa.classList.add('js'); ir(0, false);
+    function openQuestionHash() {
+      var target = null;
+      try { target = location.hash && document.getElementById(decodeURIComponent(location.hash.slice(1))); } catch (e) {}
+      if (!target || !qa.contains(target) || !target.matches('details')) return;
+      var parentPanel = target.closest('[role="tabpanel"]'), tabIndex = pan.indexOf(parentPanel);
+      if (tabIndex >= 0) ir(tabIndex, false);
+      target.open = true;
+      requestAnimationFrame(function () { target.scrollIntoView({ block: 'center' }); });
+    }
+    openQuestionHash();
+    window.addEventListener('hashchange', openQuestionHash);
+    window.addEventListener('load', openQuestionHash, { once: true });
     tabs.forEach(function (t, k) {
       t.addEventListener('click', function () { ir(k, false); });
       t.addEventListener('keydown', function (e) {

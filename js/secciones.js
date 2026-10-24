@@ -74,8 +74,17 @@
       if (accion) { accion(tipo, i, origen); return; }
       catData().then(function () { if (accion) accion(tipo, i, origen); });
     });
+    /* Hero: la cinta se mueve, así que el puntero puede terminar sobre otra foto entre pointerdown y click
+       (el navegador manda entonces el click al contenedor y la ficha no abría). Se recuerda la unidad
+       sobre la que empezó el gesto y se usa si el click no cae justo en un botón. */
+    var heroDown = null, heroDownT = 0;
+    document.addEventListener('pointerdown', function (e) {
+      heroDown = e.target.closest ? e.target.closest('[data-hero-unit]') : null; heroDownT = Date.now();
+    }, true);
     document.addEventListener('click', function (e) {
-      var heroButton = e.target.closest ? e.target.closest('[data-hero-unit]') : null;
+      var t = e.target, heroButton = t.closest ? t.closest('[data-hero-unit]') : null;
+      if (!heroButton && heroDown && Date.now() - heroDownT < 1500 && t.closest && t.closest('[data-hero-chain]')) heroButton = heroDown;
+      heroDown = null;
       if (!heroButton) return;
       var unitId = heroButton.getAttribute('data-hero-unit');
       if (!unitId) return;
@@ -83,7 +92,7 @@
         if (!list.length && data) { list = data; arrancar(); }
         var unit = list.find(function (entry) { return String(entry.id) === String(unitId); });
         var index = unit ? list.indexOf(unit) : -1;
-        if (index >= 0 && accion) accion('ficha', index, heroButton, unit);
+        if (index >= 0 && accion) accion('ficha', index, heroButton.tagName === 'BUTTON' ? heroButton : null, unit);
       }
       if (accion) { openMappedUnit(); return; }
       catData().then(openMappedUnit);

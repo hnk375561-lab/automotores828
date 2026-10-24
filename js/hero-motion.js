@@ -21,13 +21,22 @@
     chain.classList.toggle('is-paused', reduced || saveData || document.hidden || !inView || focused);
   }
 
+  /* La cinta solo se frena cuando alguien navega con el teclado (Tab / flechas) hasta ella.
+     Cerrar una ficha devuelve el foco al botón de forma programática: eso nunca debe congelarla. */
+  var lastNavKey = 0;
+  document.addEventListener('keydown', function (event) {
+    var k = event.key;
+    lastNavKey = (k === 'Tab' || k === 'ArrowLeft' || k === 'ArrowRight') ? Date.now() : 0;
+  }, true);
   interactionArea.addEventListener('focusin', function (event) {
     var t = event.target, kb = false;
     try { kb = !!(t && t.matches && t.matches(':focus-visible')); } catch (e) { kb = false; }
-    focused = kb; sync();
+    focused = kb && lastNavKey > 0 && Date.now() - lastNavKey < 1000; sync();
   });
   /* un clic o toque nunca congela la cinta: se limpia cualquier foco previo */
-  document.addEventListener('pointerdown', function () { if (focused) { focused = false; sync(); } }, true);
+  document.addEventListener('pointerdown', function () { lastNavKey = 0; if (focused) { focused = false; sync(); } }, true);
+  /* al cerrar cualquier diálogo (ficha, comparador) la cinta vuelve a andar */
+  document.addEventListener('close', function () { if (focused) { focused = false; sync(); } }, true);
   interactionArea.addEventListener('focusout', function (event) {
     if (!interactionArea.contains(event.relatedTarget)) { focused = false; sync(); }
   });

@@ -26,7 +26,8 @@ try:
             page.set_viewport_size({'width': 390, 'height': 844})
             assert track.evaluate('(el) => getComputedStyle(el).animationDuration') == '45s', 'duración móvil del hero distinta de 45 s'
             page.set_viewport_size({'width': 1280, 'height': 900})
-            page.locator('.hx-copy').first.hover()
+            page.mouse.move(300, 450)  # sobre el bloque de texto: el clic debe atravesarlo hacia la foto de la cinta
+            assert page.evaluate('() => !!document.elementFromPoint(300, 450).closest("[data-hero-unit]")'), 'el texto del hero tapa las fotos: los clics no llegan a la cinta'
             page.wait_for_timeout(150)
             assert not hero_chain.evaluate('(el) => el.classList.contains("is-paused")'), 'el hover detuvo la cadena del hero'
         # Reducir movimiento solo durante las activaciones repetidas para estabilizar el test.

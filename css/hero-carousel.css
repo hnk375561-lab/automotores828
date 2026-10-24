@@ -52,5 +52,7 @@ html body .hero-chain-car--03 img,html body .hero-chain-car--07 img,html body .h
    Además la cinta se atenúa apenas al cerrar cada vuelta para que el reinicio sea suave. */
 @keyframes dr-chain{0%{transform:translate3d(0,0,0);opacity:.45}7%{opacity:1}93%{opacity:1}100%{transform:translate3d(calc(var(--car) * -10),0,0);opacity:.45}}
 html body .hero-chain+*{position:relative}
-@media(max-width:900px){html body .hero .hx-copy{pointer-events:none}html body .hero .hx-copy a,html body .hero .hx-copy button{pointer-events:auto}html body .hero-chain{height:min(100vw + 56px,560px);inset:0 0 auto}html body .hero-chain-track{--car:clamp(150px,47vw,250px);height:100%;animation-duration:45s}html body .hero-chain-car{flex-basis:var(--car)}html body .hero-chain-car img{object-position:50% 63%}}
+/* el bloque de texto cubre media cinta en escritorio: solo sus enlaces/botones reciben clics, el resto deja pasar el clic a la foto de abajo */
+html body .hero .hx-copy{pointer-events:none}html body .hero .hx-copy a,html body .hero .hx-copy button{pointer-events:auto}
+@media(max-width:900px){html body .hero-chain{height:min(100vw + 56px,560px);inset:0 0 auto}html body .hero-chain-track{--car:clamp(150px,47vw,250px);height:100%;animation-duration:45s}html body .hero-chain-car{flex-basis:var(--car)}html body .hero-chain-car img{object-position:50% 63%}}
 @media(prefers-reduced-motion:reduce){html body .hero-chain-track{animation:none!important;transform:none!important}html body .hero-chain-car:nth-child(n+6){display:none}}
