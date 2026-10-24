@@ -2349,6 +2349,51 @@ dialog.ficha .fi-faq details.dd p{font-size:14.5px}
 .fav-b:focus-visible,.fx-fav:focus-visible{outline:3px solid var(--fo);outline-offset:2px}
 .fx-fav[aria-pressed="true"],.fav-fi.on{background:var(--y);border-color:var(--y);color:var(--ink)}
 .fx-favv{margin:12px 0;padding:14px 16px;border-left:3px solid var(--y);background:rgba(255,255,255,.04);color:#e8e8e8}
+/* ===== Sistema de movimiento (tokens + menú + diálogos + feedback) ===== */
+:root{--mo-fast:140ms;--mo-base:280ms;--mo-slow:440ms;--mo-ease:cubic-bezier(.22,.8,.24,1);--mo-dist:18px}
+@media(max-width:800px){:root{--mo-dist:12px}}
+.btn{transition:background-color .2s,color .2s,filter .2s,border-color .2s,transform var(--mo-fast) var(--mo-ease)}
+.btn:active:not(:disabled){transform:translateY(1px)}
+.fi-th button{transition:opacity var(--mo-base) var(--mo-ease),border-color var(--mo-base) var(--mo-ease)}
+.fi-th button:hover{opacity:1}
+.fi-sim-c{transition:border-color var(--mo-base) var(--mo-ease),background-color var(--mo-base) var(--mo-ease)}
+.fi-sim-c:active{opacity:.85}
+html body .menu-toggle{transition:background-color var(--mo-base) var(--mo-ease),border-color var(--mo-base) var(--mo-ease),color var(--mo-base) var(--mo-ease)}
+html body .menu-icon{transition:background-color var(--mo-fast) linear}
+html body .menu-icon::before,html body .menu-icon::after{transition:transform var(--mo-base) var(--mo-ease),background-color var(--mo-base) var(--mo-ease)}
+html body .menu-toggle[aria-expanded="true"] .menu-icon{background-color:transparent!important}
+html body .menu-toggle[aria-expanded="true"] .menu-icon::before{transform:translateY(6px) rotate(45deg)}
+html body .menu-toggle[aria-expanded="true"] .menu-icon::after{transform:translateY(-6px) rotate(-45deg)}
+@media(max-width:980px){
+  html body header .site-nav{transform-origin:top center;transform:translateY(-10px) scale(.985);transition:opacity var(--mo-base) var(--mo-ease),transform var(--mo-base) var(--mo-ease),visibility 0s linear var(--mo-base)}
+  html.menu-open body header .site-nav{transform:none;transition-delay:0s}
+  html body header .site-nav a{opacity:0;transform:translateY(-8px);transition:opacity var(--mo-fast) linear,transform var(--mo-fast) var(--mo-ease),color .2s}
+  html.menu-open body header .site-nav a{opacity:1;transform:none;transition:opacity var(--mo-base) var(--mo-ease) calc(60ms + var(--n,0) * 35ms),transform var(--mo-base) var(--mo-ease) calc(60ms + var(--n,0) * 35ms),color .2s}
+  .site-nav a:nth-child(2){--n:1}.site-nav a:nth-child(3){--n:2}.site-nav a:nth-child(4){--n:3}.site-nav a:nth-child(5){--n:4}.site-nav a:nth-child(6){--n:5}.site-nav a:nth-child(7){--n:6}.site-nav a:nth-child(8){--n:7}.site-nav a:nth-child(9){--n:8}.site-nav a:nth-child(n+10){--n:9}
+}
+/* Diálogos: entrada con fondo + contenido (barato); el fade del diálogo completo costó ~40 ms de hilo principal por apertura en la medición, por eso no se anima el contenedor */
+dialog.ficha::backdrop,dialog.cmp::backdrop{transition:opacity var(--mo-base) var(--mo-ease)}
+@starting-style{dialog.ficha[open]::backdrop,dialog.cmp[open]::backdrop{opacity:0}}
+@keyframes moIn{from{opacity:0;transform:translateY(var(--mo-dist))}to{opacity:1;transform:none}}
+dialog.ficha[open] .fi-t img:first-child{animation:moIn var(--mo-slow) var(--mo-ease) 40ms backwards}
+dialog.ficha[open] .fi-i>:nth-child(-n+3){animation:moIn var(--mo-slow) var(--mo-ease) 110ms backwards}
+dialog.cmp[open] .cmp-hd{animation:moIn var(--mo-slow) var(--mo-ease) backwards}
+@media(prefers-reduced-motion:reduce){
+  html body header .site-nav,html body header .site-nav a,html body .menu-toggle,html body .menu-icon,html body .menu-icon::before,html body .menu-icon::after{transition:none!important}
+  html body header .site-nav a{opacity:1;transform:none}
+  dialog.ficha::backdrop,dialog.cmp::backdrop{transition:none}
+  dialog.ficha[open] .fi-t img:first-child,dialog.ficha[open] .fi-i>:nth-child(-n+3),dialog.cmp[open] .cmp-hd{animation:none}
+  .btn:active:not(:disabled){transform:none}
+}
+/* --- Movimiento: galería, controles, tarjetas, reveals --- */
+.fi-a{transition:background-color var(--mo-fast) linear,color var(--mo-fast) linear,transform var(--mo-fast) var(--mo-ease)}
+.fi-a:active{transform:scale(.94)}
+.fav-b,.fi-x,.qa-tabs button,.cv-chip,.fx-tg{transition:background-color var(--mo-fast) linear,border-color var(--mo-fast) linear,color var(--mo-fast) linear}
+.fav-b{transition-property:background-color,border-color,color,transform}
+.fav-b:active{transform:scale(.92)}
+.reveal{transform:translateY(calc(var(--mo-dist) * 1.3));transition:opacity .6s var(--mo-ease),transform .6s var(--mo-ease)}
+@media(hover:none){.car:active .car-ph img{transform:scale(1.03)}.fi-sim-c:active{border-color:var(--y)}}
+@media(prefers-reduced-motion:reduce){.fi-a:active,.fav-b:active{transform:none}.reveal{transform:none;transition:none}}
 .msg-updated{animation:msg-updated .28s ease-out}@keyframes msg-updated{from{opacity:.68;transform:translateY(2px)}to{opacity:1;transform:translateY(0)}}
 .guia-progress{color:#d9dbdd;font-size:.9rem;margin:.25rem 0}
 .qa-search-label{display:block;margin:.6rem 0 .25rem;color:#d9dbdd}.qa-search{display:block;min-height:44px;width:min(100%,32rem);padding:.65rem .8rem;border:1px solid #6b6d70;border-radius:.4rem;background:#111214;color:#fff;font:inherit}.qa-search:focus-visible{outline:3px solid #ee1c22;outline-offset:2px}
