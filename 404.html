@@ -1668,8 +1668,11 @@ dialog.cmp-lux .cmp-win-p{display:block;width:58px;height:42px;overflow:hidden;b
 dialog.cmp-lux .cmp-win-p img{display:block;width:100%;height:100%;object-fit:cover}
 dialog.cmp-lux .cmp-win-t small{display:block;color:#ee1c22;font:700 10.5px/1.2 var(--hero-copy);letter-spacing:.18em;text-transform:uppercase}
 dialog.cmp-lux .cmp-win-t b{display:block;margin-top:3px;color:#fff;font:italic 800 15.5px/1.1 var(--hero-title);letter-spacing:-.01em;text-transform:uppercase}
-dialog.cmp-lux .cmp-sc{padding:22px clamp(18px,3vw,38px) 12px}
-dialog.cmp-lux .cmpx{--fc:150px;--uc:236px;width:100%;min-width:calc(var(--fc) + var(--n,2) * var(--uc));table-layout:fixed;border-collapse:separate;border-spacing:0}
+dialog.cmp-lux .cmp-sc{padding:22px clamp(18px,3vw,38px) 18px;overflow-x:auto;overflow-y:visible;overscroll-behavior-x:contain;-webkit-overflow-scrolling:touch;scrollbar-width:thin;scrollbar-color:#ee1c22 #1c1c1d}
+dialog.cmp-lux .cmp-sc::-webkit-scrollbar{height:10px}
+dialog.cmp-lux .cmp-sc::-webkit-scrollbar-track{background:#1c1c1d}
+dialog.cmp-lux .cmp-sc::-webkit-scrollbar-thumb{background:#ee1c22;border-radius:0}
+html body dialog.cmp-lux .cmpx{--fc:150px;--uc:300px;width:100%;min-width:calc(var(--fc) + var(--n,2) * var(--uc));table-layout:fixed;border-collapse:separate;border-spacing:0}
 dialog.cmp-lux .cmpx thead th{padding:0 8px 20px;border:0;background:none;color:#fff;text-align:left;vertical-align:bottom}
 dialog.cmp-lux .cmpx thead th:first-child{width:var(--fc);padding:0}
 dialog.cmp-lux .cmpx thead th:nth-child(2){padding-left:0}
@@ -1685,10 +1688,10 @@ dialog.cmp-lux .cmpx .cb{display:block;margin-top:16px;color:#ee1c22;font:700 11
 dialog.cmp-lux .cmpx .cn{display:block;margin-top:5px;color:#fff;font:italic 800 clamp(21px,2.1vw,30px)/1 var(--hero-title);letter-spacing:-.025em;text-transform:uppercase;overflow-wrap:anywhere;word-break:break-word;hyphens:auto}
 dialog.cmp-lux .cmpx .cv{display:block;margin-top:7px;color:#b7b7b7;font:500 14px/1.3 var(--hero-copy)}
 dialog.cmp-lux .cmpx tbody th{position:sticky;left:0;z-index:2;width:var(--fc);padding:20px 12px 20px 0;border-bottom:1px solid rgba(255,255,255,.09);background:#111111;color:#b7b7b7;font:700 11.5px/1.3 var(--hero-copy);letter-spacing:.16em;text-transform:uppercase;text-align:left}
-dialog.cmp-lux .cmpx td{padding:20px 14px;border-bottom:1px solid rgba(255,255,255,.09);border-left:1px solid rgba(255,255,255,.07);background:transparent;color:#f2f4f4;font:500 16px/1.35 var(--hero-copy);vertical-align:top}
+dialog.cmp-lux .cmpx td{min-width:0;padding:20px 18px;border-bottom:1px solid rgba(255,255,255,.09);border-left:1px solid rgba(255,255,255,.07);background:transparent;color:#f2f4f4;font:500 16px/1.35 var(--hero-copy);vertical-align:top}
 dialog.cmp-lux .cmpx td.win{background:linear-gradient(180deg,rgba(238,28,34,.18),rgba(238,28,34,.04));box-shadow:inset 0 3px 0 #ee1c22}
 dialog.cmp-lux .cmpx tr.cmp-g th{position:static;padding:30px 0 10px;border-bottom:1px solid rgba(238,28,34,.45);background:none;color:#ee1c22;font:italic 800 13px/1 var(--hero-title);letter-spacing:.34em}
-dialog.cmp-lux .cmpx .big{display:block;color:#fff;font:italic 800 clamp(24px,2.7vw,40px)/1 var(--hero-title);letter-spacing:-.035em;white-space:nowrap}
+dialog.cmp-lux .cmpx .big{display:block;max-width:100%;color:#fff;font:italic 800 clamp(22px,2vw,28px)/1.05 var(--hero-title);letter-spacing:-.03em;white-space:nowrap}
 dialog.cmp-lux .cmpx .big.nd{color:#999999;font:600 16px/1.3 var(--hero-copy);letter-spacing:0;white-space:normal}
 dialog.cmp-lux .cmpx .val{color:#fff;font:600 17px/1.3 var(--hero-copy)}
 dialog.cmp-lux .cmpx .val.nd{color:#999999;font-weight:500}
@@ -1713,12 +1716,12 @@ dialog.cmp-lux .cmp-ft{padding:10px clamp(18px,3vw,38px) 28px;color:#a6a6a6}
   dialog.cmp-lux .cmp-sub{font-size:14px}
   dialog.cmp-lux .cmp-win,dialog.cmp-lux .cmp-hz{margin-inline:12px;padding-inline:0}
   dialog.cmp-lux .cmp-sc{padding:16px 12px 8px}
-  dialog.cmp-lux .cmpx{--fc:82px;--uc:172px}
+  html body dialog.cmp-lux .cmpx{--fc:82px;--uc:200px}
   dialog.cmp-lux .cmpx tbody th{padding:16px 6px 16px 0;font-size:9.5px;letter-spacing:.06em}
-  dialog.cmp-lux .cmpx td{padding:16px 10px;font-size:14.5px}
+  dialog.cmp-lux .cmpx td{padding:16px 12px;font-size:14.5px}
   dialog.cmp-lux .cmpx thead th{padding-inline:6px}
   dialog.cmp-lux .cmpx .cn{font-size:18px}
-  dialog.cmp-lux .cmpx .big{font-size:clamp(20px,6.4vw,26px)}
+  dialog.cmp-lux .cmpx .big{font-size:clamp(17px,5vw,21px)}
   dialog.cmp-lux .cmpx .val{font-size:15px}
   dialog.cmp-lux .cmpx tr.cmp-g th{letter-spacing:.2em}
   dialog.cmp-lux .cmp-ft{padding-inline:12px}

@@ -74,12 +74,26 @@
       if (accion) { accion(tipo, i, origen); return; }
       catData().then(function () { if (accion) accion(tipo, i, origen); });
     });
+    document.addEventListener('click', function (e) {
+      var heroButton = e.target.closest ? e.target.closest('[data-hero-unit]') : null;
+      if (!heroButton) return;
+      var unitId = heroButton.getAttribute('data-hero-unit');
+      if (!unitId) return;
+      function openMappedUnit(data) {
+        if (!list.length && data) { list = data; arrancar(); }
+        var unit = list.find(function (entry) { return String(entry.id) === String(unitId); });
+        var index = unit ? list.indexOf(unit) : -1;
+        if (index >= 0 && accion) accion('ficha', index, heroButton, unit);
+      }
+      if (accion) { openMappedUnit(); return; }
+      catData().then(openMappedUnit);
+    });
     catData().then(function (d) { list = d || []; arrancar(); });
     function arrancar() {
       if (list.length < 2) return;
-      accion = function (tipo, i, origen) {
+      accion = function (tipo, i, origen, record) {
         if (tipo === 'share') { if (list[i]) compartir(list[i]); return; }
-        if (list[i]) abrirFicha(i, origen);
+        if (list[i]) abrirFicha(i, origen, record);
       };
 
       var fmt = function (n) { return n.toLocaleString('es-AR'); };
@@ -755,8 +769,8 @@ ul.appendChild(frag);
         return x;
       }
       function boton(txt, cls, fn) { var b = el('button', txt, cls || 'btn sm'); b.type = 'button'; b.addEventListener('click', fn); return b; }
-      function abrirFicha(i, origen) {
-        var a = list[i]; if (!a) return;
+      function abrirFicha(i, origen, record) {
+        var a = record || list[i]; if (!a) return;
         fOrigen = origen || null;
         if (!fdlg) {
           fdlg = el('dialog', null, 'ficha'); fdlg.setAttribute('aria-labelledby', 'fi-ttl');

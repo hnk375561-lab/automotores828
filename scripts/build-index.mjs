@@ -522,8 +522,26 @@ const HERO_FOTOS = [
   ['10', 'images/hero/hero-10.webp', 'images/hero/hero-10-828.webp', 900, 1200, 621, 'Renault Duster 2018 en Automotores 828'],
 ];
 const HERO_VERSION = '?v=20261021-2';
-const HERO_CHAIN = HERO_FOTOS.map(([n, src, small, width, height, smallWidth, alt], i) => `<figure class="hero-chain-car hero-chain-car--${n}"><img src="${src}${HERO_VERSION}" srcset="${small}${HERO_VERSION} ${smallWidth}w, ${src}${HERO_VERSION} ${width}w" sizes="25vw" width="${width}" height="${height}" alt="${esc(alt)}" decoding="async"${i === 0 ? ' fetchpriority="high"' : ' loading="lazy"'}></figure>`).join('');
-const HERO_CHAIN_DUP = HERO_FOTOS.map(([n, src, small, width, height, smallWidth, alt]) => `<figure class="hero-chain-car hero-chain-car--${n}" aria-hidden="true"><img src="${src}${HERO_VERSION}" srcset="${small}${HERO_VERSION} ${smallWidth}w, ${src}${HERO_VERSION} ${width}w" sizes="25vw" width="${width}" height="${height}" alt="" decoding="async" loading="lazy"></figure>`).join('');
+const HERO_UNIT_PHOTOS = [
+  'images/stock/ml-4103009836-p01.webp', 'images/stock/ml-2137817901-p01.webp',
+  'images/stock/ml-2185939777-p01.webp', 'images/stock/ml-2032707077-p01.webp',
+  'images/stock/ml-2191782749-p01.webp', 'images/stock/ml-2116059721-p01.webp',
+  'images/stock/ml-3962722820-p01.webp', 'images/stock/ml-2140604399-p01.webp',
+  'images/stock/ml-2090433129-p01.webp', 'images/stock/ml-2057558089-p01.webp'
+];
+const HERO_UNITS = HERO_FOTOS.map((photo, i) => {
+  const source = HERO_UNIT_PHOTOS[i];
+  const matches = autos.filter((unit) => Array.isArray(unit.fotos) && unit.fotos.some((image) => image.src === source));
+  if (matches.length !== 1 || !fs.existsSync(path.join(root, source))) throw new Error(`Hero ${photo[0]}: la fotografía ${source} no identifica una única unidad del inventario`);
+  const unit = matches[0], label = `${unit.marca} ${unit.modelo} · ${unit.anio}`;
+  const altIdentity = norm(photo[6].replace(/ en Automotores 828$/, ''));
+  if (!altIdentity.includes(norm(`${unit.marca} ${unit.modelo} ${unit.anio}`))) throw new Error(`Hero ${photo[0]}: marca/modelo/año no coincide con ${source}`);
+  return { unit, index: autos.indexOf(unit), label };
+});
+if (new Set(HERO_UNITS.map((entry) => entry.index)).size !== HERO_FOTOS.length) throw new Error('Las imágenes del hero no tienen correspondencia única con fichas distintas');
+const heroFigure = ([n, src, small, width, height, smallWidth], entry, decorative, priority) => `<figure class="hero-chain-car hero-chain-car--${n}"${decorative ? ' aria-hidden="true"' : ''}>${decorative ? `<div class="hero-chain-link" aria-hidden="true"><img src="${src}${HERO_VERSION}" srcset="${small}${HERO_VERSION} ${smallWidth}w, ${src}${HERO_VERSION} ${width}w" sizes="25vw" width="${width}" height="${height}" alt="" decoding="async" loading="lazy"><span class="hero-chain-label">${esc(entry.label)}</span></div>` : `<button class="hero-chain-link" type="button" data-hero-unit="${esc(entry.unit.id)}" aria-label="Abrir la ficha de ${esc(entry.label)}"><img src="${src}${HERO_VERSION}" srcset="${small}${HERO_VERSION} ${smallWidth}w, ${src}${HERO_VERSION} ${width}w" sizes="25vw" width="${width}" height="${height}" alt="" decoding="async"${priority ? ' fetchpriority="high"' : ' loading="lazy"'}><span class="hero-chain-label">${esc(entry.label)}</span></button>`}</figure>`;
+const HERO_CHAIN = HERO_FOTOS.map((photo, i) => heroFigure(photo, HERO_UNITS[i], false, i === 0)).join('');
+const HERO_CHAIN_DUP = HERO_FOTOS.map((photo, i) => heroFigure(photo, HERO_UNITS[i], true, false)).join('');
 
 const index = page({
   title: `${NAME} · Autos y motos en ${L.city}, ${L.province}`,
