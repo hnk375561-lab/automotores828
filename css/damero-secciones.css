@@ -186,3 +186,23 @@ main>section[id]>.section-damero{position:absolute;inset:0 0 auto;z-index:6;disp
 #horarios .dr-map,#donde .dr-map{flex:0 0 clamp(250px,28vw,360px)!important}
 #nosotros.nz .nz-mapa .dr-map{flex:0 0 clamp(260px,30vw,380px)!important}
 @media(max-width:700px){#horarios .dr-map,#donde .dr-map,#nosotros.nz .nz-mapa .dr-map{flex-basis:260px!important}}
+
+/* Hover Reveal de tarjetas del inventario: solo CSS, sin ocultar datos. Táctil: sin cambios. */
+#unidades .cars .car .car-ph::after{content:"Ver ficha completa";position:absolute;z-index:2;left:0;right:0;bottom:0;padding:34px 10px 9px;box-sizing:border-box;background:linear-gradient(180deg,rgba(6,6,7,0),rgba(6,6,7,.78));color:#fff;font:800 10px/1 var(--b,Inter,system-ui,sans-serif);letter-spacing:.14em;text-transform:uppercase;opacity:0;pointer-events:none}
+@media (hover:hover) and (pointer:fine){
+  #unidades .cars .car{transition:border-color .35s ease,box-shadow .35s ease}
+  #unidades .cars .car .car-ph img{transition:opacity .2s ease,transform .9s cubic-bezier(.2,.7,.2,1)}
+  #unidades .cars .car .car-ph::after{transition:opacity .35s ease .05s}
+  #unidades .cars .car .pr{transition:box-shadow .35s ease}
+  #unidades .cars .car .ficha-trigger{transition:border-color .3s ease,background-color .3s ease}
+  #unidades .cars .car:hover,#unidades .cars .car:has(:focus-visible){border-color:rgba(238,28,34,.62);box-shadow:inset 3px 0 0 #ee1c22,0 16px 34px rgba(0,0,0,.38)}
+  #unidades .cars .car:hover .car-ph::after,#unidades .cars .car:has(:focus-visible) .car-ph::after{opacity:1}
+  #unidades .cars .car:hover .pr,#unidades .cars .car:has(:focus-visible) .pr{box-shadow:0 0 0 1px rgba(238,28,34,.55)}
+  #unidades .cars .car:hover .ficha-trigger,#unidades .cars .car:has(:focus-visible) .ficha-trigger{border-color:#ee1c22;background-color:rgba(238,28,34,.14)}
+}
+@media (hover:hover) and (pointer:fine) and (prefers-reduced-motion:no-preference){
+  #unidades .cars .car:hover .car-ph img,#unidades .cars .car:has(:focus-visible) .car-ph img{transform:scale(1.07) translate3d(0,-1.2%,0);transform-origin:50% 60%}
+}
+@media (prefers-reduced-motion:reduce){
+  #unidades .cars .car,#unidades .cars .car .car-ph::after,#unidades .cars .car .pr,#unidades .cars .car .ficha-trigger{transition:none!important}
+}
