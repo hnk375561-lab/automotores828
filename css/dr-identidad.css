@@ -175,3 +175,6 @@ html body .fav-b:hover::after{border-color:var(--y)}
 html body .fav-b.on{background:transparent;border-color:transparent}
 html body .fav-b.on::after{background:var(--y);border-color:var(--y)}
 html body .fav-b svg{position:relative;z-index:1;width:19px;height:19px}
+
+/* Barra fija inferior (móvil): el texto largo de WhatsApp se partía en dos líneas pegado al borde */
+html body .cta-bar a{padding:6px 12px;text-align:center;line-height:1.3}
