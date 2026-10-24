@@ -2487,6 +2487,14 @@ dialog.cmp[open] .cmp-hd{animation:moIn var(--mo-slow) var(--mo-ease) backwards}
   #nosotros.nz .nz-top.nz-top::after{background:linear-gradient(90deg,transparent calc(50% - 3px),#060607 calc(50% - 3px),#060607 calc(50% + 3px),transparent calc(50% + 3px))}
   #nosotros.nz .nz-top.nz-top::before{background:linear-gradient(180deg,rgba(6,6,7,.86),rgba(90,5,9,.72))!important}
 }
+
+/* ==========================================================================
+   v12 · Anillo decorativo de interiores (js/anillo.js): 10 tarjetas, solo para mirar
+   ========================================================================== */
+.ring-sec{position:relative;isolation:isolate;overflow:hidden;contain:layout paint;background:radial-gradient(ellipse 55% 70% at 50% 55%,rgba(238,28,34,.2),transparent 70%),#060607;border-top:1px solid rgba(238,28,34,.4);border-bottom:1px solid rgba(238,28,34,.4);pointer-events:none;-webkit-user-select:none;user-select:none}
+.ring-stage{position:relative;height:clamp(420px,50vw,620px);margin:0;padding:0;list-style:none}
+.ring-card{position:absolute;left:50%;top:50%;width:clamp(110px,13vw,190px);aspect-ratio:3/4;margin:0;padding:0;background:#111;border:1px solid rgba(255,255,255,.16);border-bottom:4px solid #ee1c22;clip-path:polygon(0 0,calc(100% - 18px) 0,100% 18px,100% 100%,0 100%);box-shadow:0 18px 40px rgba(0,0,0,.5);will-change:transform,opacity}
+.ring-card img{display:block;width:100%;height:100%;object-fit:cover}
 .msg-updated{animation:msg-updated .28s ease-out}@keyframes msg-updated{from{opacity:.68;transform:translateY(2px)}to{opacity:1;transform:translateY(0)}}
 .guia-progress{color:#d9dbdd;font-size:.9rem;margin:.25rem 0}
 .qa-search-label{display:block;margin:.6rem 0 .25rem;color:#d9dbdd}.qa-search{display:block;min-height:44px;width:min(100%,32rem);padding:.65rem .8rem;border:1px solid #6b6d70;border-radius:.4rem;background:#111214;color:#fff;font:inherit}.qa-search:focus-visible{outline:3px solid #ee1c22;outline-offset:2px}
