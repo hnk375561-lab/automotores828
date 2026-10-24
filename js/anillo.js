@@ -1,5 +1,5 @@
 /* Automotores 828 · anillo decorativo de interiores (entre «Unidades» y «Financiación»).
-   10 tarjetas sobre una rueda inclinada, una sola animación con requestAnimationFrame.
+   7 tarjetas sobre una rueda inclinada, una sola animación con requestAnimationFrame.
    Solo decoración: sin interacción, aria-hidden. Pausa fuera de pantalla o con la pestaña oculta;
    con «reducir movimiento» o «ahorro de datos» queda quieto. */
 (function () {

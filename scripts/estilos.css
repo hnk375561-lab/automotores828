@@ -2455,9 +2455,34 @@ dialog.cmp[open] .cmp-hd{animation:moIn var(--mo-slow) var(--mo-ease) backwards}
 }
 
 /* ==========================================================================
-   v12 · Anillo decorativo de interiores (js/anillo.js): 10 tarjetas, solo para mirar
+   v12 · Anillo decorativo de interiores (js/anillo.js): 7 tarjetas, solo para mirar
    ========================================================================== */
 .ring-sec{position:relative;isolation:isolate;overflow:hidden;contain:layout paint;background:radial-gradient(ellipse 55% 70% at 50% 55%,rgba(238,28,34,.2),transparent 70%),#060607;border-top:1px solid rgba(238,28,34,.4);border-bottom:1px solid rgba(238,28,34,.4);pointer-events:none;-webkit-user-select:none;user-select:none}
-.ring-stage{position:relative;height:clamp(420px,50vw,620px);margin:0;padding:0;list-style:none}
-.ring-card{position:absolute;left:50%;top:50%;width:clamp(110px,13vw,190px);aspect-ratio:3/4;margin:0;padding:0;background:#111;border:1px solid rgba(255,255,255,.16);border-bottom:4px solid #ee1c22;clip-path:polygon(0 0,calc(100% - 18px) 0,100% 18px,100% 100%,0 100%);box-shadow:0 18px 40px rgba(0,0,0,.5);will-change:transform,opacity}
+.ring-stage{position:relative;height:clamp(460px,54vw,680px);margin:0;padding:0;list-style:none}
+.ring-card{position:absolute;left:50%;top:50%;width:clamp(130px,16vw,230px);aspect-ratio:3/4;margin:0;padding:0;background:#111;border:1px solid rgba(255,255,255,.16);border-bottom:4px solid #ee1c22;clip-path:polygon(0 0,calc(100% - 18px) 0,100% 18px,100% 100%,0 100%);box-shadow:0 18px 40px rgba(0,0,0,.5);will-change:transform,opacity}
 .ring-card img{display:block;width:100%;height:100%;object-fit:cover}
+
+/* ==========================================================================
+   v13 · Flecha que cruza (js/boton-flecha.js): en .btn[data-bf] hay dos ventanas recortadas.
+   Al pasar el mouse (o enfocar con teclado), 300 ms con cubic-bezier(.25,1,.5,1): la flecha final
+   sale por la derecha mientras su ventana se cierra, y la ventana de adelante se abre y deja
+   entrar el icono desde la izquierda. Las dos anchuras corren en el mismo reloj: el botón no cambia de ancho.
+   ========================================================================== */
+.btn[data-bf]{--bf-s:1.25em;--bf-g:.6em;--bf-t:300ms;--bf-e:cubic-bezier(.25,1,.5,1);gap:0}
+.btn[data-bf] .bf{display:inline-flex;align-items:center;flex:none;overflow:hidden;height:var(--bf-s);pointer-events:none;transition:width var(--bf-t) var(--bf-e)}
+.btn[data-bf] .bf svg{display:block;flex:none;width:var(--bf-s);height:var(--bf-s);fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;transition:transform var(--bf-t) var(--bf-e)}
+.btn[data-bf] .bf-l{width:0}
+.btn[data-bf] .bf-l svg{margin-right:var(--bf-g);transform:translateX(calc(-100% - var(--bf-g)))}
+.btn[data-bf] .bf-t{width:calc(var(--bf-s) + var(--bf-g))}
+.btn[data-bf] .bf-t svg{margin-left:var(--bf-g)}
+@media (hover:hover) and (pointer:fine){
+  .btn[data-bf]:hover .bf-l{width:calc(var(--bf-s) + var(--bf-g))}
+  .btn[data-bf]:hover .bf-l svg{transform:none}
+  .btn[data-bf]:hover .bf-t{width:0}
+  .btn[data-bf]:hover .bf-t svg{transform:translateX(calc(100% + var(--bf-g)))}
+}
+.btn[data-bf]:focus-visible .bf-l{width:calc(var(--bf-s) + var(--bf-g))}
+.btn[data-bf]:focus-visible .bf-l svg{transform:none}
+.btn[data-bf]:focus-visible .bf-t{width:0}
+.btn[data-bf]:focus-visible .bf-t svg{transform:translateX(calc(100% + var(--bf-g)))}
+@media (prefers-reduced-motion:reduce){.btn[data-bf] .bf,.btn[data-bf] .bf svg{transition-duration:.01ms}}

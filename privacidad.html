@@ -2503,6 +2503,31 @@ dialog.cmp[open] .cmp-hd{animation:moIn var(--mo-slow) var(--mo-ease) backwards}
 .dr-hr-note{font-size:.9rem;color:#d9dbdd;margin-top:.6rem}
 @media(prefers-reduced-motion:reduce){.msg-updated{animation:none}}
 
+
+/* ==========================================================================
+   v13 · Flecha que cruza (js/boton-flecha.js): en .btn[data-bf] hay dos ventanas recortadas.
+   Al pasar el mouse (o enfocar con teclado), 300 ms con cubic-bezier(.25,1,.5,1): la flecha final
+   sale por la derecha mientras su ventana se cierra, y la ventana de adelante se abre y deja
+   entrar el icono desde la izquierda. Las dos anchuras corren en el mismo reloj: el botón no cambia de ancho.
+   ========================================================================== */
+.btn[data-bf]{--bf-s:1.25em;--bf-g:.6em;--bf-t:300ms;--bf-e:cubic-bezier(.25,1,.5,1);gap:0}
+.btn[data-bf] .bf{display:inline-flex;align-items:center;flex:none;overflow:hidden;height:var(--bf-s);pointer-events:none;transition:width var(--bf-t) var(--bf-e)}
+.btn[data-bf] .bf svg{display:block;flex:none;width:var(--bf-s);height:var(--bf-s);fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;transition:transform var(--bf-t) var(--bf-e)}
+.btn[data-bf] .bf-l{width:0}
+.btn[data-bf] .bf-l svg{margin-right:var(--bf-g);transform:translateX(calc(-100% - var(--bf-g)))}
+.btn[data-bf] .bf-t{width:calc(var(--bf-s) + var(--bf-g))}
+.btn[data-bf] .bf-t svg{margin-left:var(--bf-g)}
+@media (hover:hover) and (pointer:fine){
+  .btn[data-bf]:hover .bf-l{width:calc(var(--bf-s) + var(--bf-g))}
+  .btn[data-bf]:hover .bf-l svg{transform:none}
+  .btn[data-bf]:hover .bf-t{width:0}
+  .btn[data-bf]:hover .bf-t svg{transform:translateX(calc(100% + var(--bf-g)))}
+}
+.btn[data-bf]:focus-visible .bf-l{width:calc(var(--bf-s) + var(--bf-g))}
+.btn[data-bf]:focus-visible .bf-l svg{transform:none}
+.btn[data-bf]:focus-visible .bf-t{width:0}
+.btn[data-bf]:focus-visible .bf-t svg{transform:translateX(calc(100% + var(--bf-g)))}
+@media (prefers-reduced-motion:reduce){.btn[data-bf] .bf,.btn[data-bf] .bf svg{transition-duration:.01ms}}
 </style>
 <link rel="stylesheet" href="css/dr-identidad.css?v=20261024-4">
 </head>
@@ -2533,5 +2558,6 @@ dialog.cmp[open] .cmp-hd{animation:moIn var(--mo-slow) var(--mo-ease) backwards}
 </div>
 <div class="ft-bottom"><p class="ft-copy">© 2026 Automotores 828</p><p class="demo-note" data-demo-note>Demo ilustrativa. Consultá disponibilidad y precios con Automotores 828. No es el sitio oficial.</p><p class="ft-sources"><a href="https://www.facebook.com/automotoressrl828/" target="_blank" rel="noopener noreferrer">Facebook</a> · <a href="https://www.instagram.com/automotores828/" target="_blank" rel="noopener noreferrer">Instagram</a></p><a class="ft-privacy" href="./privacidad.html">Privacidad y avisos</a><a class="ft-top" href="#top">Volver arriba ↑</a></div>
 </div></footer>
+<script defer src="js/boton-flecha.js?v=20261024-1"></script>
 </body>
 </html>

@@ -2675,10 +2675,36 @@ html body .fav-b svg{position:relative;z-index:1;width:19px;height:19px}
 
 /* Barra fija inferior (móvil): el texto largo de WhatsApp se partía en dos líneas pegado al borde */
 html body .cta-bar a{padding:6px 12px;text-align:center;line-height:1.3}
+
+/* ==========================================================================
+   v13 · Flecha que cruza (js/boton-flecha.js): en .btn[data-bf] hay dos ventanas recortadas.
+   Al pasar el mouse (o enfocar con teclado), 300 ms con cubic-bezier(.25,1,.5,1): la flecha final
+   sale por la derecha mientras su ventana se cierra, y la ventana de adelante se abre y deja
+   entrar el icono desde la izquierda. Las dos anchuras corren en el mismo reloj: el botón no cambia de ancho.
+   ========================================================================== */
+.btn[data-bf]{--bf-s:1.25em;--bf-g:.6em;--bf-t:300ms;--bf-e:cubic-bezier(.25,1,.5,1);gap:0}
+.btn[data-bf] .bf{display:inline-flex;align-items:center;flex:none;overflow:hidden;height:var(--bf-s);pointer-events:none;transition:width var(--bf-t) var(--bf-e)}
+.btn[data-bf] .bf svg{display:block;flex:none;width:var(--bf-s);height:var(--bf-s);fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;transition:transform var(--bf-t) var(--bf-e)}
+.btn[data-bf] .bf-l{width:0}
+.btn[data-bf] .bf-l svg{margin-right:var(--bf-g);transform:translateX(calc(-100% - var(--bf-g)))}
+.btn[data-bf] .bf-t{width:calc(var(--bf-s) + var(--bf-g))}
+.btn[data-bf] .bf-t svg{margin-left:var(--bf-g)}
+@media (hover:hover) and (pointer:fine){
+  .btn[data-bf]:hover .bf-l{width:calc(var(--bf-s) + var(--bf-g))}
+  .btn[data-bf]:hover .bf-l svg{transform:none}
+  .btn[data-bf]:hover .bf-t{width:0}
+  .btn[data-bf]:hover .bf-t svg{transform:translateX(calc(100% + var(--bf-g)))}
+}
+.btn[data-bf]:focus-visible .bf-l{width:calc(var(--bf-s) + var(--bf-g))}
+.btn[data-bf]:focus-visible .bf-l svg{transform:none}
+.btn[data-bf]:focus-visible .bf-t{width:0}
+.btn[data-bf]:focus-visible .bf-t svg{transform:translateX(calc(100% + var(--bf-g)))}
+@media (prefers-reduced-motion:reduce){.btn[data-bf] .bf,.btn[data-bf] .bf svg{transition-duration:.01ms}}
 </style>
 <script>(function(){var s=location.pathname.split("/").filter(Boolean),b=/github\.io$/.test(location.hostname)&&s.length?"/"+s[0]+"/":"/";var st=document.createElement("style");st.textContent="@font-face{font-family:\"Exo 2\";font-style:italic;font-weight:100 900;font-display:swap;src:__U__exo-2-latin-italic.woff2__E__ format(\"woff2\")}\n@font-face{font-family:\"Exo 2\";font-style:normal;font-weight:100 900;font-display:swap;src:__U__exo-2-latin.woff2__E__ format(\"woff2\")}\n@font-face{font-family:\"Inter\";font-style:normal;font-weight:100 900;font-display:swap;src:__U__inter-latin-var.woff2__E__ format(\"woff2\")}\n".split("__U__").join("ur"+"l("+b+"fonts/").split("__E__").join(")");document.head.appendChild(st);document.addEventListener("DOMContentLoaded",function(){document.getElementById("home").href=b})})()</script>
 </head>
 <body>
 <main class="nf"><div><img class="lg-404" src="images/logo-sm.png" width="320" height="320" alt="Automotores 828"><p class="ey">Error 404</p><h1>No encontramos <em>esa página</em></h1><p>Puede que el enlace esté mal escrito o que la página ya no exista.</p><a id="home" class="btn p" href="./">Volver al inicio</a></div></main>
+<script defer src="js/boton-flecha.js?v=20261024-1"></script>
 </body>
 </html>
