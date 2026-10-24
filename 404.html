@@ -2515,6 +2515,25 @@ html body .cmp .cmpt .big{display:block;min-height:1.3em}
 .fi-wa svg{width:18px;height:18px;flex:none}
 .ft-wa a{display:inline-flex;align-items:center;gap:8px}
 .ft-wa svg{width:18px;height:18px;flex:none;fill:none;stroke:currentColor;stroke-width:1.7}
+
+/* Ficha · «Claves de una compra segura»: logo de la agencia en lugar de 01 / 02 / 03 */
+dialog.ficha .fi-proof-c b.fi-proof-logo{display:grid;place-items:center;min-width:0;width:clamp(48px,5vw,60px);height:clamp(48px,5vw,60px);line-height:0}
+dialog.ficha .fi-proof-c b.fi-proof-logo img{display:block;width:100%;height:100%;object-fit:contain;border-radius:50%}
+@media(max-width:400px){dialog.ficha .fi-proof-c b.fi-proof-logo{width:44px;height:44px}}
+
+/* Ficha · «Tu próxima visita»: tilde de correcto en lugar de 1 / 2 / 3 */
+html body .fi-path .fi-path-l li::before{content:"\2705";background:none;color:inherit;width:26px;height:26px;font:400 20px/1 "Segoe UI Emoji","Apple Color Emoji","Noto Color Emoji",sans-serif}
+html body .fi-path .fi-path-l li{padding-left:38px}
+
+/* Tarjetas · botón de favoritos apenas más chico */
+/* el cuadro visible mide 38 px; el área táctil se mantiene en 44 px (regla del proyecto) */
+html body .fav-b{position:relative;border-color:transparent;background:transparent}
+html body .fav-b::after{content:"";position:absolute;inset:1px;border:2px solid var(--g3);pointer-events:none}
+html body .fav-b:hover{border-color:transparent}
+html body .fav-b:hover::after{border-color:var(--y)}
+html body .fav-b.on{background:transparent;border-color:transparent}
+html body .fav-b.on::after{background:var(--y);border-color:var(--y)}
+html body .fav-b svg{position:relative;z-index:1;width:19px;height:19px}
 </style>
 <script>(function(){var s=location.pathname.split("/").filter(Boolean),b=/github\.io$/.test(location.hostname)&&s.length?"/"+s[0]+"/":"/";var st=document.createElement("style");st.textContent="@font-face{font-family:\"Exo 2\";font-style:italic;font-weight:100 900;font-display:swap;src:__U__exo-2-latin-italic.woff2__E__ format(\"woff2\")}\n@font-face{font-family:\"Exo 2\";font-style:normal;font-weight:100 900;font-display:swap;src:__U__exo-2-latin.woff2__E__ format(\"woff2\")}\n@font-face{font-family:\"Inter\";font-style:normal;font-weight:100 900;font-display:swap;src:__U__inter-latin-var.woff2__E__ format(\"woff2\")}\n".split("__U__").join("ur"+"l("+b+"fonts/").split("__E__").join(")");document.head.appendChild(st);document.addEventListener("DOMContentLoaded",function(){document.getElementById("home").href=b})})()</script>
 </head>

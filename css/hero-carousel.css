@@ -36,9 +36,9 @@ html.save-data .hero-slide img{animation-duration:0s!important}
 /* Hero 2026 · cadena horizontal continua de frentes del inventario.
    Se utilizan las fuentes originales del hero; la segunda secuencia evita saltos al reiniciar. */
 html body .hero-chain{position:absolute;inset:0;z-index:3;overflow:hidden;background:#060607;display:flex;align-items:stretch}
-html body .hero-chain-track{display:flex;align-items:stretch;width:max-content;height:100%;min-width:0;animation:dr-chain 10s linear infinite,dr-chain-soft 10s ease-in-out infinite;will-change:transform,opacity}
+html body .hero-chain-track{--car:clamp(210px,25vw,380px);flex:none;display:flex;align-items:stretch;width:max-content;height:100%;min-width:0;animation:dr-chain 25s linear infinite;will-change:transform,opacity}
 html body .hero-chain.is-paused .hero-chain-track{animation-play-state:paused}
-html body .hero-chain-car{position:relative;flex:0 0 clamp(210px,25vw,380px);height:100%;margin:0;overflow:hidden;background:#111;border-left:1px solid rgba(255,255,255,.08)}
+html body .hero-chain-car{position:relative;flex:0 0 var(--car);height:100%;margin:0;overflow:hidden;background:#111;border-left:1px solid rgba(255,255,255,.08)}
 html body .hero-chain-link{position:relative;z-index:2;display:block;width:100%;height:100%;padding:0;border:0;background:none;color:#fff;text-align:left;font:inherit;cursor:pointer}
 html body .hero-chain-link:focus-visible{outline:3px solid #ee1c22;outline-offset:-5px}
 html body .hero-chain-label{position:absolute;z-index:2;left:12px;right:12px;bottom:12px;display:block;min-height:44px;padding:11px 12px;border-radius:4px;background:rgba(6,6,7,.88);color:#fff;font:600 .9rem/1.35 Inter,Arial,sans-serif;text-shadow:0 1px 1px #060607}
@@ -47,9 +47,10 @@ html body .hero-chain-car::after{content:"";position:absolute;inset:0;background
 html body .hero-chain-car img{display:block;width:100%;height:100%;object-fit:cover;object-position:50% 68%;filter:saturate(.94) contrast(1.04) brightness(.84);transform:scale(1.015)}
 html body .hero-chain-car--02 img,html body .hero-chain-car--05 img,html body .hero-chain-car--08 img,html body .hero-chain-car--09 img{object-position:50% 58%}
 html body .hero-chain-car--03 img,html body .hero-chain-car--07 img,html body .hero-chain-car--10 img{object-position:50% 72%}
-@keyframes dr-chain{from{transform:translate3d(0,0,0)}to{transform:translate3d(-50%,0,0)}}
-/* al terminar la vuelta la cinta se atenúa apenas y reaparece: el reinicio deja de verse como un corte seco */
-@keyframes dr-chain-soft{0%{opacity:.35}7%{opacity:1}93%{opacity:1}100%{opacity:.35}}
+/* La vuelta recorre exactamente las 10 fotos de la primera tanda (la segunda es copia idéntica), así el reinicio es invisible.
+   Antes se usaba -50 % del ancho de la pista, que el contenedor flex encogía: el reinicio saltaba ~2400 px.
+   Además la cinta se atenúa apenas al cerrar cada vuelta para que el reinicio sea suave. */
+@keyframes dr-chain{0%{transform:translate3d(0,0,0);opacity:.45}7%{opacity:1}93%{opacity:1}100%{transform:translate3d(calc(var(--car) * -10),0,0);opacity:.45}}
 html body .hero-chain+*{position:relative}
-@media(max-width:900px){html body .hero .hx-copy{pointer-events:none}html body .hero .hx-copy a,html body .hero .hx-copy button{pointer-events:auto}html body .hero-chain{height:min(100vw + 56px,560px);inset:0 0 auto}html body .hero-chain-track{height:100%;animation-duration:11.083333s}html body .hero-chain-car{flex-basis:clamp(150px,47vw,250px)}html body .hero-chain-car img{object-position:50% 63%}}
+@media(max-width:900px){html body .hero .hx-copy{pointer-events:none}html body .hero .hx-copy a,html body .hero .hx-copy button{pointer-events:auto}html body .hero-chain{height:min(100vw + 56px,560px);inset:0 0 auto}html body .hero-chain-track{--car:clamp(150px,47vw,250px);height:100%;animation-duration:45s}html body .hero-chain-car{flex-basis:var(--car)}html body .hero-chain-car img{object-position:50% 63%}}
 @media(prefers-reduced-motion:reduce){html body .hero-chain-track{animation:none!important;transform:none!important}html body .hero-chain-car:nth-child(n+6){display:none}}

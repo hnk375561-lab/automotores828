@@ -22,9 +22,9 @@ try:
         hero_chain = page.locator('[data-hero-chain]')
         if hero_chain.count():
             track = hero_chain.locator('.hero-chain-track')
-            assert track.evaluate('(el) => getComputedStyle(el).animationDuration') == '10s', 'duración de escritorio del hero distinta de 10 s'
+            assert track.evaluate('(el) => getComputedStyle(el).animationDuration') == '25s', 'duración de escritorio del hero distinta de 25 s'
             page.set_viewport_size({'width': 390, 'height': 844})
-            assert track.evaluate('(el) => getComputedStyle(el).animationDuration') == '11.0833s', 'duración móvil del hero distinta de 11,0833 s'
+            assert track.evaluate('(el) => getComputedStyle(el).animationDuration') == '45s', 'duración móvil del hero distinta de 45 s'
             page.set_viewport_size({'width': 1280, 'height': 900})
             page.locator('.hx-copy').first.hover()
             page.wait_for_timeout(150)

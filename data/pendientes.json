@@ -2,7 +2,7 @@
   "items": [
     {
       "id": "P1",
-      "tema": "WhatsApp comercial +54 9 11 6023-9259 cargado desde captura de WhatsApp Business: confirmar autorización de publicación",
+      "tema": "WhatsApp comercial +54 9 11 6023-9259: número verificado por el solicitante (ficha de WhatsApp Business, 2026-10-24) y habilitado en la demo; falta la autorización del dueño para publicarlo en el sitio oficial",
       "estado": "abierto",
       "bloqueante": true
     },
@@ -89,6 +89,12 @@
       "tema": "Verificar vigencia de rutas y paradas de Moovit (Alfonso Amat 480, Boulevard Buenos Aires 909, colectivos y tren Roca) antes de publicar indicaciones",
       "estado": "abierto",
       "bloqueante": false
+    },
+    {
+      "id": "P16",
+      "tema": "La ficha de WhatsApp Business (captura del 2026-10-24) muestra Blvd. Buenos Aires 831, B1842 Monte Grande, y el correo automotores828@gmail.com; el sitio usa 828 y automotores828@live.com. Confirmar con el dueño cuál es el correcto (relacionado con P4)",
+      "estado": "abierto",
+      "bloqueante": true
     }
   ]
 }
