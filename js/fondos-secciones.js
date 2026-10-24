@@ -19,7 +19,6 @@
     ['#busqueda', 'busqueda', '40%', null],
     ['#guia', 'guia', '40%', velo(.82, .4)],
     ['#visita', 'visita', '50%', velo(.82, .4)],
-    ['#donde', 'donde', '68%', velo(.8, .45)],
     ['#contacto', 'contacto', '58%', velo(.84, .45)],
     ['footer', 'footer', '58%', velo(.88, .6)]
   ];

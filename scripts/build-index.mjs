@@ -472,7 +472,7 @@ const trayectoriaEtiqueta = D.presentacion.destacadoEtiqueta || 'trayectoria';
 const trayectoriaSub = D.presentacion.destacadoSub || '';
 const secNosotros = `
 <section class="nz" id="nosotros" aria-labelledby="nos-t">
-<div class="nz-top"><div class="w nz-w">
+<div class="nz-top"><div class="nz-frentes" aria-hidden="true"><i></i><i></i><i></i><i></i></div><div class="w nz-w">
 <div class="nz-intro">
 <p class="ey"><span class="ey-brand">828</span> · Nosotros</p>
 <span class="nz-logo"><img src="images/logo-sm.png" width="320" height="320" alt="${esc(NAME)}"></span>
@@ -495,9 +495,9 @@ ${hasSvc('permuta') ? `<li class="nz-tile"><span class="nz-ic">${ICN.swap}</span
 ${hasSvc('consignacion') ? `<li class="nz-tile"><span class="nz-ic">${ICN.shield}</span><h4>Consignaciones</h4><p>Podés dejar tu vehículo en consignación. Las condiciones se coordinan con ${esc(NAME)}.</p><a href="#contacto">Consultar</a></li>` : ''}
 </ul>
 </div></div>
-<div class="nz-net nz-net--mapa" id="donde"><div class="w"><h3 class="nz-h">Dónde encontrarnos</h3><p class="nz-net-p">Nuestro salón está en ${esc(L.address)}, ${esc(L.city)}. Revisá el horario general, confirmá previamente la unidad que querés ver y elegí «Abrir en Google Maps» para planificar el trayecto. El mapa interactivo de esta página queda disponible solo si decidís abrirlo.</p>
+<div class="nz-net nz-net--mapa" id="donde"><div class="nz-donde-hd"><div class="w"><h3 class="nz-h">Dónde encontrarnos</h3><p class="nz-net-p">Nuestro salón está en ${esc(L.address)}, ${esc(L.city)}. Revisá el horario general, confirmá previamente la unidad que querés ver y elegí «Abrir en Google Maps» para planificar el trayecto. El mapa interactivo de esta página queda disponible solo si decidís abrirlo.</p>
 <ul><li class="is-here">${ICX.pin}<div><b>${esc(NAME)}</b><span>${esc(DIR_COMPLETA)}</span></div></li></ul>
-${L.mapsUrl ? `<p class="nz-net-acc"><a class="btn p sm" href="${L.mapsUrl}" ${EXT}>Abrir en Google Maps</a></p>` : ''}</div>
+${L.mapsUrl ? `<p class="nz-net-acc"><a class="btn p sm" href="${L.mapsUrl}" ${EXT}>Abrir en Google Maps</a></p>` : ''}</div></div>
 ${COORD ? `<div class="nz-mapa"><div class="dr-map" id="mapa-nosotros" data-lat="${COORD.lat}" data-lng="${COORD.lng}" data-nombre="${esc(NAME)}" data-dir="${esc(DIR_COMPLETA)}" data-gmaps="${esc(L.mapsUrl)}" data-leaflet="js/vendor/leaflet.js" data-css="js/vendor/leaflet.css" data-manual-map="1"><div class="dr-map-v" role="region" aria-label="Mapa con la ubicación de ${esc(NAME)}"></div><div class="dr-map-ph" data-mapa-ph><span class="dr-map-ic">${ICX.pin}</span><p>Mapa de ${esc(L.city)}</p><p class="map-m src" role="status" aria-live="polite">El mapa interactivo se carga solo cuando lo solicites.</p><div class="row"><button class="btn p sm" type="button" data-mapa-abrir>Ver mapa interactivo</button></div></div></div>` : ''}</div>
 </section>`;
 
@@ -547,7 +547,7 @@ const index = page({
   title: `${NAME} · Autos y motos en ${L.city}, ${L.province}`,
   desc: `${NAME} en ${L.city}, ${L.partido}: compra y venta de autos y motos usados, permutas y consignaciones. Visitanos en ${L.address} o escribinos por redes o correo.`,
   file: 'index.html',
-  extraHead: `<link rel="stylesheet" href="css/hero-carousel.css?v=20261024-5">\n<link rel="stylesheet" href="css/fondos-secciones.css">\n<link rel="stylesheet" href="css/damero-secciones.css?v=20261024-1">\n<link rel="stylesheet" href="css/comparador.css?v=20261024-2">\n<script type="application/ld+json">${JSON.stringify(ld)}</script>\n<script defer src="js/hero-carousel.js?v=20261024-1"></script>\n<script defer src="js/hero-motion.js?v=20261024-5"></script>\n<script defer src="js/fondos-secciones.js?v=20261024-1"></script>\n<script defer src="js/secciones.js?v=20261024-7"></script>\n<script defer src="js/mapa.js?v=20261023-1"></script>\n<script defer src="js/horarios.js?v=20261024-1"></script>\n<script defer src="js/site.js?v=20261024-2"></script>\n<script defer src="js/reserva-inline.js?v=20261024-4"></script>\n`,
+  extraHead: `<link rel="stylesheet" href="css/hero-carousel.css?v=20261024-5">\n<link rel="stylesheet" href="css/fondos-secciones.css">\n<link rel="stylesheet" href="css/damero-secciones.css?v=20261024-1">\n<link rel="stylesheet" href="css/comparador.css?v=20261024-2">\n<script type="application/ld+json">${JSON.stringify(ld)}</script>\n<script defer src="js/hero-carousel.js?v=20261024-1"></script>\n<script defer src="js/hero-motion.js?v=20261024-5"></script>\n<script defer src="js/fondos-secciones.js?v=20261024-1"></script>\n<script defer src="js/secciones.js?v=20261024-7"></script>\n<script defer src="js/combobox.js?v=20261024-1"></script>\n<script defer src="js/mapa.js?v=20261023-1"></script>\n<script defer src="js/horarios.js?v=20261024-1"></script>\n<script defer src="js/site.js?v=20261024-2"></script>\n<script defer src="js/reserva-inline.js?v=20261024-4"></script>\n`,
   body: `${header()}
 <main id="top">
 <div class="hero" role="region" aria-label="${esc(NAME)}">
