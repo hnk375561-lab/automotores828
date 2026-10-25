@@ -27,15 +27,46 @@
     banda.setAttribute('aria-hidden', 'true');
     section.insertBefore(banda, section.firstChild);
   });
-  /* Entrada editorial: reveal progresivo sin bloquear el contenido. */
-  if ('IntersectionObserver' in window && !saveData && !(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches)) {
-    var revealObserver = new IntersectionObserver(function (entries) { entries.forEach(function (entry) { if (entry.isIntersecting) { entry.target.classList.add('in'); revealObserver.unobserve(entry.target); } }); }, { threshold: 0.15 });
-    document.querySelectorAll('section h2, .car, .card, .quick-card, .ct-c, .visit-card, .reveal').forEach(function (node, index) {
-      node.classList.add('reveal');
-      node.style.transitionDelay = (Math.min(index % 6, 5) * 60) + 'ms';
-      revealObserver.observe(node);
-    });
-  }
+  /* Entrada editorial: scroll reveal de una sola pasada. El contenido es visible por defecto y solo se oculta
+     (html.rv-ready) cuando el observador ya está listo; ante cualquier fallo se recupera la presentación visible. */
+  (function () {
+    var reducido = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (!('IntersectionObserver' in window) || saveData || reducido) return;
+    var raiz = document.documentElement;
+    var nodos = Array.prototype.slice.call(document.querySelectorAll('section h2, .car, .card, .quick-card, .ct-c, .visit-card, .reveal'));
+    if (!nodos.length) return;
+    var vivo = false, pendientes = 0, io = null;
+    var recuperar = function () {
+      raiz.classList.remove('rv-ready');
+      nodos.forEach(function (n) { n.classList.add('in'); n.style.transitionDelay = ''; });
+      if (io) io.disconnect();
+    };
+    try {
+      io = new IntersectionObserver(function (entries) {
+        vivo = true;
+        var lote = entries.filter(function (e) { return e.isIntersecting; }).sort(function (a, b) {
+          return (a.boundingClientRect.top - b.boundingClientRect.top) || (a.boundingClientRect.left - b.boundingClientRect.left);
+        });
+        lote.forEach(function (e, k) {
+          io.unobserve(e.target);
+          e.target.style.transitionDelay = (Math.min(k, 4) * 70) + 'ms';
+          e.target.classList.add('in');
+        });
+        /* El desfase solo sirve a la entrada: se quita después para no demorar el hover. */
+        if (lote.length) setTimeout(function () { lote.forEach(function (e) { e.target.style.transitionDelay = ''; }); }, 1400);
+      }, { threshold: 0.12, rootMargin: '0px 0px -5% 0px' });
+      var alto = window.innerHeight || document.documentElement.clientHeight;
+      nodos.forEach(function (n) {
+        n.classList.add('reveal');
+        if (n.matches('.car')) n.classList.add('rv-card'); else if (n.matches('section h2')) n.classList.add('rv-title');
+        var r = n.getBoundingClientRect();
+        if (r.bottom > 0 && r.top < alto * 0.95) { n.classList.add('in'); } else { pendientes++; io.observe(n); }
+      });
+      raiz.classList.add('rv-ready');
+      if (!pendientes) vivo = true;
+      setTimeout(function () { if (!vivo) recuperar(); }, 2500);
+    } catch (e) { recuperar(); }
+  })();
   /* Guía: acordeones. Arranca plegada; botón para expandir o plegar todo. */
   (function () {
     var gds = Array.prototype.slice.call(document.querySelectorAll('details.gd')), all = document.querySelector('[data-guia-all]');
