@@ -25,7 +25,7 @@
 
   function st(dlg) {
     var s = states.get(dlg);
-    if (!s) { s = { origin: null, anims: [], tgt: null, closing: false, sy: 0, wd: 0, onScroll: null, rv: undefined, tok: 0, settle: null }; states.set(dlg, s); }
+    if (!s) { s = { origin: null, anims: [], tgt: null, closing: false, sy: 0, wd: 0, onScroll: null, rv: undefined, tok: 0, settle: null, shown: false }; states.set(dlg, s); }
     return s;
   }
   function rect(el) { var r = el.getBoundingClientRect(); return { left: r.left, top: r.top, width: r.width, height: r.height }; }
@@ -113,9 +113,20 @@
     try { attach(dlg); doOpen(dlg, origin); } catch (e) { cleanup(dlg, st(dlg)); }
   }
   function doOpen(dlg, origin) {
-    var s = st(dlg); cleanup(dlg, s); s.closing = false; s.origin = origin || null; s.sy = window.pageYOffset;
+    var s = st(dlg), again = s.shown; cleanup(dlg, s); s.closing = false; s.origin = origin || null; s.sy = window.pageYOffset;
+    s.shown = !!dlg.open;
     if (reduce() || !dlg.open) return;
     var easing = ease(), dur = narrow() ? 440 : 520;
+    if (again) {
+      /* otra unidad («Otras unidades») con la ficha ya abierta: el cuadro no se vuelve a abrir desde la tarjeta, solo entra el
+         contenido nuevo. Esta unidad no tiene su tarjeta como destino, así que al cerrar se usa el cierre breve. */
+      s.origin = null;
+      [dlg.querySelector('.fi-x'), dlg.querySelector('.fi-g')].forEach(function (n) { if (n) track(s, n, [{ opacity: 0 }, { opacity: 1 }], { duration: 260, easing: easing }); });
+      var tkA = ++s.tok;
+      s.settle = function () { if (s.tok === tkA && s.anims.every(function (a) { return a.playState === 'finished'; })) cleanup(dlg, s); };
+      s.wd = setTimeout(function () { if (s.tok === tkA) cleanup(dlg, s); }, 900);
+      return;
+    }
     var src = source(origin), D = rect(dlg), x = dlg.querySelector('.fi-x'), g = dlg.querySelector('.fi-g');
     var tgt = dlg.querySelector('.fi-t img'), T = tgt ? rect(tgt) : null;
     dlg.style.willChange = 'transform';
@@ -241,7 +252,7 @@
     if (s.attached) return; s.attached = true;
     dlg.close = function (rv) { try { closeAnimated(dlg, rv); } catch (e) { cleanup(dlg, s); nativeClose.call(dlg, rv); } };
     dlg.addEventListener('cancel', function (e) { if (reduce()) return; e.preventDefault(); dlg.close(); });
-    dlg.addEventListener('close', function () { s.closing = false; cleanup(dlg, s); });
+    dlg.addEventListener('close', function () { s.closing = false; s.shown = false; cleanup(dlg, s); });
   }
 
   window.drFichaFlip = { attach: attach, open: open };

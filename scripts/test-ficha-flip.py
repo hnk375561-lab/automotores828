@@ -20,6 +20,9 @@ def check(name, cond, extra=''):
 
 def load(browser, **kw):
     ctx = browser.new_context(**kw)
+    # Un equipo/CI de ≤2 núcleos se declara «gama baja» y el módulo omite el morph y el vuelo de la foto:
+    # por defecto se simulan 8 núcleos para probar el camino completo (LOWEND=1 lo desactiva).
+    if not os.environ.get('LOWEND'): ctx.add_init_script("Object.defineProperty(navigator,'hardwareConcurrency',{get:()=>8})")
     page = ctx.new_page()
     errors = []
     page.on('pageerror', lambda e: errors.append(str(e)))
@@ -100,6 +103,7 @@ try:
         page.locator('button[data-ficha]').nth(3).click(); page.wait_for_selector(DLG + '[open]'); page.wait_for_timeout(120)
         page.keyboard.press('Escape'); ms = wait_closed(page)
         check('Escape en pleno movimiento de apertura cierra', ms is not None, f'{ms} ms')
+        page.wait_for_timeout(80)   # el evento «close» (que limpia) se despacha un instante después de quitarse [open]
         check('sin residuos tras interrupción', clean_state(page)['ok'], str(clean_state(page)))
         page.locator('button[data-ficha]').nth(4).click(); page.wait_for_selector(DLG + '[open]'); page.wait_for_timeout(200)
         page.keyboard.press('Escape'); page.keyboard.press('Escape'); page.keyboard.press('Escape')
@@ -127,6 +131,26 @@ try:
             check('enlace «#horarios» cierra la ficha', ms is not None, f'{ms} ms')
             page.wait_for_timeout(500)
             check('el enlace llevó a la sección', page.evaluate("()=>{var e=document.querySelector('#horarios');var r=e.getBoundingClientRect();return r.top<innerHeight&&r.bottom>0}"))
+
+        bring(page, 4); page.locator('button[data-ficha]').nth(4).click(); page.wait_for_selector(DLG + '[open]'); page.wait_for_timeout(1700)
+
+        # «Otras unidades»: otra ficha con la ficha ya abierta no vuelve a abrirse desde la tarjeta
+        if page.locator(DLG + ' .fi-sim-c').count():
+            sw = page.evaluate("""()=>new Promise(res=>{var d=document.querySelector('dialog.ficha'),t0=performance.now(),w={op:1,moved:false,ghost:false},tt=d.querySelector('#fi-ttl').textContent;
+              d.querySelector('.fi-sim-c').click();
+              (function f(){var cs=getComputedStyle(d);w.op=Math.min(w.op,parseFloat(cs.opacity));if(cs.transform!=='none')w.moved=true;
+                if(document.querySelector('[popover]:popover-open'))w.ghost=true;
+                if(performance.now()-t0<450)requestAnimationFrame(f);else{w.changed=d.querySelector('#fi-ttl').textContent!==tt;res(w)}})()})""")
+            check('otra unidad: cambia la ficha', sw['changed'], str(sw))
+            check('otra unidad: el cuadro no se mueve ni se desvanece', sw['op'] > 0.99 and not sw['moved'] and not sw['ghost'], str(sw))
+            page.wait_for_timeout(1200)
+            check('otra unidad: queda limpia', clean_state(page)['ok'], str(clean_state(page)))
+            page.locator(DLG + ' .fi-x').click(); ms = wait_closed(page)
+            page.wait_for_timeout(150)
+            check('otra unidad: cierra y el foco vuelve a la tarjeta original', ms is not None and page.evaluate('()=>document.activeElement===document.querySelectorAll("button[data-ficha]")[4]'), f'{ms} ms')
+            check('otra unidad: sin residuos al cerrar', clean_state(page)['ok'], str(clean_state(page)))
+        else:
+            page.locator(DLG + ' .fi-x').click(); wait_closed(page)
 
         # hero
         page.evaluate('scrollTo(0,0)'); page.wait_for_timeout(500)
