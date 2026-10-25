@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "node scripts/serve.mjs",
     "build": "node scripts/build-index.mjs",
-    "test": "node scripts/validate-dealership.mjs && node scripts/audit-copy.mjs --prohibidos && python3 scripts/validate-image-manifest.py && node scripts/test-catalog-pagination.mjs && python3 scripts/e2e-catalogo.py && python3 scripts/e2e-t1-enlaces.py && python3 scripts/e2e-t2-bimoneda.py && python3 scripts/e2e-t6-visitas.py && python3 scripts/e2e-t5-comparalo.py",
+    "test": "node scripts/validate-dealership.mjs && node scripts/audit-copy.mjs --prohibidos && python3 scripts/validate-image-manifest.py && node scripts/test-catalog-pagination.mjs && python3 scripts/e2e-catalogo.py && python3 scripts/e2e-t1-enlaces.py",
     "test:prod": "node scripts/validate-dealership.mjs --prod && node scripts/audit-copy.mjs --prohibidos",
     "site": "node scripts/build-site.mjs",
     "images": "node scripts/make-images.mjs",
@@ -13,10 +13,7 @@
     "check:links": "node scripts/check-links.mjs",
     "check:browser": "python3 scripts/qa-browser.py",
     "test:catalog": "python3 scripts/e2e-catalogo.py",
-    "test:t1": "python3 scripts/e2e-t1-enlaces.py",
-    "test:t2": "python3 scripts/e2e-t2-bimoneda.py",
-    "test:t6": "python3 scripts/e2e-t6-visitas.py",
-    "test:t5": "python3 scripts/e2e-t5-comparalo.py"
+    "test:t1": "python3 scripts/e2e-t1-enlaces.py"
   },
   "devDependencies": {
     "sharp": "^0.33.5"

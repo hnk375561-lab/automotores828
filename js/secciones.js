@@ -854,14 +854,35 @@ ul.appendChild(frag);
          con la ficha ya abierta, cambiar de unidad la reemplaza (replaceState). Atrás/Adelante (popstate) solo sincronizan
          la interfaz: mientras hNav es true, abrirFicha no escribe en el historial. Cerrar la ficha deshace su propia entrada
          (history.back) o, si la entrada no la creó la ficha (enlace directo, recarga), solo quita el fragmento. */
-      var hNav = false, esperaBack = false, colaUrl = null, tBack = 0;
+      var hNav = false, esperaBack = false, colaUrl = null, tBack = 0, anclaPend = null;
       function idDeUrl() {
         var m = /^#unidad=(.*)$/.exec(location.hash); if (!m) return null;
         try { return decodeURIComponent(m[1]); } catch (e) { return ''; }
       }
       function hashDe(id) { return '#unidad=' + encodeURIComponent(String(id)); }
       function urlBase() { return location.pathname + location.search; }
-      function esperaFin() { clearTimeout(tBack); esperaBack = false; var f = colaUrl; colaUrl = null; if (f) f(); }
+      function esperaFin() { clearTimeout(tBack); esperaBack = false; var f = colaUrl; colaUrl = null; if (f) f(); anclaYa(); }
+      /* Enlaces internos (#tu-usado, #horarios) dentro de la ficha: si la entrada de historial la creó la ficha, primero se la deshace
+         (history.back) y recién después se navega al ancla; así el ancla reemplaza a la ficha en vez de apilarse sobre ella y dejar
+         una entrada #unidad=… huérfana. Si la entrada no es de la ficha (enlace directo, recarga) se deja la navegación nativa. */
+      function anclaYa() {
+        if (!anclaPend || esperaBack) return;
+        var h = anclaPend; anclaPend = null;
+        var ir = function () { location.hash = h; };
+        if (window.drAnclaListo) window.drAnclaListo(ir); else ir();   /* js/site.js: espera a que las secciones omitidas estén preparadas para que el scroll caiga bien */
+      }
+      function irAnclaDesdeFicha(ev, hash) {
+        var st = history.state;
+        if (fId != null && !esperaBack && idDeUrl() === fId && st && st.dr828Ficha === fId) {
+          /* se deshace la entrada de la ficha en el acto: el popstate navega al ancla (esperaFin → anclaYa) y cierra la ficha con su animación, sin esperar el cierre */
+          ev.preventDefault(); anclaPend = hash;
+          esperaBack = true; clearTimeout(tBack);
+          tBack = setTimeout(function () { esperaFin(); if (fdlg && fdlg.open) fdlg.close(); }, 400);   /* si el popstate no llega: igual se navega y se cierra */
+          try { history.back(); } catch (e) { esperaFin(); if (fdlg && fdlg.open) fdlg.close(); }
+          return;
+        }
+        fdlg.close();
+      }
       function urlAbrir(a) {
         if (hNav || a.id == null) return;
         var id = String(a.id), estado = { dr828Ficha: id };
@@ -933,7 +954,7 @@ ul.appendChild(frag);
           fdlg = el('dialog', null, 'ficha'); fdlg.setAttribute('aria-labelledby', 'fi-ttl');
           fdlg.addEventListener('click', function (e) { if (e.target === fdlg) fdlg.close(); });
           fdlg.addEventListener('close', function () { if (fdlg.open) return;   /* «close» tardío de un cierre anterior: la ficha ya volvió a abrirse (Adelante, otra unidad) */
-          if (window.drGaleriaVisor) window.drGaleriaVisor.close(true); if (!(dlg && dlg.open)) document.documentElement.classList.remove('has-dlg'); urlCerrar(); var fo = fOrigen && fOrigen.focus && fOrigen.isConnected ? fOrigen : fFoco; if (fo && fo.focus) { try { fo.focus({ preventScroll: true }); } catch (e) {} } });
+          if (window.drGaleriaVisor) window.drGaleriaVisor.close(true); if (!(dlg && dlg.open)) document.documentElement.classList.remove('has-dlg'); urlCerrar(); anclaYa(); var fo = fOrigen && fOrigen.focus && fOrigen.isConnected ? fOrigen : fFoco; if (fo && fo.focus) { try { fo.focus({ preventScroll: true }); } catch (e) {} } });
           document.body.appendChild(fdlg);
         }
         fdlg.textContent = '';
@@ -1046,7 +1067,7 @@ ul.appendChild(frag);
         if (a.hrefFin) ac2.appendChild(enlace('Consultar financiación', hrefU(a, 'fin') || a.hrefFin, 'btn sm', true));
         if (a.mail) ac2.appendChild(enlace('Enviar correo', a.mail, 'btn sm', false));
         if (ctx.tel) ac2.appendChild(enlace('Llamar' + (ctx.telTxt ? ' · ' + ctx.telTxt : ''), 'tel:' + ctx.tel, 'btn sm', false));
-        var tas = enlace('Tasar mi usado', '#tu-usado', 'btn sm', false); tas.addEventListener('click', function () { if (window.drTasarRef) window.drTasarRef(a); fdlg.close(); });
+        var tas = enlace('Tasar mi usado', '#tu-usado', 'btn sm', false); tas.addEventListener('click', function (ev) { if (window.drTasarRef) window.drTasarRef(a); irAnclaDesdeFicha(ev, '#tu-usado'); });
         if ($('#tu-usado')) ac2.appendChild(tas);
         ac2.appendChild(boton('Compartir', 'btn sm', function () { compartir(a); }));
         var fvb = boton('♡ Guardar en favoritos', 'btn sm fav-fi', function () { favToggle(a); });
@@ -1215,7 +1236,7 @@ ul.appendChild(frag);
         var ev = window.drEstado ? window.drEstado() : null, est = ev ? ev.txt : (ctx.horario || '');
         if (est) { var le = el('p', est, 'fi-e'); if (ev) le.setAttribute('data-abierto', ev.abierto ? '1' : '0'); vis.appendChild(le); }
         if ($('#horarios')) {
-          var hl = enlace('Ver horarios y mapa', '#horarios', 'btn sm', false); hl.addEventListener('click', function () { fdlg.close(); });
+          var hl = enlace('Ver horarios y mapa', '#horarios', 'btn sm', false); hl.addEventListener('click', function (ev) { irAnclaDesdeFicha(ev, '#horarios'); });
           vis.appendChild(hl);
         }
         pn.appendChild(vis);

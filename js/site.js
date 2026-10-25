@@ -222,6 +222,7 @@
     if (estado === 2) return;
     var a = anclaDeSeccion(event);
     if (!a || event.button || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey || (a.target && a.target !== '_self')) return;
+    if (a.closest && a.closest('dialog.ficha')) return;   /* los enlaces internos de la ficha los navega js/secciones.js (deshace antes su entrada de historial) mediante drAnclaListo */
     /* El clic llegó antes de terminar la preparación (clic programático o muy rápido): se difiere la navegación nativa unos cuadros. */
     var href = a.getAttribute('href'), destino = destinoDe(href);
     event.preventDefault();
@@ -230,6 +231,8 @@
       if (window.location.hash === href) destino.scrollIntoView(); else window.location.hash = href;
     });
   }, true);
+  /* Gancho para otros módulos: ejecuta fn cuando las secciones omitidas ya están preparadas (de inmediato si ya lo están). */
+  window.drAnclaListo = function (fn) { if (estado === 2) { fn(); return; } preparar(); cola.push(fn); };
   /* Carga con #sección en la URL. */
   if (afectaAlturas(destinoDe(window.location.hash))) preparar();
 })();

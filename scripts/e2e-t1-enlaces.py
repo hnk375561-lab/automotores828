@@ -261,13 +261,35 @@ def main(browser):
         check((s['hash'] == '') == (not s['open']), 'URL y ficha desincronizadas tras Atrás')
         q.close()
 
+    def t_ancla_horarios_y_enlace_directo():
+        # «Ver horarios y mapa» se comporta igual que «Tasar mi usado»: el ancla reemplaza a la ficha, sin entrada huérfana.
+        p = new_page(ctx, errors); go(p)
+        uid = click_card(p, 0); open_state(p, uid); l0 = snap(p)['len']
+        lk = p.locator('dialog.ficha').get_by_role('link', name='Ver horarios y mapa')
+        check(lk.count() == 1, 'no está el enlace «Ver horarios y mapa» en la ficha')
+        lk.click()
+        p.wait_for_function("() => !document.querySelector('dialog.ficha[open]') && location.hash === '#horarios'", timeout=6000); settle(p, 700)
+        s = snap(p); check(s['len'] == l0, f"«Ver horarios y mapa» dejó una entrada huérfana: {l0}→{s['len']}")
+        check(s['nOpen'] == 0 and s['nDlg'] == 1, 'quedó un diálogo abierto o duplicado')
+        p.go_back(); s = closed_state(p); check(s['path'] == '/', 'Atrás desde #horarios abandonó el sitio')
+        p.close()
+        # Ficha abierta por enlace directo (la entrada no la creó la ficha): el ancla navega de forma nativa y Atrás no abandona el sitio.
+        q = new_page(ctx, errors); go(q, '#unidad=' + IDS[0]); open_state(q, IDS[0])
+        q.locator('dialog.ficha').get_by_role('link', name='Tasar mi usado').click()
+        q.wait_for_function("() => !document.querySelector('dialog.ficha[open]') && location.hash === '#tu-usado'", timeout=6000); settle(q, 700)
+        s = snap(q); check(s['nOpen'] == 0 and s['nDlg'] == 1, 'quedó un diálogo abierto o duplicado tras el ancla (enlace directo)')
+        q.go_back(); settle(q, 700)
+        s = snap(q); check(s['path'] == '/', 'Atrás tras ancla (enlace directo) abandonó el sitio')
+        check((s['hash'] == '') == (not s['open']), 'URL y ficha desincronizadas tras Atrás (enlace directo)')
+        q.close()
+
     print('E2E T1 · enlaces propios y navegación Atrás')
     for name, fn in [('apertura, Atrás y Adelante', t_apertura_atras_adelante), ('cierre manual + 10 ciclos sin acumular', t_cerrar_manual_y_diez_ciclos),
                      ('apertura directa y recarga', t_apertura_directa_y_recarga), ('identificador inválido', t_enlace_invalido),
                      ('filtros conservados', t_filtros_conservados), ('galería anidada', t_galeria_anidada), ('compartir / copiar enlace', t_compartir_copiar),
                      ('hero abre la misma ficha con URL', t_hero), ('cambio de unidad con la ficha abierta', t_otras_unidades),
                      ('interacciones rápidas', t_interacciones_rapidas), ('con animación, 390/768/1280 px', t_animado_y_movil),
-                     ('ancla de la ficha y Atrás', t_ancla_desde_ficha), ('foco', t_foco), ('un solo diálogo', t_sin_listeners_duplicados)]:
+                     ('ancla de la ficha y Atrás', t_ancla_desde_ficha), ('ancla a horarios y enlace directo', t_ancla_horarios_y_enlace_directo), ('foco', t_foco), ('un solo diálogo', t_sin_listeners_duplicados)]:
         run(name, fn)
     ctx.close()
     check(not errors, 'errores de consola: ' + ' | '.join(errors[:5]))
