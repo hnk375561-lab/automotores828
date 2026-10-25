@@ -76,9 +76,21 @@ def main():
                 r = pg.evaluate("""() => { const f = [...document.querySelectorAll('.dr-fab a')].map(a => a.getBoundingClientRect()); const t = [...document.querySelectorAll('.tray button, .tray a, .tray-count')].map(a => a.getBoundingClientRect());
                     const hit = f.some(a => t.some(b => !(a.right <= b.left || a.left >= b.right || a.bottom <= b.top || a.top >= b.bottom))); return { hit, trayTop: document.querySelector('.tray').getBoundingClientRect().top, fabBottom: Math.max(...f.map(a => a.bottom)) }; }""")
                 check(not r['hit'], f'los flotantes tapan la bandeja a {w}px: {r}'); check(r['fabBottom'] <= r['trayTop'] + 1, f'los flotantes deben quedar sobre la bandeja a {w}px: {r}'); pg.context.close()
+        def t_comparador_movil():
+            for w in (320, 390):
+                pg = nueva(b, w)
+                for u in LIBRES[2:4]: pg.evaluate("(i) => document.querySelector('.car-c input[value=\"' + i + '\"]').click()", u['i']); time.sleep(.3)
+                pg.evaluate("document.querySelector('.cmp-open').click()"); pg.wait_for_selector('dialog.cmp[open]'); time.sleep(.8)
+                r = pg.evaluate("""() => { const d = document.querySelector('dialog.cmp').getBoundingClientRect(); const u = [...document.querySelectorAll('.cmpx thead th.cmp-u')].map(e => e.getBoundingClientRect());
+                    const ph = [...document.querySelectorAll('.cmp-ph')].map(e => e.getBoundingClientRect()); const ft = document.querySelector('.cmp-ft'); const sc = document.querySelector('.cmp-sc');
+                    return { izq: u[0].left - d.left, der: d.right - u[1].right, w0: u[0].width, w1: u[1].width, ph: ph.map(x => x.height), phw: ph.map(x => x.width), ft: ft.getBoundingClientRect().height, abierto: ft.open, sw: sc.scrollWidth - sc.clientWidth }; }""")
+                check(abs(r['izq'] - r['der']) <= 6, f'las unidades deben estar centradas a {w}px: {r}'); check(abs(r['w0'] - r['w1']) <= 2, f'columnas desiguales a {w}px: {r}')
+                check(min(r['ph']) >= 0.75 * min(r['phw']) and min(r['ph']) >= 120, f'las fotos deben ser grandes a {w}px: {r}')
+                check(not r['abierto'] and r['ft'] <= 60, f'el aviso debe estar plegado a {w}px: {r}'); check(r['sw'] <= 1, f'sin scroll horizontal a {w}px: {r}')
+                pg.click('.cmp-ft summary'); check(pg.evaluate("() => document.querySelector('.cmp-ft').open"), 'el aviso se despliega con un toque'); pg.context.close()
         for n, fn in [('«Tasar mi usado» lleva a la sección (táctil)', t_ancla('#tu-usado', '#tu-usado')), ('«Ver horarios y mapa» lleva a la sección (táctil)', t_ancla('#horarios', '#horarios')),
                       ('«Agendar visita y prueba de manejo» abre «Coordiná tu visita»', t_agendar), ('Favoritos dentro de su casilla 320/390/768/1280', t_favoritos),
-                      ('botones flotantes permanentes a la derecha', t_fab), ('flotantes no tapan la bandeja del comparador', t_fab_vs_bandeja)]: run(n, fn)
+                      ('botones flotantes permanentes a la derecha', t_fab), ('flotantes no tapan la bandeja del comparador', t_fab_vs_bandeja), ('comparador móvil: centrado, fotos grandes, aviso plegado', t_comparador_movil)]: run(n, fn)
         b.close()
     print(f'\n{len(PASSED)} OK, {len(FAILS)} con fallos'); raise SystemExit(1 if FAILS else 0)
 

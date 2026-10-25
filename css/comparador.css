@@ -99,3 +99,34 @@ html body dialog.cmp.cmp-lux .cmp-nav{display:none}
   html body dialog.cmp.cmp-lux .cmpx .cmp-ph{height:100px}
 }
 @media(prefers-reduced-motion:reduce){html body dialog.cmp.cmp-lux *{transition:none!important;animation:none!important}}
+
+/* ===== Móvil: cada unidad ocupa la mitad del ancho, centrada, con la foto como protagonista; el aviso legal va plegado ===== */
+html body dialog.cmp.cmp-lux .cmp-ft{flex:none;margin:0;padding:0 14px 6px;font-size:12.5px;color:#bdbdbd}
+html body dialog.cmp.cmp-lux .cmp-ft summary{display:flex;align-items:center;gap:8px;min-height:44px;cursor:pointer;color:#d0d0d0;font:600 12.5px var(--hero-copy);letter-spacing:.06em;text-transform:uppercase;list-style:none}
+html body dialog.cmp.cmp-lux .cmp-ft summary::-webkit-details-marker{display:none}
+html body dialog.cmp.cmp-lux .cmp-ft summary::before{content:"+";display:inline-grid;place-items:center;width:20px;height:20px;border:1px solid #ee1c22;color:#ee1c22;font:700 15px/1 var(--hero-copy)}
+html body dialog.cmp.cmp-lux .cmp-ft[open] summary::before{content:"–"}
+html body dialog.cmp.cmp-lux .cmp-ft summary:focus-visible{outline:3px solid #fff;outline-offset:2px}
+html body dialog.cmp.cmp-lux .cmp-ft p{margin:0 0 8px;font-size:12.5px;line-height:1.45}
+@media(max-width:700px){
+  html body dialog.cmp.cmp-lux .cmpx,html body dialog.cmp.cmp-lux .cmpx thead,html body dialog.cmp.cmp-lux .cmpx tbody{display:block;width:100%;min-width:0}
+  html body dialog.cmp.cmp-lux .cmpx tr{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr)}
+  html body dialog.cmp.cmp-lux.solo-dif .cmpx tr.same{display:none}
+  html body dialog.cmp.cmp-lux .cmpx thead th:first-child{display:none}
+  html body dialog.cmp.cmp-lux .cmpx thead th.cmp-u{position:static;width:auto;padding:10px 8px 14px!important;text-align:center;border-bottom:2px solid #ee1c22}
+  html body dialog.cmp.cmp-lux .cmpx .cmp-slot{text-align:center}
+  html body dialog.cmp.cmp-lux .cmpx .cmp-ph{height:auto;aspect-ratio:1/1;width:100%}
+  html body dialog.cmp.cmp-lux .cmpx .cmp-ph img{object-fit:contain}
+  html body dialog.cmp.cmp-lux .cmpx .cv{display:none}
+  html body dialog.cmp.cmp-lux .cmpx .cb{margin-top:8px}
+  html body dialog.cmp.cmp-lux .cmpx .cn{font-size:16px}
+  html body dialog.cmp.cmp-lux .cmpx .cmp-pr{font-size:17px}
+  html body dialog.cmp.cmp-lux .cmpx .cmp-ac{justify-content:center}
+  html body dialog.cmp.cmp-lux .cmpx tbody th{position:static;grid-column:1/-1;width:auto;padding:12px 10px 4px!important;font-size:10px;letter-spacing:.08em}
+  html body dialog.cmp.cmp-lux .cmpx tbody tr.cmp-g th{padding:20px 10px 8px!important}
+  html body dialog.cmp.cmp-lux .cmpx tr.diff th::after,html body dialog.cmp.cmp-lux .cmpx tr.same th::after{display:inline}
+  html body dialog.cmp.cmp-lux .cmpx tbody td{padding:6px 10px 12px!important;text-align:center}
+  html body dialog.cmp.cmp-lux .cmpx tbody td::before{display:block;margin-bottom:3px;color:#ee1c22;font:700 9px/1 var(--hero-copy);letter-spacing:.18em;text-transform:uppercase}
+  html body dialog.cmp.cmp-lux .cmpx tbody td:nth-of-type(1)::before{content:"Unidad 1"}
+  html body dialog.cmp.cmp-lux .cmpx tbody td:nth-of-type(2)::before{content:"Unidad 2"}
+}

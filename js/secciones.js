@@ -885,7 +885,9 @@ ul.appendChild(frag);
         t.appendChild(tb);
         var sc = el('div', null, 'cmp-sc'); sc.appendChild(t); dlg.appendChild(sc);
         var f = sel.map(function (a) { return a.precio && a.precio.fecha; }).filter(Boolean);
-        dlg.appendChild(el('p', 'Precios y kilometrajes relevados' + (f.length ? ' el ' + fecha(f[0]) : '') + '; no garantizan precio ni disponibilidad actuales. Las diferencias son observaciones entre estas dos unidades, no una recomendación de compra. Consultá disponibilidad por WhatsApp.', 'src cmp-ft'));
+        var notaD = el('details', null, 'cmp-ft'), notaS = el('summary', 'Sobre estos datos'); notaD.appendChild(notaS);
+        notaD.appendChild(el('p', 'Precios y kilometrajes relevados' + (f.length ? ' el ' + fecha(f[0]) : '') + '; no garantizan precio ni disponibilidad actuales. Las diferencias son observaciones entre estas dos unidades, no una recomendación de compra. Consultá disponibilidad por WhatsApp.', 'src'));   /* el aviso largo queda plegado: no le quita lugar a la comparación */
+        dlg.appendChild(notaD);
         document.documentElement.classList.add('has-dlg');
         if (typeof dlg.showModal === 'function') { if (!dlg.open) dlg.showModal(); } else dlg.setAttribute('open', '');
         sc.scrollTop = 0; sc.scrollLeft = 0;
