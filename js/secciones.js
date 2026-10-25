@@ -63,7 +63,7 @@
     function favGuardar() { try { window.localStorage.setItem(FAV_KEY, JSON.stringify(favs)); } catch (e) {} }
     /* El clic en una tarjeta se atiende desde el primer momento. Si los datos del catálogo todavía no
        llegaron, se espera a que lleguen y se abre la ficha recién ahí. */
-    var accion = null;
+    var accion = null, urlListo = false;   /* T1: los listeners del historial se registran una sola vez */
     ul.addEventListener('click', function (e) {
       var b = e.target.closest ? e.target.closest('[data-ficha],[data-share],.car-ph') : null;
       if (!b || !ul.contains(b)) return;
@@ -527,7 +527,7 @@ ul.appendChild(frag);
           else if (g.tipo === 'select') poner(g.k, st[g.k]);
           else { poner(g.k + '_d', st[g.k + 'D']); poner(g.k + '_h', st[g.k + 'H']); }
         });
-        history.replaceState(null, '', u.pathname + u.search + u.hash);
+        history.replaceState(history.state, '', u.pathname + u.search + u.hash);
       }
       function deUrl() {
         var P = new URLSearchParams(location.search);
@@ -792,15 +792,75 @@ ul.appendChild(frag);
       /* ----- ficha completa (diálogo), compartir y aviso breve ----- */
       var ctx = {};
       try { ctx = JSON.parse(($('#cat-ctx') || {}).textContent || '{}'); } catch (e) {}
-      var fdlg = null, fOrigen = null, toast = null, toastT = 0, fRO = null, fSwap = false;
+      var fdlg = null, fOrigen = null, fFoco = null, fId = null, toast = null, toastT = 0, fRO = null, fSwap = false;
       function aviso(msg) {
         if (!toast) { toast = el('div', null, 'toast'); toast.setAttribute('role', 'status'); toast.setAttribute('aria-live', 'polite'); document.body.appendChild(toast); }
         toast.textContent = msg; toast.classList.add('on');
         clearTimeout(toastT); toastT = setTimeout(function () { toast.classList.remove('on'); }, 2400);
       }
-      function urlUnidad() { return /^https?:/.test(location.protocol) ? location.href.split('#')[0].split('?')[0] + '#unidades' : null; }
+      /* ----- T1 · enlace propio por unidad e historial -----
+         Contrato: la URL es la única fuente de verdad de «qué ficha debe estar abierta». Formato: #unidad=<id real del catálogo>
+         (los filtros siguen en la query y se conservan). Abrir una ficha crea UNA entrada de historial (pushState);
+         con la ficha ya abierta, cambiar de unidad la reemplaza (replaceState). Atrás/Adelante (popstate) solo sincronizan
+         la interfaz: mientras hNav es true, abrirFicha no escribe en el historial. Cerrar la ficha deshace su propia entrada
+         (history.back) o, si la entrada no la creó la ficha (enlace directo, recarga), solo quita el fragmento. */
+      var hNav = false, esperaBack = false, colaUrl = null, tBack = 0;
+      function idDeUrl() {
+        var m = /^#unidad=(.*)$/.exec(location.hash); if (!m) return null;
+        try { return decodeURIComponent(m[1]); } catch (e) { return ''; }
+      }
+      function hashDe(id) { return '#unidad=' + encodeURIComponent(String(id)); }
+      function urlBase() { return location.pathname + location.search; }
+      function esperaFin() { clearTimeout(tBack); esperaBack = false; var f = colaUrl; colaUrl = null; if (f) f(); }
+      function urlAbrir(a) {
+        if (hNav || a.id == null) return;
+        var id = String(a.id), estado = { dr828Ficha: id };
+        if (esperaBack) { colaUrl = function () { if (fdlg && fdlg.open && fId === id) urlAbrir(a); }; return; }   /* un history.back() propio aún no llegó: se escribe después */
+        if (idDeUrl() === id) { if (!history.state || history.state.dr828Ficha !== id) { try { history.replaceState(estado, '', urlBase() + hashDe(id)); } catch (e) {} } return; }
+        try {
+          /* con #unidad=… ya en la URL la entrada de la ficha anterior sigue arriba (ficha abierta, o cerrada cuyo «close» aún no llegó): se reutiliza */
+          if (idDeUrl() !== null) history.replaceState(estado, '', urlBase() + hashDe(id));
+          else history.pushState(estado, '', urlBase() + hashDe(id));
+        } catch (e) {}
+      }
+      function urlCerrar() {
+        var id = fId; fId = null;
+        if (esperaBack) { colaUrl = null; return; }   /* ya hay un history.back() propio en camino: no se encadena otro */
+        if (hNav || id == null || idDeUrl() !== id) return;   /* la URL ya cambió (Atrás, otro ancla): no hay nada que deshacer */
+        var st = history.state;
+        try {
+          if (st && st.dr828Ficha === id) { esperaBack = true; clearTimeout(tBack); tBack = setTimeout(esperaFin, 400); history.back(); }
+          else history.replaceState(st, '', urlBase());
+        } catch (e) { esperaBack = false; }
+      }
+      function urlSincronizar() {
+        if (esperaBack) { esperaFin(); }
+        var id = idDeUrl(), abierta = !!(fdlg && fdlg.open);
+        if (id === null) {
+          if (!abierta) return;
+          var gv = window.drGaleriaVisor;
+          if (gv && gv.isOpen && gv.isOpen() && fId != null) {   /* Atrás con el visor abierto: cierra solo el visor y la ficha conserva su entrada */
+            gv.close();
+            try { history.pushState({ dr828Ficha: fId }, '', urlBase() + hashDe(fId)); } catch (e) {}
+            return;
+          }
+          hNav = true; try { fdlg.close(); } finally { hNav = false; }
+          return;
+        }
+        var u = id ? list.filter(function (x) { return String(x.id) === id; })[0] : null;
+        if (!u) {   /* identificador inválido o unidad que ya no está publicada: el catálogo sigue operativo */
+          try { history.replaceState(history.state && history.state.dr828Ficha ? null : history.state, '', urlBase()); } catch (e) {}
+          if (abierta) { hNav = true; try { fdlg.close(); } finally { hNav = false; } }
+          aviso('No encontramos esa unidad. Puede que ya no esté publicada: seguí viendo el catálogo.');
+          return;
+        }
+        if (abierta && fId === id) return;
+        hNav = true; try { abrirFicha(list.indexOf(u), null); } finally { hNav = false; }
+      }
+      /* enlace absoluto de una unidad concreta (sin filtros: quien lo recibe ve la unidad, no la búsqueda de quien lo envía) */
+      function urlUnidad(a) { return /^https?:/.test(location.protocol) && a && a.id != null ? location.origin + location.pathname + hashDe(a.id) : null; }
       function compartir(a) {
-        var url = urlUnidad() || a.url, datos = { title: a.titulo, text: a.titulo + ' · ' + (ctx.nombre || ''), url: url };
+        var url = urlUnidad(a) || a.url, datos = { title: a.titulo, text: a.titulo + ' · ' + (ctx.nombre || ''), url: url };
         if (navigator.share) { navigator.share(datos).catch(function () {}); return; }
         copiar(datos.text + ' ' + url, function (ok) { aviso(ok ? 'Enlace copiado' : 'No se pudo copiar el enlace'); });
       }
@@ -813,13 +873,17 @@ ul.appendChild(frag);
       function abrirFicha(i, origen, record) {
         var a = record || list[i]; if (!a) return;
         fOrigen = origen || null;
+        fId = a.id != null ? String(a.id) : null;
+        fFoco = $('#cars').querySelector('[data-ficha="' + list.indexOf(a) + '"]');   /* foco de vuelta aunque la ficha se abra por enlace, Atrás o Adelante */
+        urlAbrir(a);
         if (window.drGaleriaVisor) window.drGaleriaVisor.close(true);   /* el visor nunca sobrevive a la reconstrucción de la ficha */
         /* otra unidad con la ficha ya abierta: el contenido actual sale brevemente (js/ficha-flip.js) y recién entonces se reconstruye; la última selección prevalece */
         if (fdlg && fdlg.open && !fSwap && window.drFichaFlip && window.drFichaFlip.leave && window.drFichaFlip.leave(fdlg, function () { fSwap = true; try { abrirFicha(i, origen, record); } finally { fSwap = false; } })) return;
         if (!fdlg) {
           fdlg = el('dialog', null, 'ficha'); fdlg.setAttribute('aria-labelledby', 'fi-ttl');
           fdlg.addEventListener('click', function (e) { if (e.target === fdlg) fdlg.close(); });
-          fdlg.addEventListener('close', function () { if (window.drGaleriaVisor) window.drGaleriaVisor.close(true); if (!(dlg && dlg.open)) document.documentElement.classList.remove('has-dlg'); if (fOrigen && fOrigen.focus) { try { fOrigen.focus({ preventScroll: true }); } catch (e) {} } });
+          fdlg.addEventListener('close', function () { if (fdlg.open) return;   /* «close» tardío de un cierre anterior: la ficha ya volvió a abrirse (Adelante, otra unidad) */
+          if (window.drGaleriaVisor) window.drGaleriaVisor.close(true); if (!(dlg && dlg.open)) document.documentElement.classList.remove('has-dlg'); urlCerrar(); var fo = fOrigen && fOrigen.focus && fOrigen.isConnected ? fOrigen : fFoco; if (fo && fo.focus) { try { fo.focus({ preventScroll: true }); } catch (e) {} } });
           document.body.appendChild(fdlg);
         }
         fdlg.textContent = '';
@@ -937,7 +1001,7 @@ ul.appendChild(frag);
         ac2.appendChild(boton('Compartir', 'btn sm', function () { compartir(a); }));
         var fvb = boton('♡ Guardar en favoritos', 'btn sm fav-fi', function () { favToggle(a); });
         fvb.setAttribute('data-fav', favKey(a)); fvb.setAttribute('aria-pressed', 'false'); ac2.appendChild(fvb); favSync();
-        ac2.appendChild(boton('Copiar enlace', 'btn sm', function () { copiar((urlUnidad() || a.url), function (ok) { aviso(ok ? 'Enlace copiado' : 'No se pudo copiar el enlace'); }); }));
+        ac2.appendChild(boton('Copiar enlace', 'btn sm', function () { copiar((urlUnidad(a) || a.url), function (ok) { aviso(ok ? 'Enlace copiado' : 'No se pudo copiar el enlace'); }); }));
         var cb = cbs.filter(function (c) { return +c.value === a.i; })[0];
         if (cb) {
           var cm = boton(cb.checked ? 'Quitar de la comparación' : 'Agregar a comparar', 'btn sm', function () {
@@ -1156,6 +1220,9 @@ ul.appendChild(frag);
       tg.setAttribute('aria-controls', 'fx-body');
       tools.hidden = false;
       aplicar(false);
+      /* T1: con el catálogo ya listo, se atiende #unidad=<id> (apertura directa, recarga) y se siguen Atrás/Adelante */
+      if (!urlListo) { urlListo = true; window.addEventListener('popstate', urlSincronizar); window.addEventListener('hashchange', urlSincronizar); }
+      urlSincronizar();
     }
   })();
 
