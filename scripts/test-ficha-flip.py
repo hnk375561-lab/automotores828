@@ -135,9 +135,9 @@ try:
         bring(page, 4); page.locator('button[data-ficha]').nth(4).click(); page.wait_for_selector(DLG + '[open]'); page.wait_for_timeout(1700)
 
         # «Otras unidades»: otra ficha con la ficha ya abierta no vuelve a abrirse desde la tarjeta
-        if page.locator(DLG + ' .fi-sim-c').count():
+        if page.locator(DLG + ' .fi-sim-v').count():
             sw = page.evaluate("""()=>new Promise(res=>{var d=document.querySelector('dialog.ficha'),t0=performance.now(),w={op:1,moved:false,ghost:false},tt=d.querySelector('#fi-ttl').textContent;
-              d.querySelector('.fi-sim-c').click();
+              d.querySelector('.fi-sim-v').click();
               (function f(){var cs=getComputedStyle(d);w.op=Math.min(w.op,parseFloat(cs.opacity));if(cs.transform!=='none')w.moved=true;
                 if(document.querySelector('[popover]:popover-open'))w.ghost=true;
                 if(performance.now()-t0<450)requestAnimationFrame(f);else{w.changed=d.querySelector('#fi-ttl').textContent!==tt;res(w)}})()})""")

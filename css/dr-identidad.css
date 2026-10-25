@@ -102,6 +102,9 @@ html{scroll-padding-top:110px}
 .fi-sim .fi-s-k,.fi-gu .fi-s-k{margin:0 0 10px}
 .fi-sim-g{display:grid;gap:8px}
 .fi-sim-c{display:flex;align-items:center;gap:12px;width:100%;padding:6px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.12);color:#fff;text-align:left;cursor:pointer;font:inherit;transition:border-color .2s,background .2s}
+.fi-sim-w{display:flex;gap:6px;align-items:stretch}.fi-sim-w .fi-sim-c{flex:1 1 auto;min-width:0;width:auto;min-height:44px}
+.fi-sim-v{flex:none;min-width:64px;min-height:44px;padding:0 10px;background:transparent;border:1px solid rgba(255,255,255,.12);color:#d9dbdd;font:inherit;font-size:12px;cursor:pointer}
+.fi-sim-v:hover,.fi-sim-v:focus-visible{border-color:var(--dr-red);color:#fff}
 .fi-sim-c:hover,.fi-sim-c:focus-visible{border-color:var(--dr-red);background:rgba(238,28,34,.08)}
 .fi-sim-c img{flex:none;width:84px;height:58px;object-fit:cover;display:block}
 .fi-sim-t{display:grid;gap:3px;min-width:0}

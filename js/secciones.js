@@ -612,7 +612,7 @@ ul.appendChild(frag);
       tg.addEventListener('click', function () { abrirPanel(body.hidden); if (!body.hidden) { try { body.scrollIntoView({ block: 'nearest', behavior: (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth') }); } catch (e) {} } });
 
       /* ----- comparador: exactamente 2 unidades · selección por id real (nunca por posición) ----- */
-      var MAX = 2, cmp = [], tray = null, dlg = null;
+      var MAX = 2, cmp = [], tray = null, dlg = null, cmpVuelta = null;
       var cbs = $$('.car-c input', ul);
       $$('.car-c', ul).forEach(function (l) { l.hidden = false; });
       function sinMarca(a) { return a.modeloTxt; }
@@ -668,6 +668,15 @@ ul.appendChild(frag);
         });
       });
 
+      /* T5 · desde la ficha: la selección pasa a ser exactamente estas dos unidades y se abre la comparación */
+      function compararCon(a, c, origen) {
+        var ka = favKey(a), kc = favKey(c), antes = cmp.slice();
+        if (!porId(ka) || !porId(kc)) return;
+        cmp = [ka, kc]; cmpVuelta = origen || null; pintarBandeja();
+        if (antes.some(function (id) { return id !== ka && id !== kc; })) aviso('Se reemplazó la selección anterior por estas 2 unidades.');
+        var cm0 = fdlg && fdlg.querySelector('[data-cmp-ficha]'); if (cm0) cm0.textContent = 'Quitar de la comparación';
+        abrirComparacion();
+      }
       function abrirComparacion(enfocar) {
         podarSel();
         var sel = cmp.map(porId);
@@ -676,7 +685,9 @@ ul.appendChild(frag);
           dlg = el('dialog', null, 'cmp cmp-lux'); dlg.setAttribute('aria-labelledby', 'cmp-ttl');
           dlg.addEventListener('click', function (e) { if (e.target === dlg) dlg.close(); });
           dlg.addEventListener('close', function () {
-            document.documentElement.classList.remove('has-dlg');
+            if (!(fdlg && fdlg.open)) document.documentElement.classList.remove('has-dlg');   /* T5: con la ficha abierta debajo, el bloqueo de scroll sigue */
+            var v = cmpVuelta; cmpVuelta = null;
+            if (v && v.isConnected && fdlg && fdlg.open) { try { v.focus({ preventScroll: true }); } catch (e) {} return; }   /* T5: el foco vuelve a la tarjeta de la ficha */
             var b = tray && tray.querySelector('.cmp-open'); if (b && !b.disabled) { try { b.focus({ preventScroll: true }); } catch (e) {} }
           });
           document.body.appendChild(dlg);
@@ -1047,7 +1058,7 @@ ul.appendChild(frag);
             cb.checked = !cb.checked; cb.dispatchEvent(new Event('change', { bubbles: true }));
             cm.textContent = cb.checked ? 'Quitar de la comparación' : 'Agregar a comparar';
           });
-          ac2.appendChild(cm);
+          cm.setAttribute('data-cmp-ficha', ''); ac2.appendChild(cm);
         }
         if (a.url) ac2.appendChild(enlace('Ver publicación original', a.url, 'btn sm', true));
         if (ctx.maps) ac2.appendChild(enlace('Cómo llegar', ctx.maps, 'btn sm', true));
@@ -1122,25 +1133,37 @@ ul.appendChild(frag);
         [cPrecio, cAnt, cN, cTna].forEach(function (c) { c.addEventListener('input', calcular); });
         calcular(); info.appendChild(cal);
 
-        /* relleno útil de la columna derecha: unidades parecidas del catálogo (datos reales) + guía para ver un usado */
-        var sim = list.filter(function (c) { return c !== a && c.media && c.media.length; }).map(function (c) {
-          var sc = (c.marca === a.marca ? 4 : 0) + (c.vendida ? 0 : 3) + (c.carroceria && c.carroceria === a.carroceria ? 1 : 0)
-            - (a.anio != null && c.anio != null ? Math.min(Math.abs(c.anio - a.anio), 20) / 10 : 1);
-          return { c: c, sc: sc };
-        }).sort(function (x, y) { return y.sc - x.sc; }).slice(0, 3);
+        /* T5 · «Comparalo con»: hasta 3 unidades elegidas solo con datos estructurados (mismo tipo, misma carrocería si la unidad la publica,
+           misma moneda y precio dentro de ±50 %); nunca se convierte moneda ni se dice cuál es «mejor». Un toque abre el comparador con las dos.
+           Sin candidata con criterio claro, el bloque no aparece. */
+        var sim = [];
+        if (pOk(a) && a.precio.monto > 0 && tx(a.tipoVehiculo) && porId(favKey(a))) {
+          sim = list.filter(function (c) {
+            if (c === a || c.vendida || !(c.media && c.media.length) || !pOk(c) || !(c.precio.monto > 0)) return false;
+            if (c.tipoVehiculo !== a.tipoVehiculo) return false;
+            if (tx(a.carroceria) && c.carroceria !== a.carroceria) return false;
+            if (c.precio.moneda !== a.precio.moneda) return false;
+            var rz = c.precio.monto / a.precio.monto; return rz >= 1 / 1.5 && rz <= 1.5;
+          }).map(function (c) {
+            return { c: c, d: Math.abs(Math.log(c.precio.monto / a.precio.monto)), y: a.anio != null && c.anio != null ? Math.abs(c.anio - a.anio) : 99 };
+          }).sort(function (x, y) { return x.d - y.d || x.y - y.y || x.c.i - y.c.i; }).slice(0, 3);
+        }
         if (sim.length) {
-          var sb = el('section', null, 'fi-sim'); sb.setAttribute('aria-label', 'Otras unidades');
-          sb.appendChild(el('p', 'Otras unidades que pueden interesarte', 'fi-s-k'));
+          var sb = el('section', null, 'fi-sim'); sb.setAttribute('aria-label', 'Comparalo con');
+          sb.appendChild(el('p', 'Comparalo con', 'fi-s-k'));
           var sg = el('div', null, 'fi-sim-g');
           sim.forEach(function (o) {
-            var c = o.c, b = el('button', null, 'fi-sim-c'); b.type = 'button';
-            var im = el('img'); im.src = c.media[0].src; im.alt = ''; im.loading = 'lazy'; im.decoding = 'async'; b.appendChild(im);
-            var tx = el('span', null, 'fi-sim-t');
-            tx.appendChild(el('b', c.titulo || c.modeloTxt));
-            tx.appendChild(el('small', (c.anio != null ? c.anio : '') + (c.vendida ? ' · Vendida' : (c.combustible ? (c.anio != null ? ' · ' : '') + c.combustible : ''))));
-            b.appendChild(tx);
-            b.addEventListener('click', function () { abrirFicha(list.indexOf(c), fOrigen); });
-            sg.appendChild(b);
+            var c = o.c, w = el('div', null, 'fi-sim-w'), b = el('button', null, 'fi-sim-c'); b.type = 'button';
+            b.setAttribute('aria-label', 'Comparar con ' + (c.titulo || c.modeloTxt) + ', ' + pTxt(c));
+            var im = el('img'); im.src = c.media[0].thumb || c.media[0].card || c.media[0].src; im.alt = ''; im.loading = 'lazy'; im.decoding = 'async'; b.appendChild(im);
+            var tx2 = el('span', null, 'fi-sim-t');
+            tx2.appendChild(el('b', c.titulo || c.modeloTxt));
+            tx2.appendChild(el('small', pTxt(c) + (c.anio != null ? ' · ' + c.anio : '')));
+            b.appendChild(tx2);
+            b.addEventListener('click', function () { compararCon(a, c, b); });
+            var vf = el('button', 'Ver ficha', 'fi-sim-v'); vf.type = 'button'; vf.setAttribute('aria-label', 'Ver la ficha de ' + (c.titulo || c.modeloTxt));
+            vf.addEventListener('click', function () { abrirFicha(list.indexOf(c), fOrigen); });
+            w.appendChild(b); w.appendChild(vf); sg.appendChild(w);
           });
           sb.appendChild(sg); info.appendChild(sb);
         }

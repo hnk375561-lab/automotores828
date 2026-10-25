@@ -179,7 +179,7 @@ def main(browser):
     def t_otras_unidades():
         p = new_page(ctx, errors); go(p)
         uid = click_card(p, 0); open_state(p, uid); l0 = snap(p)['len']
-        sim = p.locator('dialog.ficha .fi-sim-c')
+        sim = p.locator('dialog.ficha .fi-sim-v')
         if sim.count():
             sim.first.click(); p.wait_for_function("(u) => location.hash !== '#unidad=' + u", arg=uid)
             s = snap(p); nid = s['hash'].split('=')[1]; check(nid in BY_ID and nid != uid, 'otra unidad con id inválido')
