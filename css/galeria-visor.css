@@ -1,0 +1,57 @@
+/* Galería inmersiva de la ficha · visor de fotos ampliadas (js/galeria-visor.js) y controles de la galería integrada.
+   Paleta del sitio: negro #060607, rojo #ee1c22, blanco. Sin dependencias: usa las variables que ya define el sitio
+   (con valores de respaldo). */
+
+/* ---------- galería integrada en la ficha (dialog.ficha .fi-m) ---------- */
+.fi-m .fi-vz{position:absolute;left:10px;top:10px;z-index:2;display:flex;align-items:center;gap:8px;pointer-events:none}
+.fi-m .fi-vz>*{pointer-events:auto}
+.fi-m .fi-zoom{display:inline-flex;align-items:center;gap:8px;min-height:44px;padding:0 14px;border:1px solid rgba(255,255,255,.28);background:rgba(6,6,7,.8);color:#fff;font:700 12px/1 var(--b,system-ui,sans-serif);letter-spacing:.12em;text-transform:uppercase;cursor:pointer;transition:background-color .14s linear,color .14s linear,border-color .14s linear}
+.fi-m .fi-zoom::before{content:"";flex:none;width:14px;height:14px;background:
+  linear-gradient(currentColor,currentColor) 0 0/6px 2px no-repeat,linear-gradient(currentColor,currentColor) 0 0/2px 6px no-repeat,
+  linear-gradient(currentColor,currentColor) 100% 0/6px 2px no-repeat,linear-gradient(currentColor,currentColor) 100% 0/2px 6px no-repeat,
+  linear-gradient(currentColor,currentColor) 0 100%/6px 2px no-repeat,linear-gradient(currentColor,currentColor) 0 100%/2px 6px no-repeat,
+  linear-gradient(currentColor,currentColor) 100% 100%/6px 2px no-repeat,linear-gradient(currentColor,currentColor) 100% 100%/2px 6px no-repeat}
+.fi-m .fi-zoom:hover{background:var(--y,#ee1c22);border-color:var(--y,#ee1c22);color:var(--ink,#060607)}
+.fi-m .fi-zoom:focus-visible{outline:2px solid #fff;outline-offset:2px}
+.fi-m .fi-ct{display:inline-block;padding:7px 11px;background:rgba(6,6,7,.8);color:#fff;font:700 12px/1 var(--b,system-ui,sans-serif);letter-spacing:.08em;font-variant-numeric:tabular-nums}
+.fi-m.fi-vz-on .fi-t img{cursor:zoom-in}
+
+/* ---------- visor ampliado ---------- */
+/* 100vw/100dvh y no 100%: el sitio declara html{scrollbar-gutter:stable}, que dejaría una franja vacía a la derecha en escritorio */
+dialog.gv{position:fixed;inset:0;width:100vw;height:100%;height:100dvh;max-width:none;max-height:none;margin:0;padding:0;border:0;overflow:hidden;background:#050506;color:#f4f4f4;color-scheme:dark}
+dialog.gv::backdrop{background:#050506}
+dialog.gv[open]{display:grid;grid-template-columns:clamp(56px,7vw,96px) minmax(0,1fr) clamp(56px,7vw,96px);grid-template-rows:auto minmax(0,1fr);grid-template-areas:"bar bar bar" "prev stage next";
+  padding:env(safe-area-inset-top,0px) env(safe-area-inset-right,0px) env(safe-area-inset-bottom,0px) env(safe-area-inset-left,0px);box-sizing:border-box}
+.gv-bar{grid-area:bar;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:10px clamp(12px,2vw,24px);border-bottom:1px solid rgba(255,255,255,.08)}
+.gv-ct{margin:0;font:700 14px/1.2 var(--b,system-ui,sans-serif);letter-spacing:.14em;text-transform:uppercase;font-variant-numeric:tabular-nums;color:#e9e9e9}
+.gv-x{display:inline-flex;align-items:center;gap:8px;min-height:44px;padding:0 16px;border:1px solid rgba(255,255,255,.4);background:transparent;color:#fff;font:800 12px/1 var(--b,system-ui,sans-serif);letter-spacing:.14em;text-transform:uppercase;cursor:pointer;transition:background-color .14s linear,color .14s linear,border-color .14s linear}
+.gv-x::before{content:"\00d7";font:400 24px/1 var(--b,system-ui,sans-serif);letter-spacing:0}
+.gv-x:hover{background:var(--y,#ee1c22);border-color:var(--y,#ee1c22);color:var(--ink,#060607)}
+.gv-st{grid-area:stage;position:relative;min-width:0;min-height:0;display:grid;touch-action:pan-y pinch-zoom;-webkit-user-select:none;user-select:none}
+.gv-img{display:block;width:100%;height:100%;min-width:0;min-height:0;object-fit:contain;-webkit-user-drag:none}
+.gv-img[hidden],.gv-err[hidden],.gv-a[hidden]{display:none}
+.gv-err{position:absolute;inset:0;display:grid;place-items:center;margin:0;padding:24px;text-align:center;color:#d6d6d6;font:500 15px/1.5 var(--b,system-ui,sans-serif)}
+.gv-st.gv-load::after{content:"";position:absolute;left:50%;top:50%;width:30px;height:30px;margin:-15px 0 0 -15px;border:2px solid rgba(255,255,255,.18);border-top-color:var(--y,#ee1c22);border-radius:50%;animation:gv-spin .8s linear infinite;pointer-events:none}
+@keyframes gv-spin{to{transform:rotate(360deg)}}
+.gv-a{display:grid;place-items:center;width:48px;height:48px;padding:0;border:1px solid rgba(255,255,255,.28);border-radius:50%;background:rgba(20,20,22,.85);color:#fff;font:400 30px/1 var(--b,system-ui,sans-serif);cursor:pointer;transition:background-color .14s linear,color .14s linear,border-color .14s linear}
+.gv-prev{grid-area:prev;align-self:center;justify-self:center}
+.gv-next{grid-area:next;align-self:center;justify-self:center}
+.gv-a:hover{background:var(--y,#ee1c22);border-color:var(--y,#ee1c22);color:var(--ink,#060607)}
+.gv-a.off{opacity:.3;cursor:default}
+.gv-a.off:hover{background:rgba(20,20,22,.85);border-color:rgba(255,255,255,.28);color:#fff}
+.gv-x:focus-visible,.gv-a:focus-visible{outline:2px solid var(--y,#ee1c22);outline-offset:3px}
+
+/* móvil: las flechas pasan a una fila inferior (áreas grandes, fuera de la foto) y la foto ocupa todo el ancho */
+@media(max-width:700px){
+  dialog.gv[open]{grid-template-columns:1fr 1fr;grid-template-rows:auto minmax(0,1fr) auto;grid-template-areas:"bar bar" "stage stage" "prev next"}
+  .gv-prev,.gv-next{align-self:stretch;justify-self:stretch;width:auto;height:56px;border-radius:0;border-width:1px 0 0;font-size:32px}
+  .gv-prev{border-right:1px solid rgba(255,255,255,.12)}
+}
+/* móvil horizontal / ventanas muy bajas: barra más compacta */
+@media(max-height:480px){
+  .gv-bar{padding-top:4px;padding-bottom:4px}.gv-x{min-height:44px}
+}
+@media(prefers-reduced-motion:reduce){
+  .gv-st.gv-load::after{animation:none;border-top-color:rgba(255,255,255,.18);border-color:var(--y,#ee1c22)}
+  .fi-m .fi-zoom,.gv-x,.gv-a{transition:none}
+}

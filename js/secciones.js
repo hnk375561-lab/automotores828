@@ -801,10 +801,11 @@ ul.appendChild(frag);
       function abrirFicha(i, origen, record) {
         var a = record || list[i]; if (!a) return;
         fOrigen = origen || null;
+        if (window.drGaleriaVisor) window.drGaleriaVisor.close(true);   /* el visor nunca sobrevive a la reconstrucción de la ficha */
         if (!fdlg) {
           fdlg = el('dialog', null, 'ficha'); fdlg.setAttribute('aria-labelledby', 'fi-ttl');
           fdlg.addEventListener('click', function (e) { if (e.target === fdlg) fdlg.close(); });
-          fdlg.addEventListener('close', function () { document.documentElement.classList.remove('has-dlg'); if (fOrigen && fOrigen.focus) { try { fOrigen.focus({ preventScroll: true }); } catch (e) {} } });
+          fdlg.addEventListener('close', function () { if (window.drGaleriaVisor) window.drGaleriaVisor.close(true); document.documentElement.classList.remove('has-dlg'); if (fOrigen && fOrigen.focus) { try { fOrigen.focus({ preventScroll: true }); } catch (e) {} } });
           document.body.appendChild(fdlg);
         }
         fdlg.textContent = '';
@@ -822,6 +823,22 @@ ul.appendChild(frag);
             tr.appendChild(im);
           });
           gal.appendChild(tr);
+          /* visor ampliado (js/galeria-visor.js): botón «Ampliar», contador y clic en la foto; si el módulo no cargó, la galería queda como antes */
+          var vzCt = null, vzBtn = null, vzOn = !!(window.drGaleriaVisor && window.drGaleriaVisor.open);
+          var vzIdx = function () { return Math.max(0, Math.min(a.media.length - 1, Math.round(tr.scrollLeft / Math.max(1, tr.clientWidth)))); };
+          var vzAbrir = function (trigger) {
+            window.drGaleriaVisor.open({ items: a.media, index: vzIdx(), title: a.titulo, trigger: trigger || tr,
+              onIndex: function (k) { tr.scrollTo({ left: k * tr.clientWidth, behavior: 'auto' }); } });
+          };
+          if (vzOn) {
+            var vz = el('div', null, 'fi-vz');
+            vzBtn = boton('Ampliar', 'fi-zoom', function () { vzAbrir(vzBtn); }); vzBtn.setAttribute('aria-label', 'Ampliar foto');
+            vz.appendChild(vzBtn);
+            if (a.media.length > 1) { vzCt = el('span', '1 de ' + a.media.length, 'fi-ct'); vz.appendChild(vzCt); }
+            gal.appendChild(vz); gal.classList.add('fi-vz-on');
+            tr.addEventListener('click', function (e) { if (e.target && e.target.tagName === 'IMG') vzAbrir(tr); });
+            tr.addEventListener('keydown', function (e) { if ((e.key === 'Enter' || e.key === ' ') && e.target === tr) { vzAbrir(tr); e.preventDefault(); } });
+          }
           if (a.media.length > 1) {
             var ir = function (k) { k = Math.max(0, Math.min(a.media.length - 1, k)); tr.scrollTo({ left: k * tr.clientWidth, behavior: (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth') }); };
             var act = function () { return Math.round(tr.scrollLeft / Math.max(1, tr.clientWidth)); };
@@ -836,7 +853,7 @@ ul.appendChild(frag);
             });
             var tk = 0, ul = 0;
             tr.addEventListener('scroll', function () {
-              if (tk) return; tk = requestAnimationFrame(function () { tk = 0; var c = act(); tbs.forEach(function (b, k) { b.classList.toggle('on', k === c); }); if (c !== ul) { ul = c; var tb = tbs[c]; if (tb && th.scrollWidth > th.clientWidth) th.scrollTo({ left: tb.offsetLeft - (th.clientWidth - tb.offsetWidth) / 2, behavior: (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth') }); } });
+              if (tk) return; tk = requestAnimationFrame(function () { tk = 0; var c = act(); tbs.forEach(function (b, k) { b.classList.toggle('on', k === c); }); if (vzCt) vzCt.textContent = (c + 1) + ' de ' + a.media.length; if (c !== ul) { ul = c; var tb = tbs[c]; if (tb && th.scrollWidth > th.clientWidth) th.scrollTo({ left: tb.offsetLeft - (th.clientWidth - tb.offsetWidth) / 2, behavior: (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth') }); } });
             }, { passive: true });
             tbs[0].classList.add('on');
             tr.addEventListener('keydown', function (e) { if (e.key === 'ArrowRight') { ir(act() + 1); e.preventDefault(); } if (e.key === 'ArrowLeft') { ir(act() - 1); e.preventDefault(); } });

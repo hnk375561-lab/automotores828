@@ -2495,14 +2495,6 @@ dialog.cmp[open] .cmp-hd{animation:moIn var(--mo-slow) var(--mo-ease) backwards}
 .ring-stage{position:relative;height:clamp(460px,54vw,680px);margin:0;padding:0;list-style:none}
 .ring-card{position:absolute;left:50%;top:50%;width:clamp(130px,16vw,230px);aspect-ratio:3/4;margin:0;padding:0;background:#111;border:1px solid rgba(255,255,255,.16);border-bottom:4px solid #ee1c22;clip-path:polygon(0 0,calc(100% - 18px) 0,100% 18px,100% 100%,0 100%);box-shadow:0 18px 40px rgba(0,0,0,.5);will-change:transform,opacity}
 .ring-card img{display:block;width:100%;height:100%;object-fit:cover}
-.msg-updated{animation:msg-updated .28s ease-out}@keyframes msg-updated{from{opacity:.68;transform:translateY(2px)}to{opacity:1;transform:translateY(0)}}
-.guia-progress{color:#d9dbdd;font-size:.9rem;margin:.25rem 0}
-.qa-search-label{display:block;margin:.6rem 0 .25rem;color:#d9dbdd}.qa-search{display:block;min-height:44px;width:min(100%,32rem);padding:.65rem .8rem;border:1px solid #6b6d70;border-radius:.4rem;background:#111214;color:#fff;font:inherit}.qa-search:focus-visible{outline:3px solid #ee1c22;outline-offset:2px}
-.qa-search-status{min-height:1.4em;color:#d9dbdd;font-size:.9rem}
-.gd [data-guide-checklist] label{display:flex;align-items:flex-start;gap:.65rem;cursor:pointer;padding:.3rem 0}.gd [data-guide-item]{inline-size:44px;block-size:44px;min-inline-size:44px;min-block-size:44px;flex:0 0 44px;margin:0;accent-color:#ee1c22}
-.dr-hr-note{font-size:.9rem;color:#d9dbdd;margin-top:.6rem}
-@media(prefers-reduced-motion:reduce){.msg-updated{animation:none}}
-
 
 /* ==========================================================================
    v13 · Flecha que cruza (js/boton-flecha.js): en .btn[data-bf] hay dos ventanas recortadas.
@@ -2528,18 +2520,28 @@ dialog.cmp[open] .cmp-hd{animation:moIn var(--mo-slow) var(--mo-ease) backwards}
 .btn[data-bf]:focus-visible .bf-t{width:0}
 .btn[data-bf]:focus-visible .bf-t svg{transform:translateX(calc(100% + var(--bf-g)))}
 @media (prefers-reduced-motion:reduce){.btn[data-bf] .bf,.btn[data-bf] .bf svg{transition-duration:.01ms}}
+.msg-updated{animation:msg-updated .28s ease-out}@keyframes msg-updated{from{opacity:.68;transform:translateY(2px)}to{opacity:1;transform:translateY(0)}}
+.guia-progress{color:#d9dbdd;font-size:.9rem;margin:.25rem 0}
+.qa-search-label{display:block;margin:.6rem 0 .25rem;color:#d9dbdd}.qa-search{display:block;min-height:44px;width:min(100%,32rem);padding:.65rem .8rem;border:1px solid #6b6d70;border-radius:.4rem;background:#111214;color:#fff;font:inherit}.qa-search:focus-visible{outline:3px solid #ee1c22;outline-offset:2px}
+.qa-search-status{min-height:1.4em;color:#d9dbdd;font-size:.9rem}
+.gd [data-guide-checklist] label{display:flex;align-items:flex-start;gap:.65rem;cursor:pointer;padding:.3rem 0}.gd [data-guide-item]{inline-size:44px;block-size:44px;min-inline-size:44px;min-block-size:44px;flex:0 0 44px;margin:0;accent-color:#ee1c22}
+.dr-hr-note{font-size:.9rem;color:#d9dbdd;margin-top:.6rem}
+@media(prefers-reduced-motion:reduce){.msg-updated{animation:none}}
+
 </style>
 <link rel="stylesheet" href="css/dr-identidad.css?v=20261024-4">
 <link rel="stylesheet" href="css/hero-carousel.css?v=20261024-5">
 <link rel="stylesheet" href="css/fondos-secciones.css">
 <link rel="stylesheet" href="css/damero-secciones.css?v=20261024-1">
 <link rel="stylesheet" href="css/comparador.css?v=20261024-2">
+<link rel="stylesheet" href="css/galeria-visor.css?v=20261026-1">
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"AutoDealer","name":"Automotores 828","address":{"@type":"PostalAddress","streetAddress":"Blvd. Buenos Aires 828","postalCode":"B1842","addressLocality":"Monte Grande","addressRegion":"Buenos Aires","addressCountry":"AR"},"sameAs":["https://www.facebook.com/automotoressrl828/","https://www.instagram.com/automotores828/"],"email":"automotores828@live.com","hasMap":"https://www.google.com/maps/place/Automotores+828+SRL/@-34.8137588,-58.4555267,17z/data=!4m15!1m8!3m7!1s0x95bcd3dc6c2273fd:0xf9dc7d0717e644c1!2sBlvd.+Buenos+Aires+828,+B1842+Monte+Grande,+Provincia+de+Buenos+Aires!3b1!8m2!3d-34.8137588!4d-58.4555267!16s%2Fg%2F11s3ldxgn0!3m5!1s0x95bcd3dc6bd3f11f:0x23494f2381c7b3b5!8m2!3d-34.8137588!4d-58.4555267!16s%2Fg%2F1hc32h2qs?entry=ttu&g_ep=EgoyMDI2MTAyMC4wIKXMDSoASAFQAw%3D%3D","geo":{"@type":"GeoCoordinates","latitude":-34.8138439,"longitude":-58.455598},"openingHoursSpecification":[{"@type":"OpeningHoursSpecification","dayOfWeek":["Monday","Tuesday","Wednesday","Thursday","Friday"],"opens":"09:00","closes":"13:00"},{"@type":"OpeningHoursSpecification","dayOfWeek":["Monday","Tuesday","Wednesday","Thursday","Friday"],"opens":"15:00","closes":"19:00"},{"@type":"OpeningHoursSpecification","dayOfWeek":["Saturday"],"opens":"09:00","closes":"13:00"}]}</script>
 <script defer src="js/hero-carousel.js?v=20261024-1"></script>
 <script defer src="js/hero-motion.js?v=20261024-5"></script>
 <script defer src="js/fondos-secciones.js?v=20261024-1"></script>
-<script defer src="js/secciones.js?v=20261024-8"></script>
+<script defer src="js/secciones.js?v=20261026-1"></script>
 <script defer src="js/ficha-flip.js?v=20261025-2"></script>
+<script defer src="js/galeria-visor.js?v=20261026-1"></script>
 <script defer src="js/combobox.js?v=20261024-1"></script>
 <script defer src="js/anillo.js?v=20261024-2"></script>
 <script defer src="js/boton-flecha.js?v=20261024-1"></script>
