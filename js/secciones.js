@@ -684,11 +684,14 @@ ul.appendChild(frag);
       function nu(v) { return typeof v === 'number' && isFinite(v) ? v : null; }
       function pOk(a) { return !!(a.precio && nu(a.precio.monto) != null && tx(a.precio.moneda)); }
       function pTxt(a, m) { return a.precio.moneda + ' ' + fmt(m != null ? m : a.precio.monto); }
+      /* --tray-h = alto real de la bandeja: el padding del cuerpo y los botones flotantes (.dr-fab) se apoyan en él para no tapar «Comparar» ni «Vaciar» */
+      function trayAlto() { document.documentElement.style.setProperty('--tray-h', (tray && !tray.hidden ? tray.offsetHeight : 0) + 'px'); }
+      window.addEventListener('resize', function () { if (tray && !tray.hidden) trayAlto(); });
       function pintarBandeja() {
         podarSel();
         cbs.forEach(function (c) { var a = list[+c.value]; c.checked = !!a && cmp.indexOf(favKey(a)) > -1; });
         document.body.classList.toggle('has-tray', cmp.length > 0);
-        if (!cmp.length) { if (tray) tray.hidden = true; return; }
+        if (!cmp.length) { if (tray) tray.hidden = true; trayAlto(); return; }
         if (!tray) {
           tray = el('div', null, 'tray'); tray.setAttribute('role', 'region'); tray.setAttribute('aria-label', 'Unidades para comparar');
           document.body.appendChild(tray);
@@ -706,7 +709,7 @@ ul.appendChild(frag);
         var vac = el('button', 'Vaciar', 'btn sm'); vac.type = 'button';
         ver.addEventListener('click', function () { abrirComparacion(); });
         vac.addEventListener('click', function () { cmp = []; pintarBandeja(); if (dlg && dlg.open) dlg.close(); aviso('Selección vaciada'); });
-        w.appendChild(lst); w.appendChild(ver); w.appendChild(vac); tray.appendChild(w);
+        w.appendChild(lst); w.appendChild(ver); w.appendChild(vac); tray.appendChild(w); trayAlto();
       }
       function quitar(id) {
         var k = cmp.indexOf(id); if (k < 0) return;
@@ -924,10 +927,26 @@ ul.appendChild(frag);
       /* Enlaces internos (#tu-usado, #horarios) dentro de la ficha: si la entrada de historial la creó la ficha, primero se la deshace
          (history.back) y recién después se navega al ancla; así el ancla reemplaza a la ficha en vez de apilarse sobre ella y dejar
          una entrada #unidad=… huérfana. Si la entrada no es de la ficha (enlace directo, recarga) se deja la navegación nativa. */
+      /* El navegador móvil restaura el scroll del historial DESPUÉS de nuestro popstate y las secciones diferidas cambian de alto:
+         el salto nativo al ancla puede quedar lejos del destino. Se reafirma la posición unas veces, salvo que la persona toque o desplace. */
+      function asegurarAncla(h) {
+        var t = null; try { t = document.querySelector(h); } catch (e) {}
+        if (!t) return;
+        var paro = false, parar = function () { paro = true; };
+        ['touchstart', 'wheel', 'keydown', 'mousedown'].forEach(function (n) { window.addEventListener(n, parar, { once: true, passive: true }); });
+        [60, 250, 600, 1000, 1600].forEach(function (ms) {
+          setTimeout(function () {
+            if (paro || (fdlg && fdlg.open)) return;
+            var hh = document.querySelector('header'), cs = window.getComputedStyle(t);
+            var esperado = parseFloat(cs.scrollMarginTop) || (hh ? hh.offsetHeight : 0);
+            if (Math.abs(t.getBoundingClientRect().top - esperado) > 24) { try { t.scrollIntoView({ block: 'start', behavior: 'auto' }); } catch (e) { t.scrollIntoView(); } }
+          }, ms);
+        });
+      }
       function anclaYa() {
         if (!anclaPend || esperaBack) return;
         var h = anclaPend; anclaPend = null;
-        var ir = function () { location.hash = h; };
+        var ir = function () { location.hash = h; asegurarAncla(h); };
         if (window.drAnclaListo) window.drAnclaListo(ir); else ir();   /* js/site.js: espera a que las secciones omitidas estén preparadas para que el scroll caiga bien */
       }
       function irAnclaDesdeFicha(ev, hash) {

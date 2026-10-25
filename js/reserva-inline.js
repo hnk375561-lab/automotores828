@@ -118,7 +118,12 @@
     var dl = document.querySelector('dialog[open]'); if (dl && dl.close) dl.close();
     box.classList.add('is-open');
     var hh = document.querySelector('header'), off = (hh ? hh.offsetHeight : 68) + 16;
-    window.scrollTo({ top: Math.max(0, box.getBoundingClientRect().top + window.pageYOffset - off), behavior: reduce ? 'auto' : 'smooth' });
+    var destino = function () { return Math.max(0, box.getBoundingClientRect().top + window.pageYOffset - off); };
+    window.scrollTo({ top: destino(), behavior: reduce ? 'auto' : 'smooth' });
+    /* Al cerrar la ficha, el navegador (sobre todo el móvil) restaura el scroll del historial después de este salto y lo pisa: se reafirma la posición salvo que la persona toque o desplace. */
+    var paro = false, parar = function () { paro = true; };
+    ['touchstart', 'wheel', 'keydown', 'mousedown'].forEach(function (n) { window.addEventListener(n, parar, { once: true, passive: true }); });
+    [350, 700, 1100, 1700].forEach(function (ms) { setTimeout(function () { if (!paro && Math.abs(window.pageYOffset - destino()) > 24) window.scrollTo({ top: destino(), behavior: 'auto' }); }, ms); });
     setTimeout(function () { var f = q('.rz-d:not(:disabled)'); if (f) { try { f.focus({ preventScroll: true }); } catch (e) { f.focus(); } } }, reduce ? 0 : 450);
   }
   function cerrar() { box.classList.remove('is-open'); st.unitId = null; st.unit = null; st.unitEstado = 'ninguna'; st.espera = null; pintarUnidad(); reset(); var go = sec.querySelector('.vz-go'); if (go) { try { go.focus({ preventScroll: true }); } catch (e) {} } }

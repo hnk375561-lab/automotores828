@@ -540,9 +540,7 @@ dt{color:var(--gold);font:500 11px/1 var(--b)}dd{color:var(--ivory)}dd a{color:v
 footer{background:var(--ink);border-top:1px solid rgba(238,28,34,.25)}footer a{color:var(--gold-hi)}
 .reveal{opacity:0;transform:translateY(24px);transition:opacity .8s var(--ease),transform .8s var(--ease)}.reveal.in{opacity:1;transform:none}
 .filter-bar{position:sticky;top:calc(var(--hdr) + 12px);z-index:20;display:flex;gap:8px;align-items:center;width:fit-content;margin-inline:auto;padding:8px 10px;border-radius:999px}
-.cta-bar{position:fixed;inset:auto 0 0;z-index:50;display:none;grid-template-columns:1fr 1fr;gap:1px;background:var(--graphite);padding-bottom:env(safe-area-inset-bottom,0)}
-.cta-bar a{display:grid;place-items:center;min-height:52px;background:var(--carbon);color:var(--ivory);font:600 11px/1 var(--b);letter-spacing:.14em;text-transform:uppercase;text-decoration:none}.cta-bar a:first-child{background:var(--gold);color:var(--ink)}
-@media(max-width:700px){.cta-bar{display:grid}body{padding-bottom:52px}.fx{width:calc(100% - 32px);border-radius:18px}.fx-top{grid-template-columns:1fr auto}.fx-top .f:first-child{grid-column:1/-1}.hero{min-height:calc(100svh - var(--hdr));padding:54px 16px 240px}.hero .row .btn{width:100%}.car:hover .car-ph img{transform:none}footer{padding-bottom:calc(72px + env(safe-area-inset-bottom,0px))}}
+@media(max-width:700px){.fx{width:calc(100% - 32px);border-radius:18px}.fx-top{grid-template-columns:1fr auto}.fx-top .f:first-child{grid-column:1/-1}.hero{min-height:calc(100svh - var(--hdr));padding:54px 16px 240px}.hero .row .btn{width:100%}.car:hover .car-ph img{transform:none}footer{padding-bottom:calc(72px + env(safe-area-inset-bottom,0px))}}
 @media(max-width:980px){:root{--hdr:68px}.mark .lg-img{height:40px}.site-nav{background:rgba(6,6,7,.96);border-color:rgba(238,28,34,.25)}}
 @media(prefers-reduced-motion:reduce){.reveal{opacity:1;transform:none;transition:none}.hero{animation:none!important}.btn,.car{transition:none}.btn.p::after{display:none}}
 
@@ -816,7 +814,6 @@ section.conversion--search.lt .ey{border-left-color:#ee1c22;background:var(--ink
 .hero-carousel-controls{display:none}
 .hero.hero-carousel-ready .hero-carousel-controls{display:flex}
 
-@media(max-width:700px){.hero-in-view .cta-bar{display:none}}
 
 /* Hero/home de referencia: fotografía a sangre completa, navegación superpuesta y firma negro/amarillo. */
 :root{--hero-title:"Exo 2",system-ui,sans-serif;--hero-copy:"Inter",system-ui,sans-serif}
@@ -2551,6 +2548,22 @@ html body dialog.ficha .fi-i section.fi-extra{padding-bottom:8px}
 .mi-sel-a .btn{min-height:44px}
 .mi-sel-a .btn[disabled]{opacity:.5;cursor:not-allowed}
 .mi-sel-h{margin:10px 0 0;font-size:13px;color:var(--g4)}
+
+/* Favoritos: el botón ocupa su celda completa en la grilla de 12 columnas y no deja que el texto se salga */
+#unidades .fx .fx-top>.fx-fav{grid-column:span 3;width:100%;min-height:44px;justify-content:center;white-space:nowrap;padding-inline:14px}
+@media(max-width:700px){#unidades .fx .fx-top>.fx-fav{grid-column:1/-1}}
+/* Botones flotantes permanentes a la derecha: WhatsApp arriba, agendar visita abajo. Suben sobre la bandeja del comparador (--tray-h) para no tapar «Comparar» ni «Vaciar». */
+.dr-fab{position:fixed;right:max(12px,env(safe-area-inset-right,0px));bottom:calc(16px + env(safe-area-inset-bottom,0px) + var(--tray-h,0px));z-index:45;display:flex;flex-direction:column;gap:10px;margin:0;padding:0}
+.dr-fab a{display:grid;place-items:center;width:52px;height:52px;border-radius:50%;text-decoration:none;font:800 13px var(--b);box-shadow:0 6px 18px rgba(0,0,0,.45);transition:transform .15s ease}
+.dr-fab a:hover{transform:translateY(-2px)}
+.dr-fab a:focus-visible{outline:3px solid var(--fo);outline-offset:3px}
+.dr-fab svg{width:26px;height:26px;fill:none;stroke:currentColor;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round}
+.dr-fab-wa{background:var(--y);color:var(--ink,#060607);border:2px solid var(--y)}
+.dr-fab-ag{background:var(--k2,#131313);color:#fff;border:2px solid var(--y)}
+@media(prefers-reduced-motion:reduce){.dr-fab a{transition:none}.dr-fab a:hover{transform:none}}
+html.has-dlg .dr-fab{display:none}
+/* El aviso breve no tapa la bandeja del comparador ni los botones flotantes */
+.toast{left:calc(50% - 32px);bottom:calc(22px + var(--tray-h,0px) + env(safe-area-inset-bottom,0px));max-width:calc(100vw - 100px)}
 .msg-updated{animation:msg-updated .28s ease-out}@keyframes msg-updated{from{opacity:.68;transform:translateY(2px)}to{opacity:1;transform:translateY(0)}}
 .guia-progress{color:#d9dbdd;font-size:.9rem;margin:.25rem 0}
 .qa-search-label{display:block;margin:.6rem 0 .25rem;color:#d9dbdd}.qa-search{display:block;min-height:44px;width:min(100%,32rem);padding:.65rem .8rem;border:1px solid #6b6d70;border-radius:.4rem;background:#111214;color:#fff;font:inherit}.qa-search:focus-visible{outline:3px solid #ee1c22;outline-offset:2px}
@@ -2560,7 +2573,7 @@ html body dialog.ficha .fi-i section.fi-extra{padding-bottom:8px}
 @media(prefers-reduced-motion:reduce){.msg-updated{animation:none}}
 
 </style>
-<link rel="stylesheet" href="css/dr-identidad.css?v=1ba1e5e1">
+<link rel="stylesheet" href="css/dr-identidad.css?v=d87f1e5b">
 <link rel="stylesheet" href="css/hero-carousel.css?v=b665d82c">
 <link rel="stylesheet" href="css/fondos-secciones.css?v=a9d5c6c3">
 <link rel="stylesheet" href="css/damero-secciones.css?v=db29102c">
@@ -2571,7 +2584,7 @@ html body dialog.ficha .fi-i section.fi-extra{padding-bottom:8px}
 <script defer src="js/hero-motion.js?v=50ca0567"></script>
 <script defer src="js/fondos-secciones.js?v=7f9083a8"></script>
 <script defer src="js/wa-mensajes.js?v=e4255f8f"></script>
-<script defer src="js/secciones.js?v=5c231dee"></script>
+<script defer src="js/secciones.js?v=217b9c9d"></script>
 <script defer src="js/ficha-flip.js?v=e8df815f"></script>
 <script defer src="js/galeria-visor.js?v=fe7ca994"></script>
 <script defer src="js/combobox.js?v=ec7fd5f4"></script>
@@ -2582,7 +2595,7 @@ html body dialog.ficha .fi-i section.fi-extra{padding-bottom:8px}
 <script defer src="js/site.js?v=9fdc8df8"></script>
 <script defer src="js/foto-reactiva.js?v=47cfd4a7"></script>
 <script defer src="js/visita-horarios.js?v=76b1d216"></script>
-<script defer src="js/reserva-inline.js?v=24e4388f"></script>
+<script defer src="js/reserva-inline.js?v=7214f1d8"></script>
 </head>
 <body>
 <a class="skip" href="#unidades">Saltar al contenido</a>
@@ -3293,7 +3306,7 @@ html body dialog.ficha .fi-i section.fi-extra{padding-bottom:8px}
 </div>
 <div class="ft-bottom"><p class="ft-copy">© 2026 Automotores 828</p><p class="demo-note" data-demo-note>Demo ilustrativa. Consultá disponibilidad y precios con Automotores 828. No es el sitio oficial.</p><p class="ft-sources">Fuentes: <a href="https://www.facebook.com/automotoressrl828/" target="_blank" rel="noopener noreferrer">Facebook</a> · <a href="https://www.instagram.com/automotores828/" target="_blank" rel="noopener noreferrer">Instagram</a></p><a class="ft-privacy" href="privacidad.html">Privacidad y avisos</a><a class="ft-top" href="#top">Volver arriba ↑</a></div>
 </div></footer>
-<nav class="cta-bar" aria-label="Acciones rápidas"><a href="https://wa.me/5491160239259?text=Hola!%20Quiero%20consultar%20por%20las%20unidades%20disponibles." target="_blank" rel="noopener noreferrer">Consultar por WhatsApp</a><a href="reserva.html">Agendar visita</a></nav>
+<nav class="dr-fab" aria-label="Acciones rápidas"><a class="dr-fab-wa" href="https://wa.me/5491160239259?text=Hola!%20Quiero%20consultar%20por%20las%20unidades%20disponibles." target="_blank" rel="noopener noreferrer" aria-label="Consultar por WhatsApp" title="Consultar por WhatsApp"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20l1.3-4A8 8 0 1 1 8 18.7z"/><path d="M9 9c0 3 3 6 6 6l1-1.5-2-1-1 .8a4 4 0 0 1-2-2l.8-1-1-2z"/></svg><span class="sr">Consultar por WhatsApp</span></a><a class="dr-fab-ag" href="reserva.html" aria-label="Agendar visita" title="Agendar visita"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20l1-4L16.5 4.5a2 2 0 0 1 3 3L8 19z"/><path d="M14.5 6.5l3 3"/></svg><span class="sr">Agendar visita</span></a></nav>
 
 </body>
 </html>

@@ -603,7 +603,7 @@ ${secNosotros}
 </div></section>
 </main>
 ${footer(true)}
-${C.whatsApp && D.contact.whatsAppConfirmed === true ? `<nav class="cta-bar" aria-label="Acciones rápidas"><a href="${WA}" ${EXT}>Consultar por WhatsApp</a><a href="reserva.html">Agendar visita</a></nav>` : `<nav class="cta-bar" aria-label="Acciones rápidas"><a href="${ML_PROFILE}" ${EXT} aria-label="Ver publicaciones en Mercado Libre">Mercado Libre</a><a href="reserva.html">Agendar visita</a></nav>`}
+${C.whatsApp && D.contact.whatsAppConfirmed === true ? `<nav class="dr-fab" aria-label="Acciones rápidas"><a class="dr-fab-wa" href="${WA}" ${EXT} aria-label="Consultar por WhatsApp" title="Consultar por WhatsApp">${IC.wa}<span class="sr">Consultar por WhatsApp</span></a><a class="dr-fab-ag" href="reserva.html" aria-label="Agendar visita" title="Agendar visita"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20l1-4L16.5 4.5a2 2 0 0 1 3 3L8 19z"/><path d="M14.5 6.5l3 3"/></svg><span class="sr">Agendar visita</span></a></nav>` : `<nav class="dr-fab" aria-label="Acciones rápidas"><a class="dr-fab-wa" href="${ML_PROFILE}" ${EXT} aria-label="Ver publicaciones en Mercado Libre" title="Mercado Libre"><span aria-hidden="true">ML</span></a><a class="dr-fab-ag" href="reserva.html" aria-label="Agendar visita" title="Agendar visita"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20l1-4L16.5 4.5a2 2 0 0 1 3 3L8 19z"/><path d="M14.5 6.5l3 3"/></svg><span class="sr">Agendar visita</span></a></nav>`}
 `,
 });
 

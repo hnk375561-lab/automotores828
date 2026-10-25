@@ -25,7 +25,7 @@ Bloqueos de autorización/dato no resueltos
 
 - No se fija nueva dirección o fachada por la discrepancia 828/831.
 - No se incorpora segunda fotografía a tarjetas sin autorización verificable.
-- WhatsApp no se habilita como nuevo contacto comercial/mensaje contextual mientras el dato del generador y las pendientes del proyecto no tengan confirmación coherente.
+- WhatsApp: el dueño confirmó y autorizó el número (P1 resuelto el 2026-10-25), por lo que se habilitan los mensajes contextuales; sigue prohibido agregar otros números o canales sin confirmación.
 - No se agregan cifras de reseñas ni contadores comerciales no verificados.
 - Las diez fotos del hero abren su ficha correspondiente. La asociación se verificó con marca/modelo/año y la foto fuente del inventario; el generador falla si una asignación deja de ser única.
 
