@@ -193,7 +193,7 @@ main>section[id]>.section-damero{position:absolute;inset:0 0 auto;z-index:6;disp
 @media (hover:hover) and (pointer:fine){
   /* Orden fijo: js/site.js desfasa solo opacity y transform (primeros dos) durante la entrada por scroll. */
   #unidades .cars .car{transition:opacity .75s var(--mo-ease,cubic-bezier(.22,.8,.24,1)),transform .75s var(--mo-ease,cubic-bezier(.22,.8,.24,1)),border-color .35s ease,box-shadow .35s ease}
-  #unidades .cars .car .car-ph img{transition:opacity .2s ease,transform .9s cubic-bezier(.2,.7,.2,1)}
+  #unidades .cars .car .car-ph img{transition:opacity .2s ease,transform .9s cubic-bezier(.2,.7,.2,1),translate .38s cubic-bezier(.2,.7,.2,1)}
   #unidades .cars .car .car-ph::after{transition:opacity .35s ease .05s}
   #unidades .cars .car .pr{transition:box-shadow .35s ease}
   #unidades .cars .car .ficha-trigger{transition:border-color .3s ease,background-color .3s ease}
@@ -206,6 +206,8 @@ main>section[id]>.section-damero{position:absolute;inset:0 0 auto;z-index:6;disp
 }
 @media (hover:hover) and (pointer:fine) and (prefers-reduced-motion:no-preference){
   #unidades .cars .car:is(:hover,:has(:focus-visible)) .car-ph img{transform:scale(1.07) translate3d(0,-1.2%,0);transform-origin:50% 60%}
+  /* Foto reactiva al cursor (js/foto-reactiva.js): la propiedad individual «translate» se compone con el transform de arriba sin pisarlo; --ph-x/--ph-y los escribe el JS solo con mouse y valen 0 por defecto. */
+  #unidades .cars .car:hover .car-ph img{translate:var(--ph-x,0%) var(--ph-y,0%)}
 }
 @media (prefers-reduced-motion:reduce){
   #unidades .cars .car,#unidades .cars .car .car-ph::after,#unidades .cars .car .pr,#unidades .cars .car .ficha-trigger{transition:none!important}
