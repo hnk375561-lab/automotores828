@@ -118,6 +118,7 @@
         a.t = norm(a.t + ' ' + [a.tipoVehiculo, a.tipoMoto, a.modelo, a.version, a.carroceria, a.transmision, a.combustible, a.cilindrada].filter(Boolean).join(' '));
         a.ant = a.anio != null ? anioHoy - a.anio : null;
         a.monto = a.precio && a.precio.moneda === 'ARS' ? a.precio.monto : null;
+        a.montoUsd = a.precio && a.precio.moneda === 'USD' ? a.precio.monto : null;   /* T2: cada precio se queda en su moneda; nunca se convierte */
         a.pub = a.publicado ? Math.floor((Date.now() - new Date(a.publicado + 'T12:00:00').getTime()) / 864e5) : null;
         a.modeloTxt = a.titulo.indexOf(a.marca + ' ') === 0 ? a.titulo.slice(a.marca.length + 1) : a.titulo;
       });
@@ -190,8 +191,24 @@
       GR.push(porValor('version', 'select', 'Versión', 4, function (a) { return a.version; }, null, { todos: 'Todas las versiones' }));
       GR.push(rango('anio', 'Año', 3, function (a) { return a.anio; }, function (d) { return uniq(function (a) { return a.anio; }).sort(function (x, y) { return x - y; }); }, function (n) { return String(n); }));
       GR.push(rango('km', 'Kilómetros', 3, function (a) { return a.km; }, function (d) { return pasos(d, 10000); }, function (n) { return fmt(n) + ' km'; }, 'Las unidades sin kilometraje publicado no entran en este filtro.'));
-      GR.push(rango('precio', 'Precio en ARS', 3, function (a) { return a.monto; }, function (d) { return pasos(d, 2500000); }, function (n) { return '$ ' + fmt(n); }, 'Este rango solo incluye publicaciones en pesos; usá el filtro Moneda para ver las cotizadas en dólares.'));
-      GR.push(porValor('moneda', 'select', 'Moneda', 2, function (a) { return a.precio && a.precio.moneda; }, null, { todos: 'Todas las monedas' }));
+      /* T2 · presupuesto bimoneda sin conversión: «Ver precios en» (Todos · Pesos · Dólares) define en qué moneda se filtra y ordena.
+         El rango de precio se arma solo con las unidades de la moneda elegida; con «Todos» no se ofrece rango porque no se mezclan monedas. */
+      var MON = { ARS: 'Pesos', USD: 'Dólares' };
+      var PV = {
+        ARS: (function (d) { return d.length ? pasos(d, 2500000) : []; })(list.map(function (a) { return a.monto; }).filter(function (x) { return x != null; })),
+        USD: (function (d) { return d.length ? pasos(d, 1000) : []; })(list.map(function (a) { return a.montoUsd; }).filter(function (x) { return x != null; }))
+      };
+      var PF = { ARS: function (n) { return '$ ' + fmt(n); }, USD: function (n) { return 'US$ ' + fmt(n); } };
+      function tituloPrecio() { return st.moneda === 'ARS' ? 'Precio en pesos' : st.moneda === 'USD' ? 'Precio en dólares' : 'Precio'; }
+      GR.push(porValor('moneda', 'select', 'Ver precios en', 2, function (a) { return a.precio && a.precio.moneda; }, null, { todos: 'Todos' }));
+      GR[GR.length - 1].ops.forEach(function (o) { o.label = MON[o.id] || o.label; });
+      GR.push({
+        k: 'precio', tipo: 'rango', dyn: true, t: 'Precio', s: 3,
+        get: function (a) { return st.moneda === 'USD' ? a.montoUsd : st.moneda === 'ARS' ? a.monto : null; },
+        get vals() { return (typeof st !== 'undefined' && st && PV[st.moneda]) || []; },
+        f: function (n) { return (PF[st.moneda] || PF.ARS)(n); },
+        nota: 'Sin conversión.'
+      });
       GR.push({ k: 'pub', tipo: 'chips', uno: true, t: 'Publicación', s: 3, ops: [
         { id: '7', label: 'Últimos 7 días', test: function (a) { return a.pub != null && a.pub <= 7; } },
         { id: '15', label: 'Últimos 15 días', test: function (a) { return a.pub != null && a.pub <= 15; } },
@@ -217,7 +234,7 @@
       GR.push(porValor('color', 'chips', 'Color', 3, function (a) { return a.color; }, null, { sw: true }));
       GR.push({ k: 'ant', tipo: 'chips', t: 'Antigüedad del modelo', s: 3, ops: buckets });
       /* los filtros que no separan nada (un solo valor distinto en select o rango) no se muestran */
-      GR = GR.filter(function (g) { return g.tipo === 'chips' ? g.ops.length > 0 : g.tipo === 'select' ? g.ops.length > 1 : g.vals.length > 1; });
+      GR = GR.filter(function (g) { return g.tipo === 'chips' ? g.ops.length > 0 : g.tipo === 'select' ? g.ops.length > 1 : g.dyn ? (PV.ARS.length > 1 || PV.USD.length > 1) : g.vals.length > 1; });
 
       var ORDEN = [['', 'Orden de publicación'], ['p-asc', 'Precio: menor a mayor'], ['p-desc', 'Precio: mayor a menor'], ['a-desc', 'Año: más nuevo primero'], ['a-asc', 'Año: más antiguo primero'], ['k-asc', 'Kilometraje: menor primero'], ['k-desc', 'Kilometraje: mayor primero'], ['m-asc', 'Marca: de la A a la Z']];
       if (!list.some(function (a) { return a.monto != null; })) ORDEN = ORDEN.filter(function (o) { return o[0].charAt(0) !== 'p'; });
@@ -226,6 +243,7 @@
 
       /* ----- estado ----- */
       var st = { q: '', orden: '' };
+      var pendQuit = [];   /* T2: avisos de filtros que se quitaron al cambiar de moneda */
       var soloFav = false;
       GR.forEach(function (g) {
         if (g.tipo === 'chips') st[g.k] = [];
@@ -252,7 +270,7 @@
           var ws = norm(st.q).split(/\s+/).filter(Boolean);
           if (!ws.every(function (w) { return a.t.indexOf(w) > -1; })) return false;
         }
-        return GR.every(function (g) { return g.k === salto || pasa(a, g); });
+        return GR.every(function (g) { return g.k === salto || (salto === 'moneda' && g.dyn) || pasa(a, g); });   /* T2: al probar otra moneda no pesa el rango de la actual */
       }
       /* cantidad de unidades que quedarían si se eligiera esa opción, dado todo lo demás que ya está elegido */
       function contar(g, o, sinQ) { return list.filter(function (a) { return coincide(a, g.k, sinQ) && o.test(a); }).length; }
@@ -314,7 +332,7 @@
 
       var refs = {};   /* k -> { g, inputs:[{o,input,n}], select, note, d, h } */
       GR.forEach(function (g) {
-        var fs = el('fieldset', null, 'fg s' + g.s), lg = el('legend', g.t), r = refs[g.k] = { g: g };
+        var fs = el('fieldset', null, 'fg s' + g.s), lg = el('legend', g.t), r = refs[g.k] = { g: g, leg: lg };
         fs.appendChild(lg);
         if (g.tipo === 'chips') {
           var cw = el('div', null, 'chips'); r.inputs = [];
@@ -340,7 +358,13 @@
           var sl = el('select'); sl.id = 'f-' + g.k; sl.setAttribute('aria-label', g.t); r.select = sl;
           var o0 = el('option', g.todos); o0.value = ''; sl.appendChild(o0);
           g.ops.forEach(function (o) { var op = el('option', o.label); op.value = o.id; sl.appendChild(op); });
-          sl.addEventListener('change', function () { st[g.k] = sl.value; aplicar(true); });
+          sl.addEventListener('change', function () {
+            if (g.k === 'moneda' && sl.value !== st.moneda) {   /* T2: el rango de una moneda no vale para la otra: se quita y se avisa */
+              var gp = GR.filter(function (x) { return x.dyn; })[0];
+              if (gp && (st.precioD !== '' || st.precioH !== '')) { pendQuit.push(tituloPrecio() + ': ' + textoRango(gp, st.precioD, st.precioH)); st.precioD = ''; st.precioH = ''; }
+            }
+            st[g.k] = sl.value; aplicar(true);
+          });
           fs.appendChild(sl);
         } else {
           var rw = el('div', null, 'rng');
@@ -382,12 +406,12 @@
               if (o) out.push({ t: g.t + ': ' + o.label, quitar: function () { st[g.k].splice(st[g.k].indexOf(id), 1); } });
             });
           } else if (g.tipo === 'select') {
-            if (st[g.k]) out.push({ t: g.t + ': ' + st[g.k], quitar: function () { st[g.k] = ''; } });
+            if (st[g.k]) out.push({ t: g.t + ': ' + (g.k === 'moneda' ? (MON[st[g.k]] || st[g.k]) : st[g.k]), quitar: function () { if (g.k === 'moneda') { if (st.precioD !== '' || st.precioH !== '') { var gp = GR.filter(function (x) { return x.dyn; })[0]; pendQuit.push(tituloPrecio() + ': ' + textoRango(gp, st.precioD, st.precioH)); } st.precioD = ''; st.precioH = ''; } st[g.k] = ''; } });
           } else {
             var d = st[g.k + 'D'], h = st[g.k + 'H'];
             if (d === '' && h === '') return;
             var txt = textoRango(g, d, h);
-            out.push({ t: g.t + ': ' + txt, quitar: function () { st[g.k + 'D'] = ''; st[g.k + 'H'] = ''; } });
+            out.push({ t: (g.dyn ? tituloPrecio() : g.t) + ': ' + txt, quitar: function () { st[g.k + 'D'] = ''; st[g.k + 'H'] = ''; } });
           }
         });
         return out;
@@ -409,7 +433,7 @@
           flip = new Map();
           list.forEach(function (a) { var node = items[a.i]; if (!node.hidden) flip.set(node, node.getBoundingClientRect()); });
         }
-        var n = 0, visibles = 0, quitados = podar();
+        var n = 0, visibles = 0, quitados = podar().concat(pendQuit.splice(0));
         var paso = window.innerWidth <= 700 ? 5 : 20;
         if (window._drCatalogoPaso !== paso) { window._drCatalogoPaso = paso; window._drCatalogoMostradas = paso; }
         else if (escribirUrl) { window._drCatalogoMostradas = paso; }
@@ -468,6 +492,21 @@ ul.appendChild(frag);
             });
             r.select.value = st[g.k];
           } else {
+            if (g.dyn) {   /* T2: las opciones del rango siguen a la moneda elegida */
+              if (r.mon !== st.moneda) {
+                [r.d, r.h].forEach(function (sl, z) {
+                  while (sl.options.length > 1) sl.remove(1);
+                  g.vals.forEach(function (v) { var op = el('option', g.f(v)); op.value = String(v); sl.appendChild(op); });
+                  sl.setAttribute('aria-label', tituloPrecio() + ': ' + (z === 0 ? 'desde' : 'hasta'));
+                });
+                r.mon = st.moneda;
+              }
+              r.d.disabled = r.h.disabled = !st.moneda;
+              r.leg.textContent = tituloPrecio();
+              r.note.textContent = st.moneda ? 'Cada unidad se muestra en la moneda en que fue publicada; no se convierte entre monedas.' : 'Elegí «Pesos» o «Dólares» en «Ver precios en» para acotar por precio. Los precios no se convierten entre monedas.';
+              r.note.hidden = false; r.note.id = 'fg-precio-n';
+              r.d.setAttribute('aria-describedby', 'fg-precio-n'); r.h.setAttribute('aria-describedby', 'fg-precio-n');
+            }
             var D = st[g.k + 'D'], Hh = st[g.k + 'H'];
             [].slice.call(r.d.options).forEach(function (op, k) {
               if (k === 0) return;
@@ -480,7 +519,7 @@ ul.appendChild(frag);
               op.disabled = !ok && String(v) !== Hh;
             });
             r.d.value = D; r.h.value = Hh;
-            if (r.note) r.note.hidden = st[g.k + 'D'] === '' && st[g.k + 'H'] === '';
+            if (r.note && !g.dyn) r.note.hidden = st[g.k + 'D'] === '' && st[g.k + 'H'] === '';
           }
         });
         ord.value = st.orden;
