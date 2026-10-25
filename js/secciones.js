@@ -572,13 +572,24 @@ ul.appendChild(frag);
       function abrirPanel(si) { body.hidden = !si; tools.classList.toggle('is-open', !!si); tg.setAttribute('aria-expanded', si ? 'true' : 'false'); etiquetaTg(); }
       tg.addEventListener('click', function () { abrirPanel(body.hidden); if (!body.hidden) { try { body.scrollIntoView({ block: 'nearest', behavior: (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth') }); } catch (e) {} } });
 
-      /* ----- comparador: hasta 4 unidades, desde un botón en cada ficha ----- */
-      var MAX = 4, cmp = [], tray = null, dlg = null;
+      /* ----- comparador: exactamente 2 unidades · selección por id real (nunca por posición) ----- */
+      var MAX = 2, cmp = [], tray = null, dlg = null;
       var cbs = $$('.car-c input', ul);
       $$('.car-c', ul).forEach(function (l) { l.hidden = false; });
       function sinMarca(a) { return a.modeloTxt; }
+      function porId(id) { for (var k = 0; k < list.length; k++) { if (favKey(list[k]) === id) return list[k]; } return null; }
+      function podarSel() {
+        var antes = cmp.length;
+        cmp = cmp.filter(function (id, k) { return cmp.indexOf(id) === k && !!porId(id); });
+        if (cmp.length < antes) aviso('Se descartó una unidad que ya no está en el catálogo.');
+      }
+      function tx(v) { if (v == null) return null; var s = String(v).trim(); return s === '' ? null : s; }
+      function nu(v) { return typeof v === 'number' && isFinite(v) ? v : null; }
+      function pOk(a) { return !!(a.precio && nu(a.precio.monto) != null && tx(a.precio.moneda)); }
+      function pTxt(a, m) { return a.precio.moneda + ' ' + fmt(m != null ? m : a.precio.monto); }
       function pintarBandeja() {
-        cbs.forEach(function (c) { var on = cmp.indexOf(+c.value) > -1; c.checked = on; c.disabled = !on && cmp.length >= MAX; });
+        podarSel();
+        cbs.forEach(function (c) { var a = list[+c.value]; c.checked = !!a && cmp.indexOf(favKey(a)) > -1; });
         document.body.classList.toggle('has-tray', cmp.length > 0);
         if (!cmp.length) { if (tray) tray.hidden = true; return; }
         if (!tray) {
@@ -588,56 +599,62 @@ ul.appendChild(frag);
         tray.hidden = false; tray.textContent = '';
         var w = el('div', null, 'w'), lst = el('ul', null, 'tray-l');
         var count = el('p', 'Unidades seleccionadas: ' + cmp.length + ' de ' + MAX, 'tray-count'); count.setAttribute('role', 'status'); count.setAttribute('aria-live', 'polite'); w.appendChild(count);
-        cmp.forEach(function (i) {
-          var a = list[i], li = el('li', null, 'tray-i'), b = el('button', '×'); b.type = 'button'; b.setAttribute('aria-label', 'Quitar de la comparación: ' + a.titulo);
+        cmp.forEach(function (id) {
+          var a = porId(id), li = el('li', null, 'tray-i'), b = el('button', '×'); b.type = 'button'; b.setAttribute('aria-label', 'Quitar de la comparación: ' + a.titulo);
           if (a.media && a.media[0]) { var th = el('img', null, 'tray-th'); th.src = a.media[0].thumb || a.media[0].card || a.media[0].src; th.alt = ''; th.decoding = 'async'; li.appendChild(th); }
           li.appendChild(el('span', a.marca + ' ' + a.modeloTxt)); li.appendChild(b); lst.appendChild(li);
-          b.addEventListener('click', function () { cmp.splice(cmp.indexOf(i), 1); pintarBandeja(); aviso('Unidad quitada del comparador'); });
+          b.addEventListener('click', function () { quitar(id); });
         });
-        var ver = el('button', cmp.length < 2 ? 'Elegí una más para comparar' : 'Comparar ' + cmp.length + ' unidades', 'btn p sm'); ver.type = 'button'; ver.disabled = cmp.length < 2;
+        var ver = el('button', cmp.length < 2 ? 'Elegí una segunda unidad para comparar' : 'Comparar las 2 unidades', 'btn p sm'); ver.type = 'button'; ver.disabled = cmp.length < 2; ver.className += ' cmp-open';
         var vac = el('button', 'Vaciar', 'btn sm'); vac.type = 'button';
-        ver.addEventListener('click', abrirComparacion);
-        vac.addEventListener('click', function () { cmp = []; pintarBandeja(); });
+        ver.addEventListener('click', function () { abrirComparacion(); });
+        vac.addEventListener('click', function () { cmp = []; pintarBandeja(); if (dlg && dlg.open) dlg.close(); aviso('Selección vaciada'); });
         w.appendChild(lst); w.appendChild(ver); w.appendChild(vac); tray.appendChild(w);
+      }
+      function quitar(id) {
+        var k = cmp.indexOf(id); if (k < 0) return;
+        cmp.splice(k, 1); pintarBandeja(); aviso('Unidad quitada del comparador');
+        if (dlg && dlg.open) { if (cmp.length < 2) dlg.close(); else abrirComparacion(); }
       }
       cbs.forEach(function (c) {
         c.addEventListener('change', function () {
-          var i = +c.value, k = cmp.indexOf(i);
-          if (c.checked && k < 0 && cmp.length < MAX) cmp.push(i);
-          if (!c.checked && k > -1) cmp.splice(k, 1);
+          var a = list[+c.value]; if (!a) { c.checked = false; return; }
+          var id = favKey(a), k = cmp.indexOf(id);
+          if (c.checked && k < 0) {
+            if (cmp.length >= MAX) { c.checked = false; aviso('Ya elegiste 2 unidades. Quitá una en la bandeja o cambiala desde el comparador.'); return; }
+            cmp.push(id);
+            aviso(cmp.length < 2 ? 'Primera unidad elegida. Elegí una segunda para comparar.' : 'Segunda unidad elegida. Ya podés comparar.');
+          } else if (!c.checked && k > -1) { cmp.splice(k, 1); aviso('Unidad quitada del comparador'); }
           pintarBandeja();
-          aviso(c.checked ? 'Unidad agregada al comparador' : 'Unidad quitada del comparador');
         });
       });
 
-      function mejor(sel, f, dir) {
-        var v = sel.map(f).filter(function (x) { return x != null; });
-        if (v.length < 2) return null;
-        var mn = Math.min.apply(null, v), mx = Math.max.apply(null, v);
-        return mn === mx ? null : (dir < 0 ? mn : mx);
-      }
-      function abrirComparacion() {
-        var sel = cmp.map(function (i) { return list[i]; });
-        if (sel.length < 2) return;
+      function abrirComparacion(enfocar) {
+        podarSel();
+        var sel = cmp.map(porId);
+        if (sel.length !== 2) return;
         if (!dlg) {
           dlg = el('dialog', null, 'cmp cmp-lux'); dlg.setAttribute('aria-labelledby', 'cmp-ttl');
           dlg.addEventListener('click', function (e) { if (e.target === dlg) dlg.close(); });
-          dlg.addEventListener('close', function () { document.documentElement.classList.remove('has-dlg'); });
+          dlg.addEventListener('close', function () {
+            document.documentElement.classList.remove('has-dlg');
+            var b = tray && tray.querySelector('.cmp-open'); if (b && !b.disabled) { try { b.focus({ preventScroll: true }); } catch (e) {} }
+          });
           document.body.appendChild(dlg);
         }
         var soloDif = dlg.classList.contains('solo-dif');
         dlg.textContent = '';
-        dlg.style.setProperty('--n', sel.length);
+        dlg.style.setProperty('--n', 2);
 
-        /* ----- encabezado: bandera, título y controles ----- */
+        /* ----- encabezado ----- */
         var hd = el('div', null, 'cmp-hd'), tt = el('div', null, 'cmp-tt');
         var sun = el('span', null, 'cmp-flag'); sun.setAttribute('aria-hidden', 'true'); sun.innerHTML = '<svg viewBox="0 0 64 36" focusable="false"><path d="M8 3v32"/><path d="M8 6h46v20H8z"/><path d="M8 16h46M19.5 6v20M31 6v20M42.5 6v20"/></svg>';
         tt.appendChild(sun);
-        var tx = el('div', null, 'cmp-tx');
-        tx.appendChild(el('p', 'Automotores 828', 'cmp-ey'));
-        var h = el('h2', 'Comparador'); h.id = 'cmp-ttl'; tx.appendChild(h);
-        tx.appendChild(el('p', sel.length + ' unidades, lado a lado', 'cmp-sub'));
-        tt.appendChild(tx); hd.appendChild(tt);
+        var tcx = el('div', null, 'cmp-tx');
+        tcx.appendChild(el('p', 'Automotores 828', 'cmp-ey'));
+        var h = el('h2', 'Comparador'); h.id = 'cmp-ttl'; tcx.appendChild(h);
+        tcx.appendChild(el('p', 'Comparás dos unidades, lado a lado', 'cmp-sub'));
+        tt.appendChild(tcx); hd.appendChild(tt);
         var ct = el('div', null, 'cmp-ct');
         var sw = el('label', null, 'cmp-sw'), ck = el('input'); ck.type = 'checkbox'; ck.checked = soloDif;
         sw.appendChild(ck); sw.appendChild(el('span', null, 'cmp-sw-k')); sw.appendChild(el('span', 'Solo diferencias'));
@@ -646,135 +663,123 @@ ul.appendChild(frag);
         ct.appendChild(sw); ct.appendChild(x); hd.appendChild(ct); dlg.appendChild(hd);
         dlg.appendChild(el('div', null, 'cmp-hz'));
 
-        var minP = mejor(sel, function (a) { return a.monto; }, -1), maxP = Math.max.apply(null, sel.map(function (a) { return a.monto || 0; }));
-        var maxA = mejor(sel, function (a) { return a.anio; }, 1);
-        var minK = mejor(sel, function (a) { return a.km; }, -1), maxK = Math.max.apply(null, sel.map(function (a) { return a.km || 0; }));
-        var base = Math.min.apply(null, sel.map(function (a) { return a.monto; }).filter(function (v) { return v != null; }));
-        var esP = function (a) { return a.monto != null && minP != null && a.monto === minP; };
-        var esA = function (a) { return a.anio != null && maxA != null && a.anio === maxA; };
-        var esK = function (a) { return a.km != null && minK != null && a.km === minK; };
+        /* ----- cálculos: solo con datos válidos y de la misma moneda ----- */
+        var A = sel[0], B = sel[1];
+        var mismaMon = pOk(A) && pOk(B) && A.precio.moneda === B.precio.moneda;
+        var menorP = mismaMon && A.precio.monto !== B.precio.monto ? (A.precio.monto < B.precio.monto ? A : B) : null;
+        var anioOk = nu(A.anio) != null && nu(B.anio) != null && A.anio !== B.anio;
+        var nuevo = anioOk ? (A.anio > B.anio ? A : B) : null;
+        var kmOk = nu(A.km) != null && nu(B.km) != null && A.km !== B.km;
+        var menosKm = kmOk ? (A.km < B.km ? A : B) : null;
 
-        /* ----- resumen: quién gana en cada cosa ----- */
-        var ganan = [];
-        [['Menor precio', esP], ['Más nuevo', esA], ['Menos kilómetros', esK]].forEach(function (g) {
-          var a = sel.filter(g[1])[0]; if (a) ganan.push([g[0], a]);
-        });
-        if (ganan.length) {
-          var rs = el('ul', null, 'cmp-win');
-          ganan.forEach(function (g) {
-            var li = el('li'), im = el('span', null, 'cmp-win-p');
-            if (g[1].media && g[1].media[0]) { var i = el('img'); i.src = g[1].media[0].src; i.alt = ''; i.decoding = 'async'; im.appendChild(i); }
-            li.appendChild(im);
-            var t = el('span', null, 'cmp-win-t'); t.appendChild(el('small', g[0])); t.appendChild(el('b', g[1].marca + ' ' + g[1].modeloTxt)); li.appendChild(t);
-            rs.appendChild(li);
-          });
-          dlg.appendChild(rs);
-        }
-
-        var t = el('table', null, 'cmpt cmpx'), cap = el('caption', 'Comparación de unidades'); cap.className = 'sr'; t.appendChild(cap);
+        var t = el('table', null, 'cmpt cmpx'), cap = el('caption', 'Comparación de dos unidades'); cap.className = 'sr'; t.appendChild(cap);
         var hr = el('tr'), c0 = el('th'); c0.scope = 'col'; c0.appendChild(el('span', 'Dato', 'sr')); hr.appendChild(c0);
         sel.forEach(function (a, k) {
           var th = el('th', null, 'cmp-u'); th.scope = 'col';
+          th.appendChild(el('span', 'Unidad ' + (k + 1), 'cmp-slot'));
           var ph = el('div', null, 'cmp-ph');
           if (a.media && a.media[0]) {
             var im = el('img'); im.src = a.media[0].src; if (a.media[0].srcset) im.srcset = a.media[0].srcset;
-            im.sizes = '(max-width: 700px) 150px, 300px'; im.alt = a.media[0].alt || a.titulo; im.decoding = 'async'; if (k > 1) im.loading = 'lazy';
+            im.sizes = '(max-width: 700px) 150px, 300px'; im.alt = a.media[0].alt || a.titulo; im.decoding = 'async';
+            if (a.media[0].width && a.media[0].height) { im.width = a.media[0].width; im.height = a.media[0].height; }
             ph.appendChild(im);
-          }
-          var md = el('span', null, 'cmp-md');
-          [['Menor precio', esP(a)], ['Más nuevo', esA(a)], ['Menos km', esK(a)]].forEach(function (m) { if (m[1]) md.appendChild(el('span', m[0], 'cmp-medal')); });
-          ph.appendChild(md);
+          } else { ph.className += ' sin-foto'; ph.setAttribute('role', 'img'); ph.setAttribute('aria-label', 'Sin fotografía publicada de ' + a.titulo); ph.appendChild(el('span', 'Sin foto', 'cmp-nf')); }
           var rm = el('button', '×', 'cmp-rm'); rm.type = 'button'; rm.setAttribute('aria-label', 'Quitar de la comparación: ' + a.titulo);
-          rm.addEventListener('click', function () {
-            var j = cmp.indexOf(a.i); if (j > -1) cmp.splice(j, 1); pintarBandeja();
-            if (cmp.length < 2) dlg.close(); else abrirComparacion();
-          });
+          rm.addEventListener('click', function () { quitar(favKey(a)); });
           ph.appendChild(rm);
           th.appendChild(ph);
           th.appendChild(el('span', a.marca, 'cb')); th.appendChild(el('span', sinMarca(a), 'cn'));
-          th.appendChild(el('span', [a.anio, a.version].filter(Boolean).join(' · '), 'cv'));
+          th.appendChild(el('span', [a.anio != null ? a.anio : null, a.version].filter(Boolean).join(' · '), 'cv'));
+          th.appendChild(el('span', pOk(a) ? pTxt(a) : 'Consultar precio', 'cmp-pr'));
+          var ac = el('div', null, 'cmp-ac');
+          var vf = el('button', 'Ver ficha', 'btn p sm'); vf.type = 'button'; vf.setAttribute('aria-label', 'Ver la ficha de ' + a.titulo);
+          vf.addEventListener('click', function () { abrirFicha(a.i, vf); });
+          var otro = sel[1 - k], sl = el('select', null, 'cmp-sel'); sl.setAttribute('aria-label', 'Cambiar la unidad ' + (k + 1) + ' (' + a.titulo + ')');
+          var o0 = el('option', 'Cambiar unidad…'); o0.value = ''; sl.appendChild(o0);
+          list.forEach(function (b) { if (favKey(b) === favKey(a) || favKey(b) === favKey(otro)) return; var o = el('option', b.titulo); o.value = favKey(b); sl.appendChild(o); });
+          sl.addEventListener('change', function () {
+            var id = sl.value; if (!id || !porId(id) || id === favKey(otro)) return;
+            cmp[k] = id; pintarBandeja(); aviso('Unidad ' + (k + 1) + ' cambiada'); abrirComparacion(k);
+          });
+          ac.appendChild(vf); ac.appendChild(sl); th.appendChild(ac);
           hr.appendChild(th);
         });
         var thead = el('thead'); thead.appendChild(hr); t.appendChild(thead);
-        var tb = el('tbody');
-        function grupo(txt) {
-          var r = el('tr', null, 'cmp-g'), th = el('th', txt); th.scope = 'rowgroup'; th.colSpan = sel.length + 1; r.appendChild(th); tb.appendChild(r);
-        }
-        function fila(rotulo, celda, clave) {
+        var tb = el('tbody'), pend = null;
+        function grupo(txt) { pend = txt; }
+        function fila(rotulo, celda, clave, nc) {
+          if (pend) { var g = el('tr', null, 'cmp-g'), gh = el('th', pend); gh.scope = 'rowgroup'; gh.colSpan = 3; g.appendChild(gh); tb.appendChild(g); pend = null; }
           var r = el('tr'), th = el('th', rotulo); th.scope = 'row'; r.appendChild(th);
           sel.forEach(function (a) { var td = el('td'); celda(td, a); r.appendChild(td); });
-          if (clave) { var ks = sel.map(function (a) { return String(clave(a)); }); if (ks.every(function (v) { return v === ks[0]; })) r.className = 'same'; }
+          var ks = sel.map(clave);
+          if (nc && sel.some(nc)) r.className = 'nc';
+          else if (ks[0] == null || ks[1] == null) r.className = 'nd';
+          else r.className = ks[0] === ks[1] ? 'same' : 'diff';
           tb.appendChild(r);
         }
-        function badge(td, txt) { td.appendChild(el('span', txt, 'bd')); }
-        function barra(td, v, max, es) { if (v == null || !max) return; var b = el('span', null, 'mb' + (es ? ' best' : '')), i = el('i'); i.style.width = Math.max(4, Math.round(v / max * 100)) + '%'; b.appendChild(i); td.appendChild(b); }
-        function gana(td, si) { if (si) td.className = 'win'; }
+        function nota(td, txt) { if (txt) td.appendChild(el('small', txt, 'cmp-note')); }
+        function campo(rot, k, moto, opc) {
+          var v0 = tx(A[k]), v1 = tx(B[k]);
+          var ncf = moto ? function (a) { return a.tipoVehiculo === 'Moto' && tx(a[k]) == null; } : null;
+          if (opc && v0 == null && v1 == null && !(ncf && (ncf(A) || ncf(B)))) return;
+          fila(rot, function (td, a) {
+            var v = tx(a[k]);
+            if (v == null && ncf && ncf(a)) { td.appendChild(el('span', 'No comparable', 'val nc')); return; }
+            td.appendChild(el('span', v != null ? v : 'No informado', v != null ? 'val' : 'val nd'));
+          }, function (a) { var v = tx(a[k]); return v == null ? null : v.toLowerCase(); }, ncf);
+        }
 
         grupo('Lo esencial');
         fila('Precio publicado', function (td, a) {
-          td.appendChild(el('strong', a.precio ? peso(a) : 'Consultar', 'big' + (a.precio ? '' : ' nd')));
-          if (esP(a)) badge(td, 'Menor precio');
-          barra(td, a.monto, maxP, esP(a)); gana(td, esP(a));
-        }, function (a) { return a.monto; });
-        fila('Diferencia de precio', function (td, a) {
-          if (a.monto == null) { td.textContent = 'Sin dato'; return; }
-          td.textContent = a.monto === base ? (sel.length > 1 && minP != null ? 'La más económica' : '—') : '+ $ ' + fmt(a.monto - base);
-        }, function (a) { return a.monto; });
+          td.appendChild(el('strong', pOk(a) ? pTxt(a) : 'Consultar precio', 'big' + (pOk(a) ? '' : ' nd')));
+          if (pOk(a) && tx(a.precio.fecha)) nota(td, 'Relevado el ' + fecha(a.precio.fecha));
+          if (menorP === a) td.appendChild(el('span', 'Importe menor', 'bd'));
+        }, function (a) { return pOk(a) ? a.precio.moneda + ' ' + a.precio.monto : null; });
+        if (pOk(A) && pOk(B)) {
+          fila('Diferencia de precio', function (td, a) {
+            if (!mismaMon) { td.textContent = 'Monedas distintas: no se calcula una diferencia.'; td.className = 'nd'; return; }
+            var d = Math.abs(A.precio.monto - B.precio.monto);
+            td.textContent = d === 0 ? 'Mismo importe' : (menorP === a ? 'Importe menor' : '+ ' + pTxt(a, d) + ' respecto de la otra');
+          }, function () { return null; });
+        }
         fila('Año', function (td, a) {
-          td.appendChild(el('strong', a.anio != null ? String(a.anio) : 'Sin dato', 'big' + (a.anio != null ? '' : ' nd')));
-          if (esA(a)) badge(td, 'Más nuevo'); gana(td, esA(a));
-        }, function (a) { return a.anio; });
+          td.appendChild(el('strong', nu(a.anio) != null ? String(a.anio) : 'No informado', 'big' + (nu(a.anio) != null ? '' : ' nd')));
+          if (nuevo === a) nota(td, Math.abs(A.anio - B.anio) + (Math.abs(A.anio - B.anio) === 1 ? ' año' : ' años') + ' más reciente');
+        }, function (a) { return nu(a.anio); });
         fila('Kilómetros', function (td, a) {
-          td.appendChild(el('strong', a.km != null ? fmt(a.km) + ' km' : 'Consultar', 'big' + (a.km != null ? '' : ' nd')));
-          if (esK(a)) badge(td, 'Menos km');
-          barra(td, a.km, maxK, esK(a)); gana(td, esK(a));
-        }, function (a) { return a.km; });
+          td.appendChild(el('strong', nu(a.km) != null ? fmt(a.km) + ' km' : 'No informado', 'big' + (nu(a.km) != null ? '' : ' nd')));
+          if (menosKm === a) nota(td, fmt(Math.abs(A.km - B.km)) + ' km menos registrados');
+        }, function (a) { return nu(a.km); });
         grupo('Mecánica');
-        [['Caja', 'transmision'], ['Combustible', 'combustible'], ['Cilindrada', 'cilindrada']].forEach(function (p) {
-          fila(p[0], function (td, a) { td.appendChild(el('span', a[p[1]] || 'Sin dato', a[p[1]] ? 'val' : 'val nd')); }, function (a) { return a[p[1]]; });
-        });
-        grupo('Detalle');
-        fila('Color', function (td, a) {
-          if (a.color && a.sw) { var d = el('i', null, 'sw'); d.style.setProperty('--sw', a.sw); td.appendChild(d); }
-          td.appendChild(el('span', a.color || 'Sin dato', a.color ? 'val' : 'val nd'));
-        }, function (a) { return a.color; });
-        fila('Versión', function (td, a) { td.appendChild(el('span', a.version || 'Sin dato', a.version ? 'val' : 'val nd')); }, function (a) { return a.version; });
-        fila('Carrocería', function (td, a) { td.appendChild(el('span', a.carroceria || 'Sin dato', a.carroceria ? 'val' : 'val nd')); }, function (a) { return a.carroceria; });
-        var fr = el('tr', null, 'cmp-fr'), fth = el('th', 'Ficha'); fth.scope = 'row'; fr.appendChild(fth);
+        campo('Caja', 'transmision', false, false);
+        campo('Combustible', 'combustible', false, false);
+        campo('Cilindrada', 'cilindrada', false, true);
+        campo('Motor', 'motor', false, true);
+        campo('Potencia', 'potencia', false, true);
+        campo('Tracción', 'traccion', false, true);
+        grupo('Carrocería y detalle');
+        campo('Carrocería', 'carroceria', true, true);
+        campo('Puertas', 'puertas', true, true);
+        campo('Color', 'color', false, true);
+        campo('Versión', 'version', false, true);
+        var fr = el('tr', null, 'cmp-fr'), fth = el('th', 'Publicación'); fth.scope = 'row'; fr.appendChild(fth);
         sel.forEach(function (a) {
           var td = el('td');
           var c = el('a', 'Consultar esta unidad', 'btn p sm'); c.href = a.href; c.target = '_blank'; c.rel = 'noopener noreferrer';
-          var v = el('a', 'Ver publicación', 'vp'); v.href = a.url; v.target = '_blank'; v.rel = 'noopener noreferrer';
-          td.appendChild(c); td.appendChild(v); fr.appendChild(td);
+          td.appendChild(c);
+          if (a.url) { var v = el('a', 'Ver publicación', 'vp'); v.href = a.url; v.target = '_blank'; v.rel = 'noopener noreferrer'; td.appendChild(v); }
+          fr.appendChild(td);
         });
         tb.appendChild(fr);
         t.appendChild(tb);
         var sc = el('div', null, 'cmp-sc'); sc.appendChild(t); dlg.appendChild(sc);
-        /* navegación horizontal siempre visible: flechas fijas abajo + arrastre con el mouse */
-        var nav = el('div', null, 'cmp-nav'); nav.setAttribute('role', 'group'); nav.setAttribute('aria-label', 'Desplazar la comparación');
-        var bp = el('button', '‹', 'cmp-nav-b'), bn = el('button', '›', 'cmp-nav-b'), nt = el('span', 'Deslizá o usá las flechas para ver las otras unidades', 'cmp-nav-t');
-        bp.type = 'button'; bn.type = 'button'; bp.setAttribute('aria-label', 'Ver unidades anteriores'); bn.setAttribute('aria-label', 'Ver más unidades');
-        nav.appendChild(bp); nav.appendChild(nt); nav.appendChild(bn); dlg.appendChild(nav);
-        var paso = function () { var u = t.querySelector('thead th:nth-child(2)'); return (u && u.offsetWidth) || 280; };
-        var estado = function () { var max = sc.scrollWidth - sc.clientWidth; nav.hidden = max < 4; bp.disabled = sc.scrollLeft < 4; bn.disabled = sc.scrollLeft > max - 4; };
-        bp.addEventListener('click', function () { sc.scrollBy({ left: -paso(), behavior: (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth') }); });
-        bn.addEventListener('click', function () { sc.scrollBy({ left: paso(), behavior: (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth') }); });
-        sc.addEventListener('scroll', estado, { passive: true });
-        if (window.ResizeObserver) new ResizeObserver(estado).observe(sc);
-        var arr = null;
-        sc.addEventListener('pointerdown', function (e) {
-          if (e.pointerType !== 'mouse' || e.button !== 0 || e.target.closest('a,button,input,label')) return;
-          arr = { x: e.clientX, l: sc.scrollLeft }; sc.classList.add('arrastrando');
-          try { sc.setPointerCapture(e.pointerId); } catch (err) {}
-        });
-        sc.addEventListener('pointermove', function (e) { if (arr) sc.scrollLeft = arr.l - (e.clientX - arr.x); });
-        ['pointerup', 'pointercancel'].forEach(function (n) { sc.addEventListener(n, function () { arr = null; sc.classList.remove('arrastrando'); }); });
         var f = sel.map(function (a) { return a.precio && a.precio.fecha; }).filter(Boolean);
-        dlg.appendChild(el('p', 'Precios y kilometrajes' + (f.length ? ' al ' + fecha(f[0]) : '') + '. Consultá disponibilidad actualizada por WhatsApp.', 'src cmp-ft'));
+        dlg.appendChild(el('p', 'Precios y kilometrajes relevados' + (f.length ? ' el ' + fecha(f[0]) : '') + '; no garantizan precio ni disponibilidad actuales. Las diferencias son observaciones entre estas dos unidades, no una recomendación de compra. Consultá disponibilidad por WhatsApp.', 'src cmp-ft'));
         document.documentElement.classList.add('has-dlg');
         if (typeof dlg.showModal === 'function') { if (!dlg.open) dlg.showModal(); } else dlg.setAttribute('open', '');
-        estado(); dlg.scrollTop = 0; sc.scrollTop = 0; sc.scrollLeft = 0;
-        x.focus();
+        sc.scrollTop = 0; sc.scrollLeft = 0;
+        var foco = typeof enfocar === 'number' ? dlg.querySelectorAll('.cmp-sel')[enfocar] : x;
+        if (foco) foco.focus();
       }
 
       /* ----- ficha completa (diálogo), compartir y aviso breve ----- */
@@ -807,7 +812,7 @@ ul.appendChild(frag);
         if (!fdlg) {
           fdlg = el('dialog', null, 'ficha'); fdlg.setAttribute('aria-labelledby', 'fi-ttl');
           fdlg.addEventListener('click', function (e) { if (e.target === fdlg) fdlg.close(); });
-          fdlg.addEventListener('close', function () { if (window.drGaleriaVisor) window.drGaleriaVisor.close(true); document.documentElement.classList.remove('has-dlg'); if (fOrigen && fOrigen.focus) { try { fOrigen.focus({ preventScroll: true }); } catch (e) {} } });
+          fdlg.addEventListener('close', function () { if (window.drGaleriaVisor) window.drGaleriaVisor.close(true); if (!(dlg && dlg.open)) document.documentElement.classList.remove('has-dlg'); if (fOrigen && fOrigen.focus) { try { fOrigen.focus({ preventScroll: true }); } catch (e) {} } });
           document.body.appendChild(fdlg);
         }
         fdlg.textContent = '';
