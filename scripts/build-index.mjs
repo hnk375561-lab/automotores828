@@ -1,4 +1,5 @@
 import vm from 'node:vm';
+import { execSync } from 'node:child_process';
 import crypto from 'node:crypto';
 // Genera index.html, reserva.html, 404.html, privacidad.html, robots.txt, sitemap.xml, site.webmanifest y favicon.svg
 // a partir de data/dealership.json y data/vehicles.json. Sin dependencias.
@@ -31,7 +32,10 @@ const siteUrl = D.publicacion.siteUrl ? D.publicacion.siteUrl.replace(/\/?$/, '/
    (Netlify: URL / DEPLOY_PRIME_URL; GitHub Pages: GITHUB_REPOSITORY). Si no hay ninguna, queda relativa y
    scripts/build-site.mjs la completa al armar _site/ en Netlify. */
 const envBase = process.env.DEPLOY_PRIME_URL || process.env.URL || (process.env.GITHUB_REPOSITORY ? `https://${process.env.GITHUB_REPOSITORY.split('/')[0].toLowerCase()}.github.io/${process.env.GITHUB_REPOSITORY.split('/')[1]}` : null);
-const ogBaseRaw = siteUrl || D.publicacion.previewUrl || envBase || '';
+/* Respaldo: sin URL cargada ni entorno de build, se toma el remoto git (GitHub Pages: usuario.github.io/repo). WhatsApp/Facebook/Instagram EXIGEN og:image absoluta: una ruta relativa deja el enlace sin imagen.
+   Si el sitio se publica en otra dirección, cargarla en data/dealership.json → publicacion.previewUrl. */
+const gitBase = (() => { try { const u = execSync('git remote get-url origin', { cwd: root, stdio: ['ignore', 'pipe', 'ignore'] }).toString().trim(); const m = /github\.com[:/]([^/]+)\/([^/]+?)(?:\.git)?$/.exec(u); return m ? `https://${m[1].toLowerCase()}.github.io/${m[2]}` : null; } catch (e) { return null; } })();
+const ogBaseRaw = siteUrl || D.publicacion.previewUrl || envBase || gitBase || '';
 const ogBase = ogBaseRaw ? ogBaseRaw.replace(/\/?$/, '/') : '';
 const NAME = D.identity.tradeName;
 const L = D.location;

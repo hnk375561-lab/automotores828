@@ -27,3 +27,9 @@ Suite completa sin cortarse en el primer fallo: `npm run test:todo` (incluye `te
 - Capturas en dispositivo real: T3 y T7 (en headless ya revisadas).
 - T8 y T9 (ver tabla).
 - Pendientes de datos: `data/pendientes.json`. Bloquean producción P3, P4, P6 y P16. P1 (WhatsApp) está resuelto.
+
+## Vista previa al compartir el enlace (og:image)
+
+- Hasta el 25/10 el HTML salía con `og:image` relativa (`images/og-dr.jpg`) y WhatsApp/Facebook/Instagram mostraban el enlace sin imagen. Corregido: el generador usa `publicacion.siteUrl` > `previewUrl` > entorno de build > remoto git (GitHub Pages) y `validate-dealership.mjs` falla si alguna página no tiene `og:image` absoluta https.
+- Si el sitio vive en otra dirección que `https://hnk375561-lab.github.io/automotores828/`, cargarla en `data/dealership.json` → `publicacion.previewUrl` y correr `npm run build`.
+- Las redes guardan en caché la vista previa: después de publicar, pedir que la actualicen (Facebook Sharing Debugger; en WhatsApp suele bastar con compartir una URL con otro parámetro, p. ej. `?v=2`).

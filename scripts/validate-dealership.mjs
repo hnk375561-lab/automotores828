@@ -41,6 +41,7 @@ if (d && a) {
     if (demo !== /noindex/.test(h)) err(`${p}: noindex no coincide con publicacion.publicIndexing`);
     if (demo && !/data-demo-note/.test(h) && p !== '404.html') err(`${p}: falta el aviso de demo`);
     if (!demo && /data-demo-note/.test(h)) err(`${p}: no debe tener aviso de demo en producción`);
+    if (p !== '404.html' || true) { const og = (h.match(/<meta property="og:image" content="([^"]*)"/) || [])[1]; if (!og || !/^https:\/\//.test(og)) err(`${p}: og:image debe ser una URL absoluta https (hoy: ${og || 'ausente'}); sin eso WhatsApp y las redes muestran el enlace sin imagen. Cargá publicacion.previewUrl o corré el build con el remoto git.`); }
     if ((h.match(/<h1[\s>]/g) || []).length !== 1) err(`${p}: debe tener un único h1`);
     if (/href="#"/.test(h)) err(`${p}: href="#"`);
     if (/href="http:\/\//.test(h)) err(`${p}: enlace http:// sin cifrar`);
@@ -169,7 +170,7 @@ if (d && a) {
   for (const f of walk(root)) {
     const rel = path.relative(root, f);
     if (!/\.(html|js|mjs|json|md|xml|txt|webmanifest|svg|yml|css)$/.test(rel) || rel.split(path.sep).join('/') === 'scripts/validate-dealership.mjs') continue;
-    if (legacy.test(fs.readFileSync(f, 'utf8'))) err(`${rel}: quedan restos de otro proyecto`);
+    if (legacy.test(fs.readFileSync(f, 'utf8').replace(/hnk375561-lab\.github\.io\/automotores828\/?|github\.com\/hnk375561-lab\/automotores828/gi, ''))) err(`${rel}: quedan restos de otro proyecto`);
   }
 
   // --- pendientes y puerta de producción ---
