@@ -1,5 +1,5 @@
 /* Automotores 828 · js/secciones.js
-   1) Catálogo: filtros, orden y comparador de hasta 4 unidades (lee js/units.min.json, que genera scripts/build-index.mjs desde data/vehicles.json).
+   1) Catálogo: filtros, orden y comparador de exactamente 2 unidades (lee js/units.min.json, que genera scripts/build-index.mjs desde data/vehicles.json).
    2) Formularios «Tu usado» y «Contanos qué auto buscás»: arman un mensaje que la persona copia y envía ella.
       No se transmite ni se guarda nada.
    Sin dependencias. Sin JavaScript, la página sigue completa: las fichas están en #unidades. */
@@ -765,9 +765,9 @@ ul.appendChild(frag);
         var fr = el('tr', null, 'cmp-fr'), fth = el('th', 'Publicación'); fth.scope = 'row'; fr.appendChild(fth);
         sel.forEach(function (a) {
           var td = el('td');
-          var c = el('a', 'Consultar esta unidad', 'btn p sm'); c.href = a.href; c.target = '_blank'; c.rel = 'noopener noreferrer';
+          var c = el('a', 'Consultar esta unidad', 'btn p sm'); c.href = hrefConsulta(a); c.target = '_blank'; c.rel = 'noopener noreferrer'; c.textContent = hrefU(a, 'consulta') ? 'Consultar por WhatsApp' : 'Consultar en Mercado Libre';
           td.appendChild(c);
-          if (a.url) { var v = el('a', 'Ver publicación', 'vp'); v.href = a.url; v.target = '_blank'; v.rel = 'noopener noreferrer'; td.appendChild(v); }
+          if (a.url && c.href !== a.url) { var v = el('a', 'Ver publicación', 'vp'); v.href = a.url; v.target = '_blank'; v.rel = 'noopener noreferrer'; td.appendChild(v); }
           fr.appendChild(td);
         });
         tb.appendChild(fr);
@@ -781,6 +781,13 @@ ul.appendChild(frag);
         var foco = typeof enfocar === 'number' ? dlg.querySelectorAll('.cmp-sel')[enfocar] : x;
         if (foco) foco.focus();
       }
+
+      /* ----- consultas comerciales: un único constructor de mensajes WhatsApp, siempre por la unidad (id real) ----- */
+      var WAM = window.drWaMensajes || null;   /* js/wa-mensajes.js: el mismo constructor que usa el build para las tarjetas */
+      function descU(a) { return WAM ? WAM.desc(a) : String(a.titulo || ''); }
+      function mensajeU(a, intencion) { return WAM ? WAM.mensaje(a, intencion) : ''; }
+      function hrefU(a, intencion) { var b = WAM && ctx && ctx.wa ? String(ctx.wa).split('?')[0] : null; return b ? b + '?text=' + encodeURIComponent(mensajeU(a, intencion)) : null; }
+      function hrefConsulta(a) { return (!a.vendida && hrefU(a, 'consulta')) || a.href; }
 
       /* ----- ficha completa (diálogo), compartir y aviso breve ----- */
       var ctx = {};
@@ -916,13 +923,13 @@ ul.appendChild(frag);
 
         /* acciones */
         var ac = el('div', null, 'fi-ac');
-        ac.appendChild(enlace(a.vendida ? 'Consultar por similares' : ctx.wa ? 'Consultar por WhatsApp' : 'Consultar en Mercado Libre', a.href, 'btn p sm', true));
-        ac.appendChild(enlace('Agendar visita y prueba de manejo', 'reserva.html', 'btn sm', false));
+        ac.appendChild(enlace(a.vendida ? 'Consultar por similares' : ctx.wa ? 'Consultar por WhatsApp' : 'Consultar en Mercado Libre', hrefConsulta(a), 'btn p sm', true));
+        ac.appendChild(enlace('Agendar visita y prueba de manejo', 'reserva.html' + (a.id != null ? '?unidad=' + encodeURIComponent(String(a.id)) : ''), 'btn sm', false));
         info.appendChild(ac);
         var ac2 = el('div', null, 'fi-ac2');
         /* WhatsApp ya es el botón principal de arriba (a.href); no se repite en la grilla */
         if (ctx.ig) ac2.appendChild(enlace('Instagram', ctx.ig, 'btn sm', true));
-        if (a.hrefFin) ac2.appendChild(enlace('Consultar financiación', a.hrefFin, 'btn sm', true));
+        if (a.hrefFin) ac2.appendChild(enlace('Consultar financiación', hrefU(a, 'fin') || a.hrefFin, 'btn sm', true));
         if (a.mail) ac2.appendChild(enlace('Enviar correo', a.mail, 'btn sm', false));
         if (ctx.tel) ac2.appendChild(enlace('Llamar' + (ctx.telTxt ? ' · ' + ctx.telTxt : ''), 'tel:' + ctx.tel, 'btn sm', false));
         var tas = enlace('Tasar mi usado', '#tu-usado', 'btn sm', false); tas.addEventListener('click', function () { if (window.drTasarRef) window.drTasarRef(a); fdlg.close(); });
@@ -934,7 +941,6 @@ ul.appendChild(frag);
         var cb = cbs.filter(function (c) { return +c.value === a.i; })[0];
         if (cb) {
           var cm = boton(cb.checked ? 'Quitar de la comparación' : 'Agregar a comparar', 'btn sm', function () {
-            if (!cb.checked && cb.disabled) { aviso('Ya hay 4 unidades para comparar'); return; }
             cb.checked = !cb.checked; cb.dispatchEvent(new Event('change', { bubbles: true }));
             cm.textContent = cb.checked ? 'Quitar de la comparación' : 'Agregar a comparar';
           });
@@ -962,7 +968,7 @@ ul.appendChild(frag);
             var desc = String(a.titulo || ''), nd = norm(desc);
             if (a.version && nd.indexOf(norm(a.version)) < 0) desc += ' ' + a.version;
             if (a.anio != null && nd.indexOf(String(a.anio)) < 0) desc += ' ' + a.anio;
-            var msg = 'Hola! Quiero coordinar una visita para ver el ' + desc.trim() + '. ¿Qué día y horario me conviene?';
+            var msg = mensajeU(a, 'visita');
             var wv = enlace('Coordinar visita por WhatsApp', ctx.wa.split('?')[0] + '?text=' + encodeURIComponent(msg), 'btn p sm', true);
             wv.setAttribute('aria-label', 'Coordinar por WhatsApp una visita para ver ' + desc.trim());
             vi.appendChild(wv);
@@ -1317,7 +1323,7 @@ var io = new IntersectionObserver(function (es) {
           var tx = el('span', null, 'cv-m-t');
           tx.appendChild(el('b', a.titulo));
           tx.appendChild(el('small', [a.anio, a.km != null ? a.km.toLocaleString('es-AR') + ' km' : null, a.transmision, a.combustible].filter(Boolean).join(' · ')));
-          var ln = el('a', 'Consultar', 'cv-m-a'); ln.href = a.href; ln.target = '_blank'; ln.rel = 'noopener noreferrer'; ln.setAttribute('aria-label', 'Consultar por ' + a.titulo);
+          var ln = el('a', 'Consultar', 'cv-m-a'); ln.href = hrefConsulta(a); ln.target = '_blank'; ln.rel = 'noopener noreferrer'; ln.setAttribute('aria-label', 'Consultar por ' + a.titulo);
           li.appendChild(ph); li.appendChild(tx); li.appendChild(ln); mL.appendChild(li);
         });
         if (r.length > 3) mL.appendChild(el('li', 'y ' + (r.length - 3) + ' más en «Nuestras unidades»', 'cv-m-more'));

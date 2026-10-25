@@ -32,6 +32,36 @@
 
   function q(s) { return box.querySelector(s); }
   var live = q('[data-live]');
+  /* contexto de la unidad: el id llega en ?unidad= del enlace de la ficha y se valida contra js/units.min.json (nunca se confía en un título recibido).
+     Estados: ninguna · cargando · lista · inexistente · error. El resumen espera mientras carga; si falla, la consulta sigue como general. */
+  var WAM = window.drWaMensajes || null, UNITS = null;
+  function unidades() {
+    if (!UNITS) {
+      var ctl = window.AbortController ? new AbortController() : null, tm = ctl ? setTimeout(function () { ctl.abort(); }, 8000) : 0;
+      UNITS = fetch('js/units.min.json', ctl ? { signal: ctl.signal } : undefined).then(function (r) { if (!r.ok) throw new Error('HTTP ' + r.status); return r.json(); })
+        .then(function (l) { clearTimeout(tm); return l; }, function (err) { clearTimeout(tm); UNITS = null; throw err; });
+    }
+    return UNITS;
+  }
+  var TXT_UNIDAD = { cargando: 'Cargando los datos de la unidad…', inexistente: 'No encontramos esa unidad: la consulta será general.', error: 'No pudimos cargar los datos de la unidad: podés seguir con una consulta general.' };
+  function pintarUnidad() {
+    var t = st.unitEstado === 'lista' && st.unit ? 'Consulta por: ' + (WAM ? WAM.desc(st.unit) : st.unit.titulo) : (TXT_UNIDAD[st.unitEstado] || '');
+    [].forEach.call(box.querySelectorAll('[data-unit]'), function (n) { n.hidden = !t; n.textContent = t; });
+  }
+  [].forEach.call(box.querySelectorAll('.rz-step[data-s="month"] .rz-p, .rz-step[data-s="confirm"] .rz-p'), function (pp) {
+    var u = document.createElement('p'); u.className = 'rz-p'; u.setAttribute('data-unit', ''); u.hidden = true; pp.parentNode.insertBefore(u, pp.nextSibling);
+  });
+  function resolvio() { pintarUnidad(); var f = st.espera; st.espera = null; if (f) f(); }
+  function fijarUnidad(id) {
+    st.unit = null; st.espera = null;
+    if (!id || !/^[A-Za-z0-9_-]{1,40}$/.test(id)) { st.unitEstado = id ? 'inexistente' : 'ninguna'; pintarUnidad(); return; }
+    st.unitEstado = 'cargando'; pintarUnidad();
+    unidades().then(function (l) {
+      if (st.unitId !== id) return;
+      var u = null; for (var k = 0; k < l.length; k++) { if (String(l[k].id) === id) { u = l[k]; break; } }
+      st.unit = u; st.unitEstado = u ? 'lista' : 'inexistente'; resolvio();
+    }, function () { if (st.unitId !== id) return; st.unitEstado = 'error'; resolvio(); });
+  }
   function say(t) { live.textContent = t; }
   function today() { var t = new Date(); return new Date(t.getFullYear(), t.getMonth(), t.getDate()); }
   function esDiaElegible(date) { return date >= today() && date.getDay() !== 0; }
@@ -70,25 +100,28 @@
     q('[data-confirm]').disabled = true; cal(); slots(); show('time'); say('Día seleccionado: ' + fmt(date));
   }
   function sendState(sent) {
-    q('[data-send]').textContent = sent ? (wa ? 'Consulta abierta en WhatsApp · la respuesta llega por ahí' : 'Mensaje copiado · pegalo en Facebook o Instagram') : (wa ? 'Listo para enviar · lo mandás vos por WhatsApp' : 'Listo para copiar · lo mandás vos por Facebook o Instagram');
+    q('[data-send]').textContent = sent ? (wa ? 'WhatsApp se abrió. Revisá el mensaje y enviálo cuando quieras.' : 'Mensaje copiado. Pegalo en Facebook o Instagram y enviálo cuando quieras.') : (wa ? 'Listo para enviar · lo mandás vos por WhatsApp' : 'Listo para copiar · lo mandás vos por Facebook o Instagram');
   }
   function summary() {
     if (!st.day || !st.slot) return;
+    if (st.unitEstado === 'cargando') { st.espera = summary; q('[data-send]').textContent = 'Cargando la unidad… el resumen se completa en un momento'; say('Esperando los datos de la unidad'); return; }
     q('[data-sd]').textContent = st.day.getDate() + ' ' + MES[st.day.getMonth()]; q('[data-sf]').textContent = st.slot;
-    var msg = 'Hola! Quiero coordinar una visita el ' + fmt(st.day) + ', por la ' + st.slot.toLowerCase() + '. ¿Me confirman disponibilidad y horario?', a = q('[data-wa]');
+    var u = st.unitEstado === 'lista' ? st.unit : null, a = q('[data-wa]');
+    var msg = WAM ? WAM.visita(u, fmt(st.day), st.slot) : 'Hola! Quiero coordinar una visita el ' + fmt(st.day) + ', por la ' + st.slot.toLowerCase() + '. ¿Me confirman si se puede y a qué hora?';
     a.dataset.msg = msg; if (wa) a.href = 'https://wa.me/' + wa + '?text=' + encodeURIComponent(msg);
     sendState(false); show('confirm'); say('Resumen listo: ' + fmt(st.day) + ', por la ' + st.slot.toLowerCase());
   }
   function back() { show(st.step === 'confirm' ? 'time' : 'month'); }
-  function reset() { st.day = null; st.slot = null; var a = q('[data-wa]'); if (a) { delete a.dataset.msg; if (wa) a.href = 'https://wa.me/' + wa; } cal(); slots(); show('month'); }
-  function abrir() {
+  function reset() { st.day = null; st.slot = null; st.espera = null; var a = q('[data-wa]'); if (a) { delete a.dataset.msg; if (wa) a.href = 'https://wa.me/' + wa; } cal(); slots(); show('month'); }
+  function abrir(id) {
+    if (st.unitId !== (id || null) || st.unitEstado === 'error') { st.unitId = id || null; fijarUnidad(st.unitId); }
     var dl = document.querySelector('dialog[open]'); if (dl && dl.close) dl.close();
     box.classList.add('is-open');
     var hh = document.querySelector('header'), off = (hh ? hh.offsetHeight : 68) + 16;
     window.scrollTo({ top: Math.max(0, box.getBoundingClientRect().top + window.pageYOffset - off), behavior: reduce ? 'auto' : 'smooth' });
     setTimeout(function () { var f = q('.rz-d:not(:disabled)'); if (f) { try { f.focus({ preventScroll: true }); } catch (e) { f.focus(); } } }, reduce ? 0 : 450);
   }
-  function cerrar() { box.classList.remove('is-open'); reset(); var go = sec.querySelector('.vz-go'); if (go) { try { go.focus({ preventScroll: true }); } catch (e) {} } }
+  function cerrar() { box.classList.remove('is-open'); st.unitId = null; st.unit = null; st.unitEstado = 'ninguna'; st.espera = null; pintarUnidad(); reset(); var go = sec.querySelector('.vz-go'); if (go) { try { go.focus({ preventScroll: true }); } catch (e) {} } }
 
   box.addEventListener('click', function (e) {
     var t = e.target;
@@ -112,9 +145,9 @@
     }
   });
   document.addEventListener('click', function (e) {
-    var a = e.target.closest && e.target.closest('a[href="reserva.html"]');
+    var a = e.target.closest && e.target.closest('a[href^="reserva.html"]');
     if (!a || e.defaultPrevented || e.button || e.metaKey || e.ctrlKey || e.shiftKey) return;
-    e.preventDefault(); abrir();
+    e.preventDefault(); var id = null; try { id = new URL(a.getAttribute('href'), location.href).searchParams.get('unidad'); } catch (err) {} abrir(id);
   });
   cal(); slots();
 })();

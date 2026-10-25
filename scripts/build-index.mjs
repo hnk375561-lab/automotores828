@@ -1,3 +1,5 @@
+import vm from 'node:vm';
+import crypto from 'node:crypto';
 // Genera index.html, reserva.html, 404.html, privacidad.html, robots.txt, sitemap.xml, site.webmanifest y favicon.svg
 // a partir de data/dealership.json y data/vehicles.json. Sin dependencias.
 // Uso: npm run build   (después: npm test)
@@ -7,7 +9,13 @@ import { fileURLToPath } from 'node:url';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const read = (f) => fs.readFileSync(path.join(root, f), 'utf8');
-const write = (f, s) => fs.writeFileSync(path.join(root, f), s);
+// Versionado automático: cada <script>/<link> local de css/ y js/ lleva ?v=<hash del contenido> (se recalcula en cada build)
+const stamp = (html) => html.replace(/(\b(?:src|href)=")((?:css|js)\/[^"?#]+\.(?:js|css))(?:\?v=[^"]*)?(")/g, (m, a, f, c) => {
+  try { return a + f + '?v=' + crypto.createHash('sha1').update(fs.readFileSync(path.join(root, f))).digest('hex').slice(0, 8) + c; } catch (e) { return m; }
+});
+const write = (f, s) => fs.writeFileSync(path.join(root, f), f.endsWith('.html') ? stamp(s) : s);
+// Mensajes de WhatsApp: el mismo módulo que usa el navegador (js/wa-mensajes.js)
+const WAM = (() => { const sb = {}; vm.runInNewContext(read('js/wa-mensajes.js'), sb); return sb.drWaMensajes; })();
 const D = JSON.parse(read('data/dealership.json'));
 const A = JSON.parse(read('data/vehicles.json'));
 
@@ -146,10 +154,7 @@ const SW = { blanco: '#f1f1ee', negro: '#161b1d', rojo: '#c21f1f', 'gris plata':
 const swatch = (c) => SW[norm(c || '')] || null;
 const marcaDe = (a) => a.marca || a.titulo.split(' ')[0];
 const sinMarca = (a) => { const m = marcaDe(a); return a.tipoVehiculo === 'Moto' ? (a.modelo || a.titulo) : a.titulo.startsWith(m + ' ') ? a.titulo.slice(m.length + 1) : a.titulo; };
-const consultaHref = (a) => {
-  const desc = a.anio && !String(a.titulo).includes(String(a.anio)) ? `${a.titulo} ${a.anio}` : a.titulo;
-  return wa(a.vendida ? `Hola! Vi que el ${desc} está vendido. ¿Tienen unidades similares?` : `Hola! Me interesa el ${desc}.`) || a.url;
-};
+const consultaHref = (a) => wa(WAM.mensaje(a, a.vendida ? 'similares' : 'rapida')) || a.url;
 // Fotos opcionales: no se inventan ni se toman de terceros; solo se publican si data/ las autoriza.
 const mediaDe = (a) => (Array.isArray(a.fotos) ? a.fotos : Array.isArray(a.imagenes) ? a.imagenes : Array.isArray(a.galeria) ? a.galeria : []).map((x) => typeof x === 'string' ? { src: x, alt: a.titulo } : x).filter((x) => x && (x.src || x.url)).map((x) => ({ src: x.src || x.url, srcset: x.srcset || '', card: x.card || '', cardWidth: x.cardWidth || null, cardHeight: x.cardHeight || null, thumb: x.thumb || '', width: x.width || null, height: x.height || null, alt: x.alt || a.titulo, tipo: x.tipo || '' }));
 const cardSrcset = (m) => { if (m.srcset) return m.srcset; if (m.card) return `${m.card} ${m.cardWidth || 600}w, ${m.src} ${m.width || 900}w`; const k = /^(images\/stock\/unidad-\d+)\.webp$/.exec(m.src || ''); return k && fs.existsSync(new URL('../' + k[1] + '-640.webp', import.meta.url)) && fs.existsSync(new URL('../' + k[1] + '-1000.webp', import.meta.url)) ? `${k[1]}-640.webp 640w, ${k[1]}-1000.webp 1000w` : ''; };
@@ -197,8 +202,8 @@ const catData = autos.map((a, i) => ({
   potencia: a.potencia || null, traccion: a.traccion || null, puertas: a.puertas || null, numeroVelocidades: a.numeroVelocidades || null,
   version: a.version || null, anio: a.anio ?? null, km: a.km ?? null, carroceria: a.carroceria || null, id: a.id || null,
   vendida: !!a.vendida, nota: a.nota || null, relevadoEl: a.relevadoEl || a.fuente?.consultado || null,
-  atributosPublicados: a.atributosPublicados || [], hrefFin: wa(`Hola! Quiero consultar financiación para el ${a.titulo}${a.anio ? ' ' + a.anio : ''}.`),
-  hrefVisita: wa(`Hola! Quiero coordinar una visita y prueba de manejo del ${a.titulo}${a.anio ? ' ' + a.anio : ''}.`),
+  atributosPublicados: a.atributosPublicados || [], hrefFin: wa(WAM.mensaje(a, 'fin')),
+  hrefVisita: wa(WAM.mensaje(a, 'visita')),
   mail: mailHref(a), transmision: a.transmision || null, combustible: a.combustible || null, color: a.color || null,
   sw: swatch(a.color), precio: a.precio || null, anticipo: a.anticipo || null, url: a.url, href: consultaHref(a)
 }));
@@ -547,7 +552,7 @@ const index = page({
   title: `${NAME} · Autos y motos en ${L.city}, ${L.province}`,
   desc: `${NAME} en ${L.city}, ${L.partido}: compra y venta de autos y motos usados, permutas y consignaciones. Visitanos en ${L.address} o escribinos por redes o correo.`,
   file: 'index.html',
-  extraHead: `<link rel="stylesheet" href="css/hero-carousel.css?v=20261024-5">\n<link rel="stylesheet" href="css/fondos-secciones.css">\n<link rel="stylesheet" href="css/damero-secciones.css?v=20261027-1">\n<link rel="stylesheet" href="css/comparador.css?v=20261028-1">\n<link rel="stylesheet" href="css/galeria-visor.css?v=20261026-1">\n<script type="application/ld+json">${JSON.stringify(ld)}</script>\n<script defer src="js/hero-carousel.js?v=20261024-1"></script>\n<script defer src="js/hero-motion.js?v=20261024-5"></script>\n<script defer src="js/fondos-secciones.js?v=20261024-1"></script>\n<script defer src="js/secciones.js?v=20261028-1"></script>\n<script defer src="js/ficha-flip.js?v=20261027-1"></script>\n<script defer src="js/galeria-visor.js?v=20261026-1"></script>\n<script defer src="js/combobox.js?v=20261024-1"></script>\n<script defer src="js/anillo.js?v=20261024-2"></script>\n<script defer src="js/boton-flecha.js?v=20261024-1"></script>\n<script defer src="js/mapa.js?v=20261023-1"></script>\n<script defer src="js/horarios.js?v=20261024-1"></script>\n<script defer src="js/site.js?v=20261024-3"></script>\n<script defer src="js/foto-reactiva.js?v=20261027-1"></script>\n<script defer src="js/reserva-inline.js?v=20261024-4"></script>\n`,
+  extraHead: `<link rel="stylesheet" href="css/hero-carousel.css?v=20261024-5">\n<link rel="stylesheet" href="css/fondos-secciones.css">\n<link rel="stylesheet" href="css/damero-secciones.css?v=20261027-1">\n<link rel="stylesheet" href="css/comparador.css?v=20261028-1">\n<link rel="stylesheet" href="css/galeria-visor.css?v=20261026-1">\n<script type="application/ld+json">${JSON.stringify(ld)}</script>\n<script defer src="js/hero-carousel.js?v=20261024-1"></script>\n<script defer src="js/hero-motion.js?v=20261024-5"></script>\n<script defer src="js/fondos-secciones.js?v=20261024-1"></script>\n<script defer src="js/wa-mensajes.js"></script>\n<script defer src="js/secciones.js?v=20261028-2"></script>\n<script defer src="js/ficha-flip.js?v=20261027-1"></script>\n<script defer src="js/galeria-visor.js?v=20261026-1"></script>\n<script defer src="js/combobox.js?v=20261024-1"></script>\n<script defer src="js/anillo.js?v=20261024-2"></script>\n<script defer src="js/boton-flecha.js?v=20261024-1"></script>\n<script defer src="js/mapa.js?v=20261023-1"></script>\n<script defer src="js/horarios.js?v=20261024-1"></script>\n<script defer src="js/site.js?v=20261024-3"></script>\n<script defer src="js/foto-reactiva.js?v=20261027-1"></script>\n<script defer src="js/reserva-inline.js?v=20261028-1"></script>\n`,
   body: `${header()}
 <main id="top">
 <div class="hero" role="region" aria-label="${esc(NAME)}">
@@ -699,7 +704,7 @@ ${ogTags('reserva.html', `Coordiná tu visita · ${NAME}`, 'Elegí un día y una
   </section>
   <div id="live" class="sr-only" aria-live="polite"></div>
 </main>
-<script type="module" src="js/reserva.js"></script><script type="module" src="js/motion.js"></script>
+<script src="js/wa-mensajes.js"></script><script type="module" src="js/reserva.js"></script><script type="module" src="js/motion.js"></script>
 </body>
 </html>
 `;

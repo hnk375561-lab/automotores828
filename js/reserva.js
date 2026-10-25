@@ -7,6 +7,25 @@ const $$ = (selector, root = document) => [...root.querySelectorAll(selector)];
 const months = ["enero", "febrero", "marzo", "abril", "mayo", "junio", "julio", "agosto", "septiembre", "octubre", "noviembre", "diciembre"];
 const state = { month: new Date(new Date().getFullYear(), new Date().getMonth(), 1), day: null, slot: null, step: "month", control: null };
 const live = $("#live");
+const UNIT_ID = (() => { const v = new URLSearchParams(location.search).get("unidad"); return v && /^[A-Za-z0-9_-]{1,40}$/.test(v) ? v : null; })();
+const WAM = window.drWaMensajes || null;
+/* contexto de la unidad: ninguna · cargando · lista · inexistente · error. El resumen espera mientras carga; si falla, la consulta sigue como general. */
+let unitEstado = UNIT_ID ? "cargando" : (new URLSearchParams(location.search).get("unidad") ? "inexistente" : "ninguna"), esperaConfirm = false;
+const TXT_UNIDAD = { cargando: "Cargando los datos de la unidad…", inexistente: "No encontramos esa unidad: la consulta será general.", error: "No pudimos cargar los datos de la unidad: podés seguir con una consulta general." };
+function pintarUnidad() {
+  const t = unitEstado === "lista" && state.unit ? `Consulta por: ${WAM ? WAM.desc(state.unit) : state.unit.titulo}` : (TXT_UNIDAD[unitEstado] || "");
+  let p = $("#unidad-ctx");
+  if (!t) { if (p) p.hidden = true; return; }
+  if (!p) { p = document.createElement("p"); p.id = "unidad-ctx"; p.setAttribute("role", "status"); const anchor = $(".confirm-actions") || $("#booking"); if (anchor && anchor.parentNode) anchor.parentNode.insertBefore(p, anchor); }
+  p.hidden = false; p.textContent = t;
+}
+if (UNIT_ID) {
+  const ctl = window.AbortController ? new AbortController() : null, tm = ctl ? setTimeout(() => ctl.abort(), 8000) : 0;
+  fetch("js/units.min.json", ctl ? { signal: ctl.signal } : undefined).then((r) => { if (!r.ok) throw new Error(`HTTP ${r.status}`); return r.json(); })
+    .then((list) => { const u = list.find((x) => String(x.id) === UNIT_ID); state.unit = u || null; unitEstado = u ? "lista" : "inexistente"; })
+    .catch(() => { unitEstado = "error"; })
+    .finally(() => { clearTimeout(tm); pintarUnidad(); if (esperaConfirm) { esperaConfirm = false; showConfirm(); } });
+}
 const EMBED = new URLSearchParams(location.search).get("embed") === "1";
 const cerrarEmbed = () => { try { window.parent.postMessage({ hz: "cerrar-reserva" }, location.origin); } catch (e) {} };
 const startOfToday = () => { const t = new Date(); return new Date(t.getFullYear(), t.getMonth(), t.getDate()); };
@@ -43,11 +62,11 @@ function selectDay(day) { const date = new Date(state.month.getFullYear(), state
 function renderSlots() { const box = $("#slots"); box.textContent = ""; CONFIG.slots.forEach((slot) => { const button = document.createElement("button"); button.type = "button"; button.className = "slot"; button.dataset.slot = slot; button.setAttribute("role", "option"); button.setAttribute("aria-selected", String(state.slot === slot)); button.innerHTML = `<b>${slot}</b><small>a coordinar</small>`; box.appendChild(button); }); }
 function selectSlot(slot) { state.slot = slot; $$(".slot").forEach((button) => button.setAttribute("aria-selected", String(button.dataset.slot === slot))); $("#time-status").textContent = slot; $("#to-confirm").disabled = false; announce(`Franja seleccionada: ${slot}`); }
 function waNumber() { const b = $("#whatsapp"); return b ? (b.dataset.wa || "") : ""; }
-function sendState(sent) { const el = $("#send-state"); if (!el) return; const wa = waNumber(); el.dataset.state = sent ? "pending" : "ready"; el.textContent = sent ? (wa ? "Consulta abierta en WhatsApp · la respuesta llega por ahí" : "Mensaje copiado · pegalo en Facebook o Instagram") : (wa ? "Listo para enviar · lo mandás vos por WhatsApp" : "Listo para copiar · lo mandás vos por Facebook o Instagram"); }
-function showConfirm() { if (!state.day || !state.slot) return; sendState(false); $("#summary-day").textContent = `${state.day.getDate()} ${months[state.day.getMonth()]}`; $("#summary-time").textContent = state.slot; { const btn = $("#whatsapp"); if (btn) { const msg = `Hola! Quiero coordinar una visita el ${formatDate(state.day)}, por la ${state.slot.toLowerCase()}. ¿Me confirman disponibilidad y horario?`; btn.dataset.msg = msg; if (btn.dataset.wa) btn.href = `https://wa.me/${btn.dataset.wa}?text=${encodeURIComponent(msg)}`; } }
+function sendState(sent) { const el = $("#send-state"); if (!el) return; const wa = waNumber(); el.dataset.state = sent ? "pending" : "ready"; el.textContent = sent ? (wa ? "WhatsApp se abrió. Revisá el mensaje y enviálo cuando quieras." : "Mensaje copiado. Pegalo en Facebook o Instagram y enviálo cuando quieras.") : (wa ? "Listo para enviar · lo mandás vos por WhatsApp" : "Listo para copiar · lo mandás vos por Facebook o Instagram"); }
+function showConfirm() { if (!state.day || !state.slot) return; if (unitEstado === "cargando") { esperaConfirm = true; announce("Esperando los datos de la unidad"); const w = $("#send-state"); if (w) w.textContent = "Cargando la unidad… el resumen se completa en un momento"; return; } sendState(false); $("#summary-day").textContent = `${state.day.getDate()} ${months[state.day.getMonth()]}`; $("#summary-time").textContent = state.slot; { const btn = $("#whatsapp"); if (btn) { const u = unitEstado === "lista" ? state.unit : null; const msg = WAM ? WAM.visita(u, formatDate(state.day), state.slot) : `Hola! Quiero coordinar una visita el ${formatDate(state.day)}, por la ${state.slot.toLowerCase()}. ¿Me confirman si se puede y a qué hora?`; btn.dataset.msg = msg; if (btn.dataset.wa) btn.href = `https://wa.me/${btn.dataset.wa}?text=${encodeURIComponent(msg)}`; } }
   announce(`Resumen listo: ${formatDate(state.day)}, por la ${state.slot.toLowerCase()}`); animateScene("confirm"); }
 function goBack() { if (state.step === "confirm") animateScene("time"); else if (state.step === "time") animateScene("day"); else if (state.step === "day") animateScene("month"); }
-function reset() { state.day = null; state.slot = null; state.step = "month"; $("#to-time").disabled = true; $("#to-confirm").disabled = true; renderCalendar(); renderSlots(); $$(".scene").forEach((scene) => { scene.hidden = !scene.classList.contains("scene--month"); scene.style.removeProperty("opacity"); scene.style.removeProperty("transform"); }); $("#back").hidden = true; $("#booking").dataset.step = "month"; window.scrollTo({ top: 0, behavior: "auto" }); announce("Calendario reiniciado"); }
+function reset() { esperaConfirm = false; state.day = null; state.slot = null; state.step = "month"; $("#to-time").disabled = true; $("#to-confirm").disabled = true; renderCalendar(); renderSlots(); $$(".scene").forEach((scene) => { scene.hidden = !scene.classList.contains("scene--month"); scene.style.removeProperty("opacity"); scene.style.removeProperty("transform"); }); $("#back").hidden = true; $("#booking").dataset.step = "month"; window.scrollTo({ top: 0, behavior: "auto" }); announce("Calendario reiniciado"); }
 
 if ($("#booking")) {
   $("#calendar").addEventListener("click", (event) => { const button = event.target.closest("button[data-day]"); if (button && !button.disabled) selectDay(+button.dataset.day); });
