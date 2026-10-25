@@ -9,7 +9,7 @@
   var maps = mapA ? mapA.href : '';
   var adEl = sec.querySelector('.vz-addr span'), addr = adEl ? adEl.textContent.replace(/,\s*Buenos Aires\s*$/, '') : '';
   var MES = ['enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio', 'julio', 'agosto', 'septiembre', 'octubre', 'noviembre', 'diciembre'];
-  var SLOTS = ['Mañana', 'Tarde'];
+  var VH = window.drVisitaHorarios;   /* T6: horarios publicados, los mismos que usa reserva.html (js/visita-horarios.js) */
   var now0 = new Date(), st = { month: new Date(now0.getFullYear(), now0.getMonth(), 1), day: null, slot: null, step: 'month' };
   var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
@@ -18,7 +18,7 @@
   box.innerHTML =
     '<div class="rz-clip"><div class="rz-box" role="region" aria-label="Coordiná tu visita">' +
     '<div class="rz-bar"><span><b>Coordiná tu visita</b> / consulta</span><span class="rz-acts"><button type="button" data-back hidden>← Atrás</button><button type="button" data-close>✕ Cerrar</button></span></div>' +
-    '<div class="rz-step" data-s="month"><div><p class="rz-k">Automotores 828</p><h3 id="rz-t">Elegí<em>cuándo</em><em>venir.</em></h3><p class="rz-p">Elegí un día en el calendario y armá la consulta. Todavía no es un turno.</p></div>' +
+    '<div class="rz-step" data-s="month"><div><p class="rz-k">Automotores 828</p><h3 id="rz-t">Elegí<em>cuándo</em><em>venir.</em></h3><p class="rz-p">Elegí un día en el calendario y armá la consulta. Todavía no es un turno. Los feriados no están cargados: el negocio confirma el día y la hora.</p></div>' +
     '<div class="rz-cal"><div class="rz-ch"><button type="button" data-prev aria-label="Mes anterior">←</button><strong data-ml></strong><button type="button" data-next aria-label="Mes siguiente">→</button></div>' +
     '<div class="rz-wd" aria-hidden="true"><span>LU</span><span>MA</span><span>MI</span><span>JU</span><span>VI</span><span>SA</span><span>DO</span></div><div class="rz-days" data-days role="group" aria-label="Calendario de consulta"></div></div></div>' +
     '<div class="rz-step" data-s="time" hidden><div class="rz-big" aria-hidden="true"><small data-dm></small><span data-dn></span><strong data-dw></strong></div>' +
@@ -64,7 +64,7 @@
   }
   function say(t) { live.textContent = t; }
   function today() { var t = new Date(); return new Date(t.getFullYear(), t.getMonth(), t.getDate()); }
-  function esDiaElegible(date) { return date >= today() && date.getDay() !== 0; }
+  function esDiaElegible(date) { return VH ? VH.elegible(date) : date >= today() && date.getDay() !== 0; }
   function fmt(d) { return d.toLocaleDateString('es-AR', { weekday: 'long', day: 'numeric', month: 'long' }); }
 
   function cal() {
@@ -74,16 +74,16 @@
     for (var e = 0; e < first; e++) { var s = document.createElement('span'); s.className = 'rz-d rz-d--e'; s.setAttribute('aria-hidden', 'true'); c.appendChild(s); }
     for (var d = 1; d <= n; d++) {
       var date = new Date(m.getFullYear(), m.getMonth(), d), b = document.createElement('button'), ok = esDiaElegible(date), sel = st.day && st.day.getTime() === date.getTime();
-      b.type = 'button'; b.className = 'rz-d'; b.dataset.day = d; b.disabled = !ok; b.setAttribute('aria-pressed', String(!!sel));
+      b.type = 'button'; b.className = 'rz-d'; b.dataset.day = d; b.disabled = !ok; if (!ok && VH) b.setAttribute('aria-label', fmt(date) + ', ' + (VH.motivo(date) || 'no disponible')); b.setAttribute('aria-pressed', String(!!sel));
       b.innerHTML = '<span>' + (d < 10 ? '0' + d : d) + '</span><small>' + (date.getTime() === today().getTime() ? 'hoy' : '') + '</small>';
       c.appendChild(b);
     }
   }
   function slots() {
     var c = q('[data-slots]'); c.textContent = '';
-    SLOTS.forEach(function (s) {
-      var b = document.createElement('button'); b.type = 'button'; b.className = 'rz-slot'; b.dataset.slot = s; b.setAttribute('role', 'option'); b.setAttribute('aria-selected', String(st.slot === s));
-      b.innerHTML = '<b>' + s + '</b><small>a coordinar</small>'; c.appendChild(b);
+    (VH ? VH.franjas(st.day) : [{ id: 'Mañana', rango: '' }, { id: 'Tarde', rango: '' }]).forEach(function (f) {
+      var s = f.id, b = document.createElement('button'); b.type = 'button'; b.className = 'rz-slot'; b.dataset.slot = s; b.setAttribute('role', 'option'); b.setAttribute('aria-selected', String(st.slot === s));
+      b.innerHTML = '<b>' + s + '</b><small>' + (f.rango ? f.rango + ' · hora a coordinar' : 'a coordinar') + '</small>'; if (f.rango) b.setAttribute('aria-label', s + ', ' + f.rango + ', hora a coordinar'); c.appendChild(b);
     });
   }
   function show(step) {
