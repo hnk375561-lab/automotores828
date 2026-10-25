@@ -175,3 +175,61 @@
   window.addEventListener('scroll', function () { if (!t) t = requestAnimationFrame(f); }, { passive: true });
   f();
 })();
+
+/* Saltos por enlace interno. Las secciones con content-visibility:auto (financiación … contacto) miden 800 px estimados hasta que se
+   renderizan; un salto calculado con esa estimación aterriza lejos del destino cuando, al llegar, crecen o se encogen. Se renderizan una
+   sola vez (dos cuadros) para que el navegador recuerde su altura real (contain-intrinsic-size:auto); después vuelven a omitirse fuera de
+   pantalla. Se prepara al apoyar el puntero o enfocar el enlace, antes del clic, así que no hay espera. No intercepta rueda ni gestos;
+   la navegación sigue siendo la nativa (ancla, scroll-behavior y scroll-padding-top). */
+(function () {
+  'use strict';
+  var SECCIONES = '#financiacion,#tu-usado,#busqueda,#preguntas,#visita,#contacto,.nz-mapa';
+  var estado = 0, lista = [], cola = [];
+  function destinoDe(href) {
+    if (!href || href.charAt(0) !== '#' || href.length < 2) return null;
+    try { return document.getElementById(decodeURIComponent(href.slice(1))); } catch (e) { return null; }
+  }
+  function anclaDeSeccion(event) {
+    var a = event.target && event.target.closest ? event.target.closest('a[href^="#"]') : null;
+    return a && afectaAlturas(destinoDe(a.getAttribute('href'))) ? a : null;
+  }
+  /* Afecta al destino cualquier sección omitida que quede por encima de él: financiación o lo que la sigue en el documento. */
+  function afectaAlturas(d) {
+    var primera = document.getElementById('financiacion');
+    return !!(d && primera && (d === primera || primera.contains(d) || (primera.compareDocumentPosition(d) & Node.DOCUMENT_POSITION_FOLLOWING)));
+  }
+  function terminar() {
+    if (estado === 2) return;
+    estado = 2;
+    lista.forEach(function (s) { s.style.contentVisibility = ''; });
+    var pendientes = cola; cola = [];
+    pendientes.forEach(function (fn) { fn(); });
+  }
+  function preparar() {
+    if (estado) return;
+    estado = 1;
+    try {
+      lista = Array.prototype.slice.call(document.querySelectorAll(SECCIONES));
+      lista.forEach(function (s) { s.style.contentVisibility = 'visible'; });
+      requestAnimationFrame(function () { requestAnimationFrame(terminar); });
+      setTimeout(terminar, 400); /* pestaña en segundo plano: no dejar secciones forzadas */
+    } catch (e) { terminar(); }
+  }
+  ['pointerdown', 'focusin'].forEach(function (tipo) {
+    document.addEventListener(tipo, function (event) { if (anclaDeSeccion(event)) preparar(); }, true);
+  });
+  document.addEventListener('click', function (event) {
+    if (estado === 2) return;
+    var a = anclaDeSeccion(event);
+    if (!a || event.button || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey || (a.target && a.target !== '_self')) return;
+    /* El clic llegó antes de terminar la preparación (clic programático o muy rápido): se difiere la navegación nativa unos cuadros. */
+    var href = a.getAttribute('href'), destino = destinoDe(href);
+    event.preventDefault();
+    preparar();
+    cola.push(function () {
+      if (window.location.hash === href) destino.scrollIntoView(); else window.location.hash = href;
+    });
+  }, true);
+  /* Carga con #sección en la URL. */
+  if (afectaAlturas(destinoDe(window.location.hash))) preparar();
+})();
