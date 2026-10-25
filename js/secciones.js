@@ -135,6 +135,7 @@
         var n = favN();
         favBtn.textContent = '♥ Favoritos' + (n ? ' (' + n + ')' : '');
         favBtn.setAttribute('aria-pressed', soloFav ? 'true' : 'false'); favBtn.classList.toggle('is-on', soloFav);
+        if (typeof selRender === 'function' && typeof selPanel !== 'undefined') selRender();
       }
       function favToggle(a) {
         var k = favKey(a), i = favs.indexOf(k), adding = i < 0;
@@ -328,6 +329,63 @@
       favBtn.addEventListener('click', function () { soloFav = !soloFav; favSync(); aplicar(true); });
       favTodas.addEventListener('click', function () { soloFav = false; favSync(); aplicar(true); });
       window.addEventListener('storage', function (e) { if (e.key === FAV_KEY) { favs = favLeer(); favSync(); aplicar(false); } });
+      /* ----- T4 · «Mi selección»: una sola fuente de verdad (favoritos). Comparar usa exactamente 2; la visita admite 1 a 3. ----- */
+      var SEL_MAX_VISITA = 3, selPurgado = false;
+      var selPanel = el('section', null, 'mi-sel'); selPanel.setAttribute('aria-labelledby', 'mi-sel-t'); selPanel.hidden = true;
+      var selT = el('h3', 'Mi selección', 'mi-sel-t'); selT.id = 'mi-sel-t'; selT.tabIndex = -1;
+      var selCount = el('p', null, 'mi-sel-n'); selCount.setAttribute('role', 'status'); selCount.setAttribute('aria-live', 'polite');
+      var selCuerpo = el('div', null, 'mi-sel-b');
+      selPanel.appendChild(selT); selPanel.appendChild(selCount); selPanel.appendChild(selCuerpo);
+      if (ul.parentNode) ul.parentNode.insertBefore(selPanel, ul);
+      function selUnidades() { return favs.map(porId).filter(Boolean); }
+      function selPurgar() {
+        if (selPurgado) return; selPurgado = true;
+        var antes = favs.length; favs = favs.filter(function (k) { return !!porId(k); });
+        if (favs.length < antes) { favGuardar(); setTimeout(function () { aviso('Se descartó una unidad guardada que ya no está en el catálogo.'); }, 0); }
+      }
+      function selFoco() { try { selT.focus({ preventScroll: true }); } catch (e) {} }
+      function selVaciar() {
+        favs = []; favGuardar(); soloFav = false; favSync(); aplicar(false); aviso('Selección vaciada');
+        try { favBtn.focus({ preventScroll: true }); } catch (e) {}
+      }
+      function selRender() {
+        selPurgar();
+        var us = selUnidades(), n = us.length;
+        selCuerpo.textContent = '';
+        if (!n) { selPanel.hidden = true; selCount.textContent = ''; return; }
+        selPanel.hidden = false;
+        selCount.textContent = n === 1 ? '1 unidad en tu selección' : n + ' unidades en tu selección';
+        var ls = el('ul', null, 'mi-sel-l');
+        us.forEach(function (a) {
+          var li = el('li', null, 'mi-sel-i'), t = el('span', (WAM ? WAM.desc(a) : a.titulo), 'mi-sel-u');
+          var q = el('button', '×', 'mi-sel-q'); q.type = 'button'; q.setAttribute('aria-label', 'Quitar de la selección: ' + a.titulo);
+          q.addEventListener('click', function () { favToggle(a); if (favs.length) selFoco(); else { try { favBtn.focus({ preventScroll: true }); } catch (e) {} } });
+          li.appendChild(t); li.appendChild(q); ls.appendChild(li);
+        });
+        selCuerpo.appendChild(ls);
+        var ac = el('div', null, 'mi-sel-a');
+        var cb = el('button', n === 2 ? 'Comparar las 2 unidades' : 'Comparar (hacen falta exactamente 2)', 'btn sm'); cb.type = 'button'; cb.disabled = n !== 2;
+        cb.addEventListener('click', function () {
+          var u = selUnidades(); if (u.length !== 2) return;
+          cmp = [favKey(u[0]), favKey(u[1])]; cmpVuelta = null; pintarBandeja(); abrirComparacion();
+        });
+        ac.appendChild(cb);
+        if (ctx && ctx.wa && WAM && WAM.visitaVarias) {
+          if (n <= SEL_MAX_VISITA) {
+            var href = String(ctx.wa).split('?')[0] + '?text=' + encodeURIComponent(WAM.visitaVarias(us));
+            ac.appendChild(enlace('Coordinar visita por WhatsApp' + (n > 1 ? ' (' + n + ' unidades)' : ''), href, 'btn p sm', true));
+          } else {
+            var vb = el('button', 'Coordinar visita por WhatsApp', 'btn p sm'); vb.type = 'button'; vb.disabled = true; ac.appendChild(vb);
+          }
+        }
+        var vc = el('button', 'Vaciar selección', 'btn sm'); vc.type = 'button'; vc.addEventListener('click', selVaciar); ac.appendChild(vc);
+        var vt = el('button', 'Volver al catálogo', 'btn sm'); vt.type = 'button';
+        vt.addEventListener('click', function () { soloFav = false; favSync(); aplicar(true); try { ul.scrollIntoView({ block: 'start' }); } catch (e) {} });
+        ac.appendChild(vt);
+        selCuerpo.appendChild(ac);
+        var nota = n > SEL_MAX_VISITA ? 'Para coordinar una visita elegí hasta ' + SEL_MAX_VISITA + ' unidades.' : (n > 2 ? 'Para comparar dejá exactamente 2 unidades.' : '');
+        if (nota) selCuerpo.appendChild(el('p', nota, 'mi-sel-h'));
+      }
       favSync();
 
       var refs = {};   /* k -> { g, inputs:[{o,input,n}], select, note, d, h } */
@@ -842,6 +900,7 @@ ul.appendChild(frag);
       /* ----- ficha completa (diálogo), compartir y aviso breve ----- */
       var ctx = {};
       try { ctx = JSON.parse(($('#cat-ctx') || {}).textContent || '{}'); } catch (e) {}
+      selRender();   /* T4: ahora que WAM y ctx existen, el panel puede ofrecer la visita por WhatsApp */
       var fdlg = null, fOrigen = null, fFoco = null, fId = null, toast = null, toastT = 0, fRO = null, fSwap = false;
       function aviso(msg) {
         if (!toast) { toast = el('div', null, 'toast'); toast.setAttribute('role', 'status'); toast.setAttribute('aria-live', 'polite'); document.body.appendChild(toast); }

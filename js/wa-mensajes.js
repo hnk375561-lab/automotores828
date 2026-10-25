@@ -30,5 +30,14 @@
   function visita(a, dia, franja) {
     return 'Hola! Quiero coordinar una visita ' + (a ? 'para conocer el ' + desc(a) + ' ' : '') + 'el ' + dia + ', por la ' + String(franja).toLowerCase() + '. ¿Me confirman si se puede y a qué hora?';
   }
-  root.drWaMensajes = { desc: desc, precio: precio, mensaje: mensaje, visita: visita };
+  /* T4 · visita con 1 a 3 unidades. Con una sola, el texto es EXACTAMENTE el de mensaje(a, 'visita'). */
+  function visitaVarias(lista) {
+    var l = (lista || []).filter(Boolean).slice(0, 3);
+    if (!l.length) return mensaje(null, 'general');
+    if (l.length === 1) return mensaje(l[0], 'visita');
+    return 'Hola! Quería coordinar una visita para conocer estas ' + l.length + ' unidades:\n' +
+      l.map(function (a) { var p = precio(a); return '- ' + desc(a) + (p ? ' (' + p + ')' : ''); }).join('\n') +
+      '\n¿Podemos acordar un día y horario?';
+  }
+  root.drWaMensajes = { desc: desc, precio: precio, mensaje: mensaje, visita: visita, visitaVarias: visitaVarias };
 })(typeof window !== 'undefined' ? window : globalThis);
