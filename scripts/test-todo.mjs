@@ -13,6 +13,7 @@ const PASOS = [
   ['e2e-t2-bimoneda', 'python3', ['scripts/e2e-t2-bimoneda.py']],
   ['e2e-t6-visitas', 'python3', ['scripts/e2e-t6-visitas.py']],
   ['e2e-t5-comparalo', 'python3', ['scripts/e2e-t5-comparalo.py']],
+  ['e2e-t3-transparencia', 'python3', ['scripts/e2e-t3-transparencia.py']],
 ];
 
 const res = [];

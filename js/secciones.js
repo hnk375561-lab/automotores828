@@ -1018,6 +1018,18 @@ ul.appendChild(frag);
         info.appendChild(el('p', a.precio ? peso(a) : 'Consultar precio', 'fi-pr'));
         if (a.anticipo && a.anticipo.monto != null) info.appendChild(el('p', 'Anticipo publicado: ' + a.anticipo.moneda + ' ' + fmt(a.anticipo.monto), 'fi-n'));
         if (a.precio && a.precio.fecha) info.appendChild(el('p', 'Precio al ' + fecha(a.precio.fecha) + '.', 'fi-n'));
+        /* T3 · lectura rápida: lo que más pesa al decidir, con el dato tal como lo publicó la agencia.
+           Lo que la publicación no trae se lista una sola vez, sin afirmar que la unidad no lo tenga. */
+        var rapDefs = [['Año', nu(a.anio) != null ? String(a.anio) : null], ['Kilómetros', nu(a.km) != null ? fmt(a.km) + ' km' : null], ['Caja', a.transmision || null], ['Combustible', a.combustible || null]];
+        var rapHay = rapDefs.filter(function (r) { return r[1] != null; });
+        if (rapHay.length) {
+          var rp = el('dl', null, 'fi-rapido');
+          rapHay.forEach(function (r) { var c = el('div'); c.appendChild(el('dt', r[0])); c.appendChild(el('dd', r[1])); rp.appendChild(c); });
+          info.appendChild(rp);
+          var sinDato = rapDefs.filter(function (r) { return r[1] == null; }).map(function (r) { return r[0]; });
+          if (a.tipoVehiculo !== 'Moto') [['Carrocería', a.carroceria], ['Puertas', a.puertas], ['Potencia', a.potencia], ['Tracción', a.traccion]].forEach(function (r) { if (r[1] == null || r[1] === '') sinDato.push(r[0]); });
+          if (sinDato.length) info.appendChild(el('p', 'No informado en la publicación: ' + sinDato.join(', ') + '.', 'fi-n fi-nd'));
+        }
         var dl = el('dl', null, 'fi-d');
         function dato(k, v, sw) {
           if (v == null || v === '') return;
@@ -1027,23 +1039,42 @@ ul.appendChild(frag);
           dd.appendChild(document.createTextNode(String(v)));
           d.appendChild(el('dt', k)); d.appendChild(dd); dl.appendChild(d);
         }
-        dato('Tipo', a.tipoVehiculo); dato('Tipo de moto', a.tipoMoto); dato('Año', a.anio); dato('Kilómetros', a.km != null ? fmt(a.km) + ' km' : 'Consultar'); dato('Caja', a.transmision); dato('Combustible', a.combustible);
+        dato('Tipo', a.tipoVehiculo); dato('Tipo de moto', a.tipoMoto); 
         dato('Color', a.color, a.sw); dato('Cilindrada', a.cilindrada); dato('Motor', a.tipoVehiculo === 'Moto' ? a.motor : null); dato('Potencia', a.potencia); dato('Tracción', a.traccion);
         dato('Versión', a.version); dato('Carrocería', a.carroceria); dato('Puertas', a.puertas); dato('Velocidades', a.numeroVelocidades);
-        if (a.relevadoEl) dato('Relevado', fecha(a.relevadoEl));
         info.appendChild(dl);
         var yaVisible = { 'año': 1, 'marca': 1, 'modelo': 1, 'versión': 1, 'kilómetros': 1, 'color': 1, 'tipo de combustible': 1, 'combustible': 1, 'transmisión': 1, 'motor': 1, 'cilindrada': 1, 'tipo de carrocería': 1, 'carrocería': 1, 'puertas': 1, 'potencia': 1, 'control de tracción': 1, 'tipo de moto': 1, 'numero de velocidades': 1, 'número de velocidades': 1 };
+        Object.keys(yaVisible).forEach(function (k) { yaVisible[norm(k)] = 1; });   /* norm() quita acentos: sin esto «Año», «Kilómetros», «Transmisión»… se repetían abajo */
         var extras = (a.atributosPublicados || []).filter(function (x) { return x && x.nombre && x.valor && !yaVisible[norm(x.nombre)]; });
         if (extras.length) {
           /* Bloque permanente: las características publicadas no se esconden detrás
              de un acordeón ni generan un estado visual distinto entre unidades. */
           var ep = el('section', null, 'fi-extra');
           ep.appendChild(el('h3', 'Características publicadas (' + extras.length + ')', 'fi-s-k'));
-          var edl = el('dl', null, 'fi-d');
-          extras.forEach(function (x) { var row = el('div'), val = el('dd', x.valor); if (String(x.valor).trim().toLowerCase() === 'sí') val.className = 'fi-yes'; row.appendChild(el('dt', x.nombre)); row.appendChild(val); edl.appendChild(row); });
-          ep.appendChild(edl); ep.appendChild(el('p', 'Datos declarados en la publicación de Mercado Libre; confirmalos con la agencia.', 'fi-n')); info.appendChild(ep);
+          var filasDe = function (arr) { var d = el('dl', null, 'fi-d'); arr.forEach(function (x) { var row = el('div'), val = el('dd', x.valor); if (String(x.valor).trim().toLowerCase() === 'sí') val.className = 'fi-yes'; row.appendChild(el('dt', x.nombre)); row.appendChild(val); d.appendChild(row); }); return d; };
+          var VISIBLES = 8;   /* T3: la lista completa llega a ~50 filas; las primeras quedan a la vista y el resto se despliega con teclado o toque */
+          ep.appendChild(filasDe(extras.slice(0, VISIBLES)));
+          if (extras.length > VISIBLES) {
+            var mas = el('details', null, 'fi-mas');
+            mas.appendChild(el('summary', 'Ver todas las características (' + extras.length + ')'));
+            mas.appendChild(filasDe(extras.slice(VISIBLES)));
+            ep.appendChild(mas);
+          }
+          ep.appendChild(el('p', 'Datos declarados en la publicación de Mercado Libre; confirmalos con la agencia.', 'fi-n')); info.appendChild(ep);
         }
         if (a.nota) info.appendChild(el('p', a.nota, 'fi-n'));
+        /* T3 · de dónde salen estos datos: fecha real del relevamiento y enlace a la publicación original */
+        var urlOrig = typeof a.url === 'string' && /^https:\/\//.test(a.url) ? a.url : null;
+        if (a.relevadoEl || urlOrig) {
+          var fu = el('details', null, 'fi-fuente');
+          fu.appendChild(el('summary', 'De dónde salen estos datos'));
+          var fc = el('div', null, 'fi-fuente-c');
+          fc.appendChild(el('p', 'Precio y características son los declarados en la publicación; no son el resultado de una inspección del vehículo.'));
+          if (a.relevadoEl) fc.appendChild(el('p', 'Relevado el ' + fecha(a.relevadoEl) + '.'));
+          fc.appendChild(el('p', 'Precio y disponibilidad pueden cambiar: confirmalos con Automotores 828 antes de decidir.'));
+          if (urlOrig) fc.appendChild(enlace('Ver la publicación original', urlOrig, 'fi-lnk', true));
+          fu.appendChild(fc); info.appendChild(fu);
+        }
 
         /* Mini mapa de la agencia, no de la unidad; Leaflet lo inicia al acercarse a la ficha. */
         if (ctx.coordenadas && Number.isFinite(Number(ctx.coordenadas.lat)) && Number.isFinite(Number(ctx.coordenadas.lng))) {

@@ -2520,6 +2520,23 @@ dialog.cmp[open] .cmp-hd{animation:moIn var(--mo-slow) var(--mo-ease) backwards}
 .btn[data-bf]:focus-visible .bf-t{width:0}
 .btn[data-bf]:focus-visible .bf-t svg{transform:translateX(calc(100% + var(--bf-g)))}
 @media (prefers-reduced-motion:reduce){.btn[data-bf] .bf,.btn[data-bf] .bf svg{transition-duration:.01ms}}
+
+/* T3 · ficha: lectura rápida, «No informado», características plegadas y fuente de los datos */
+dialog.ficha .fi-rapido{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:0 12px;margin:12px 0 4px;padding:10px 0;border-top:2px solid var(--y);border-bottom:1px solid rgba(255,255,255,.14)}
+dialog.ficha .fi-rapido div{min-width:0}
+dialog.ficha .fi-rapido dt{color:#9e9e9e;font:700 10px/1.1 var(--b);letter-spacing:.14em;text-transform:uppercase}
+dialog.ficha .fi-rapido dd{margin:4px 0 0;color:#fff;font:800 17px/1.2 var(--b);overflow-wrap:anywhere}
+@media(max-width:800px){dialog.ficha .fi-rapido{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px 12px}}
+dialog.ficha .fi-nd{margin:6px 0 0}
+dialog.ficha .fi-mas,dialog.ficha .fi-fuente{margin:8px 0;border-top:1px solid rgba(255,255,255,.14)}
+dialog.ficha .fi-mas>summary,dialog.ficha .fi-fuente>summary{display:flex;align-items:center;justify-content:space-between;gap:12px;min-height:44px;padding:8px 0;cursor:pointer;list-style:none;color:var(--y);font:700 13px/1.2 var(--b)}
+dialog.ficha .fi-mas>summary::-webkit-details-marker,dialog.ficha .fi-fuente>summary::-webkit-details-marker{display:none}
+dialog.ficha .fi-mas>summary::after,dialog.ficha .fi-fuente>summary::after{content:"+";flex:none;display:grid;place-items:center;width:28px;height:28px;background:#ee1c22;color:#060607;font:800 20px/1 var(--b)}
+dialog.ficha .fi-mas[open]>summary::after,dialog.ficha .fi-fuente[open]>summary::after{content:"\2212"}
+dialog.ficha .fi-mas>summary:focus-visible,dialog.ficha .fi-fuente>summary:focus-visible{outline:2px solid var(--y);outline-offset:2px}
+dialog.ficha .fi-fuente-c p{margin:0 0 8px;color:#d6d6d6;font-size:13.5px;line-height:1.45}
+dialog.ficha .fi-lnk{display:inline-flex;align-items:center;min-height:44px;color:var(--y);font-weight:700;text-decoration:underline;text-underline-offset:4px}
+html body dialog.ficha .fi-i section.fi-extra{padding-bottom:8px}
 .msg-updated{animation:msg-updated .28s ease-out}@keyframes msg-updated{from{opacity:.68;transform:translateY(2px)}to{opacity:1;transform:translateY(0)}}
 .guia-progress{color:#d9dbdd;font-size:.9rem;margin:.25rem 0}
 .qa-search-label{display:block;margin:.6rem 0 .25rem;color:#d9dbdd}.qa-search{display:block;min-height:44px;width:min(100%,32rem);padding:.65rem .8rem;border:1px solid #6b6d70;border-radius:.4rem;background:#111214;color:#fff;font:inherit}.qa-search:focus-visible{outline:3px solid #ee1c22;outline-offset:2px}
@@ -2540,7 +2557,7 @@ dialog.cmp[open] .cmp-hd{animation:moIn var(--mo-slow) var(--mo-ease) backwards}
 <script defer src="js/hero-motion.js?v=50ca0567"></script>
 <script defer src="js/fondos-secciones.js?v=7f9083a8"></script>
 <script defer src="js/wa-mensajes.js?v=e4ab37d1"></script>
-<script defer src="js/secciones.js?v=37c60836"></script>
+<script defer src="js/secciones.js?v=3cbc2019"></script>
 <script defer src="js/ficha-flip.js?v=e8df815f"></script>
 <script defer src="js/galeria-visor.js?v=fe7ca994"></script>
 <script defer src="js/combobox.js?v=ec7fd5f4"></script>
