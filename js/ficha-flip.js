@@ -184,6 +184,31 @@
     s.wd = setTimeout(function () { if (s.tok === tok && dlg.open && !s.closing) cleanup(dlg, s); }, dur + 2200);
   }
 
+  /* ---------- cambio de unidad con la ficha abierta ---------- */
+  /* Salida breve del contenido actual antes de que secciones.js lo reconstruya con la otra unidad; así no se corta de golpe a vacío.
+     done() se ejecuta una sola vez, solo si ningún cierre ni otra selección posterior invalidó este cambio (token).
+     Devuelve true si programó la salida (y llamará a done); false si hay que reconstruir de inmediato (sin movimiento, cerrándose, error). */
+  function leave(dlg, done) {
+    try {
+      var s = st(dlg), g = dlg.querySelector('.fi-g');
+      if (!dlg.open || s.closing || reduce() || !g || typeof done !== 'function') return false;
+      var o = 1; try { o = parseFloat(getComputedStyle(g).opacity); } catch (e) {}
+      if (!(o >= 0 && o <= 1)) o = 1;
+      cleanup(dlg, s);   /* cancela la entrada anterior e invalida cualquier cambio pendiente (tok++) */
+      var tk = s.tok, ran = false, dur = 110;
+      var run = function () {
+        if (ran || s.tok !== tk) return; ran = true;
+        clearTimeout(s.wd);
+        if (!dlg.open || s.closing) return;
+        done();
+      };
+      var a = g.animate([{ opacity: o }, { opacity: 0 }], { duration: dur, easing: 'linear', fill: 'forwards' });
+      s.anims.push(a); a.onfinish = run;
+      s.wd = setTimeout(run, dur + 150);   /* si la animación no termina, igualmente se hace el cambio */
+      return true;
+    } catch (e) { return false; }
+  }
+
   /* ---------- cierre ---------- */
   function closeAnimated(dlg, rv) {
     var s = st(dlg);
@@ -255,5 +280,5 @@
     dlg.addEventListener('close', function () { s.closing = false; s.shown = false; cleanup(dlg, s); });
   }
 
-  window.drFichaFlip = { attach: attach, open: open };
+  window.drFichaFlip = { attach: attach, open: open, leave: leave };
 })();

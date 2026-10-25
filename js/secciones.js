@@ -780,7 +780,7 @@ ul.appendChild(frag);
       /* ----- ficha completa (diálogo), compartir y aviso breve ----- */
       var ctx = {};
       try { ctx = JSON.parse(($('#cat-ctx') || {}).textContent || '{}'); } catch (e) {}
-      var fdlg = null, fOrigen = null, toast = null, toastT = 0, fRO = null;
+      var fdlg = null, fOrigen = null, toast = null, toastT = 0, fRO = null, fSwap = false;
       function aviso(msg) {
         if (!toast) { toast = el('div', null, 'toast'); toast.setAttribute('role', 'status'); toast.setAttribute('aria-live', 'polite'); document.body.appendChild(toast); }
         toast.textContent = msg; toast.classList.add('on');
@@ -802,6 +802,8 @@ ul.appendChild(frag);
         var a = record || list[i]; if (!a) return;
         fOrigen = origen || null;
         if (window.drGaleriaVisor) window.drGaleriaVisor.close(true);   /* el visor nunca sobrevive a la reconstrucción de la ficha */
+        /* otra unidad con la ficha ya abierta: el contenido actual sale brevemente (js/ficha-flip.js) y recién entonces se reconstruye; la última selección prevalece */
+        if (fdlg && fdlg.open && !fSwap && window.drFichaFlip && window.drFichaFlip.leave && window.drFichaFlip.leave(fdlg, function () { fSwap = true; try { abrirFicha(i, origen, record); } finally { fSwap = false; } })) return;
         if (!fdlg) {
           fdlg = el('dialog', null, 'ficha'); fdlg.setAttribute('aria-labelledby', 'fi-ttl');
           fdlg.addEventListener('click', function (e) { if (e.target === fdlg) fdlg.close(); });
