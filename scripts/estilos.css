@@ -2531,3 +2531,10 @@ html body dialog.ficha .fi-i section.fi-extra{padding-bottom:8px}
 html.has-dlg .dr-fab{display:none}
 /* El aviso breve no tapa la bandeja del comparador ni los botones flotantes */
 .toast{left:calc(50% - 32px);bottom:calc(22px + var(--tray-h,0px) + env(safe-area-inset-bottom,0px));max-width:calc(100vw - 100px)}
+/* Tarjetas del catálogo: sin palabras ni cifras partidas (km, «COMPLETA», marca). Revisado con capturas a 390/768/1280 px. */
+#unidades .cars .car .car-h{flex-wrap:wrap!important;row-gap:6px}
+#unidades .cars .car .car-h .car-b{flex:1 1 100%;min-width:0}
+#unidades .cars .car .car-s b,#unidades .cars .car .car-s small{overflow-wrap:normal;word-break:normal;hyphens:none;white-space:nowrap}
+#unidades .cars .car .car-s small{letter-spacing:.06em}
+@media(max-width:520px){#unidades .cars .car .car-s b{font-size:15px!important}#unidades .cars .car .car-s p{padding-right:4px!important}#unidades .cars .car .car-s p+p{padding-left:8px!important}}
+#unidades .cars .car .car-f .btn{overflow-wrap:normal;word-break:normal;hyphens:none;letter-spacing:.03em!important;padding:6px 4px}

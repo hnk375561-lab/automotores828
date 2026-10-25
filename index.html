@@ -2565,6 +2565,13 @@ html body dialog.ficha .fi-i section.fi-extra{padding-bottom:8px}
 html.has-dlg .dr-fab{display:none}
 /* El aviso breve no tapa la bandeja del comparador ni los botones flotantes */
 .toast{left:calc(50% - 32px);bottom:calc(22px + var(--tray-h,0px) + env(safe-area-inset-bottom,0px));max-width:calc(100vw - 100px)}
+/* Tarjetas del catálogo: sin palabras ni cifras partidas (km, «COMPLETA», marca). Revisado con capturas a 390/768/1280 px. */
+#unidades .cars .car .car-h{flex-wrap:wrap!important;row-gap:6px}
+#unidades .cars .car .car-h .car-b{flex:1 1 100%;min-width:0}
+#unidades .cars .car .car-s b,#unidades .cars .car .car-s small{overflow-wrap:normal;word-break:normal;hyphens:none;white-space:nowrap}
+#unidades .cars .car .car-s small{letter-spacing:.06em}
+@media(max-width:520px){#unidades .cars .car .car-s b{font-size:15px!important}#unidades .cars .car .car-s p{padding-right:4px!important}#unidades .cars .car .car-s p+p{padding-left:8px!important}}
+#unidades .cars .car .car-f .btn{overflow-wrap:normal;word-break:normal;hyphens:none;letter-spacing:.03em!important;padding:6px 4px}
 .msg-updated{animation:msg-updated .28s ease-out}@keyframes msg-updated{from{opacity:.68;transform:translateY(2px)}to{opacity:1;transform:translateY(0)}}
 .guia-progress{color:#d9dbdd;font-size:.9rem;margin:.25rem 0}
 .qa-search-label{display:block;margin:.6rem 0 .25rem;color:#d9dbdd}.qa-search{display:block;min-height:44px;width:min(100%,32rem);padding:.65rem .8rem;border:1px solid #6b6d70;border-radius:.4rem;background:#111214;color:#fff;font:inherit}.qa-search:focus-visible{outline:3px solid #ee1c22;outline-offset:2px}
