@@ -8,7 +8,7 @@ Secciones de `index.html`: Hero · Horarios y ubicación · Unidades · Financia
 
 | T | Transformación | Estado | Prueba |
 |---|---|---|---|
-| T1 | Enlace propio por unidad y «Atrás» | Hecha; falta prueba en móvil real | `e2e-t1-enlaces.py` |
+| T1 | Enlace propio por unidad y «Atrás» | Hecha; táctil emulado 20/20; falta teléfono real | `e2e-t1-enlaces.py`, `e2e-t1-tactil.py` |
 | T2 | Presupuesto bimoneda sin conversión | Hecha | `e2e-t2-bimoneda.py` |
 | T3 | Ficha con transparencia de datos | Hecha; capturas 390/768/1280 revisadas en Chromium headless (25/10) | `e2e-t3-transparencia.py` |
 | T4 | Selección unificada y visita multi-unidad | Hecha; falta prueba en móvil real | `e2e-t4-seleccion.py`, `e2e-movil-acciones.py` |
@@ -16,7 +16,7 @@ Secciones de `index.html`: Hero · Horarios y ubicación · Unidades · Financia
 | T6 | Calendario con horarios publicados | Hecha; depende de P11 | `e2e-t6-visitas.py` |
 | T7 | Foto vertical sin recorte | Hecha; capturas 390/768/1280 revisadas (25/10); defectos de texto partido en tarjetas corregidos | `e2e-t7-foto.py` |
 | T8 | Medición de eventos | **Abierta**: requiere autorización escrita del dueño, actualizar `privacidad.html` y definir dónde se guardan los conteos (P3) | — |
-| T9 | Movimiento selectivo | **Abierta**: medir primero peso, LCP e INP en móvil de gama media; probar 2–3 firmas en una rama | — |
+| T9 | Movimiento selectivo | **Abierta**: medición base headless hecha (`docs/MEDICION-T9-BASE-2026-10-25.md`: portada LCP 3,3 s, ≈755 ms de bloqueo, 2 MB de imágenes); no cargar GSAP en la portada; falta INP y móvil real | — |
 | T10 | «Tu búsqueda» conectada al catálogo | Hecha | `e2e-t10-busqueda.py` |
 
 Suite completa sin cortarse en el primer fallo: `npm run test:todo` (incluye `test-ficha-flip.py`). `npm test` corta en el primer fallo.
