@@ -49,7 +49,9 @@
         });
         lote.forEach(function (e, k) {
           io.unobserve(e.target);
-          e.target.style.transitionDelay = (Math.min(k, 4) * 70) + 'ms';
+          var d = (Math.min(k, 4) * 70) + 'ms';
+          /* .car transiciona opacity, transform, border-color, box-shadow (damero-secciones.css): el desfase solo va a los dos primeros. */
+          e.target.style.transitionDelay = e.target.matches('.car') ? d + ', ' + d + ', 0s, 0s' : d;
           e.target.classList.add('in');
         });
         /* El desfase solo sirve a la entrada: se quita después para no demorar el hover. */
