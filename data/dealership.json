@@ -194,7 +194,12 @@
     "official": false,
     "publicIndexing": false,
     "siteUrl": null,
-    "previewUrl": null
+    "previewUrl": null,
+    "medicion": {
+      "activo": false,
+      "endpoint": null,
+      "nota": "T8: apagada. Requiere autorización del dueño, endpoint https y publicIndexing true; en la demo nunca corre."
+    }
   },
   "investigacionComplementaria": {
     "consultada": "2026-10-21",

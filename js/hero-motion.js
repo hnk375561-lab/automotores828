@@ -7,8 +7,10 @@
   var interactionArea = chain.closest('.hero') || chain;
 
   /* la segunda tanda de fotos era lazy: al llegar el reinicio aparecían de golpe. Se cargan y decodifican de antemano. */
-  [].forEach.call(chain.querySelectorAll('img'), function (img) {
+  /* Solo la primera foto compite por el ancho de banda inicial (LCP): el resto baja con prioridad baja, sigue cargando de antemano. */
+  [].forEach.call(chain.querySelectorAll('img'), function (img, n) {
     if (img.loading === 'lazy') img.loading = 'eager';
+    if (n > 0 && 'fetchPriority' in img) img.fetchPriority = 'low';
     if (img.decode) img.decode().catch(function () {});
   });
   var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)');

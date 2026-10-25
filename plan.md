@@ -15,8 +15,8 @@ Secciones de `index.html`: Hero · Horarios y ubicación · Unidades · Financia
 | T5 | «Comparalo con» en la ficha | Hecha | `e2e-t5-comparalo.py` |
 | T6 | Calendario con horarios publicados | Hecha; depende de P11 | `e2e-t6-visitas.py` |
 | T7 | Foto vertical sin recorte | Hecha; capturas 390/768/1280 revisadas (25/10); defectos de texto partido en tarjetas corregidos | `e2e-t7-foto.py` |
-| T8 | Medición de eventos | **Abierta**: requiere autorización escrita del dueño, actualizar `privacidad.html` y definir dónde se guardan los conteos (P3) | — |
-| T9 | Movimiento selectivo | **Abierta**: medición base headless hecha (`docs/MEDICION-T9-BASE-2026-10-25.md`: portada LCP 3,3 s, ≈755 ms de bloqueo, 2 MB de imágenes); no cargar GSAP en la portada; falta INP y móvil real | — |
+| T8 | Medición de eventos | Construida y apagada (nunca corre en la demo); para activarla: autorización del dueño, endpoint https y producción | `e2e-t8-t9.py` |
+| T9 | Movimiento selectivo | Hecha en versión liviana: odómetro de cifras reales (sin GSAP) y hero con prioridad baja; LCP 3,28→2,95 s en headless; falta INP y móvil real | `e2e-t8-t9.py` |
 | T10 | «Tu búsqueda» conectada al catálogo | Hecha | `e2e-t10-busqueda.py` |
 
 Suite completa sin cortarse en el primer fallo: `npm run test:todo` (incluye `test-ficha-flip.py`). `npm test` corta en el primer fallo.

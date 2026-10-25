@@ -2572,6 +2572,8 @@ html.has-dlg .dr-fab{display:none}
 #unidades .cars .car .car-s small{letter-spacing:.06em}
 @media(max-width:520px){#unidades .cars .car .car-s b{font-size:15px!important}#unidades .cars .car .car-s p{padding-right:4px!important}#unidades .cars .car .car-s p+p{padding-left:8px!important}}
 #unidades .cars .car .car-f .btn{overflow-wrap:normal;word-break:normal;hyphens:none;letter-spacing:.03em!important;padding:6px 4px}
+/* T9 · cifras del resumen del catálogo: ancho estable mientras cuentan */
+.inventory-meta .odo{display:inline-block;font-weight:inherit;font-variant-numeric:tabular-nums;text-align:right}
 .msg-updated{animation:msg-updated .28s ease-out}@keyframes msg-updated{from{opacity:.68;transform:translateY(2px)}to{opacity:1;transform:translateY(0)}}
 .guia-progress{color:#d9dbdd;font-size:.9rem;margin:.25rem 0}
 .qa-search-label{display:block;margin:.6rem 0 .25rem;color:#d9dbdd}.qa-search{display:block;min-height:44px;width:min(100%,32rem);padding:.65rem .8rem;border:1px solid #6b6d70;border-radius:.4rem;background:#111214;color:#fff;font:inherit}.qa-search:focus-visible{outline:3px solid #ee1c22;outline-offset:2px}
@@ -2582,6 +2584,8 @@ html.has-dlg .dr-fab{display:none}
 
 </style>
 <link rel="stylesheet" href="css/dr-identidad.css?v=d87f1e5b">
+<meta name="dr-medicion" content="off">
+<script defer src="js/medir.js?v=089e0145"></script>
 <link rel="stylesheet" href="css/hero-carousel.css?v=b665d82c">
 <link rel="stylesheet" href="css/fondos-secciones.css?v=a9d5c6c3">
 <link rel="stylesheet" href="css/damero-secciones.css?v=db29102c">
@@ -2589,7 +2593,8 @@ html.has-dlg .dr-fab{display:none}
 <link rel="stylesheet" href="css/galeria-visor.css?v=62ec5645">
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"AutoDealer","name":"Automotores 828","address":{"@type":"PostalAddress","streetAddress":"Blvd. Buenos Aires 828","postalCode":"B1842","addressLocality":"Monte Grande","addressRegion":"Buenos Aires","addressCountry":"AR"},"sameAs":["https://www.facebook.com/automotoressrl828/","https://www.instagram.com/automotores828/"],"email":"automotores828@live.com","hasMap":"https://www.google.com/maps/place/Automotores+828+SRL/@-34.8137588,-58.4555267,17z/data=!4m15!1m8!3m7!1s0x95bcd3dc6c2273fd:0xf9dc7d0717e644c1!2sBlvd.+Buenos+Aires+828,+B1842+Monte+Grande,+Provincia+de+Buenos+Aires!3b1!8m2!3d-34.8137588!4d-58.4555267!16s%2Fg%2F11s3ldxgn0!3m5!1s0x95bcd3dc6bd3f11f:0x23494f2381c7b3b5!8m2!3d-34.8137588!4d-58.4555267!16s%2Fg%2F1hc32h2qs?entry=ttu&g_ep=EgoyMDI2MTAyMC4wIKXMDSoASAFQAw%3D%3D","geo":{"@type":"GeoCoordinates","latitude":-34.8138439,"longitude":-58.455598},"openingHoursSpecification":[{"@type":"OpeningHoursSpecification","dayOfWeek":["Monday","Tuesday","Wednesday","Thursday","Friday"],"opens":"09:00","closes":"13:00"},{"@type":"OpeningHoursSpecification","dayOfWeek":["Monday","Tuesday","Wednesday","Thursday","Friday"],"opens":"15:00","closes":"19:00"},{"@type":"OpeningHoursSpecification","dayOfWeek":["Saturday"],"opens":"09:00","closes":"13:00"}]}</script>
 <script defer src="js/hero-carousel.js?v=c5c433be"></script>
-<script defer src="js/hero-motion.js?v=50ca0567"></script>
+<script defer src="js/hero-motion.js?v=aed6963b"></script>
+<script defer src="js/odometro.js?v=ef802a5b"></script>
 <script defer src="js/fondos-secciones.js?v=7f9083a8"></script>
 <script defer src="js/wa-mensajes.js?v=e4255f8f"></script>
 <script defer src="js/secciones.js?v=0bb76ddb"></script>
@@ -2652,7 +2657,7 @@ html.has-dlg .dr-fab{display:none}
 <section id="unidades" class="inventory-section" aria-labelledby="unidades-t"><div class="w wide">
 <div class="inventory-head">
 <div class="inventory-title"><p class="ey reveal"><span class="ey-brand">828</span> · Compra y venta · Monte Grande</p><h2 id="unidades-t" class="reveal">Nuestras <em>unidades</em></h2><p class="sec-p">Catálogo relevado el 21/10/2026: 50 autos y camionetas y 8 motos. Precios y disponibilidad pueden cambiar; confirmalos con la agencia.</p></div>
-<div class="inventory-meta" aria-label="Resumen del catálogo"><span class="inventory-meta-kicker">Automotores 828</span><span>58 unidades relevadas al 21/10/2026 · 50 autos · 8 motos</span><i aria-hidden="true"></i></div>
+<div class="inventory-meta" aria-label="Resumen del catálogo"><span class="inventory-meta-kicker">Automotores 828</span><span><b class="odo" data-odo="58">58</b> unidades relevadas al 21/10/2026 · <b class="odo" data-odo="50">50</b> autos · <b class="odo" data-odo="8">8</b> motos</span><i aria-hidden="true"></i></div>
 </div>
 <div class="inventory-rule" aria-hidden="true"><span></span><small>Monte Grande · Buenos Aires</small><span></span></div>
 <div class="fx" id="tools" hidden></div>

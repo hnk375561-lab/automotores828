@@ -21,6 +21,10 @@ const A = JSON.parse(read('data/vehicles.json'));
 
 const esc = (s) => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 const demo = D.publicacion.publicIndexing === false;
+/* T8: medición de eventos. Apagada por defecto y SIEMPRE apagada en la demo (noindex). Solo se enciende con publicacion.medicion.activo === true y un endpoint https, ya en producción. */
+const MED = D.publicacion.medicion || {};
+const medicionOn = !demo && MED.activo === true && /^https:\/\//.test(MED.endpoint || '');
+const medHead = `<meta name="dr-medicion" content="${medicionOn ? MED.endpoint.replace(/"/g, '%22') : 'off'}">\n<script defer src="js/medir.js?v=20261025-1"></script>\n`;
 const siteUrl = D.publicacion.siteUrl ? D.publicacion.siteUrl.replace(/\/?$/, '/') : null;
 /* Base ABSOLUTA para las vistas previas (WhatsApp, Facebook, etc. exigen URL absoluta en og:image).
    Prioridad: siteUrl (producción) > publicacion.previewUrl (demo, URL donde está publicada) > entorno de build
@@ -95,7 +99,7 @@ ${withFonts ? FONTS : ''}${CSS}
 @media(prefers-reduced-motion:reduce){.msg-updated{animation:none}}
 ${withFonts ? '' : '\n' + DRID}
 </style>
-${withFonts ? '<link rel="stylesheet" href="css/dr-identidad.css?v=20261024-4">\n' : ''}${extraHead}</head>
+${withFonts ? '<link rel="stylesheet" href="css/dr-identidad.css?v=20261024-4">\n' : ''}${medHead}${extraHead}</head>
 <body>
 ${body}
 </body>
@@ -552,7 +556,7 @@ const index = page({
   title: `${NAME} · Autos y motos en ${L.city}, ${L.province}`,
   desc: `${NAME} en ${L.city}, ${L.partido}: compra y venta de autos y motos usados, permutas y consignaciones. Visitanos en ${L.address} o escribinos por redes o correo.`,
   file: 'index.html',
-  extraHead: `<link rel="stylesheet" href="css/hero-carousel.css?v=20261024-5">\n<link rel="stylesheet" href="css/fondos-secciones.css">\n<link rel="stylesheet" href="css/damero-secciones.css?v=20261027-1">\n<link rel="stylesheet" href="css/comparador.css?v=20261028-1">\n<link rel="stylesheet" href="css/galeria-visor.css?v=20261026-1">\n<script type="application/ld+json">${JSON.stringify(ld)}</script>\n<script defer src="js/hero-carousel.js?v=20261024-1"></script>\n<script defer src="js/hero-motion.js?v=20261024-5"></script>\n<script defer src="js/fondos-secciones.js?v=20261024-1"></script>\n<script defer src="js/wa-mensajes.js"></script>\n<script defer src="js/secciones.js?v=20261029-1"></script>\n<script defer src="js/ficha-flip.js?v=20261027-1"></script>\n<script defer src="js/galeria-visor.js?v=20261026-1"></script>\n<script defer src="js/combobox.js?v=20261024-1"></script>\n<script defer src="js/anillo.js?v=20261024-2"></script>\n<script defer src="js/boton-flecha.js?v=20261024-1"></script>\n<script defer src="js/mapa.js?v=20261023-1"></script>\n<script defer src="js/horarios.js?v=20261024-1"></script>\n<script defer src="js/site.js?v=20261024-3"></script>\n<script defer src="js/foto-reactiva.js?v=20261027-1"></script>\n<script defer src="js/visita-horarios.js?v=1"></script>\n<script defer src="js/reserva-inline.js?v=20261028-1"></script>\n`,
+  extraHead: `<link rel="stylesheet" href="css/hero-carousel.css?v=20261024-5">\n<link rel="stylesheet" href="css/fondos-secciones.css">\n<link rel="stylesheet" href="css/damero-secciones.css?v=20261027-1">\n<link rel="stylesheet" href="css/comparador.css?v=20261028-1">\n<link rel="stylesheet" href="css/galeria-visor.css?v=20261026-1">\n<script type="application/ld+json">${JSON.stringify(ld)}</script>\n<script defer src="js/hero-carousel.js?v=20261024-1"></script>\n<script defer src="js/hero-motion.js?v=20261025-1"></script>\n<script defer src="js/odometro.js?v=20261025-1"></script>\n<script defer src="js/fondos-secciones.js?v=20261024-1"></script>\n<script defer src="js/wa-mensajes.js"></script>\n<script defer src="js/secciones.js?v=20261029-1"></script>\n<script defer src="js/ficha-flip.js?v=20261027-1"></script>\n<script defer src="js/galeria-visor.js?v=20261026-1"></script>\n<script defer src="js/combobox.js?v=20261024-1"></script>\n<script defer src="js/anillo.js?v=20261024-2"></script>\n<script defer src="js/boton-flecha.js?v=20261024-1"></script>\n<script defer src="js/mapa.js?v=20261023-1"></script>\n<script defer src="js/horarios.js?v=20261024-1"></script>\n<script defer src="js/site.js?v=20261024-3"></script>\n<script defer src="js/foto-reactiva.js?v=20261027-1"></script>\n<script defer src="js/visita-horarios.js?v=1"></script>\n<script defer src="js/reserva-inline.js?v=20261028-1"></script>\n`,
   body: `${header()}
 <main id="top">
 <div class="hero" role="region" aria-label="${esc(NAME)}">
@@ -569,7 +573,7 @@ ${secHorarios}
 <section id="unidades" class="inventory-section" aria-labelledby="unidades-t"><div class="w wide">
 <div class="inventory-head">
 <div class="inventory-title"><p class="ey reveal"><span class="ey-brand">828</span> · Compra y venta · ${esc(L.city)}</p><h2 id="unidades-t" class="reveal">Nuestras <em>unidades</em></h2><p class="sec-p">Catálogo relevado el ${A.relevadoEl ? esc(fdate(A.relevadoEl)) : 'último relevamiento'}: ${cantidadAutos} autos y camionetas y ${cantidadMotos} motos. Precios y disponibilidad pueden cambiar; confirmalos con la agencia.</p></div>
-<div class="inventory-meta" aria-label="Resumen del catálogo"><span class="inventory-meta-kicker">${esc(NAME)}</span><span>${autos.length} unidades relevadas al ${fdate(A.relevadoEl)} · ${cantidadAutos} autos · ${cantidadMotos} motos</span><i aria-hidden="true"></i></div>
+<div class="inventory-meta" aria-label="Resumen del catálogo"><span class="inventory-meta-kicker">${esc(NAME)}</span><span><b class="odo" data-odo="${autos.length}">${autos.length}</b> unidades relevadas al ${fdate(A.relevadoEl)} · <b class="odo" data-odo="${cantidadAutos}">${cantidadAutos}</b> autos · <b class="odo" data-odo="${cantidadMotos}">${cantidadMotos}</b> motos</span><i aria-hidden="true"></i></div>
 </div>
 <div class="inventory-rule" aria-hidden="true"><span></span><small>${esc(L.city)} · ${esc(L.province)}</small><span></span></div>
 ${unidades}
@@ -615,7 +619,7 @@ const privacidad = page({
 <main id="top"><section><div class="w doc">
 <p class="ey">Avisos</p><h1>Privacidad y <em>avisos</em></h1>
 <h2>Datos personales</h2>
-<p>Este sitio no tiene cuentas ni cookies propias y no guarda datos de quienes lo visitan. Los formularios «Tu usado» y «Contanos qué auto buscás» solo arman un mensaje en tu navegador, que podés copiar y enviar vos: no se transmite nada a este sitio. Los mapas de «Horarios y ubicación» y «Dónde encontrarnos» cargan sus mosaicos de OpenStreetMap solo cuando los solicitás; al abrirlos, el proveedor recibe tu dirección IP. Los botones y enlaces externos abren Mercado Libre, Facebook, Instagram, TikTok${C.whatsApp ? ', WhatsApp' : ''} o Google Maps, que tienen sus propias políticas de privacidad.</p>
+<p>Este sitio no tiene cuentas ni cookies propias y ${medicionOn ? 'cuenta solo eventos agregados y anónimos (apertura de una ficha, clic en WhatsApp, comparador abierto, favorito agregado, filtro usado), sin cookies, sin tu teléfono ni lo que escribas en los formularios, y respeta la señal «No rastrear»; nada más de lo que hacés se guarda.' : 'no guarda datos de quienes lo visitan.'} Los formularios «Tu usado» y «Contanos qué auto buscás» solo arman un mensaje en tu navegador, que podés copiar y enviar vos: no se transmite nada a este sitio. Los mapas de «Horarios y ubicación» y «Dónde encontrarnos» cargan sus mosaicos de OpenStreetMap solo cuando los solicitás; al abrirlos, el proveedor recibe tu dirección IP. Los botones y enlaces externos abren Mercado Libre, Facebook, Instagram, TikTok${C.whatsApp ? ', WhatsApp' : ''} o Google Maps, que tienen sus propias políticas de privacidad.</p>
 <h2>Información de las unidades</h2>
 <p>Los datos de las unidades (año, kilometraje, precio y anticipo cuando aparecen) provienen de publicaciones públicas consultadas en Mercado Libre y pueden haber cambiado. Confirmá siempre con ${esc(NAME)} antes de decidir.</p>
 <h2>Documento preliminar</h2>

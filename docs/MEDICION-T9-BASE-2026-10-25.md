@@ -17,3 +17,16 @@
 # T1 · Prueba táctil emulada
 
 `scripts/e2e-t1-tactil.py`: 20/20. Toque en tarjeta → «Tasar mi usado» / «Ver horarios y mapa» → Atrás, 3 repeticiones cada uno: la ficha cierra, el ancla navega, Atrás no deja la ficha ni sale del sitio, sin errores. Enlace directo `#unidad=ID` abre la ficha y cerrar con toque limpia el hash. **Sigue pendiente la prueba en un teléfono real.**
+
+# Después de los cambios (mismo método, 25/10/2026)
+
+| Página | LCP | Tareas largas | TBT aprox. | JS transferido |
+|---|---|---|---|---|
+| `index.html` antes | 3,28 s | 8 | ≈755 ms | 79 KB |
+| `index.html` después | 2,95 s | 6 | ≈663 ms | 82 KB |
+
+Cambios: (1) `js/hero-motion.js` ya no deja las 20 fotos del hero compitiendo por el ancho de banda; solo la primera conserva prioridad alta y el resto baja con `fetchPriority = 'low'` (siguen cargándose de antemano, sin saltos al reiniciar la cinta). (2) T9: `js/odometro.js` (≈1 KB, sin GSAP) cuenta hasta las cifras publicadas del resumen del catálogo (58 unidades · 50 autos · 8 motos); con movimiento reducido o ahorro de datos no anima y el HTML ya trae el valor final. Una sola corrida de 3 en headless: es orientativa, no un móvil real.
+
+# T8 · Medición de eventos
+
+Construida y **apagada**: `js/medir.js` no hace nada ni emite peticiones si `<meta name="dr-medicion">` vale `off` (siempre en la demo). Se enciende solo con `publicacion.medicion.activo = true`, un endpoint https y `publicIndexing = true`. Eventos de lista cerrada (`ficha_abierta`, `whatsapp_clic`, `comparador_abierto`, `favorito_agregado`, `filtro_usado`), sin teléfono ni textos de formularios, respeta «No rastrear» y GPC. El texto de `privacidad.html` cambia solo cuando está encendida. Prueba: `scripts/e2e-t8-t9.py`.

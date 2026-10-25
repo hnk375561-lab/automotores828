@@ -2538,3 +2538,5 @@ html.has-dlg .dr-fab{display:none}
 #unidades .cars .car .car-s small{letter-spacing:.06em}
 @media(max-width:520px){#unidades .cars .car .car-s b{font-size:15px!important}#unidades .cars .car .car-s p{padding-right:4px!important}#unidades .cars .car .car-s p+p{padding-left:8px!important}}
 #unidades .cars .car .car-f .btn{overflow-wrap:normal;word-break:normal;hyphens:none;letter-spacing:.03em!important;padding:6px 4px}
+/* T9 · cifras del resumen del catálogo: ancho estable mientras cuentan */
+.inventory-meta .odo{display:inline-block;font-weight:inherit;font-variant-numeric:tabular-nums;text-align:right}
