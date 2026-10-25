@@ -1549,6 +1549,11 @@ var io = new IntersectionObserver(function (es) {
       }
 
       /* ----- coincidencias con el catálogo (solo en la búsqueda) ----- */
+      /* La función del catálogo vive en otro ámbito (daba ReferenceError al listar coincidencias): misma regla, mismo constructor de mensajes. */
+      function hrefConsulta(a) {
+        var W = window.drWaMensajes, n = wa && wa.getAttribute('data-wa');
+        return (!a.vendida && W && n) ? 'https://wa.me/' + n + '?text=' + encodeURIComponent(W.mensaje(a, 'consulta')) : a.href;
+      }
       function coincidencias() {
         var q = norm(val('b-mm')).split(/\s+/).filter(Boolean), an = soloNum(val('b-an')), tr = norm(val('b-tr'));
         var co = val('b-co').split(', ').filter(Boolean).map(norm), ca = val('b-ca').split(', ').filter(Boolean).map(norm);
@@ -1562,7 +1567,8 @@ var io = new IntersectionObserver(function (es) {
           if (tr && norm(a.transmision) !== tr) return false;
           if (co.length && co.indexOf(norm(a.combustible)) < 0) return false;
           if (ca.length && ca.indexOf(norm(a.carroceria)) < 0) return false;
-          if (pr && a.monto != null && a.precio && a.precio.moneda === mo && a.monto > pr) return false;
+          /* T10: el tope se compara en su propia moneda y sin conversión; una unidad en otra moneda o sin precio publicado no se da por coincidente. */
+          if (pr && !(a.precio && a.precio.moneda === mo && a.precio.monto > 0 && a.precio.monto <= pr)) return false;
           return true;
         });
       }

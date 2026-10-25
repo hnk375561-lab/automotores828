@@ -16,6 +16,7 @@ const PASOS = [
   ['e2e-t3-transparencia', 'python3', ['scripts/e2e-t3-transparencia.py']],
   ['e2e-t4-seleccion', 'python3', ['scripts/e2e-t4-seleccion.py']],
   ['e2e-movil-acciones', 'python3', ['scripts/e2e-movil-acciones.py']],
+  ['e2e-t10-busqueda', 'python3', ['scripts/e2e-t10-busqueda.py']],
 ];
 
 const res = [];
