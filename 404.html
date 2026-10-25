@@ -1073,7 +1073,7 @@ section.conversion::before,.finance-section{image-rendering:auto}
 #unidades .cars .car{display:flex!important;flex-direction:column!important;grid-row:auto!important;grid-template-rows:none!important;gap:0!important;min-height:0!important;padding:0 0 14px!important;border-left:0!important;overflow:hidden;clip-path:none!important;align-content:normal}
 #unidades .cars .car::before{top:10px!important;right:10px!important;width:54px!important;height:21px!important;z-index:2}
 #unidades .cars .car::after{display:none!important}
-#unidades .cars .car .car-ph{order:0;margin:0!important;height:auto!important;aspect-ratio:1/1!important;border-bottom:1px solid rgba(255,255,255,.12)!important;width:100%}
+#unidades .cars .car .car-ph{order:0;margin:0!important;height:auto!important;aspect-ratio:4/5!important;background:#0b0b0c;border-bottom:1px solid rgba(255,255,255,.12)!important;width:100%}
 #unidades .cars .car .car-ph img{width:100%!important;height:100%!important;object-fit:cover;filter:none!important}
 #unidades .cars .car:hover{transform:none}
 #unidades .cars .car:hover .car-ph img{transform:scale(1.03);filter:none!important}
@@ -1220,7 +1220,8 @@ dialog.ficha::backdrop{background:rgba(3,3,4,.82)}
 .fi-m{position:relative;background:#070707;min-width:0}
 .fi-t{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none;-webkit-overflow-scrolling:touch}
 .fi-t::-webkit-scrollbar{display:none}
-.fi-t img{flex:0 0 100%;width:100%;aspect-ratio:1/1;max-height:72dvh;object-fit:cover;scroll-snap-align:center;display:block}
+/* T7 · foto vertical sin recorte: marco 3:4 y object-fit:contain sobre fondo oscuro de la paleta; las horizontales quedan completas con barras, nunca recortadas. */
+.fi-t img{flex:0 0 100%;width:100%;aspect-ratio:3/4;max-height:72dvh;object-fit:contain;background:#0b0b0c;scroll-snap-align:center;display:block}
 .fi-a{position:absolute;top:calc(50% - 60px);z-index:2;width:44px;height:44px;border:0;border-radius:50%;background:rgba(6,6,7,.8);color:#fff;font:400 28px/1 var(--b);cursor:pointer}
 .fi-a:hover{background:var(--y);color:var(--ink)}
 .fi-prev{left:10px}.fi-next{right:10px}
