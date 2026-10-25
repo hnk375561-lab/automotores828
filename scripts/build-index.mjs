@@ -1,3 +1,5 @@
+import vm from 'node:vm';
+import crypto from 'node:crypto';
 // Genera index.html, reserva.html, 404.html, privacidad.html, robots.txt, sitemap.xml, site.webmanifest y favicon.svg
 // a partir de data/dealership.json y data/vehicles.json. Sin dependencias.
 // Uso: npm run build   (después: npm test)
@@ -7,7 +9,13 @@ import { fileURLToPath } from 'node:url';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const read = (f) => fs.readFileSync(path.join(root, f), 'utf8');
-const write = (f, s) => fs.writeFileSync(path.join(root, f), s);
+// Versionado automático: cada <script>/<link> local de css/ y js/ lleva ?v=<hash del contenido> (se recalcula en cada build)
+const stamp = (html) => html.replace(/(\b(?:src|href)=")((?:css|js)\/[^"?#]+\.(?:js|css))(?:\?v=[^"]*)?(")/g, (m, a, f, c) => {
+  try { return a + f + '?v=' + crypto.createHash('sha1').update(fs.readFileSync(path.join(root, f))).digest('hex').slice(0, 8) + c; } catch (e) { return m; }
+});
+const write = (f, s) => fs.writeFileSync(path.join(root, f), f.endsWith('.html') ? stamp(s) : s);
+// Mensajes de WhatsApp: el mismo módulo que usa el navegador (js/wa-mensajes.js)
+const WAM = (() => { const sb = {}; vm.runInNewContext(read('js/wa-mensajes.js'), sb); return sb.drWaMensajes; })();
 const D = JSON.parse(read('data/dealership.json'));
 const A = JSON.parse(read('data/vehicles.json'));
 
@@ -146,10 +154,7 @@ const SW = { blanco: '#f1f1ee', negro: '#161b1d', rojo: '#c21f1f', 'gris plata':
 const swatch = (c) => SW[norm(c || '')] || null;
 const marcaDe = (a) => a.marca || a.titulo.split(' ')[0];
 const sinMarca = (a) => { const m = marcaDe(a); return a.tipoVehiculo === 'Moto' ? (a.modelo || a.titulo) : a.titulo.startsWith(m + ' ') ? a.titulo.slice(m.length + 1) : a.titulo; };
-const consultaHref = (a) => {
-  const desc = a.anio && !String(a.titulo).includes(String(a.anio)) ? `${a.titulo} ${a.anio}` : a.titulo;
-  return wa(a.vendida ? `Hola! Vi que el ${desc} está vendido. ¿Tienen unidades similares?` : `Hola! Me interesa el ${desc}.`) || a.url;
-};
+const consultaHref = (a) => wa(WAM.mensaje(a, a.vendida ? 'similares' : 'rapida')) || a.url;
 // Fotos opcionales: no se inventan ni se toman de terceros; solo se publican si data/ las autoriza.
 const mediaDe = (a) => (Array.isArray(a.fotos) ? a.fotos : Array.isArray(a.imagenes) ? a.imagenes : Array.isArray(a.galeria) ? a.galeria : []).map((x) => typeof x === 'string' ? { src: x, alt: a.titulo } : x).filter((x) => x && (x.src || x.url)).map((x) => ({ src: x.src || x.url, srcset: x.srcset || '', card: x.card || '', cardWidth: x.cardWidth || null, cardHeight: x.cardHeight || null, thumb: x.thumb || '', width: x.width || null, height: x.height || null, alt: x.alt || a.titulo, tipo: x.tipo || '' }));
 const cardSrcset = (m) => { if (m.srcset) return m.srcset; if (m.card) return `${m.card} ${m.cardWidth || 600}w, ${m.src} ${m.width || 900}w`; const k = /^(images\/stock\/unidad-\d+)\.webp$/.exec(m.src || ''); return k && fs.existsSync(new URL('../' + k[1] + '-640.webp', import.meta.url)) && fs.existsSync(new URL('../' + k[1] + '-1000.webp', import.meta.url)) ? `${k[1]}-640.webp 640w, ${k[1]}-1000.webp 1000w` : ''; };
@@ -197,8 +202,8 @@ const catData = autos.map((a, i) => ({
   potencia: a.potencia || null, traccion: a.traccion || null, puertas: a.puertas || null, numeroVelocidades: a.numeroVelocidades || null,
   version: a.version || null, anio: a.anio ?? null, km: a.km ?? null, carroceria: a.carroceria || null, id: a.id || null,
   vendida: !!a.vendida, nota: a.nota || null, relevadoEl: a.relevadoEl || a.fuente?.consultado || null,
-  atributosPublicados: a.atributosPublicados || [], hrefFin: wa(`Hola! Quiero consultar financiación para el ${a.titulo}${a.anio ? ' ' + a.anio : ''}.`),
-  hrefVisita: wa(`Hola! Quiero coordinar una visita y prueba de manejo del ${a.titulo}${a.anio ? ' ' + a.anio : ''}.`),
+  atributosPublicados: a.atributosPublicados || [], hrefFin: wa(WAM.mensaje(a, 'fin')),
+  hrefVisita: wa(WAM.mensaje(a, 'visita')),
   mail: mailHref(a), transmision: a.transmision || null, combustible: a.combustible || null, color: a.color || null,
   sw: swatch(a.color), precio: a.precio || null, anticipo: a.anticipo || null, url: a.url, href: consultaHref(a)
 }));
@@ -472,7 +477,7 @@ const trayectoriaEtiqueta = D.presentacion.destacadoEtiqueta || 'trayectoria';
 const trayectoriaSub = D.presentacion.destacadoSub || '';
 const secNosotros = `
 <section class="nz" id="nosotros" aria-labelledby="nos-t">
-<div class="nz-top"><div class="w nz-w">
+<div class="nz-top"><div class="nz-frentes" aria-hidden="true"><i></i><i></i><i></i><i></i></div><div class="w nz-w">
 <div class="nz-intro">
 <p class="ey"><span class="ey-brand">828</span> · Nosotros</p>
 <span class="nz-logo"><img src="images/logo-sm.png" width="320" height="320" alt="${esc(NAME)}"></span>
@@ -495,9 +500,9 @@ ${hasSvc('permuta') ? `<li class="nz-tile"><span class="nz-ic">${ICN.swap}</span
 ${hasSvc('consignacion') ? `<li class="nz-tile"><span class="nz-ic">${ICN.shield}</span><h4>Consignaciones</h4><p>Podés dejar tu vehículo en consignación. Las condiciones se coordinan con ${esc(NAME)}.</p><a href="#contacto">Consultar</a></li>` : ''}
 </ul>
 </div></div>
-<div class="nz-net nz-net--mapa" id="donde"><div class="w"><h3 class="nz-h">Dónde encontrarnos</h3><p class="nz-net-p">Nuestro salón está en ${esc(L.address)}, ${esc(L.city)}. Revisá el horario general, confirmá previamente la unidad que querés ver y elegí «Abrir en Google Maps» para planificar el trayecto. El mapa interactivo de esta página queda disponible solo si decidís abrirlo.</p>
+<div class="nz-net nz-net--mapa" id="donde"><div class="nz-donde-hd"><div class="w"><h3 class="nz-h">Dónde encontrarnos</h3><p class="nz-net-p">Nuestro salón está en ${esc(L.address)}, ${esc(L.city)}. Revisá el horario general, confirmá previamente la unidad que querés ver y elegí «Abrir en Google Maps» para planificar el trayecto. El mapa interactivo de esta página queda disponible solo si decidís abrirlo.</p>
 <ul><li class="is-here">${ICX.pin}<div><b>${esc(NAME)}</b><span>${esc(DIR_COMPLETA)}</span></div></li></ul>
-${L.mapsUrl ? `<p class="nz-net-acc"><a class="btn p sm" href="${L.mapsUrl}" ${EXT}>Abrir en Google Maps</a></p>` : ''}</div>
+${L.mapsUrl ? `<p class="nz-net-acc"><a class="btn p sm" href="${L.mapsUrl}" ${EXT}>Abrir en Google Maps</a></p>` : ''}</div></div>
 ${COORD ? `<div class="nz-mapa"><div class="dr-map" id="mapa-nosotros" data-lat="${COORD.lat}" data-lng="${COORD.lng}" data-nombre="${esc(NAME)}" data-dir="${esc(DIR_COMPLETA)}" data-gmaps="${esc(L.mapsUrl)}" data-leaflet="js/vendor/leaflet.js" data-css="js/vendor/leaflet.css" data-manual-map="1"><div class="dr-map-v" role="region" aria-label="Mapa con la ubicación de ${esc(NAME)}"></div><div class="dr-map-ph" data-mapa-ph><span class="dr-map-ic">${ICX.pin}</span><p>Mapa de ${esc(L.city)}</p><p class="map-m src" role="status" aria-live="polite">El mapa interactivo se carga solo cuando lo solicites.</p><div class="row"><button class="btn p sm" type="button" data-mapa-abrir>Ver mapa interactivo</button></div></div></div>` : ''}</div>
 </section>`;
 
@@ -539,7 +544,7 @@ const HERO_UNITS = HERO_FOTOS.map((photo, i) => {
   return { unit, index: autos.indexOf(unit), label };
 });
 if (new Set(HERO_UNITS.map((entry) => entry.index)).size !== HERO_FOTOS.length) throw new Error('Las imágenes del hero no tienen correspondencia única con fichas distintas');
-const heroFigure = ([n, src, small, width, height, smallWidth], entry, decorative, priority) => `<figure class="hero-chain-car hero-chain-car--${n}"${decorative ? ' aria-hidden="true"' : ''}>${decorative ? `<div class="hero-chain-link" aria-hidden="true"><img src="${src}${HERO_VERSION}" srcset="${small}${HERO_VERSION} ${smallWidth}w, ${src}${HERO_VERSION} ${width}w" sizes="25vw" width="${width}" height="${height}" alt="" decoding="async" loading="lazy"><span class="hero-chain-label">${esc(entry.label)}</span></div>` : `<button class="hero-chain-link" type="button" data-hero-unit="${esc(entry.unit.id)}" aria-label="Abrir la ficha de ${esc(entry.label)}"><img src="${src}${HERO_VERSION}" srcset="${small}${HERO_VERSION} ${smallWidth}w, ${src}${HERO_VERSION} ${width}w" sizes="25vw" width="${width}" height="${height}" alt="" decoding="async"${priority ? ' fetchpriority="high"' : ' loading="lazy"'}><span class="hero-chain-label">${esc(entry.label)}</span></button>`}</figure>`;
+const heroFigure = ([n, src, small, width, height, smallWidth], entry, decorative, priority) => `<figure class="hero-chain-car hero-chain-car--${n}"${decorative ? ' aria-hidden="true"' : ''}>${decorative ? `<div class="hero-chain-link" aria-hidden="true" data-hero-unit="${esc(entry.unit.id)}"><img src="${src}${HERO_VERSION}" srcset="${small}${HERO_VERSION} ${smallWidth}w, ${src}${HERO_VERSION} ${width}w" sizes="25vw" width="${width}" height="${height}" alt="" decoding="async" loading="lazy"><span class="hero-chain-label">${esc(entry.label)}</span></div>` : `<button class="hero-chain-link" type="button" data-hero-unit="${esc(entry.unit.id)}" aria-label="Abrir la ficha de ${esc(entry.label)}"><img src="${src}${HERO_VERSION}" srcset="${small}${HERO_VERSION} ${smallWidth}w, ${src}${HERO_VERSION} ${width}w" sizes="25vw" width="${width}" height="${height}" alt="" decoding="async"${priority ? ' fetchpriority="high"' : ' loading="lazy"'}><span class="hero-chain-label">${esc(entry.label)}</span></button>`}</figure>`;
 const HERO_CHAIN = HERO_FOTOS.map((photo, i) => heroFigure(photo, HERO_UNITS[i], false, i === 0)).join('');
 const HERO_CHAIN_DUP = HERO_FOTOS.map((photo, i) => heroFigure(photo, HERO_UNITS[i], true, false)).join('');
 
@@ -547,7 +552,7 @@ const index = page({
   title: `${NAME} · Autos y motos en ${L.city}, ${L.province}`,
   desc: `${NAME} en ${L.city}, ${L.partido}: compra y venta de autos y motos usados, permutas y consignaciones. Visitanos en ${L.address} o escribinos por redes o correo.`,
   file: 'index.html',
-  extraHead: `<link rel="stylesheet" href="css/hero-carousel.css?v=20261024-4">\n<link rel="stylesheet" href="css/fondos-secciones.css">\n<link rel="stylesheet" href="css/damero-secciones.css?v=20261024-1">\n<link rel="stylesheet" href="css/comparador.css?v=20261024-2">\n<script type="application/ld+json">${JSON.stringify(ld)}</script>\n<script defer src="js/hero-carousel.js?v=20261024-1"></script>\n<script defer src="js/hero-motion.js?v=20261024-4"></script>\n<script defer src="js/fondos-secciones.js?v=20261024-1"></script>\n<script defer src="js/secciones.js?v=20261024-6"></script>\n<script defer src="js/mapa.js?v=20261023-1"></script>\n<script defer src="js/horarios.js?v=20261024-1"></script>\n<script defer src="js/site.js?v=20261024-1"></script>\n<script defer src="js/reserva-inline.js?v=20261024-4"></script>\n`,
+  extraHead: `<link rel="stylesheet" href="css/hero-carousel.css?v=20261024-5">\n<link rel="stylesheet" href="css/fondos-secciones.css">\n<link rel="stylesheet" href="css/damero-secciones.css?v=20261027-1">\n<link rel="stylesheet" href="css/comparador.css?v=20261028-1">\n<link rel="stylesheet" href="css/galeria-visor.css?v=20261026-1">\n<script type="application/ld+json">${JSON.stringify(ld)}</script>\n<script defer src="js/hero-carousel.js?v=20261024-1"></script>\n<script defer src="js/hero-motion.js?v=20261024-5"></script>\n<script defer src="js/fondos-secciones.js?v=20261024-1"></script>\n<script defer src="js/wa-mensajes.js"></script>\n<script defer src="js/secciones.js?v=20261029-1"></script>\n<script defer src="js/ficha-flip.js?v=20261027-1"></script>\n<script defer src="js/galeria-visor.js?v=20261026-1"></script>\n<script defer src="js/combobox.js?v=20261024-1"></script>\n<script defer src="js/anillo.js?v=20261024-2"></script>\n<script defer src="js/boton-flecha.js?v=20261024-1"></script>\n<script defer src="js/mapa.js?v=20261023-1"></script>\n<script defer src="js/horarios.js?v=20261024-1"></script>\n<script defer src="js/site.js?v=20261024-3"></script>\n<script defer src="js/foto-reactiva.js?v=20261027-1"></script>\n<script defer src="js/visita-horarios.js?v=1"></script>\n<script defer src="js/reserva-inline.js?v=20261028-1"></script>\n`,
   body: `${header()}
 <main id="top">
 <div class="hero" role="region" aria-label="${esc(NAME)}">
@@ -569,6 +574,8 @@ ${secHorarios}
 <div class="inventory-rule" aria-hidden="true"><span></span><small>${esc(L.city)} · ${esc(L.province)}</small><span></span></div>
 ${unidades}
 </div></section>
+
+<div class="ring-sec" data-anillo aria-hidden="true"><ul class="ring-stage"><li class="ring-card"><img src="images/anillo/anillo-01.webp" width="600" height="800" alt="" loading="lazy" decoding="async" draggable="false"></li><li class="ring-card"><img src="images/anillo/anillo-02.webp" width="600" height="800" alt="" loading="lazy" decoding="async" draggable="false"></li><li class="ring-card"><img src="images/anillo/anillo-03.webp" width="600" height="800" alt="" loading="lazy" decoding="async" draggable="false"></li><li class="ring-card"><img src="images/anillo/anillo-04.webp" width="600" height="800" alt="" loading="lazy" decoding="async" draggable="false"></li><li class="ring-card"><img src="images/anillo/anillo-05.webp" width="600" height="800" alt="" loading="lazy" decoding="async" draggable="false"></li><li class="ring-card"><img src="images/anillo/anillo-06.webp" width="600" height="800" alt="" loading="lazy" decoding="async" draggable="false"></li><li class="ring-card"><img src="images/anillo/anillo-07.webp" width="600" height="800" alt="" loading="lazy" decoding="async" draggable="false"></li></ul></div>
 
 <section class="finance-section" id="financiacion" aria-labelledby="fin-t"><div class="w">
 <div class="finance-head"><div><p class="ey"><span class="ey-brand">828</span> · Financiación y servicios</p><h2 id="fin-t">Financiá tu <em>próximo vehículo</em></h2><p class="sec-p">Consultanos por financiación. Las condiciones se informan por consulta: este sitio no publica condiciones de financiación.</p></div><aside class="finance-aside"><span>${esc(NAME)}</span><p>Encontrá una forma de avanzar hacia tu próxima unidad.</p></aside></div>
@@ -596,7 +603,7 @@ ${secNosotros}
 </div></section>
 </main>
 ${footer(true)}
-${C.whatsApp && D.contact.whatsAppConfirmed === true ? `<nav class="cta-bar" aria-label="Acciones rápidas"><a href="${WA}" ${EXT}>Consultar por WhatsApp</a><a href="reserva.html">Agendar visita</a></nav>` : `<nav class="cta-bar" aria-label="Acciones rápidas"><a href="${ML_PROFILE}" ${EXT} aria-label="Ver publicaciones en Mercado Libre">Mercado Libre</a><a href="reserva.html">Agendar visita</a></nav>`}
+${C.whatsApp && D.contact.whatsAppConfirmed === true ? `<nav class="dr-fab" aria-label="Acciones rápidas"><a class="dr-fab-wa" href="${WA}" ${EXT} aria-label="Consultar por WhatsApp" title="Consultar por WhatsApp">${IC.wa}<span class="sr">Consultar por WhatsApp</span></a><a class="dr-fab-ag" href="reserva.html" aria-label="Agendar visita" title="Agendar visita"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20l1-4L16.5 4.5a2 2 0 0 1 3 3L8 19z"/><path d="M14.5 6.5l3 3"/></svg><span class="sr">Agendar visita</span></a></nav>` : `<nav class="dr-fab" aria-label="Acciones rápidas"><a class="dr-fab-wa" href="${ML_PROFILE}" ${EXT} aria-label="Ver publicaciones en Mercado Libre" title="Mercado Libre"><span aria-hidden="true">ML</span></a><a class="dr-fab-ag" href="reserva.html" aria-label="Agendar visita" title="Agendar visita"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20l1-4L16.5 4.5a2 2 0 0 1 3 3L8 19z"/><path d="M14.5 6.5l3 3"/></svg><span class="sr">Agendar visita</span></a></nav>`}
 `,
 });
 
@@ -655,7 +662,7 @@ ${ogTags('reserva.html', `Coordiná tu visita · ${NAME}`, 'Elegí un día y una
 <link rel="stylesheet" href="css/reserva.css"><link rel="stylesheet" href="css/motion.css">
 </head>
 <body>
-<main id="booking" data-step="month" data-closed="${closedDays.join(',')}" data-morning-only="${morningOnly.join(',')}">
+<main id="booking" data-step="month" data-closed="${closedDays.join(',')}" data-morning-only="${morningOnly.join(',')}" data-semana="${esc(JSON.stringify(semana))}">
   <header class="booking-nav">
     <a class="brand" href="index.html" aria-label="Volver a ${esc(NAME)}"><img class="lg-bk" src="images/logo-sm.png" width="320" height="320" alt="${esc(NAME)}"></a>
     <p class="eyebrow">Coordiná tu visita <span aria-hidden="true">/</span> consulta</p>
@@ -697,7 +704,7 @@ ${ogTags('reserva.html', `Coordiná tu visita · ${NAME}`, 'Elegí un día y una
   </section>
   <div id="live" class="sr-only" aria-live="polite"></div>
 </main>
-<script type="module" src="js/reserva.js"></script><script type="module" src="js/motion.js"></script>
+<script src="js/wa-mensajes.js"></script><script src="js/visita-horarios.js"></script><script type="module" src="js/reserva.js"></script><script type="module" src="js/motion.js"></script>
 </body>
 </html>
 `;
