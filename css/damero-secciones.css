@@ -192,7 +192,7 @@ main>section[id]>.section-damero{position:absolute;inset:0 0 auto;z-index:6;disp
 #unidades .cars .car .car-ph::after{content:"Ver ficha completa";content:"Ver ficha completa" / "";position:absolute;z-index:2;left:0;right:0;bottom:0;padding:34px 10px 9px;box-sizing:border-box;background:linear-gradient(180deg,rgba(6,6,7,0),rgba(6,6,7,.78));color:#fff;font:800 10px/1 var(--b,Inter,system-ui,sans-serif);letter-spacing:.14em;text-transform:uppercase;opacity:0;pointer-events:none}
 @media (hover:hover) and (pointer:fine){
   /* Orden fijo: js/site.js desfasa solo opacity y transform (primeros dos) durante la entrada por scroll. */
-  #unidades .cars .car{transition:opacity var(--rv-dur-b,1300ms) var(--rv-ease,cubic-bezier(.3,.55,.25,1)),transform var(--rv-dur-b,1300ms) var(--rv-ease,cubic-bezier(.3,.55,.25,1)),border-color .35s ease,box-shadow .35s ease}
+  #unidades .cars .car{transition:opacity var(--rv-dur-b,3200ms) var(--rv-ease,cubic-bezier(.3,.55,.25,1)),transform var(--rv-dur-b,3200ms) var(--rv-ease,cubic-bezier(.3,.55,.25,1)),border-color .35s ease,box-shadow .35s ease}
   #unidades .cars .car .car-ph img{transition:opacity .2s ease,transform .9s cubic-bezier(.2,.7,.2,1),translate .38s cubic-bezier(.2,.7,.2,1)}
   #unidades .cars .car .car-ph::after{transition:opacity .35s ease .05s}
   #unidades .cars .car .pr{transition:box-shadow .35s ease}
@@ -218,10 +218,10 @@ main>section[id]>.section-damero{position:absolute;inset:0 0 auto;z-index:6;disp
 .reveal{opacity:1;transform:none}
 .rv-title{--rv-y:var(--rv-dist-title,18px)}
 .rv-card{--rv-y:var(--rv-dist-card,28px)}
-html.rv-ready .reveal{transition:opacity var(--rv-dur,1500ms) var(--rv-ease,cubic-bezier(.3,.55,.25,1)),transform var(--rv-dur,1500ms) var(--rv-ease,cubic-bezier(.3,.55,.25,1))}
-html.rv-ready .car.reveal{--rv-dur:var(--rv-dur-b,1300ms)}
+html.rv-ready .reveal{transition:opacity var(--rv-dur,3600ms) var(--rv-ease,cubic-bezier(.3,.55,.25,1)),transform var(--rv-dur,3600ms) var(--rv-ease,cubic-bezier(.3,.55,.25,1))}
+html.rv-ready .car.reveal{--rv-dur:var(--rv-dur-b,3200ms)}
 html.rv-ready .reveal:not(.in){opacity:0;transform:translate3d(0,var(--rv-y,var(--rv-dist,24px)),0)}
-html.rv-ready .car.reveal .car-ph{transition:clip-path var(--rv-dur-ph,1500ms) var(--rv-ease,cubic-bezier(.3,.55,.25,1)) var(--rv-delay-ph,100ms)}
+html.rv-ready .car.reveal .car-ph{transition:clip-path var(--rv-dur-ph,3600ms) var(--rv-ease,cubic-bezier(.3,.55,.25,1)) var(--rv-delay-ph,220ms)}
 /* Recuperación (observador caído): rápida a propósito, ver js/site.js recuperar(). */
 html.rv-recover .reveal,html.rv-recover #unidades .cars .car.reveal{transition-duration:.6s,.6s,.35s,.35s}
 html.rv-ready .car.reveal:not(.in) .car-ph{clip-path:inset(0 0 100% 0)}
