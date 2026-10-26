@@ -1008,8 +1008,9 @@ ul.appendChild(frag);
         if (abierta && fId === id) return;
         hNav = true; try { abrirFicha(list.indexOf(u), null); } finally { hNav = false; }
       }
-      /* enlace absoluto de una unidad concreta (sin filtros: quien lo recibe ve la unidad, no la búsqueda de quien lo envía) */
-      function urlUnidad(a) { return /^https?:/.test(location.protocol) && a && a.id != null ? location.origin + location.pathname + hashDe(a.id) : null; }
+      /* enlace absoluto de una unidad concreta (sin filtros: quien lo recibe ve la unidad, no la búsqueda de quien lo envía).
+         Apunta a u/<id>/ (página generada con la foto de la unidad para la vista previa de WhatsApp/Facebook) y esa página redirige a #unidad=<id>. */
+      function urlUnidad(a) { return /^https?:/.test(location.protocol) && a && a.id != null ? location.origin + location.pathname.replace(/[^\/]*$/, '') + 'u/' + encodeURIComponent(String(a.id)) + '/' : null; }
       function compartir(a) {
         var url = urlUnidad(a) || a.url, datos = { title: a.titulo, text: a.titulo + ' · ' + (ctx.nombre || ''), url: url };
         if (navigator.share) { navigator.share(datos).catch(function () {}); return; }

@@ -10,6 +10,7 @@ const optional = ['sitemap.xml'];
 // .nojekyll es un archivo oculto vacío que a veces no viaja en los zips: se crea acá, no se exige en el repo.
 const dirs = ['fonts', 'images'];
 const whole = ['css', 'js'];   // se copian completas
+// u/<id>/index.html: páginas de vista previa por unidad (WhatsApp/Facebook); redirigen a la ficha.
 
 fs.rmSync(out, { recursive: true, force: true });
 fs.mkdirSync(out, { recursive: true });
@@ -42,5 +43,14 @@ for (const d of dirs) {
   copyPublicAssets(src, path.join(out, d), allowed);
 }
 for (const d of whole) { const src = path.join(root, d); if (fs.existsSync(src)) { fs.cpSync(src, path.join(out, d), { recursive: true }); n += fs.readdirSync(src, { recursive: true }).length; } }
+if (fs.existsSync(path.join(root, 'u'))) {
+  for (const ent of fs.readdirSync(path.join(root, 'u'), { withFileTypes: true })) {
+    if (!ent.isDirectory()) continue;
+    const src = path.join(root, 'u', ent.name, 'index.html'); if (!fs.existsSync(src)) continue;
+    let h = fs.readFileSync(src, 'utf8');
+    if (envBase !== '/') h = h.replace(/(<meta (?:property="og:image(?::secure_url)?"|name="twitter:image") content=")(?:\.\.\/)+images\//g, `$1${envBase}images/`);
+    fs.mkdirSync(path.join(out, 'u', ent.name), { recursive: true }); fs.writeFileSync(path.join(out, 'u', ent.name, 'index.html'), h); n++;
+  }
+}
 fs.writeFileSync(path.join(out, '.nojekyll'), '');
 console.log(`_site/ listo: ${n} archivos`);

@@ -42,6 +42,10 @@ def ms(v):  # '0.75s' | '120ms' -> ms
 DUR_JS = """([sel, prop]) => { const n = document.querySelector(sel); if (!n) return null; const cs = getComputedStyle(n);
   const p = cs.transitionProperty.split(',').map(x => x.trim()), d = cs.transitionDuration.split(',').map(x => x.trim());
   const i = p.indexOf(prop); return i < 0 ? null : d[i % d.length]; }"""
+def rv(pg, name):
+    """Duración (ms) declarada en :root como --rv-*; fuente única de verdad: scripts/estilos.css."""
+    return float(pg.evaluate("parseFloat(getComputedStyle(document.documentElement).getPropertyValue('%s'))" % name))
+def cerca(d, esperado, tol=60): return abs(d - esperado) <= tol
 def dur(pg, sel, prop):
     v = pg.evaluate(DUR_JS, [sel, prop]); check(v is not None, f'{sel} no transiciona {prop}'); return ms(v)
 
@@ -55,14 +59,14 @@ try:
                 for sel in ('section h2.reveal', 'p.ey.reveal', '.finance-card.reveal'):
                     for prop in ('opacity', 'transform'):
                         d = dur(pg, sel, prop)
-                        check(1500 <= d <= 1600, f'[{W}] A {sel} {prop} = {d} ms (esperado 1500–1600)')
+                        check(cerca(d, rv(pg, '--rv-dur')), f'[{W}] A {sel} {prop} = {d} ms (esperado --rv-dur = {rv(pg, "--rv-dur")})')
             def cat_b():
                 for prop in ('opacity', 'transform'):
-                    d = dur(pg, 'li.car.reveal', prop); check(1300 <= d <= 1600, f'[{W}] B li.car {prop} = {d} ms (esperado 1300–1600)')
-                d = dur(pg, 'li.car.reveal .car-ph', 'clip-path'); check(1425 <= d <= 1600, f'[{W}] B foto clip-path = {d} ms (esperado 1425–1600)')
-                d = dur(pg, '.dr-fondo', 'opacity'); check(1500 <= d <= 1600, f'[{W}] B .dr-fondo = {d} ms (esperado 1500–1600)')
+                    d = dur(pg, 'li.car.reveal', prop); check(cerca(d, rv(pg, '--rv-dur-b')), f'[{W}] B li.car {prop} = {d} ms (esperado --rv-dur-b = {rv(pg, "--rv-dur-b")})')
+                d = dur(pg, 'li.car.reveal .car-ph', 'clip-path'); check(cerca(d, rv(pg, '--rv-dur-ph')), f'[{W}] B foto clip-path = {d} ms (esperado --rv-dur-ph = {rv(pg, "--rv-dur-ph")})')
+                d = dur(pg, '.dr-fondo', 'opacity'); check(cerca(d, rv(pg, '--rv-dur-fondo')), f'[{W}] B .dr-fondo = {d} ms (esperado --rv-dur-fondo = {rv(pg, "--rv-dur-fondo")})')
                 a = pg.evaluate("getComputedStyle(document.querySelector('.hx-copy')).animationDuration")
-                check(900 <= ms(a) <= 1100, f'[{W}] hero .hx-copy animación = {a} (esperado ≈1000 ms)')
+                check(cerca(ms(a), rv(pg, '--rv-dur-hero')), f'[{W}] hero .hx-copy animación = {a} (esperado --rv-dur-hero = {rv(pg, "--rv-dur-hero")})')
             def timer_cubre():
                 src = open(os.path.join(ROOT, 'js/site.js'), encoding='utf-8').read()
                 m = re.search(r"transitionDelay = ''; \}\); \}, (\d+)\)", src); check(m, 'no encuentro el temporizador de limpieza de desfase')
@@ -86,7 +90,7 @@ try:
                 car.hover(); pg.wait_for_timeout(120)
                 props = pg.evaluate("(()=>{const c=document.querySelector('#unidades li.car');return c.getAnimations().map(a=>a.transitionProperty)})()")
                 check('opacity' not in props and 'transform' not in props, f'el hover de la tarjeta anima {props}')
-            run(f'{W}px · A: entradas de texto/títulos/financiación 1500–1600 ms', cat_a)
+            run(f'{W}px · A: entradas de texto/títulos/financiación = --rv-dur', cat_a)
             run(f'{W}px · B: tarjeta, foto, fondos y hero más lentos y con techo', cat_b)
             run(f'{W}px · temporizador de site.js cubre duración + desfase', timer_cubre)
             run(f'{W}px · C: botones/hover/pasos sin ralentizar', cat_c)

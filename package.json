@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "node scripts/serve.mjs",
     "build": "node scripts/build-index.mjs",
-    "test": "node scripts/validate-dealership.mjs && node scripts/audit-copy.mjs --prohibidos && python3 scripts/validate-image-manifest.py && node scripts/test-catalog-pagination.mjs && python3 scripts/e2e-catalogo.py && python3 scripts/e2e-t1-enlaces.py && python3 scripts/e2e-t2-bimoneda.py && python3 scripts/e2e-t6-visitas.py && python3 scripts/e2e-t5-comparalo.py && python3 scripts/e2e-t3-transparencia.py && python3 scripts/e2e-t4-seleccion.py && python3 scripts/e2e-movil-acciones.py && python3 scripts/e2e-t10-busqueda.py && python3 scripts/e2e-t7-foto.py && python3 scripts/e2e-t8-t9.py && python3 scripts/e2e-reveal.py",
+    "test": "node scripts/validate-dealership.mjs && node scripts/audit-copy.mjs --prohibidos && python3 scripts/validate-image-manifest.py && node scripts/test-catalog-pagination.mjs && node scripts/test-unit-share.mjs && python3 scripts/e2e-catalogo.py && python3 scripts/e2e-t1-enlaces.py && python3 scripts/e2e-t2-bimoneda.py && python3 scripts/e2e-t6-visitas.py && python3 scripts/e2e-t5-comparalo.py && python3 scripts/e2e-t3-transparencia.py && python3 scripts/e2e-t4-seleccion.py && python3 scripts/e2e-movil-acciones.py && python3 scripts/e2e-t10-busqueda.py && python3 scripts/e2e-t7-foto.py && python3 scripts/e2e-t8-t9.py && python3 scripts/e2e-reveal.py",
     "test:todo": "node scripts/test-todo.mjs",
     "test:t3": "python3 scripts/e2e-t3-transparencia.py",
     "test:t4": "python3 scripts/e2e-t4-seleccion.py",
@@ -17,6 +17,8 @@
     "test:prod": "node scripts/validate-dealership.mjs --prod && node scripts/audit-copy.mjs --prohibidos",
     "site": "node scripts/build-site.mjs",
     "images": "node scripts/make-images.mjs",
+    "og:units": "node scripts/make-og-units.mjs",
+    "test:share": "node scripts/test-unit-share.mjs",
     "audit": "node scripts/audit-copy.mjs",
     "check:links": "node scripts/check-links.mjs",
     "check:browser": "python3 scripts/qa-browser.py",

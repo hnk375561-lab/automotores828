@@ -8,6 +8,7 @@ const PASOS = [
   ['audit-copy', 'node', ['scripts/audit-copy.mjs', '--prohibidos']],
   ['image-manifest', 'python3', ['scripts/validate-image-manifest.py']],
   ['catalog-pagination', 'node', ['scripts/test-catalog-pagination.mjs']],
+  ['unit-share', 'node', ['scripts/test-unit-share.mjs']],
   ['e2e-catalogo', 'python3', ['scripts/e2e-catalogo.py']],
   ['e2e-t1-enlaces', 'python3', ['scripts/e2e-t1-enlaces.py']],
   ['e2e-t2-bimoneda', 'python3', ['scripts/e2e-t2-bimoneda.py']],

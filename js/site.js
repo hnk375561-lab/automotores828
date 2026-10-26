@@ -58,7 +58,7 @@
           e.target.classList.add('in');
         });
         /* El desfase solo sirve a la entrada: se quita después para no demorar el hover. */
-        if (lote.length) setTimeout(function () { lote.forEach(function (e) { e.target.style.transitionDelay = ''; }); }, 2400);   /* > mayor duración (1,6 s) + 4 desfases + margen */
+        if (lote.length) setTimeout(function () { lote.forEach(function (e) { e.target.style.transitionDelay = ''; }); }, 5000);   /* > mayor duración (--rv-dur-fondo 3,8 s) + 4 desfases + margen; si se alargan los --rv-* en scripts/estilos.css, subir este valor (lo vigila npm run test:reveal) */
       }, { threshold: 0.12, rootMargin: '0px 0px -5% 0px' });
       var alto = window.innerHeight || document.documentElement.clientHeight;
       nodos.forEach(function (n) {

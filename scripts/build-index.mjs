@@ -721,6 +721,28 @@ write('index.html', index);
 write('reserva.html', reserva);
 write('privacidad.html', privacidad);
 write('404.html', nf);
+/* ---- Vista previa al compartir POR UNIDAD ----
+   WhatsApp/Facebook/Instagram no leen el «#» de #unidad=ID, así que cada ficha necesita una página propia con su og:image.
+   u/<id>/index.html lleva las metas de esa unidad y redirige (solo con JS) a la ficha: ../../#unidad=<id>.
+   Las imágenes salen de `npm run og:units` (images/og/u-<id>.jpg); si falta alguna se usa la general del sitio.
+   Sin precio en la vista previa: puede haber cambiado desde el relevamiento (ver CLAUDE.md). */
+fs.rmSync(path.join(root, 'u'), { recursive: true, force: true });
+let unitPages = 0;
+for (const a of autos) {
+  const id = String(a.id);
+  if (!/^[0-9A-Za-z_-]+$/.test(id)) continue;
+  const hasOg = fs.existsSync(path.join(root, `images/og/u-${id}.jpg`));
+  const img = `${ogBase || '../../'}images/${hasOg ? `og/u-${id}.jpg` : 'og-dr.jpg'}`;
+  const bits = [a.anio, a.km != null ? `${Number(a.km).toLocaleString('es-AR')} km` : null, a.transmision, a.combustible, a.color].filter(Boolean);
+  const title = `${a.titulo} · ${NAME}`;
+  const desc = `${bits.join(' · ')}. Consultá precio y disponibilidad con ${NAME}, ${L.city}.`;
+  const self = ogBase ? `${ogBase}u/${id}/` : '';
+  const go = `../../#unidad=${encodeURIComponent(id)}`;
+  const html = `<!doctype html>\n<html lang="es-AR">\n<head>\n<meta charset="utf-8">\n<meta name="viewport" content="width=device-width, initial-scale=1">\n<title>${esc(title)}</title>\n<meta name="description" content="${esc(desc)}">\n${robotsMeta}<meta property="og:type" content="website">\n<meta property="og:title" content="${esc(title)}">\n<meta property="og:description" content="${esc(desc)}">\n<meta property="og:locale" content="es_AR">\n${ogBase ? `<meta property="og:url" content="${self}">\n` : ''}<meta property="og:site_name" content="${esc(NAME)}">\n<meta property="og:image" content="${img}">\n<meta property="og:image:secure_url" content="${img}">\n<meta property="og:image:type" content="image/jpeg">\n<meta property="og:image:width" content="1200">\n<meta property="og:image:height" content="630">\n<meta property="og:image:alt" content="${esc(a.titulo)}">\n<meta name="twitter:card" content="summary_large_image">\n<meta name="twitter:title" content="${esc(title)}">\n<meta name="twitter:description" content="${esc(desc)}">\n<meta name="twitter:image" content="${img}">\n${siteUrl ? `<link rel="canonical" href="${siteUrl}u/${id}/">\n` : ''}<noscript><meta http-equiv="refresh" content="0;url=${go}"></noscript>\n<style>body{margin:0;min-height:100vh;display:grid;place-items:center;background:#060607;color:#d9dbdd;font:16px/1.5 system-ui,sans-serif;text-align:center;padding:24px}a{color:#ee1c22}</style>\n</head>\n<body>\n<p>Abriendo la ficha de <strong>${esc(a.titulo)}</strong>…<br><a href="${go}">Si no se abre sola, tocá acá</a></p>\n<script>location.replace(${JSON.stringify(go)});</script>\n</body>\n</html>\n`;
+  fs.mkdirSync(path.join(root, 'u', id), { recursive: true });
+  fs.writeFileSync(path.join(root, 'u', id, 'index.html'), html);
+  unitPages++;
+}
 /* Datos del catálogo en archivo aparte y cacheable: el HTML deja de pesar 300 KB y el JSON se reutiliza. */
 const unitsJson = jsonSafe(slim(catData));
 write(UNITS_URL, unitsJson);
@@ -731,4 +753,4 @@ else if (fs.existsSync(smPath)) fs.rmSync(smPath);
 write('site.webmanifest', JSON.stringify({ name: NAME, short_name: 'Automotores 828', description: `Autos y motos usados en ${L.city}, ${L.province}.`, lang: 'es-AR', start_url: './', scope: './', display: 'standalone', background_color: '#060607', theme_color: '#060607', icons: [{ src: 'images/icon-192.png', sizes: '192x192', type: 'image/png', purpose: 'any' }, { src: 'images/icon-512.png', sizes: '512x512', type: 'image/png', purpose: 'any' }] }, null, 2) + '\n');
 write('favicon.svg', read('favicon.svg'));
 
-console.log(`Generado: index.html (${(index.length / 1024).toFixed(1)} KB), privacidad.html, reserva.html, 404.html · ${autos.length} unidades · ${UNITS_URL} (${(unitsJson.length / 1024).toFixed(1)} KB) · modo ${demo ? 'demo (noindex)' : 'producción'}`);
+console.log(`Generado: index.html (${(index.length / 1024).toFixed(1)} KB), privacidad.html, reserva.html, 404.html · ${autos.length} unidades (+${unitPages} páginas para compartir en u/) · ${UNITS_URL} (${(unitsJson.length / 1024).toFixed(1)} KB) · modo ${demo ? 'demo (noindex)' : 'producción'}`);

@@ -164,7 +164,7 @@ def main(browser):
         p.locator('dialog.ficha').get_by_role('button', name='Copiar enlace').click()
         p.wait_for_timeout(300)
         url = p.evaluate('navigator.clipboard.readText()')
-        check(url == BASE.rstrip('/') + '/#unidad=' + uid, f'enlace copiado incorrecto: {url!r}')
+        check(url == BASE.rstrip('/') + '/u/' + uid + '/', f'enlace copiado incorrecto: {url!r}')   # página con foto propia para la vista previa; redirige a #unidad=<id>
         q = new_page(ctx, errors); q.goto(url); q.wait_for_selector('button[data-ficha]', state='attached'); open_state(q, uid)
         q.close(); p.close()
 

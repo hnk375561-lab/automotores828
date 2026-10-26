@@ -40,3 +40,13 @@ Suite completa sin cortarse en el primer fallo: `npm run test:todo` (incluye `te
 - La regla `.reveal` de `estilos.css` (≈línea 2366) NO es código muerto: fija la duración de la recuperación (`rv-recover`). No borrar.
 - Prueba: `npm run test:reveal` (`scripts/e2e-reveal.py`), incluida en `npm test` y `npm run test:todo`.
 - Pendiente: medición en móvil real e INP. El LCP en headless quedó dentro del ruido (base 3,05–3,32 s, nuevo 3,36–3,38 s); si empeora, bajar `--rv-dur-hero` a 500ms.
+
+## Vista previa por unidad al compartir (2026-10-26)
+
+- El botón «Compartir» / «Copiar enlace» de la ficha ahora entrega `…/u/<id>/` (antes `…/#unidad=<id>`). Los crawlers de WhatsApp/Facebook/Instagram no leen el `#`, por eso antes toda ficha mostraba el logo.
+- `u/<id>/index.html` lo genera `npm run build` (una por unidad): lleva título, descripción (año, km, caja, combustible, color; **sin precio**) y `og:image` propia, y redirige con JS a `../../#unidad=<id>`. Abrir `…/#unidad=<id>` a mano sigue funcionando igual.
+- Las imágenes `images/og/u-<id>.jpg` (1200×630) las genera `npm run og:units` con la primera foto de cada ficha. **Al cargar unidades nuevas: `npm run og:units && npm run build && npm test`.**
+- Prueba: `npm run test:share` (incluida en `npm test` y `npm run test:todo`). `npm run site` copia `u/` a `_site/`.
+- Las redes guardan la vista previa en caché: si no se actualiza, compartir con `?v=2` o usar el depurador de Facebook.
+- Móvil: las 4 acciones de cada tarjeta pasan a 2×2 (≥ 44 px) y «KILÓMETROS» ya no toca el borde (`scripts/estilos.css`, final del archivo).
+- `e2e-reveal.py` lee las duraciones de las variables `--rv-*` (ya no hay números fijos) y el temporizador de `js/site.js` pasó a 5000 ms. Si se alargan los `--rv-*`, subirlo.
