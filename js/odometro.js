@@ -10,7 +10,7 @@
   var ease = function (t) { return 1 - Math.pow(1 - t, 3); };
   function run(el) {
     var fin = parseInt(el.getAttribute('data-odo'), 10); if (isNaN(fin)) return;
-    var t0 = null, dur = 900;
+    var t0 = null, dur = 1800;   /* 2× (antes 900 ms) */
     function paso(t) {
       if (t0 === null) t0 = t;
       var k = Math.min(1, (t - t0) / dur);

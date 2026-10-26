@@ -33,3 +33,10 @@ Suite completa sin cortarse en el primer fallo: `npm run test:todo` (incluye `te
 - Hasta el 25/10 el HTML salía con `og:image` relativa (`images/og-dr.jpg`) y WhatsApp/Facebook/Instagram mostraban el enlace sin imagen. Corregido: el generador usa `publicacion.siteUrl` > `previewUrl` > entorno de build > remoto git (GitHub Pages) y `validate-dealership.mjs` falla si alguna página no tiene `og:image` absoluta https.
 - Si el sitio vive en otra dirección que `https://hnk375561-lab.github.io/automotores828/`, cargarla en `data/dealership.json` → `publicacion.previewUrl` y correr `npm run build`.
 - Las redes guardan en caché la vista previa: después de publicar, pedir que la actualicen (Facebook Sharing Debugger; en WhatsApp suele bastar con compartir una URL con otro parámetro, p. ej. `?v=2`).
+
+## Efectos de entrada más lentos (2026-10-25)
+
+- Variables únicas `--rv-*` en `scripts/estilos.css`. A (títulos, `p.ey`, financiación, hero, odómetro): 2×; B (tarjeta 1,3 s, foto 1,5 s, fondos 1,6 s): 1,6×–1,7×; C (hover, botones, ficha-flip, galería): sin cambios.
+- La regla `.reveal` de `estilos.css` (≈línea 2366) NO es código muerto: fija la duración de la recuperación (`rv-recover`). No borrar.
+- Prueba: `npm run test:reveal` (`scripts/e2e-reveal.py`), incluida en `npm test` y `npm run test:todo`.
+- Pendiente: medición en móvil real e INP. El LCP en headless quedó dentro del ruido (base 3,05–3,32 s, nuevo 3,36–3,38 s); si empeora, bajar `--rv-dur-hero` a 500ms.

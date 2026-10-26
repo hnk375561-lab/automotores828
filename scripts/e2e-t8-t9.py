@@ -66,7 +66,7 @@ try:
             check('no guarda datos de quienes lo visitan' in h, 'con la medición apagada el texto de privacidad debe seguir igual')
         def t9_odometro():
             ctx, pg, reqs, bc, errs = abrir(br, reduced=False, w=1280, h=900)
-            pg.evaluate("document.querySelector('.inventory-meta').scrollIntoView({block:'center'})"); pg.wait_for_timeout(2200)
+            pg.evaluate("document.querySelector('.inventory-meta').scrollIntoView({block:'center'})"); pg.wait_for_timeout(3200)   # el odómetro dura 1800 ms (antes 900): espera = animación + margen
             v = pg.evaluate("[...document.querySelectorAll('[data-odo]')].map(e=>[e.textContent.trim(),e.dataset.odo])")
             check(len(v) == 3 and all(a == b for a, b in v), f'las cifras finales deben ser las publicadas: {v}')
             check(v[0][0] == str(len(json.load(open(os.path.join(ROOT, 'js/units.min.json'))))), 'la cifra no coincide con el catálogo')

@@ -19,6 +19,7 @@ const PASOS = [
   ['e2e-t10-busqueda', 'python3', ['scripts/e2e-t10-busqueda.py']],
   ['e2e-t7-foto', 'python3', ['scripts/e2e-t7-foto.py']],
   ['e2e-t8-t9', 'python3', ['scripts/e2e-t8-t9.py']],
+  ['e2e-reveal', 'python3', ['scripts/e2e-reveal.py']],
   ['test-ficha-flip', 'python3', ['scripts/test-ficha-flip.py']],
 ];
 

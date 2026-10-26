@@ -224,8 +224,8 @@ header{border-bottom:1px solid rgba(255,255,255,.14)}
 .btn.lnk{min-height:44px;padding:0;border:0;background:none;color:var(--s3);text-decoration:underline;text-decoration-thickness:3px;text-underline-offset:6px;text-decoration-color:var(--y)}
 .btn.lnk:hover{background:none;color:var(--y)}
 @media(prefers-reduced-motion:no-preference){
-.hx-copy{animation:entra .5s ease-out both}
-@keyframes entra{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}}
+.hx-copy{animation:entra var(--rv-dur-hero,1000ms) ease-out both}
+@keyframes entra{from{opacity:0;transform:translateY(var(--rv-dist-hero,14px))}to{opacity:1;transform:none}}}
 @media(max-width:900px){.hero{grid-template-columns:1fr;padding:36px 16px calc(min(78vw,340px) / 2 + 48px)}.hero .row .btn:not(.lnk){flex:1 1 220px}.bar li,.bar li:first-child{padding:16px 12px 16px 56px;border-left:0;border-top:1px solid rgba(255,255,255,.14)}.bar li:nth-child(-n+2){border-top:0}.bar li svg{left:12px;top:18px}}
 @media(max-width:560px){.bar ul{grid-template-columns:1fr}.bar li:nth-child(2){border-top:1px solid rgba(255,255,255,.14)}.hx-down{display:none}}
 @media(min-width:981px) and (max-width:1180px){header nav{gap:14px}header nav a{font-size:12px;letter-spacing:.04em}header .w{gap:12px}.mark .lg-img{height:40px}}
@@ -2358,6 +2358,9 @@ dialog.ficha .fi-faq details.dd p{font-size:14.5px}
 .fx-favv{margin:12px 0;padding:14px 16px;border-left:3px solid var(--y);background:rgba(255,255,255,.04);color:#e8e8e8}
 /* ===== Sistema de movimiento (tokens + menú + diálogos + feedback) ===== */
 :root{--mo-fast:140ms;--mo-base:280ms;--mo-slow:440ms;--mo-ease:cubic-bezier(.22,.8,.24,1);--mo-dist:18px}
+/* Entradas de aparición (A: texto/títulos · B: fotos/vehículos/fondos). Única fuente de verdad: las usan damero-secciones.css, fondos-secciones.css y js/site.js.
+   Categoría C (hover, foco, botones, ficha-flip, diálogos) NO usa estas variables y no se ralentiza. Con prefers-reduced-motion o save-data no hay entrada animada. */
+:root{--rv-dur:1500ms;--rv-dur-b:1300ms;--rv-dur-ph:1500ms;--rv-delay-ph:100ms;--rv-dur-fondo:1600ms;--rv-dur-hero:1000ms;--rv-stagger:50ms;--rv-ease:cubic-bezier(.3,.55,.25,1);--rv-dist:24px;--rv-dist-title:18px;--rv-dist-card:28px;--rv-dist-hero:14px}
 @media(max-width:800px){:root{--mo-dist:12px}}
 .btn{transition:background-color .2s,color .2s,filter .2s,border-color .2s,transform var(--mo-fast) var(--mo-ease)}
 .btn:active:not(:disabled){transform:translateY(1px)}
@@ -2398,6 +2401,7 @@ dialog.cmp[open] .cmp-hd{animation:moIn var(--mo-slow) var(--mo-ease) backwards}
 .fav-b,.fi-x,.qa-tabs button,.cv-chip,.fx-tg{transition:background-color var(--mo-fast) linear,border-color var(--mo-fast) linear,color var(--mo-fast) linear}
 .fav-b{transition-property:background-color,border-color,color,transform}
 .fav-b:active{transform:scale(.92)}
+/* OJO: esta regla NO es código muerto: con html.rv-ready ausente (recuperar() de js/site.js) fija la duración de la recuperación (.6s). Se deja rápida a propósito: el contenido no puede tardar más en verse si falla el observador. */
 .reveal{transform:translateY(calc(var(--mo-dist) * 1.3));transition:opacity .6s var(--mo-ease),transform .6s var(--mo-ease)}
 @media(hover:none){.car:active .car-ph img{transform:scale(1.03)}.fi-sim-c:active{border-color:var(--y)}}
 @media(prefers-reduced-motion:reduce){.fi-a:active,.fav-b:active{transform:none}.reveal{transform:none;transition:none}}

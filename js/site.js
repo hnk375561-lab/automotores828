@@ -33,10 +33,13 @@
     var reducido = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     if (!('IntersectionObserver' in window) || saveData || reducido) return;
     var raiz = document.documentElement;
-    var nodos = Array.prototype.slice.call(document.querySelectorAll('section h2, .car, .card, .quick-card, .ct-c, .visit-card, .reveal'));
+    var nodos = Array.prototype.slice.call(document.querySelectorAll('section h2, .car, .card, .reveal'));
     if (!nodos.length) return;
     var vivo = false, pendientes = 0, io = null;
+    /* Desfase entre elementos de un grupo: sale de --rv-stagger (scripts/estilos.css). */
+    var paso = parseFloat(getComputedStyle(raiz).getPropertyValue('--rv-stagger')) || 50;
     var recuperar = function () {
+      raiz.classList.add('rv-recover');   /* recuperación rápida (ver damero-secciones.css) */
       raiz.classList.remove('rv-ready');
       nodos.forEach(function (n) { n.classList.add('in'); n.style.transitionDelay = ''; });
       if (io) io.disconnect();
@@ -49,13 +52,13 @@
         });
         lote.forEach(function (e, k) {
           io.unobserve(e.target);
-          var d = (Math.min(k, 4) * 70) + 'ms';
+          var d = (Math.min(k, 4) * paso) + 'ms';
           /* .car transiciona opacity, transform, border-color, box-shadow (damero-secciones.css): el desfase solo va a los dos primeros. */
           e.target.style.transitionDelay = e.target.matches('.car') ? d + ', ' + d + ', 0s, 0s' : d;
           e.target.classList.add('in');
         });
         /* El desfase solo sirve a la entrada: se quita después para no demorar el hover. */
-        if (lote.length) setTimeout(function () { lote.forEach(function (e) { e.target.style.transitionDelay = ''; }); }, 1400);
+        if (lote.length) setTimeout(function () { lote.forEach(function (e) { e.target.style.transitionDelay = ''; }); }, 2400);   /* > mayor duración (1,6 s) + 4 desfases + margen */
       }, { threshold: 0.12, rootMargin: '0px 0px -5% 0px' });
       var alto = window.innerHeight || document.documentElement.clientHeight;
       nodos.forEach(function (n) {
