@@ -495,7 +495,7 @@ const secNosotros = `
 <p class="nz-offer-note">Las alternativas, requisitos y condiciones se confirman directamente con el equipo para cada unidad.</p>
 <p class="nz-p">Reunimos opciones de distintas marcas y vehículos usados. Podés consultar por financiación y considerar una permuta. La disponibilidad y las condiciones de cada operación se confirman de manera directa con el equipo.</p>
 <div class="row nz-cta"><a class="btn p" href="#unidades">Explorar unidades</a><a class="btn" href="#contacto">Hablar con el equipo</a></div>
-<div class="nz-contactos" aria-label="Contactos de Automotores 828"><a href="#contacto"><span>Adriano · asesor</span><b>11 4993 8719</b><small>Contacto directo</small></a><a href="#contacto"><span>Rubén · asesor</span><b>11 5249 0262</b><small>Contacto directo</small></a><a href="#contacto"><span>Línea de atención</span><b>4290-7300</b><small>Atención comercial</small></a><a href="#contacto"><span>Contacto</span><b>11 6023 9259</b><small>Atención comercial</small></a></div>
+<div class="nz-contactos" aria-label="Contacto de Automotores 828">${C.whatsAppDisplay ? `<a href="#contacto"><span>WhatsApp</span><b>${esc(C.whatsAppDisplay)}</b><small>Atención comercial</small></a>` : ''}</div>
 </div>
 <div class="nz-side"><div class="nz-big"><span class="nz-flag" aria-hidden="true"></span><p class="nz-proof">AUTOMOTORES 828 · MONTE GRANDE</p><p class="nz-num-l">Atención directa</p><p class="nz-num-s">Conocé opciones, resolvé consultas y avanzá a tu ritmo.</p></div>${GREVIEWS}</div>
 </div></div>

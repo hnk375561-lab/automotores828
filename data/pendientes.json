@@ -16,14 +16,16 @@
     {
       "id": "P3",
       "tema": "Confirmar dominio y aprobación para publicar",
-      "estado": "abierto",
-      "bloqueante": true
+      "estado": "diferido",
+      "bloqueante": false,
+      "resolucion": "Alcance actual: DEMO no publicable (noindex). Plan: repo GitHub privado + Cloudflare para mostrar la URL de demo. Dominio y aprobación del dueño se tratan más adelante, solo si el dueño quiere el sitio."
     },
     {
       "id": "P4",
       "tema": "Confirmar si el domicilio operativo es Boulevard Buenos Aires 828 o 831",
-      "estado": "abierto",
-      "bloqueante": true
+      "estado": "resuelto",
+      "bloqueante": false,
+      "resolucion": "Dirección 828 confirmada por el solicitante el 2026-10-26. El 831 es dato registral/de terceros; pendiente corregir la ficha de WhatsApp Business y las fichas externas (fuera del repo)."
     },
     {
       "id": "P5",
@@ -34,8 +36,9 @@
     {
       "id": "P6",
       "tema": "Confirmar vigencia y autorización del teléfono fijo +54 11 4290-7300",
-      "estado": "abierto",
-      "bloqueante": true
+      "estado": "resuelto",
+      "bloqueante": false,
+      "resolucion": "Decisión del solicitante 2026-10-26: se retira el teléfono fijo +54 11 4290-7300 y los números de asesores del sitio; queda solo WhatsApp."
     },
     {
       "id": "P7",
@@ -94,8 +97,9 @@
     {
       "id": "P16",
       "tema": "La ficha de WhatsApp Business (captura del 2026-10-24) muestra Blvd. Buenos Aires 831, B1842 Monte Grande, y el correo automotores828@gmail.com; el sitio usa 828 y automotores828@live.com. Confirmar con el dueño cuál es el correcto (relacionado con P4)",
-      "estado": "abierto",
-      "bloqueante": true
+      "estado": "resuelto",
+      "bloqueante": false,
+      "resolucion": "Solicitante confirma el 2026-10-26: automotores828@gmail.com funciona y es el correcto; automotores828@live.com no funciona y se retira. Dirección: ver P4 (828)."
     }
   ]
 }

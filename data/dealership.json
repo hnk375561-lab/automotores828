@@ -29,7 +29,7 @@
       "consultado": "2026-10-23"
     },
     "conflicto": {
-      "estado": "abierto",
+      "estado": "resuelto_2026-10-26_direccion_828_confirmada_por_solicitante",
       "candidatos": [
         {
           "direccion": "Blvd. Buenos Aires 828",
@@ -49,7 +49,7 @@
           ]
         }
       ],
-      "nota": "No resolver sin confirmación directa del negocio."
+      "nota": "Resuelto el 2026-10-26: el solicitante confirma que la dirección es Blvd. Buenos Aires 828. El 831 (registral/ficha WhatsApp/ML) queda como dato de terceros desactualizado; corregir esas fichas externas. Comprobante fuera del repositorio."
     }
   },
   "contact": {
@@ -60,7 +60,7 @@
     "whatsAppDisplay": "+54 9 11 6023-9259",
     "whatsAppConfirmed": true,
     "whatsAppConfirmadoNota": "Número verificado el 2026-10-24 con la ficha de WhatsApp Business (Automotores 828, +54 9 11 6023-9259). El dueño confirmó el número y autorizó su publicación (informado por el solicitante el 2026-10-25; cierra P1).",
-    "email": "automotores828@live.com",
+    "email": "automotores828@gmail.com",
     "facebook": "https://www.facebook.com/automotoressrl828/",
     "instagram": "automotores828",
     "tiktok": null,
@@ -77,8 +77,8 @@
           "https://www.bna.com.ar/Downloads/Autos-Listado-de-Concesionarias-Adheridas-a-FACCARA-11092019.pdf",
           "https://ar.near-place.com/automotores-828-srl-boulevard-buenos-aires-828-monte-grande"
         ],
-        "estado": "publicado_por_terceros_pendiente_de_confirmacion",
-        "nota": "No se publica como teléfono activo hasta confirmación del negocio."
+        "estado": "descartado_2026-10-26",
+        "nota": "El solicitante indicó retirar el fijo del sitio: el único canal telefónico publicado es el WhatsApp confirmado."
       },
       {
         "tipo": "moviles_indexados",

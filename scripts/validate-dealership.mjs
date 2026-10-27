@@ -89,7 +89,7 @@ if (d && a) {
   }
   const correos = (visible.match(/[\w.+-]+@(?:hotmail|gmail|yahoo)[\w.]*/gi) || []).map((x) => x.toLowerCase());
   if (correos.some((x) => x !== String(c.email || '').toLowerCase())) err('hay un correo publicado distinto del cargado en contact.email');
-  if (c.email) console.log('aviso: contact.email publicado por excepción (CLAUDE.md regla 5); reemplazar por uno comercial (P6)');
+  if (c.email) console.log('aviso: contact.email publicado por excepción (CLAUDE.md regla 5); confirmado por el solicitante el 2026-10-26 (P16)');
 
   // --- afirmaciones sin fuente ---
   // Cada servicio solo puede aparecer si tiene su `clave` en services.published (con fuente citada).
