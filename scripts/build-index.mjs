@@ -637,7 +637,7 @@ const secDestacada = await (async () => {
 <p class="ey"><span class="ey-brand">828</span> · ${esc(tx.eyebrow || 'Unidad destacada')}</p>
 <h2 id="hist-t">${h2}</h2>
 <p class="sec-p">${fecha ? `Dato relevado el ${esc(fdate(fecha))}. ` : ''}Precio y disponibilidad pueden cambiar; confirmalos con la agencia.</p>
-<button class="hist-btn" type="button" data-historia-abrir data-estado="cargando" aria-busy="true" aria-controls="hist-overlay" aria-haspopup="dialog" aria-expanded="false"><span class="hist-rule hist-rule--top" aria-hidden="true"></span><span class="hist-label">${esc(tx.boton || 'Conocé esta unidad')}</span><span class="hist-rule hist-rule--bottom" aria-hidden="true"></span></button>
+<button class="hist-btn" type="button" data-historia-abrir data-hist-estado="cargando" aria-busy="true" aria-controls="hist-overlay" aria-haspopup="dialog" aria-expanded="false"><span class="hist-rule hist-rule--top" aria-hidden="true"></span><span class="hist-label">${esc(tx.boton || 'Conocé esta unidad')}</span><span class="hist-rule hist-rule--bottom" aria-hidden="true"></span></button>
 <noscript><p><a class="btn" href="u/${esc(unit.id)}/">Ver ficha de esta unidad</a></p></noscript>
 </div>
 <div class="hist-overlay" id="hist-overlay" role="dialog" aria-modal="true" aria-label="${esc(etiqueta)}" hidden>

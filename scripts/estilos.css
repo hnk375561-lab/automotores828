@@ -2602,7 +2602,7 @@ html.has-dlg .dr-fab{display:none}
 .hist>.w{position:relative;z-index:1}
 .hist h2{font-family:"Exo 2",system-ui,sans-serif}
 .hist-btn{display:grid;grid-template-rows:1px auto 1px;width:min(100%,520px);margin:28px 0 0;padding:0;border:0;background:none;color:inherit;font:inherit;text-align:center;cursor:pointer;-webkit-tap-highlight-color:transparent}
-.hist-btn[data-estado="cargando"]{opacity:.7;cursor:progress}
+.hist-btn[data-hist-estado="cargando"]{opacity:.7;cursor:progress}
 .hist-rule{display:block;height:1px;background:var(--dr-silver,#d9dbdd);transition:background-color .2s}
 .hist-rule--top{transform-origin:top}
 .hist-rule--bottom{transform-origin:bottom}

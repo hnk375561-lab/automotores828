@@ -315,7 +315,7 @@
     function marcarListo() {
       if (destruido) return;
       listo = true;
-      btn.setAttribute('data-estado', 'listo');
+      btn.setAttribute('data-hist-estado', 'listo');
       btn.removeAttribute('aria-busy');
     }
     function preparar() {
