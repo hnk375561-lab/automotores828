@@ -143,8 +143,11 @@
   var toggle = document.querySelector('[data-menu-toggle]');
   var nav = document.querySelector('.site-nav');
   if (!toggle || !nav) return;
+  /* matchMedia en vez de window.innerWidth: leer innerWidth fuerza el cálculo del layout en ese instante. */
+  var mq980 = window.matchMedia ? window.matchMedia('(max-width: 980px)') : null;
+  var esMovil = function () { return mq980 ? mq980.matches : window.innerWidth <= 980; };
   var syncA11y = function (open) {
-    var mobile = window.innerWidth <= 980;
+    var mobile = esMovil();
     var expanded = mobile && open;
     nav.setAttribute('aria-hidden', mobile && !expanded ? 'true' : 'false');
     if ('inert' in nav) nav.inert = mobile && !expanded;
@@ -173,7 +176,7 @@
     if (document.documentElement.classList.contains('menu-open') && !event.target.closest('header')) close();
   });
   window.addEventListener('resize', function () {
-    if (window.innerWidth > 980) close();
+    if (!esMovil()) close();
     else syncA11y(toggle.getAttribute('aria-expanded') === 'true');
   }, { passive: true });
 })();
@@ -184,7 +187,8 @@
   var t = 0;
   function f() { t = 0; h.classList.toggle('is-scrolled', (window.scrollY || document.documentElement.scrollTop) > 24); }
   window.addEventListener('scroll', function () { if (!t) t = requestAnimationFrame(f); }, { passive: true });
-  f();
+  /* la primera lectura de scroll va en el próximo cuadro: leerla acá obligaba a calcular el layout en medio de la carga de scripts */
+  t = requestAnimationFrame(f);
 })();
 
 /* Saltos por enlace interno. Las secciones con content-visibility:auto (financiación … contacto) miden 800 px estimados hasta que se

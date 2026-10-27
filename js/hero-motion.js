@@ -8,9 +8,14 @@
 
   /* la segunda tanda de fotos era lazy: al llegar el reinicio aparecían de golpe. Se cargan y decodifican de antemano. */
   /* Solo la primera foto compite por el ancho de banda inicial (LCP): el resto baja con prioridad baja, sigue cargando de antemano. */
+  /* Este script se carga cuando la página ya terminó de cargar (js/diferidos.js), así que la descarga de estas fotos ya no compite con la portada.
+     Con ahorro de datos o conexión 2G/3G no se adelanta nada: cada foto baja recién cuando la cinta se acerca (carga diferida nativa). */
+  var lenta = false;
+  try { var cn = navigator.connection; lenta = !!(cn && (cn.saveData || /^(slow-2g|2g|3g)$/.test(cn.effectiveType || ''))); } catch (e) { lenta = false; }
   [].forEach.call(chain.querySelectorAll('img'), function (img, n) {
-    if (img.loading === 'lazy') img.loading = 'eager';
     if (n > 0 && 'fetchPriority' in img) img.fetchPriority = 'low';
+    if (lenta) return;
+    if (img.loading === 'lazy') img.loading = 'eager';
     if (img.decode) img.decode().catch(function () {});
   });
   var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)');

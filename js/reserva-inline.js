@@ -65,7 +65,10 @@
   function say(t) { live.textContent = t; }
   function today() { var t = new Date(); return new Date(t.getFullYear(), t.getMonth(), t.getDate()); }
   function esDiaElegible(date) { return VH ? VH.elegible(date) : date >= today() && date.getDay() !== 0; }
-  function fmt(d) { return d.toLocaleDateString('es-AR', { weekday: 'long', day: 'numeric', month: 'long' }); }
+  /* un solo Intl.DateTimeFormat: toLocaleDateString con opciones crea uno nuevo en cada llamada y el calendario lo llama una vez por día no elegible. */
+  var FMT_DIA = null;
+  try { FMT_DIA = new Intl.DateTimeFormat('es-AR', { weekday: 'long', day: 'numeric', month: 'long' }); } catch (e) {}
+  function fmt(d) { return FMT_DIA ? FMT_DIA.format(d) : d.toLocaleDateString('es-AR', { weekday: 'long', day: 'numeric', month: 'long' }); }
 
   function cal() {
     var m = st.month, c = q('[data-days]'), first = (new Date(m.getFullYear(), m.getMonth(), 1).getDay() + 6) % 7, n = new Date(m.getFullYear(), m.getMonth() + 1, 0).getDate();
@@ -114,6 +117,7 @@
   function back() { show(st.step === 'confirm' ? 'time' : 'month'); }
   function reset() { st.day = null; st.slot = null; st.espera = null; var a = q('[data-wa]'); if (a) { delete a.dataset.msg; if (wa) a.href = 'https://wa.me/' + wa; } cal(); slots(); show('month'); }
   function abrir(id) {
+    armar();
     if (st.unitId !== (id || null) || st.unitEstado === 'error') { st.unitId = id || null; fijarUnidad(st.unitId); }
     var dl = document.querySelector('dialog[open]'); if (dl && dl.close) dl.close();
     box.classList.add('is-open');
@@ -154,5 +158,10 @@
     if (!a || e.defaultPrevented || e.button || e.metaKey || e.ctrlKey || e.shiftKey) return;
     e.preventDefault(); var id = null; try { id = new URL(a.getAttribute('href'), location.href).searchParams.get('unidad'); } catch (err) {} abrir(id);
   });
-  cal(); slots();
+  /* El calendario arranca cerrado: se arma la primera vez que se abre, o al quedar libre el hilo después de cargar la página (lo que ocurra primero).
+     Armarlo durante la carga costaba ≈ 120 ms de CPU en un celular de gama media y nadie lo ve hasta tocar «Agendar visita». */
+  var armado = false;
+  function armar() { if (armado) return; armado = true; cal(); slots(); }
+  function enOcio() { (window.requestIdleCallback || function (f) { setTimeout(f, 300); })(armar, { timeout: 4000 }); }
+  if (document.readyState === 'complete') enOcio(); else window.addEventListener('load', enOcio, { once: true });
 })();

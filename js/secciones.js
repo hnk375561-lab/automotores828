@@ -512,6 +512,9 @@
         var c = typeof x === 'string' ? alfa(x, y) : x - y;
         return c * dir || a.i - b.i;
       }
+      /* matchMedia en vez de leer el ancho de la ventana: esa lectura obliga al navegador a calcular el layout en ese instante (reflujo forzado). */
+      var mqMovil = window.matchMedia ? window.matchMedia('(max-width: 700px)') : null;
+      function esMovil() { return mqMovil ? mqMovil.matches : window.innerWidth <= 700; }
       function aplicar(escribirUrl) {
         var flip = null;
         var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -520,7 +523,7 @@
           list.forEach(function (a) { var node = items[a.i]; if (node && !node.hidden) flip.set(node, node.getBoundingClientRect()); });
         }
         var n = 0, visibles = 0, quitados = podar().concat(pendQuit.splice(0));
-        var paso = window.innerWidth <= 700 ? 6 : 20;
+        var paso = esMovil() ? 6 : 20;
         if (window._drCatalogoPaso !== paso) { window._drCatalogoPaso = paso; window._drCatalogoMostradas = paso; }
         else if (escribirUrl) { window._drCatalogoMostradas = paso; }
         var limite = window._drCatalogoMostradas || paso;
@@ -541,12 +544,19 @@
         var frag = document.createDocumentFragment();
         orden.forEach(function (a) { if (items[a.i]) frag.appendChild(items[a.i]); });
         ul.appendChild(frag);
-        if (flip) flip.forEach(function (before, node) {
-          if (!node.isConnected || node.hidden) return;
-          var after = node.getBoundingClientRect(), dx = before.left - after.left, dy = before.top - after.top;
-          if (Math.abs(dx) < 1 && Math.abs(dy) < 1) return;
-          try { node.animate([{ transform: 'translate(' + dx + 'px,' + dy + 'px)', opacity: .88 }, { transform: 'translate(0,0)', opacity: 1 }], { duration: 240, easing: 'ease-out' }); } catch (e) {}
-        });
+        if (flip) {
+          /* primero se leen todas las posiciones y después se anima: intercalar animate() entre lecturas obligaba a recalcular el layout en cada tarjeta */
+          var mov = [];
+          flip.forEach(function (before, node) {
+            if (!node.isConnected || node.hidden) return;
+            var after = node.getBoundingClientRect(), dx = before.left - after.left, dy = before.top - after.top;
+            if (Math.abs(dx) < 1 && Math.abs(dy) < 1) return;
+            mov.push([node, dx, dy]);
+          });
+          mov.forEach(function (m) {
+            try { m[0].animate([{ transform: 'translate(' + m[1] + 'px,' + m[2] + 'px)', opacity: .88 }, { transform: 'translate(0,0)', opacity: 1 }], { duration: 240, easing: 'ease-out' }); } catch (e) {}
+          });
+        }
         visibles = 0;
         orden.forEach(function (a) {
           var li = items[a.i], ok = okPor[a.i];
@@ -628,18 +638,18 @@
         if (escribirUrl) aUrl();
       }
 
-      window._drCatalogoPaso = window.innerWidth <= 700 ? 6 : 20;
+      window._drCatalogoPaso = esMovil() ? 6 : 20;
       window._drCatalogoMostradas = window._drCatalogoPaso;
       var moreBtn = document.getElementById('inventory-more');
       if (moreBtn) moreBtn.addEventListener('click', function () {
-        window._drCatalogoMostradas += window.innerWidth <= 700 ? 6 : 20;
+        window._drCatalogoMostradas += esMovil() ? 6 : 20;
         aplicar(false);
       });
       var catalogoResizeTimer = 0;
       window.addEventListener('resize', function () {
         window.clearTimeout(catalogoResizeTimer);
         catalogoResizeTimer = window.setTimeout(function () {
-          var nuevoPaso = window.innerWidth <= 700 ? 6 : 20;
+          var nuevoPaso = esMovil() ? 6 : 20;
           if (nuevoPaso !== window._drCatalogoPaso) {
             window._drCatalogoPaso = nuevoPaso;
             window._drCatalogoMostradas = nuevoPaso;
@@ -1643,18 +1653,24 @@ var io = new IntersectionObserver(function (es) {
 
       /* Un solo repintado por cuadro de animación (antes cada tecla reconstruía todo) y las coincidencias esperan
          a que dejes de escribir. */
-      var raf = 0, tMatch = 0;
+      var raf = 0, tMatch = 0, primeraPintada = false;
       function ahoraTodo() {
         raf = 0;
         if (vista) {
           var freshMessage = texto();
           if (vista.value !== freshMessage) {
             vista.value = freshMessage;
-            if (!window.matchMedia || !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-              vista.classList.remove('msg-updated'); void vista.offsetWidth; vista.classList.add('msg-updated');
-              window.setTimeout(function () { vista.classList.remove('msg-updated'); }, 320);
+            /* el realce es para los cambios que hace la persona, no para el primer armado de la página. Se reinicia en el cuadro siguiente:
+               antes se leía offsetWidth a propósito y eso forzaba un reflujo completo de la página (≈200 ms en un celular de gama media) justo al cargar. */
+            if (primeraPintada && (!window.matchMedia || !window.matchMedia('(prefers-reduced-motion: reduce)').matches)) {
+              vista.classList.remove('msg-updated');
+              window.requestAnimationFrame(function () {
+                vista.classList.add('msg-updated');
+                window.setTimeout(function () { vista.classList.remove('msg-updated'); }, 320);
+              });
             }
           }
+          primeraPintada = true;
         }
         pintarBurbuja(); progreso(); actualizarWa();
         if (panel) { clearTimeout(tMatch); tMatch = setTimeout(pintarMatch, 180); }

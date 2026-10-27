@@ -2593,6 +2593,18 @@ html.has-dlg .dr-fab{display:none}
    El DOM tiene ~6.400 elementos (58 tarjetas completas); content-visibility:auto recorta el primer layout.
    Las primeras 6 tarjetas se renderizan normal (visibles al llegar al catálogo). «auto 720px»: alto estimado hasta que se renderiza (el navegador recuerda el real). */
 .cars>.car:nth-child(n+7){content-visibility:auto;contain-intrinsic-size:auto 720px}
+
+/* ===== Fondos diferidos (2026-10-27) =====
+   Chrome pide la imagen de fondo de cualquier caja que se dibuja, esté o no en pantalla: la portada bajaba ≈ 770 KB de fondos de secciones
+   que nadie estaba mirando (Nosotros, Dónde estamos, pie, Tu usado, Tu búsqueda, Guía). Con JavaScript activo esos fondos los pide
+   js/fondos-secciones.js cuando la sección se acerca (900 px): las secciones y el pie llevan su propia capa .dr-fondo, y Nosotros / Dónde
+   estamos reciben .bg-on. Sin JavaScript (o en un navegador sin @media (scripting)) queda el comportamiento anterior: todo se ve igual. */
+@media (scripting:enabled){
+  html[data-fondos] #financiacion,html[data-fondos] #tu-usado,html[data-fondos] #busqueda,html[data-fondos] #guia,html[data-fondos] #visita,html[data-fondos] #contacto{background-image:none!important}
+  html[data-fondos] .site-footer{background-image:none}
+  html[data-fondos] .nz-frentes:not(.bg-on) i{background-image:none}
+  html[data-fondos] .nz-donde-hd:not(.bg-on)::before{background-image:none}
+}
 .msg-updated{animation:msg-updated .28s ease-out}@keyframes msg-updated{from{opacity:.68;transform:translateY(2px)}to{opacity:1;transform:translateY(0)}}
 .guia-progress{color:#d9dbdd;font-size:.9rem;margin:.25rem 0}
 .qa-search-label{display:block;margin:.6rem 0 .25rem;color:#d9dbdd}.qa-search{display:block;min-height:44px;width:min(100%,32rem);padding:.65rem .8rem;border:1px solid #6b6d70;border-radius:.4rem;background:#111214;color:#fff;font:inherit}.qa-search:focus-visible{outline:3px solid #ee1c22;outline-offset:2px}
