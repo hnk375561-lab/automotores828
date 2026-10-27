@@ -526,16 +526,16 @@ const ld = {
 
 // Cadena horizontal del hero: frentes de diez unidades ya integradas en data/vehicles.json.
 const HERO_FOTOS = [
-  ['01', 'images/hero/hero-01.webp', 'images/hero/hero-01-828.webp', 900, 1200, 621, 'Honda Fit 2014 en Automotores 828'],
-  ['02', 'images/hero/hero-02.webp', 'images/hero/hero-02-828.webp', 902, 902, 828, 'Peugeot 208 2021 en Automotores 828'],
-  ['03', 'images/hero/hero-03.webp', 'images/hero/hero-03-828.webp', 900, 1200, 621, 'Renault Sandero Stepway 2014 en Automotores 828'],
-  ['04', 'images/hero/hero-04.webp', 'images/hero/hero-04-828.webp', 900, 1200, 621, 'Peugeot 2008 2021 en Automotores 828'],
-  ['05', 'images/hero/hero-05.webp', 'images/hero/hero-05-828.webp', 1195, 1195, 828, 'Peugeot 208 2019 en Automotores 828'],
-  ['06', 'images/hero/hero-06.webp', 'images/hero/hero-06-828.webp', 900, 900, 828, 'Fiat Palio 2013 en Automotores 828'],
-  ['07', 'images/hero/hero-07.webp', 'images/hero/hero-07-828.webp', 900, 1200, 621, 'Peugeot 208 2016 en Automotores 828'],
-  ['08', 'images/hero/hero-08.webp', 'images/hero/hero-08-828.webp', 1141, 1141, 828, 'Citroën C4 Lounge 2020 en Automotores 828'],
-  ['09', 'images/hero/hero-09.webp', 'images/hero/hero-09-828.webp', 1131, 1131, 828, 'Toyota Yaris 2021 en Automotores 828'],
-  ['10', 'images/hero/hero-10.webp', 'images/hero/hero-10-828.webp', 900, 1200, 621, 'Renault Duster 2018 en Automotores 828'],
+  ['01', 'images/hero/hero-01.webp', 'images/hero/hero-01-828.webp', 900, 1200, 621, 'Honda Fit 2014 Gris en Automotores 828'],
+  ['02', 'images/hero/hero-02.webp', 'images/hero/hero-02-828.webp', 902, 902, 828, 'Peugeot 208 2021 Blanco en Automotores 828'],
+  ['03', 'images/hero/hero-03.webp', 'images/hero/hero-03-828.webp', 900, 1200, 621, 'Renault Sandero Stepway 2014 Blanco en Automotores 828'],
+  ['04', 'images/hero/hero-04.webp', 'images/hero/hero-04-828.webp', 900, 1200, 621, 'Peugeot 2008 2021 Gris en Automotores 828'],
+  ['05', 'images/hero/hero-05.webp', 'images/hero/hero-05-828.webp', 1195, 1195, 828, 'Peugeot 208 2019 Blanco en Automotores 828'],
+  ['06', 'images/hero/hero-06.webp', 'images/hero/hero-06-828.webp', 900, 900, 828, 'Fiat Palio 2013 Blanco en Automotores 828'],
+  ['07', 'images/hero/hero-07.webp', 'images/hero/hero-07-828.webp', 900, 1200, 621, 'Peugeot 208 2016 Negro en Automotores 828'],
+  ['08', 'images/hero/hero-08.webp', 'images/hero/hero-08-828.webp', 1141, 1141, 828, 'Citroën C4 Lounge 2020 Gris en Automotores 828'],
+  ['09', 'images/hero/hero-09.webp', 'images/hero/hero-09-828.webp', 1131, 1131, 828, 'Toyota Yaris 2021 Azul en Automotores 828'],
+  ['10', 'images/hero/hero-10.webp', 'images/hero/hero-10-828.webp', 900, 1200, 621, 'Renault Duster 2018 Gris en Automotores 828'],
 ];
 const HERO_VERSION = '?v=20261021-2';
 const HERO_UNIT_PHOTOS = [
@@ -543,7 +543,7 @@ const HERO_UNIT_PHOTOS = [
   'images/stock/ml-2185939777-p01.webp', 'images/stock/ml-2032707077-p01.webp',
   'images/stock/ml-2191782749-p01.webp', 'images/stock/ml-2116059721-p01.webp',
   'images/stock/ml-3962722820-p01.webp', 'images/stock/ml-2140604399-p01.webp',
-  'images/stock/ml-2090433129-p01.webp', 'images/stock/ml-2057558089-p01.webp'
+  'images/stock/ml-2090433129-p01.webp', 'images/stock/ml-4049171736-p01.webp'
 ];
 const HERO_UNITS = HERO_FOTOS.map((photo, i) => {
   const source = HERO_UNIT_PHOTOS[i];
@@ -551,7 +551,7 @@ const HERO_UNITS = HERO_FOTOS.map((photo, i) => {
   if (matches.length !== 1 || !fs.existsSync(path.join(root, source))) throw new Error(`Hero ${photo[0]}: la fotografía ${source} no identifica una única unidad del inventario`);
   const unit = matches[0], label = `${unit.marca} ${unit.modelo} · ${unit.anio}`;
   const altIdentity = norm(photo[6].replace(/ en Automotores 828$/, ''));
-  if (!altIdentity.includes(norm(`${unit.marca} ${unit.modelo} ${unit.anio}`))) throw new Error(`Hero ${photo[0]}: marca/modelo/año no coincide con ${source}`);
+  if (!altIdentity.includes(norm(`${unit.marca} ${unit.modelo} ${unit.anio} ${unit.color}`))) throw new Error(`Hero ${photo[0]}: marca/modelo/año/color no coincide con ${source} (hay unidades homónimas: se verifica también el color)`);
   return { unit, index: autos.indexOf(unit), label };
 });
 if (new Set(HERO_UNITS.map((entry) => entry.index)).size !== HERO_FOTOS.length) throw new Error('Las imágenes del hero no tienen correspondencia única con fichas distintas');
