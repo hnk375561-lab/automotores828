@@ -565,6 +565,37 @@ const heroFigure = ([n, src, small, width, height, smallWidth], entry, decorativ
 const HERO_CHAIN = HERO_FOTOS.map((photo, i) => heroFigure(photo, HERO_UNITS[i], false, i === 0)).join('');
 const HERO_CHAIN_DUP = HERO_FOTOS.map((photo, i) => heroFigure(photo, HERO_UNITS[i], true, false)).join('');
 
+/* Anillo de interiores (js/anillo.js): cada foto de images/anillo/ es una foto publicada de una unidad del stock.
+   El vínculo se comprobó comparando cada foto con las fotos de cada ficha (coincidencia de puntos de imagen);
+   «foto» es el número de foto de la ficha de la que sale. Si una unidad deja el stock, hay que cambiar su foto y su fila. */
+const ANILLO_FOTOS = [
+  { n: '01', id: '1982665981', foto: 9 },
+  { n: '02', id: '2032707077', foto: 10 },
+  { n: '03', id: '2032158299', foto: 12 },
+  { n: '04', id: '2063616163', foto: 9 },
+  { n: '05', id: '2069940821', foto: 8 },
+  { n: '06', id: '2057558089', foto: 9 },
+  { n: '07', id: '1957627121', foto: 10 },
+];
+const ANILLO_UNIDADES = ANILLO_FOTOS.map(({ n, id, foto }) => {
+  const matches = autos.filter((unit) => String(unit.id) === id);
+  if (matches.length !== 1) throw new Error(`Anillo ${n}: la unidad ${id} no está en data/vehicles.json`);
+  const unit = matches[0];
+  if (unit.vendida) throw new Error(`Anillo ${n}: la unidad ${id} figura como vendida; hay que reemplazar su foto`);
+  if (!Array.isArray(unit.fotos) || !unit.fotos[foto - 1]) throw new Error(`Anillo ${n}: la ficha ${id} no tiene la foto ${foto}`);
+  if (!fs.existsSync(path.join(root, `images/anillo/anillo-${n}.webp`))) throw new Error(`Anillo ${n}: falta images/anillo/anillo-${n}.webp`);
+  return { n, unit };
+});
+if (new Set(ANILLO_UNIDADES.map((e) => e.unit.id)).size !== ANILLO_FOTOS.length) throw new Error('Las fotos del anillo no tienen correspondencia única con fichas distintas');
+const anilloTarjeta = ({ n }) => `<li class="ring-card"><img src="images/anillo/anillo-${n}.webp" width="600" height="800" alt="" loading="lazy" decoding="async" draggable="false"></li>`;
+const anilloUnidad = ({ unit }, k) => {
+  const pr = unit.precio ? `<p class="ring-pr"><span class="price-currency">${esc(unit.precio.moneda)}</span> ${fmt(unit.precio.monto)}</p><p class="ring-n">Precio publicado el ${esc(fdate(unit.precio.fecha))}; puede haber cambiado.</p>` : '<p class="ring-pr">Consultar precio</p>';
+  const meta = [unit.anio != null ? `<b>${unit.anio}</b>` : '', unit.version ? `<span>${esc(unit.version)}</span>` : ''].filter(Boolean).join('');
+  return `<div class="ring-unit${k === 0 ? ' is-on' : ''}" data-ring-i="${k}" role="group" aria-label="${esc(unit.titulo)}"><p class="ring-brand">${esc(marcaDe(unit))}</p><h3 class="ring-model">${esc(unit.modelo || sinMarca(unit))}</h3>${meta ? `<p class="ring-meta">${meta}</p>` : ''}${pr}<div class="ring-act"><button class="btn p sm" type="button" data-hero-unit="${esc(unit.id)}" aria-label="Ver la ficha completa de ${esc(unit.titulo)}">Ver ficha</button><a class="btn sm" href="${esc(consultaHref(unit))}" ${EXT} aria-label="${WA ? 'Consultar por WhatsApp' : 'Ver en Mercado Libre'}: ${esc(unit.titulo)}">${WA ? 'Consultar' : 'Ver publicación'}</a></div></div>`;
+};
+/* El anillo sigue siendo decoración (aria-hidden, sin interacción). Debajo va la unidad que pasa al frente, con datos de vehicles.json; las acciones reutilizan la ficha del catálogo (data-hero-unit) y el mensaje de wa-mensajes.js. */
+const ANILLO = `<div class="ring-sec" data-anillo aria-hidden="true"><ul class="ring-stage">${ANILLO_UNIDADES.map(anilloTarjeta).join('')}</ul></div>\n<section class="ring-info" aria-labelledby="ring-t" data-anillo-info><div class="w">\n<h2 class="ey ring-k" id="ring-t"><span class="ey-brand">828</span> · Los interiores de nuestras unidades</h2>\n<div class="ring-units">${ANILLO_UNIDADES.map(anilloUnidad).join('')}</div>\n</div></section>`;
+
 /* Intro «Prelude» (solo portada): superposición a pantalla completa; css/prelude.css la oculta sin JavaScript o con movimiento reducido. */
 const PRELUDE = (() => {
   const thin = Array.from({ length: 34 }, (_, i) => `<i style="width:${60 + i}%"></i>`).join('');
@@ -604,7 +635,7 @@ ${secHorarios}
 ${unidades}
 </div></section>
 
-<div class="ring-sec" data-anillo aria-hidden="true"><ul class="ring-stage"><li class="ring-card"><img src="images/anillo/anillo-01.webp" width="600" height="800" alt="" loading="lazy" decoding="async" draggable="false"></li><li class="ring-card"><img src="images/anillo/anillo-02.webp" width="600" height="800" alt="" loading="lazy" decoding="async" draggable="false"></li><li class="ring-card"><img src="images/anillo/anillo-03.webp" width="600" height="800" alt="" loading="lazy" decoding="async" draggable="false"></li><li class="ring-card"><img src="images/anillo/anillo-04.webp" width="600" height="800" alt="" loading="lazy" decoding="async" draggable="false"></li><li class="ring-card"><img src="images/anillo/anillo-05.webp" width="600" height="800" alt="" loading="lazy" decoding="async" draggable="false"></li><li class="ring-card"><img src="images/anillo/anillo-06.webp" width="600" height="800" alt="" loading="lazy" decoding="async" draggable="false"></li><li class="ring-card"><img src="images/anillo/anillo-07.webp" width="600" height="800" alt="" loading="lazy" decoding="async" draggable="false"></li></ul></div>
+${ANILLO}
 
 <section class="finance-section" id="financiacion" aria-labelledby="fin-t"><div class="w">
 <div class="finance-head"><div><p class="ey"><span class="ey-brand">828</span> · Financiación y servicios</p><h2 id="fin-t">Financiá tu <em>próximo vehículo</em></h2><p class="sec-p">Consultanos por financiación. Las condiciones se informan por consulta: este sitio no publica condiciones de financiación.</p></div><aside class="finance-aside"><span>${esc(NAME)}</span><p>Encontrá una forma de avanzar hacia tu próxima unidad.</p></aside></div>

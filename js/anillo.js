@@ -1,7 +1,9 @@
 /* Automotores 828 · anillo decorativo de interiores (entre «Unidades» y «Financiación»).
    7 tarjetas sobre una rueda inclinada, una sola animación con requestAnimationFrame.
-   Solo decoración: sin interacción, aria-hidden. Pausa fuera de pantalla o con la pestaña oculta;
-   con «reducir movimiento» o «ahorro de datos» queda quieto. */
+   El anillo es solo decoración: sin interacción, aria-hidden. Pausa fuera de pantalla o con la pestaña oculta;
+   con «reducir movimiento» o «ahorro de datos» queda quieto.
+   Unidad en foco: debajo del anillo, el panel [data-anillo-info] muestra la unidad cuya tarjeta va al frente.
+   Solo lee las profundidades que pintar() ya calcula: no cambia el giro, la velocidad ni la pausa del anillo. */
 (function () {
   'use strict';
   var root = document.querySelector('[data-anillo]');
@@ -15,6 +17,38 @@
   var quieto = (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) ||
     (navigator.connection && navigator.connection.saveData);
   var rot = 0, R = 0, visible = false, raf = 0, last = 0, vel = IDLE;
+
+  /* Panel de la unidad en foco (opcional). Mientras la persona apunta con el mouse, toca o enfoca con teclado
+     un botón del panel, el panel NO cambia de unidad (el anillo sigue girando igual), para que el clic caiga en la unidad que está viendo. */
+  var info = document.querySelector('[data-anillo-info]');
+  var paneles = info ? [].slice.call(info.querySelectorAll('[data-ring-i]')) : [];
+  var enFoco = 0, frente = 0, hover = false, foco = false, toque = false, tToque = 0;
+
+  function mostrar() {
+    if (hover || foco || toque || frente === enFoco || !paneles.length) return;
+    if (paneles[enFoco]) paneles[enFoco].classList.remove('is-on');
+    if (paneles[frente]) paneles[frente].classList.add('is-on');
+    enFoco = frente;
+  }
+  if (paneles.length) {
+    var zona = info.querySelector('.ring-units') || info;
+    zona.addEventListener('pointerenter', function (e) { if (e.pointerType === 'mouse') hover = true; });
+    zona.addEventListener('pointerleave', function (e) { if (e.pointerType === 'mouse') { hover = false; mostrar(); } });
+    zona.addEventListener('pointerdown', function (e) {
+      if (e.pointerType === 'mouse') return;
+      toque = true; clearTimeout(tToque);
+      tToque = setTimeout(function () { toque = false; mostrar(); }, 2500);
+    });
+    zona.addEventListener('focusin', function (e) {
+      var porTeclado = true;
+      try { porTeclado = e.target.matches(':focus-visible'); } catch (err) {}
+      if (porTeclado) foco = true;
+    });
+    zona.addEventListener('focusout', function (e) {
+      if (zona.contains(e.relatedTarget)) return;
+      foco = false; mostrar();
+    });
+  }
 
   function medir() {
     var r = stage.getBoundingClientRect();
@@ -38,6 +72,8 @@
     /* el navegador no resuelve solo tarjetas tan superpuestas: se ordena por profundidad a mano */
     orden.sort(function (p, q) { return p.__z - q.__z; });
     for (i = 0; i < N; i++) orden[i].style.zIndex = i;
+    frente = cards.indexOf(orden[N - 1]);        /* la tarjeta que queda arriba de todas */
+    mostrar();
   }
 
   function cuadro(t) {
