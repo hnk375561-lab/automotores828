@@ -23,7 +23,7 @@ Implementación incluida
 
 Bloqueos de autorización/dato no resueltos
 
-- No se fija nueva dirección o fachada por la discrepancia 828/831.
+- Dirección confirmada el 2026-10-26: Blvd. Buenos Aires 828 (el 831 es dato registral/de terceros).
 - No se incorpora segunda fotografía a tarjetas sin autorización verificable.
 - WhatsApp: el dueño confirmó y autorizó el número (P1 resuelto el 2026-10-25), por lo que se habilitan los mensajes contextuales; sigue prohibido agregar otros números o canales sin confirmación.
 - No se agregan cifras de reseñas ni contadores comerciales no verificados.

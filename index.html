@@ -2588,6 +2588,11 @@ html.has-dlg .dr-fab{display:none}
   html body .car-q a,html body .car-q button{min-width:44px;min-height:44px}
   html body #unidades .cars .car .car-s small{letter-spacing:.04em!important;font-size:8.5px!important}
 }
+
+/* ===== Rendimiento: las tarjetas fuera de pantalla no calculan layout ni pintan hasta acercarse al viewport =====
+   El DOM tiene ~6.400 elementos (58 tarjetas completas); content-visibility:auto recorta el primer layout.
+   Las primeras 6 tarjetas se renderizan normal (visibles al llegar al catálogo). «auto 720px»: alto estimado hasta que se renderiza (el navegador recuerda el real). */
+.cars>.car:nth-child(n+7){content-visibility:auto;contain-intrinsic-size:auto 720px}
 .msg-updated{animation:msg-updated .28s ease-out}@keyframes msg-updated{from{opacity:.68;transform:translateY(2px)}to{opacity:1;transform:translateY(0)}}
 .guia-progress{color:#d9dbdd;font-size:.9rem;margin:.25rem 0}
 .qa-search-label{display:block;margin:.6rem 0 .25rem;color:#d9dbdd}.qa-search{display:block;min-height:44px;width:min(100%,32rem);padding:.65rem .8rem;border:1px solid #6b6d70;border-radius:.4rem;background:#111214;color:#fff;font:inherit}.qa-search:focus-visible{outline:3px solid #ee1c22;outline-offset:2px}

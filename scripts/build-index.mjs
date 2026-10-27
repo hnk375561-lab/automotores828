@@ -31,7 +31,7 @@ const siteUrl = D.publicacion.siteUrl ? D.publicacion.siteUrl.replace(/\/?$/, '/
    Prioridad: siteUrl (producción) > publicacion.previewUrl (demo, URL donde está publicada) > entorno de build
    (Netlify: URL / DEPLOY_PRIME_URL; GitHub Pages: GITHUB_REPOSITORY). Si no hay ninguna, queda relativa y
    scripts/build-site.mjs la completa al armar _site/ en Netlify. */
-const envBase = process.env.DEPLOY_PRIME_URL || process.env.URL || (process.env.GITHUB_REPOSITORY ? `https://${process.env.GITHUB_REPOSITORY.split('/')[0].toLowerCase()}.github.io/${process.env.GITHUB_REPOSITORY.split('/')[1]}` : null);
+const envBase = process.env.CF_PAGES_URL || process.env.DEPLOY_PRIME_URL || process.env.URL || (process.env.GITHUB_REPOSITORY ? `https://${process.env.GITHUB_REPOSITORY.split('/')[0].toLowerCase()}.github.io/${process.env.GITHUB_REPOSITORY.split('/')[1]}` : null);
 /* Respaldo: sin URL cargada ni entorno de build, se toma el remoto git (GitHub Pages: usuario.github.io/repo). WhatsApp/Facebook/Instagram EXIGEN og:image absoluta: una ruta relativa deja el enlace sin imagen.
    Si el sitio se publica en otra dirección, cargarla en data/dealership.json → publicacion.previewUrl. */
 const gitBase = (() => { try { const u = execSync('git remote get-url origin', { cwd: root, stdio: ['ignore', 'pipe', 'ignore'] }).toString().trim(); const m = /github\.com[:/]([^/]+)\/([^/]+?)(?:\.git)?$/.exec(u); return m ? `https://${m[1].toLowerCase()}.github.io/${m[2]}` : null; } catch (e) { return null; } })();

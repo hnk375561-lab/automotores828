@@ -26,7 +26,7 @@ Suite completa sin cortarse en el primer fallo: `npm run test:todo` (incluye `te
 - Pruebas en dispositivo real: T1 y T4 (criterio de aceptación del informe).
 - Capturas en dispositivo real: T3 y T7 (en headless ya revisadas).
 - T8 y T9 (ver tabla).
-- Pendientes de datos: `data/pendientes.json`. Bloquean producción P3, P4, P6 y P16. P1 (WhatsApp) está resuelto.
+- Pendientes de datos: `data/pendientes.json`. Resueltos: P1 (WhatsApp), P4 (dirección 828), P6 (se retiró el fijo; solo WhatsApp) y P16 (email `automotores828@gmail.com`). P3 (dominio y aprobación del dueño) está diferido: el alcance actual es una demo no publicable en Cloudflare Pages (ver `docs/DEPLOY-CLOUDFLARE.md`).
 
 ## Vista previa al compartir el enlace (og:image)
 
@@ -50,3 +50,10 @@ Suite completa sin cortarse en el primer fallo: `npm run test:todo` (incluye `te
 - Las redes guardan la vista previa en caché: si no se actualiza, compartir con `?v=2` o usar el depurador de Facebook.
 - Móvil: las 4 acciones de cada tarjeta pasan a 2×2 (≥ 44 px) y «KILÓMETROS» ya no toca el borde (`scripts/estilos.css`, final del archivo).
 - `e2e-reveal.py` lee las duraciones de las variables `--rv-*` (ya no hay números fijos) y el temporizador de `js/site.js` pasó a 5000 ms. Si se alargan los `--rv-*`, subirlo.
+
+## Rendimiento y auditoría (2026-10-26, Chromium headless, build servido con brotli + caché como Cloudflare)
+
+- Lighthouse móvil (CPU 4×, 4G lenta): rendimiento 36–44 antes → 43–50 ahora; TBT ~1,7–2,0 s → ~1,0–1,5 s. Escritorio: 62 → 66. Accesibilidad 100, buenas prácticas 100; SEO 66 por el `noindex` de la demo (esperado).
+- Cambio: `.cars>.car:nth-child(n+7)` usa `content-visibility:auto` (scripts/estilos.css, final). Las primeras 6 tarjetas se renderizan normal. La suite completa pasó con el cambio.
+- Cuellos que siguen: LCP 5–9 s en móvil simulado (carrusel del hero ≈ 900 KB de imágenes + fondos de secciones inferiores ≈ 700 KB + `units.min.json` 357 KB; la entrada del hero está ralentizada a propósito por `--rv-dur-hero`); DOM de ~6.400 elementos.
+- No medido: dispositivo físico real (táctil, INP real). Lo emulado cubre táctil y CPU/red limitadas, no GPU ni memoria de un teléfono.

@@ -73,8 +73,9 @@
     {
       "id": "P12",
       "tema": "Confirmar si 11 6023-9259 es línea institucional vigente; no publicar hasta autorización",
-      "estado": "abierto",
-      "bloqueante": false
+      "estado": "resuelto",
+      "bloqueante": false,
+      "resolucion": "Superado por P1: el dueño confirmó y autorizó el 11 6023-9259 como WhatsApp comercial (2026-10-25). Es el único teléfono publicado."
     },
     {
       "id": "P13",
@@ -91,8 +92,9 @@
     {
       "id": "P15",
       "tema": "Verificar vigencia de rutas y paradas de Moovit (Alfonso Amat 480, Boulevard Buenos Aires 909, colectivos y tren Roca) antes de publicar indicaciones",
-      "estado": "abierto",
-      "bloqueante": false
+      "estado": "no_aplica_demo",
+      "bloqueante": false,
+      "resolucion": "El sitio no publica rutas, paradas ni colectivos de Moovit (verificado 2026-10-26). Revisar solo si se agregan indicaciones de transporte."
     },
     {
       "id": "P16",
