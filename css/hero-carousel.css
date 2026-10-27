@@ -56,3 +56,33 @@ html body .hero-chain+*{position:relative}
 html body .hero .hx-copy{pointer-events:none}html body .hero .hx-copy a,html body .hero .hx-copy button{pointer-events:auto}
 @media(max-width:900px){html body .hero-chain{height:min(100vw + 56px,560px);inset:0 0 auto}html body .hero-chain-track{--car:clamp(150px,47vw,250px);height:100%;animation-duration:45s}html body .hero-chain-car{flex-basis:var(--car)}html body .hero-chain-car img{object-position:50% 63%}}
 @media(prefers-reduced-motion:reduce){html body .hero-chain-track{animation:none!important;transform:none!important}html body .hero-chain-car:nth-child(n+6){display:none}}
+
+/* Hero · elevación de la tarjeta bajo el mouse (solo puntero fino con hover; en táctil no existe).
+   js/hero-motion.js marca UNA tarjeta con .is-lift. Solo transform, opacity, filter y sombras: la cinta (dr-chain) no se toca y nunca se pausa. */
+@media (hover:hover) and (pointer:fine){
+html body .hero-chain-car{transition:transform .55s cubic-bezier(.2,.75,.25,1),box-shadow .55s cubic-bezier(.2,.75,.25,1),z-index 0s linear .55s}
+html body .hero-chain-car img{transition:transform .9s cubic-bezier(.2,.75,.25,1),filter .6s ease}
+html body .hero-chain-car::after{transition:opacity .6s ease}
+html body .hero-chain-car.is-lift{z-index:6;will-change:transform;transform:translate3d(0,-8px,0) scale(1.065);transition:transform .55s cubic-bezier(.2,.75,.25,1),box-shadow .55s cubic-bezier(.2,.75,.25,1),z-index 0s;box-shadow:0 0 0 1px rgba(255,255,255,.2),0 0 54px 10px rgba(0,0,0,.78),0 30px 64px rgba(0,0,0,.65)}
+html body .hero-chain-car.is-lift img{transform:scale(1.07);filter:saturate(1.1) contrast(1.06) brightness(1.02)}
+html body .hero-chain-car.is-lift::after{opacity:.55}
+/* brillo diagonal que cruza la foto una vez al subir; al bajar se desvanece y vuelve oculto a su lugar */
+html body .hero-chain-link::before{content:"";position:absolute;inset:0;z-index:1;pointer-events:none;opacity:0;transform:translateX(-130%);background:linear-gradient(115deg,transparent 34%,rgba(255,255,255,.2) 50%,transparent 66%);transition:opacity .25s ease,transform 0s linear .25s}
+html body .hero-chain-car.is-lift .hero-chain-link::before{opacity:1;transform:translateX(130%);transition:transform .9s cubic-bezier(.3,.6,.2,1),opacity .2s ease}
+/* filo rojo de marca que se dibuja al pie */
+html body .hero-chain-link::after{content:"";position:absolute;left:0;right:0;bottom:0;z-index:3;height:4px;background:#ee1c22;pointer-events:none;transform:scaleX(0);transform-origin:left center;transition:transform .35s ease}
+html body .hero-chain-car.is-lift .hero-chain-link::after{transform:scaleX(1);transition:transform .6s cubic-bezier(.2,.75,.25,1) .08s}
+/* etiqueta: sube, gana un borde rojo y muestra la invitación «Ver ficha» */
+html body .hero-chain-label{transition:transform .5s cubic-bezier(.2,.75,.25,1),background-color .4s ease,box-shadow .5s ease}
+html body .hero-chain-car.is-lift .hero-chain-label{transform:translateY(-8px);background-color:rgba(6,6,7,.96);box-shadow:inset 3px 0 0 #ee1c22,0 12px 26px rgba(0,0,0,.55)}
+html body .hero-chain-label::after{content:"Ver ficha \2192";position:absolute;left:0;bottom:calc(100% + 8px);padding:6px 11px;border-radius:3px;background:#ee1c22;color:#fff;font:800 .72rem/1 Inter,Arial,sans-serif;letter-spacing:.09em;text-transform:uppercase;text-shadow:none;opacity:0;transform:translateY(8px);transition:opacity .25s ease,transform .25s ease}
+html body .hero-chain-car.is-lift .hero-chain-label::after{opacity:1;transform:translateY(0);transition:opacity .35s ease .12s,transform .45s cubic-bezier(.2,.75,.25,1) .12s}
+}
+/* movimiento reducido: la tarjeta se distingue sin desplazarse ni escalar */
+@media (hover:hover) and (pointer:fine) and (prefers-reduced-motion:reduce){
+html body .hero-chain-car,html body .hero-chain-car img,html body .hero-chain-car::after,html body .hero-chain-link::before,html body .hero-chain-link::after,html body .hero-chain-label,html body .hero-chain-label::after{transition:none!important}
+html body .hero-chain-car.is-lift{transform:none;will-change:auto}
+html body .hero-chain-car.is-lift img{transform:scale(1.015)}
+html body .hero-chain-car.is-lift .hero-chain-link::before{display:none}
+html body .hero-chain-car.is-lift .hero-chain-label{transform:none}
+}

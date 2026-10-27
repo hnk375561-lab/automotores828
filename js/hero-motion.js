@@ -54,5 +54,41 @@
     observer.observe(chain);
     window.addEventListener('pagehide', function () { observer.disconnect(); }, { once: true });
   }
+
+  /* Elevación de la tarjeta bajo el mouse (escritorio). Solo marca la clase .is-lift en UNA tarjeta; el efecto es CSS (css/hero-carousel.css).
+     No toca is-paused ni animation-play-state: la cinta sigue su curso con el mouse encima, al abrir la ficha y al cerrarla.
+     La cinta se mueve bajo un mouse quieto y :hover no se actualiza solo con animaciones, así que se consulta qué tarjeta hay bajo el puntero
+     mientras el puntero esté sobre el hero (cada ~90 ms; la consulta se corta sola cuando el puntero sale o hay un diálogo encima). */
+  (function () {
+    var fino = window.matchMedia && window.matchMedia('(hover: hover) and (pointer: fine)');
+    if (!fino || !fino.matches || typeof document.elementFromPoint !== 'function') return;
+    var px = 0, py = 0, raf = 0, ultimo = 0, actual = null;
+    function poner(car) {
+      if (car === actual) return;
+      if (actual) actual.classList.remove('is-lift');
+      actual = car;
+      if (car) car.classList.add('is-lift');
+    }
+    function consultar(t) {
+      raf = 0;
+      if (t - ultimo < 90) { raf = requestAnimationFrame(consultar); return; }
+      ultimo = t;
+      var el = document.elementFromPoint(px, py);
+      if (!el || !interactionArea.contains(el)) { poner(null); return; }   /* salió del hero o hay un diálogo encima: se corta hasta el próximo movimiento */
+      var car = el.closest ? el.closest('.hero-chain-car') : null;
+      poner(car && chain.contains(car) ? car : null);
+      raf = requestAnimationFrame(consultar);
+    }
+    interactionArea.addEventListener('pointermove', function (e) {
+      if (e.pointerType === 'touch') return;
+      px = e.clientX; py = e.clientY;
+      if (!raf) raf = requestAnimationFrame(function (t) { ultimo = 0; consultar(t); });
+    }, { passive: true });
+    interactionArea.addEventListener('pointerleave', function () {
+      if (raf) { cancelAnimationFrame(raf); raf = 0; }
+      poner(null);
+    });
+    document.addEventListener('visibilitychange', function () { if (document.hidden) { if (raf) { cancelAnimationFrame(raf); raf = 0; } poner(null); } });
+  })();
   sync();
 })();
