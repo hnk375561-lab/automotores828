@@ -602,6 +602,62 @@ const anilloUnidad = ({ unit }, k) => {
 /* El anillo sigue siendo decoración (aria-hidden, sin interacción). Debajo va la unidad que pasa al frente, con datos de vehicles.json; las acciones reutilizan la ficha del catálogo (data-hero-unit) y el mensaje de wa-mensajes.js. */
 const ANILLO = `<div class="ring-sec" data-anillo aria-hidden="true"><ul class="ring-stage">${ANILLO_UNIDADES.map(anilloTarjeta).join('')}</ul></div>\n<section class="ring-info" aria-labelledby="ring-t" data-anillo-info><div class="w">\n<h2 class="ey ring-k" id="ring-t"><span class="ey-brand">828</span> · Los interiores de nuestras unidades</h2>\n<div class="ring-units">${ANILLO_UNIDADES.map(anilloUnidad).join('')}</div>\n</div></section>`;
 
+/* Unidad destacada (js/historia.js): foto apaisada de una unidad real con revelado. Todo sale de data/dealership.json → historias.destacada
+   y de data/vehicles.json (nada se duplica). Sin datos válidos, desactivada, vendida o sin foto en disco no se emite nada.
+   El relleno difuminado se genera aquí con sharp (scripts/make-historia.mjs) y va incrustado como data: URI. */
+const secDestacada = await (async () => {
+  const h = D.historias && D.historias.destacada;
+  if (!h || h.activa !== true) return '';
+  const unit = autos.find((u) => String(u.id) === String(h.unidadId));
+  const foto = h.foto || {};
+  if (!unit || unit.vendida || !foto.src || !fs.existsSync(path.join(root, foto.src))) return '';
+  const tx = h.textos || {};
+  const enc = h.encuadre || {};
+  const titulo = String(tx.titulo || unit.titulo);
+  const palabras = titulo.split(/\s+/);
+  const h2 = palabras.length > 2 ? `${esc(palabras.slice(0, 2).join(' '))} <em>${esc(palabras.slice(2).join(' '))}</em>` : esc(titulo);
+  let fondo = '';
+  try { const { fondoDifuminado } = await import('./make-historia.mjs'); fondo = await fondoDifuminado(path.join(root, foto.src)); } catch (e) { fondo = ''; }
+  const fecha = unit.relevadoEl || (unit.precio && unit.precio.fecha) || null;
+  const DATO = {
+    anio: (u) => (u.anio != null ? String(u.anio) : ''),
+    km: (u) => (u.km != null ? `${fmt(u.km)} km` : ''),
+    motor: (u) => u.motor || '',
+    transmision: (u) => u.transmision || '',
+    combustible: (u) => u.combustible || '',
+    color: (u) => u.color || '',
+  };
+  const datos = (h.datos || []).map((k) => (DATO[k] ? DATO[k](unit) : '')).filter(Boolean).join(' · ');
+  const precio = unit.precio ? `<p class="n">Precio publicado el ${esc(fdate(unit.precio.fecha))}: ${esc(unit.precio.moneda)} ${fmt(unit.precio.monto)}; puede haber cambiado.</p>` : '';
+  const waUrl = wa(`Hola! Quiero consultar por ${unit.titulo}.`);
+  const etiqueta = `Unidad destacada: ${titulo}`;
+  const foco = /^[0-9. %a-z-]+$/i.test(enc.focoMovil || '') ? ` style="--hist-foco:${enc.focoMovil}"` : '';
+  return `<section class="hist" id="unidad-destacada" aria-labelledby="hist-t" data-historia data-enc-escritorio="${esc(enc.escritorio || 'contain-blur')}" data-enc-movil="${esc(enc.movil || 'contain-blur')}"${foco}>
+<div class="w">
+<p class="ey"><span class="ey-brand">828</span> · ${esc(tx.eyebrow || 'Unidad destacada')}</p>
+<h2 id="hist-t">${h2}</h2>
+<p class="sec-p">${fecha ? `Dato relevado el ${esc(fdate(fecha))}. ` : ''}Precio y disponibilidad pueden cambiar; confirmalos con la agencia.</p>
+<button class="hist-btn" type="button" data-historia-abrir data-estado="cargando" aria-busy="true" aria-controls="hist-overlay" aria-haspopup="dialog" aria-expanded="false"><span class="hist-rule hist-rule--top" aria-hidden="true"></span><span class="hist-label">${esc(tx.boton || 'Conocé esta unidad')}</span><span class="hist-rule hist-rule--bottom" aria-hidden="true"></span></button>
+<noscript><p><a class="btn" href="u/${esc(unit.id)}/">Ver ficha de esta unidad</a></p></noscript>
+</div>
+<div class="hist-overlay" id="hist-overlay" role="dialog" aria-modal="true" aria-label="${esc(etiqueta)}" hidden>
+<div class="hist-media">
+<div class="hist-bg"${fondo ? ` style="background-image:url(${fondo})"` : ''}></div>
+<img class="hist-fg" src="${esc(foto.src)}" width="${foto.ancho || 1200}" height="${foto.alto || 675}" alt="${esc(foto.alt || unit.titulo)}" loading="lazy" decoding="async" fetchpriority="low">
+<div class="hist-scrim"></div>
+</div>
+<div class="hist-plate" aria-hidden="true"></div>
+<div class="hist-info">
+<h3>${esc(unit.titulo)}</h3>
+${datos ? `<p>${esc(datos)}</p>` : ''}
+${precio}
+<div class="row"><a class="btn p" href="#unidad=${esc(unit.id)}" data-historia-ficha>${esc(tx.verFicha || 'Ver ficha completa')}</a>${waUrl ? `<a class="btn" href="${esc(waUrl)}" ${EXT}>Consultar por WhatsApp</a>` : ''}</div>
+</div>
+<button class="hist-close" type="button" aria-label="Cerrar unidad destacada">${esc(tx.cerrar || 'Cerrar')}</button>
+</div>
+</section>`;
+})();
+
 /* Intro «Prelude» (solo portada): superposición a pantalla completa; css/prelude.css la oculta sin JavaScript o con movimiento reducido. */
 const PRELUDE = (() => {
   const thin = Array.from({ length: 34 }, (_, i) => `<i style="width:${60 + i}%"></i>`).join('');
@@ -618,7 +674,7 @@ const index = page({
   desc: `${NAME} en ${L.city}, ${L.partido}: compra y venta de autos y motos usados, permutas y consignaciones. Visitanos en ${L.address} o escribinos por redes o correo.`,
   file: 'index.html',
   htmlAttrs: ' data-fondos',
-  extraHead: `<link rel="stylesheet" href="css/prelude.css">\n<script defer src="js/prelude.js"></script>\n<link rel="stylesheet" href="css/hero-carousel.css?v=20261024-5">\n<link rel="stylesheet" href="css/fondos-secciones.css">\n<link rel="stylesheet" href="css/damero-secciones.css?v=20261027-1">\n<link rel="stylesheet" href="css/comparador.css?v=20261028-1">\n<link rel="stylesheet" href="css/galeria-visor.css?v=20261026-1">\n<script type="application/ld+json">${JSON.stringify(ld)}</script>\n<script defer src="js/hero-carousel.js?v=20261024-1"></script>\n<script type="text/plain" data-dr-diferido src="js/hero-motion.js?v=20261025-1"></script>\n<script defer src="js/odometro.js?v=20261025-1"></script>\n<script defer src="js/fondos-secciones.js?v=20261024-1"></script>\n<script defer src="js/wa-mensajes.js"></script>\n<script defer src="js/secciones.js?v=20261029-1"></script>\n<script defer src="js/ficha-flip.js?v=20261027-1"></script>\n<script defer src="js/galeria-visor.js?v=20261026-1"></script>\n<script defer src="js/combobox.js?v=20261024-1"></script>\n<script type="text/plain" data-dr-diferido src="js/anillo.js?v=20261024-2"></script>\n<script defer src="js/boton-flecha.js?v=20261024-1"></script>\n<script type="text/plain" data-dr-diferido src="js/mapa.js?v=20261023-1"></script>\n<script defer src="js/horarios.js?v=20261024-1"></script>\n<script defer src="js/site.js?v=20261024-3"></script>\n<script defer src="js/diferidos.js"></script>\n<script type="text/plain" data-dr-diferido src="js/foto-reactiva.js?v=20261027-1"></script>\n<script defer src="js/visita-horarios.js?v=1"></script>\n<script defer src="js/reserva-inline.js?v=20261028-1"></script>\n`,
+  extraHead: `<link rel="stylesheet" href="css/prelude.css">\n<script defer src="js/prelude.js"></script>\n<link rel="stylesheet" href="css/hero-carousel.css?v=20261024-5">\n<link rel="stylesheet" href="css/fondos-secciones.css">\n<link rel="stylesheet" href="css/damero-secciones.css?v=20261027-1">\n<link rel="stylesheet" href="css/comparador.css?v=20261028-1">\n<link rel="stylesheet" href="css/galeria-visor.css?v=20261026-1">\n<script type="application/ld+json">${JSON.stringify(ld)}</script>\n<script defer src="js/hero-carousel.js?v=20261024-1"></script>\n<script type="text/plain" data-dr-diferido src="js/hero-motion.js?v=20261025-1"></script>\n<script defer src="js/odometro.js?v=20261025-1"></script>\n<script defer src="js/fondos-secciones.js?v=20261024-1"></script>\n<script defer src="js/wa-mensajes.js"></script>\n<script defer src="js/secciones.js?v=20261029-1"></script>\n<script defer src="js/ficha-flip.js?v=20261027-1"></script>\n<script defer src="js/galeria-visor.js?v=20261026-1"></script>\n<script defer src="js/combobox.js?v=20261024-1"></script>\n<script type="text/plain" data-dr-diferido src="js/anillo.js?v=20261024-2"></script>\n<script defer src="js/boton-flecha.js?v=20261024-1"></script>\n<script type="text/plain" data-dr-diferido src="js/mapa.js?v=20261023-1"></script>\n<script defer src="js/horarios.js?v=20261024-1"></script>\n<script defer src="js/site.js?v=20261024-3"></script>\n<script defer src="js/diferidos.js"></script>\n<script type="text/plain" data-dr-diferido src="js/foto-reactiva.js?v=20261027-1"></script>\n<script type="text/plain" data-dr-diferido src="js/historia.js?v=1"></script>\n<script defer src="js/visita-horarios.js?v=1"></script>\n<script defer src="js/reserva-inline.js?v=20261028-1"></script>\n`,
   body: `${PRELUDE}${header()}
 <main id="top">
 <div class="hero" role="region" aria-label="${esc(NAME)}">
@@ -642,7 +698,7 @@ ${unidades}
 </div></section>
 
 ${ANILLO}
-
+${secDestacada}
 <section class="finance-section" id="financiacion" aria-labelledby="fin-t"><div class="w">
 <div class="finance-head"><div><p class="ey"><span class="ey-brand">828</span> · Financiación y servicios</p><h2 id="fin-t">Financiá tu <em>próximo vehículo</em></h2><p class="sec-p">Consultanos por financiación. Las condiciones se informan por consulta: este sitio no publica condiciones de financiación.</p></div><aside class="finance-aside"><span>${esc(NAME)}</span><p>Encontrá una forma de avanzar hacia tu próxima unidad.</p></aside></div>
 <div class="finance-rule" aria-hidden="true"><span></span><small>Servicios para moverte mejor</small><span></span></div>

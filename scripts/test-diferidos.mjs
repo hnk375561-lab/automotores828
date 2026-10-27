@@ -5,7 +5,7 @@ const html = await readFile(new URL('../index.html', import.meta.url), 'utf8');
 const loader = await readFile(new URL('../js/diferidos.js', import.meta.url), 'utf8');
 const diferidos = [...html.matchAll(/<script type="text\/plain" data-dr-diferido src="(js\/[^"?]+)(?:\?v=[0-9a-f]{8})?"><\/script>/g)].map((m) => m[1]);
 
-assert.deepEqual(diferidos, ['js/hero-motion.js', 'js/anillo.js', 'js/mapa.js', 'js/foto-reactiva.js'], 'Los scripts diferidos deben ser hero-motion, anillo, mapa y foto-reactiva, en ese orden.');
+assert.deepEqual(diferidos, ['js/hero-motion.js', 'js/anillo.js', 'js/mapa.js', 'js/foto-reactiva.js', 'js/historia.js'], 'Los scripts diferidos deben ser hero-motion, anillo, mapa, foto-reactiva e historia, en ese orden.');
 for (const f of diferidos) assert.ok(!new RegExp(`<script defer src="${f}`).test(html), `${f} no debe cargarse también con defer.`);
 assert.match(html, /<script defer src="js\/diferidos\.js\?v=[0-9a-f]{8}"><\/script>/, 'Falta el cargador js/diferidos.js con versión.');
 for (const f of ['secciones', 'site', 'wa-mensajes', 'ficha-flip', 'galeria-visor', 'boton-flecha', 'combobox', 'horarios', 'reserva-inline', 'visita-horarios', 'odometro']) {

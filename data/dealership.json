@@ -344,5 +344,32 @@
       },
       "correccionEstadoRepo": "El TXT indica 48 tarjetas, pero el main vigente ya integra 58 publicaciones y 771 fotos asociadas; usar los datos actuales de data/vehicles.json."
     }
+  },
+  "historias": {
+    "destacada": {
+      "activa": true,
+      "unidadId": "3783768058",
+      "foto": {
+        "src": "images/stock/ml-3783768058-p03.webp",
+        "ancho": 1200,
+        "alto": 675,
+        "alt": "Toyota Hilux Sw4 1998 3.0 I Runner · Foto 3 de 20 publicada en Mercado Libre",
+        "autorizacion": { "registrada": false, "nota": "PENDIENTE: confirmar autorización del dueño y revisar patentes/terceros" }
+      },
+      "encuadre": { "escritorio": "contain-blur", "movil": "contain-blur", "focoMovil": "50% 60%" },
+      "textos": {
+        "eyebrow": "Unidad destacada",
+        "titulo": "Toyota Hilux SW4 1998",
+        "boton": "Conocé esta unidad",
+        "cerrar": "Cerrar",
+        "verFicha": "Ver ficha completa"
+      },
+      "datos": ["anio", "km", "motor", "transmision", "combustible", "color"]
+    },
+    "local": {
+      "activa": false,
+      "motivo": "Sin fotos propias autorizadas del local (CLAUDE.md regla 6).",
+      "fotos": []
+    }
   }
 }

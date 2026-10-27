@@ -186,6 +186,42 @@ if (d && a) {
   if (abiertos.length) warns.push(`${abiertos.length} pendientes abiertos en total`);
 }
 
+// Historias («Unidad destacada»): la sección se arma desde historias.destacada (data/dealership.json) y los datos de data/vehicles.json.
+{
+  const h = d && d.historias;
+  const dest = h && h.destacada;
+  if (dest && dest.activa === true) {
+    const unit = ((a && a.autos) || []).find((x) => String(x.id) === String(dest.unidadId));
+    if (!unit) err(`historias.destacada: la unidad ${dest.unidadId} no existe en data/vehicles.json`);
+    else if (unit.vendida) err(`historias.destacada: la unidad ${dest.unidadId} figura como vendida; hay que elegir otra`);
+    const f = dest.foto || {};
+    if (!f.alt || !String(f.alt).trim()) err('historias.destacada.foto.alt no puede estar vacío');
+    if (!f.src || !fs.existsSync(path.join(root, f.src))) err(`historias.destacada.foto.src no existe en disco: ${f.src}`);
+    else {
+      if (unit && Array.isArray(unit.fotos) && !unit.fotos.some((x) => x.src === f.src)) err('historias.destacada.foto.src no es una foto de la unidad indicada');
+      try {
+        const { default: sharp } = await import('sharp');
+        const m = await sharp(path.join(root, f.src)).metadata();
+        if (!(m.width > m.height)) err(`historias.destacada.foto debe ser apaisada (es ${m.width}×${m.height})`);
+        if (m.width < 1000) err(`historias.destacada.foto debe tener al menos 1000 px de ancho (tiene ${m.width})`);
+      } catch (e) { warns.push('historias: no se pudo leer el tamaño de la foto (¿falta sharp? npm ci)'); }
+    }
+    const aut = f.autorizacion || {};
+    if (aut.registrada !== true) {
+      if (PROD) err('PROD: historias.destacada.foto.autorizacion.registrada debe ser true (autorización de la foto)');
+      else warns.push('historias.destacada: foto sin autorización registrada (bloquea producción)');
+    }
+  }
+  const local = h && h.local;
+  if (local && local.activa === true) {
+    for (const [i, ft] of (local.fotos || []).entries()) {
+      const au = ft.autorizacion || {};
+      if (!au.texto || !au.fecha) err(`historias.local.fotos[${i}]: falta autorizacion (texto + fecha)`);
+    }
+    if (!(local.fotos || []).length) err('historias.local está activa pero no tiene fotos');
+  }
+}
+
 for (const w of warns) console.log(`aviso: ${w}`);
 if (errors.length) {
   console.error(`\n${errors.length} problema(s):`);

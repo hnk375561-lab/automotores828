@@ -18,6 +18,8 @@
     "site": "node scripts/build-site.mjs",
     "images": "node scripts/make-images.mjs",
     "og:units": "node scripts/make-og-units.mjs",
+    "historia:img": "node scripts/make-historia.mjs",
+    "test:historia": "node scripts/test-historia-kernel.mjs",
     "test:share": "node scripts/test-unit-share.mjs",
     "audit": "node scripts/audit-copy.mjs",
     "check:links": "node scripts/check-links.mjs",

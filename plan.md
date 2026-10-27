@@ -57,3 +57,10 @@ Suite completa sin cortarse en el primer fallo: `npm run test:todo` (incluye `te
 - Cambio: `.cars>.car:nth-child(n+7)` usa `content-visibility:auto` (scripts/estilos.css, final). Las primeras 6 tarjetas se renderizan normal. La suite completa pasó con el cambio.
 - Cuellos que siguen: LCP 5–9 s en móvil simulado (carrusel del hero ≈ 900 KB de imágenes + fondos de secciones inferiores ≈ 700 KB + `units.min.json` 357 KB; la entrada del hero está ralentizada a propósito por `--rv-dur-hero`); DOM de ~6.400 elementos.
 - No medido: dispositivo físico real (táctil, INP real). Lo emulado cubre táctil y CPU/red limitadas, no GPU ni memoria de un teléfono.
+
+## T11 — Unidad destacada (2026-10-27)
+
+- Estado: implementada en el generador. Sección entre «Los interiores de nuestras unidades» y «Financiación», con revelado cinematográfico y disolución orgánica al cerrar (js/historia.js, kernel puro `drHistoriaKernel`). Datos en `data/dealership.json` → `historias.destacada` (unidad Toyota Hilux SW4 1998, foto 3 de 20).
+- Carga diferida (`data-dr-diferido`); `scripts/test-diferidos.mjs` ya incluye `js/historia.js`. Degradaciones: movimiento reducido, gama baja, `save-data`, sin `clip-path: path()`.
+- Pruebas: `npm run test:historia` (kernel en Node). Falta la prueba en navegador (Playwright) y la revisión en teléfono real, a cargo del dueño.
+- Pendiente antes de publicar: autorización de la foto y revisión de patentes/terceros (`foto.autorizacion.registrada`; `npm run test:prod` falla mientras sea `false`).
