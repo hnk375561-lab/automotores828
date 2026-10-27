@@ -78,7 +78,24 @@ ${ogBase ? `<meta property="og:url" content="${ogBase}${p}">\n` : ''}<meta prope
 const robotsMeta = demo ? '<meta name="robots" content="noindex, nofollow">\n' : '';
 const canon = (p) => (siteUrl ? `<link rel="canonical" href="${siteUrl}${p}">\n` : '');
 
+/* CSS compartido: un solo archivo externo (css/site.css), versionado por hash y cacheable entre páginas.
+   Se genera desde scripts/estilos.css + los ajustes de abajo. Las rutas relativas de url() se reescriben porque el archivo vive en css/. */
+const EXTRA_CSS = `.msg-updated{animation:msg-updated .28s ease-out}@keyframes msg-updated{from{opacity:.68;transform:translateY(2px)}to{opacity:1;transform:translateY(0)}}
+.guia-progress{color:#d9dbdd;font-size:.9rem;margin:.25rem 0}
+.qa-search-label{display:block;margin:.6rem 0 .25rem;color:#d9dbdd}.qa-search{display:block;min-height:44px;width:min(100%,32rem);padding:.65rem .8rem;border:1px solid #6b6d70;border-radius:.4rem;background:#111214;color:#fff;font:inherit}.qa-search:focus-visible{outline:3px solid #ee1c22;outline-offset:2px}
+.qa-search-status{min-height:1.4em;color:#d9dbdd;font-size:.9rem}
+.gd [data-guide-checklist] label{display:flex;align-items:flex-start;gap:.65rem;cursor:pointer;padding:.3rem 0}.gd [data-guide-item]{inline-size:44px;block-size:44px;min-inline-size:44px;min-block-size:44px;flex:0 0 44px;margin:0;accent-color:#ee1c22}
+.dr-hr-note{font-size:.9rem;color:#d9dbdd;margin-top:.6rem}
+@media(prefers-reduced-motion:reduce){.msg-updated{animation:none}}`;
+const absUrls = (css) => css.replace(/url\((['"]?)(?!data:|#|https?:|\/|\.\.\/)([^)'"]+)/g, 'url($1../$2');
+const SITE_CSS = '/* GENERADO por scripts/build-index.mjs desde scripts/estilos.css. No editar a mano: se pisa en cada build. */\n' + absUrls(CSS + '\n' + EXTRA_CSS) + '\n';
+fs.writeFileSync(path.join(root, 'css/site.css'), SITE_CSS);
+const hashDe = (f) => crypto.createHash('sha1').update(fs.readFileSync(path.join(root, f))).digest('hex').slice(0, 8);
+const linkCss = '<link rel="stylesheet" href="css/site.css">\n<link rel="stylesheet" href="css/dr-identidad.css">\n';
+
 function page({ title, desc, body, file, withFonts = true, extraHead = '', htmlAttrs = '' }) {
+  /* withFonts: fuentes inline (muy chicas) + CSS externo. 404 (withFonts=false) enlaza el CSS desde extraHead porque se sirve en cualquier ruta. */
+  const cssHead = withFonts ? `<style>\n${FONTS}</style>\n${linkCss}` : '';
   return `<!DOCTYPE html>
 <html lang="es-AR"${htmlAttrs}>
 <head>
@@ -92,18 +109,7 @@ ${robotsMeta}<link rel="icon" type="image/svg+xml" href="favicon.svg">
 <meta property="og:title" content="${esc(title)}">
 <meta property="og:description" content="${esc(desc)}">
 <meta property="og:locale" content="es_AR">
-${ogTags(file === 'index.html' ? '' : file, title, desc)}${canon(file === 'index.html' ? '' : file)}${withFonts ? '<link rel="manifest" href="site.webmanifest">\n<link rel="icon" type="image/png" sizes="192x192" href="images/icon-192.png">\n<link rel="apple-touch-icon" href="images/icon-180.png">\n<link rel="preload" href="fonts/exo-2-latin-italic.woff2" as="font" type="font/woff2" crossorigin>\n<link rel="preload" href="fonts/inter-latin-var.woff2" as="font" type="font/woff2" crossorigin>\n' : ''}<style>
-${withFonts ? FONTS : ''}${CSS}
-.msg-updated{animation:msg-updated .28s ease-out}@keyframes msg-updated{from{opacity:.68;transform:translateY(2px)}to{opacity:1;transform:translateY(0)}}
-.guia-progress{color:#d9dbdd;font-size:.9rem;margin:.25rem 0}
-.qa-search-label{display:block;margin:.6rem 0 .25rem;color:#d9dbdd}.qa-search{display:block;min-height:44px;width:min(100%,32rem);padding:.65rem .8rem;border:1px solid #6b6d70;border-radius:.4rem;background:#111214;color:#fff;font:inherit}.qa-search:focus-visible{outline:3px solid #ee1c22;outline-offset:2px}
-.qa-search-status{min-height:1.4em;color:#d9dbdd;font-size:.9rem}
-.gd [data-guide-checklist] label{display:flex;align-items:flex-start;gap:.65rem;cursor:pointer;padding:.3rem 0}.gd [data-guide-item]{inline-size:44px;block-size:44px;min-inline-size:44px;min-block-size:44px;flex:0 0 44px;margin:0;accent-color:#ee1c22}
-.dr-hr-note{font-size:.9rem;color:#d9dbdd;margin-top:.6rem}
-@media(prefers-reduced-motion:reduce){.msg-updated{animation:none}}
-${withFonts ? '' : '\n' + DRID}
-</style>
-${withFonts ? '<link rel="stylesheet" href="css/dr-identidad.css?v=20261024-4">\n' : ''}${medHead}${extraHead}</head>
+${ogTags(file === 'index.html' ? '' : file, title, desc)}${canon(file === 'index.html' ? '' : file)}${withFonts ? '<link rel="manifest" href="site.webmanifest">\n<link rel="icon" type="image/png" sizes="192x192" href="images/icon-192.png">\n<link rel="apple-touch-icon" href="images/icon-180.png">\n<link rel="preload" href="fonts/exo-2-latin-italic.woff2" as="font" type="font/woff2" crossorigin>\n<link rel="preload" href="fonts/inter-latin-var.woff2" as="font" type="font/woff2" crossorigin>\n' : ''}${cssHead}${medHead}${extraHead}</head>
 <body>
 ${body}
 </body>
@@ -640,9 +646,11 @@ ${footer(false)}`,
 const home404 = siteUrl || './';
 const logo404 = 'images/logo-sm.png';
 const FONTS_404 = FONTS.replace(/url\(fonts\/([^)]+)\)/g, '__U__$1__E__');
+/* 404: se sirve en cualquier ruta, así que el CSS externo se enlaza con base absoluta (siteUrl) o calculada (document.write bloqueante: sin destello sin estilo). */
+const V_SITE = hashDe('css/site.css'), V_DR = hashDe('css/dr-identidad.css');
 const nf404Head = siteUrl
-  ? `<style>${FONTS.replace(/url\(fonts\//g, `url(${siteUrl}fonts/`)}</style>\n`
-  : '<script>(function(){var s=location.pathname.split("/").filter(Boolean),b=/github\\.io$/.test(location.hostname)&&s.length?"/"+s[0]+"/":"/";var st=document.createElement("style");st.textContent=' + JSON.stringify(FONTS_404) + '.split("__U__").join("ur"+"l("+b+"fonts/").split("__E__").join(")");document.head.appendChild(st);document.addEventListener("DOMContentLoaded",function(){document.getElementById("home").href=b})})()</script>\n';
+  ? `<style>${FONTS.replace(/url\(fonts\//g, `url(${siteUrl}fonts/`)}</style>\n<link rel="stylesheet" href="${siteUrl}css/site.css?v=${V_SITE}">\n<link rel="stylesheet" href="${siteUrl}css/dr-identidad.css?v=${V_DR}">\n`
+  : '<script>(function(){var s=location.pathname.split("/").filter(Boolean),b=/github\\.io$/.test(location.hostname)&&s.length?"/"+s[0]+"/":"/";var st=document.createElement("style");st.textContent=' + JSON.stringify(FONTS_404) + '.split("__U__").join("ur"+"l("+b+"fonts/").split("__E__").join(")");document.head.appendChild(st);document.write(' + JSON.stringify('<link rel="stylesheet" href="') + '+b+' + JSON.stringify('css/site.css?v=' + V_SITE + '"><link rel="stylesheet" href="') + '+b+' + JSON.stringify('css/dr-identidad.css?v=' + V_DR + '">') + ');document.addEventListener("DOMContentLoaded",function(){document.getElementById("home").href=b})})()</script>\n<noscript><link rel="stylesheet" href="css/site.css?v=' + V_SITE + '"><link rel="stylesheet" href="css/dr-identidad.css?v=' + V_DR + '"></noscript>\n';
 const nf = page({
   title: `Página no encontrada · ${NAME}`,
   desc: `La página que buscás no existe. Volvé al inicio de ${NAME}.`,

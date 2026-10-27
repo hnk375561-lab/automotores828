@@ -29,8 +29,9 @@ assert.ok(/fetchpriority="high"/.test(heroImgs[0]) && !/loading="lazy"/.test(her
 for (const t of heroImgs.slice(1)) assert.ok(/loading="lazy"/.test(t) && /fetchpriority="low"/.test(t), `Las demás fotos del hero deben ser lazy y de prioridad baja: ${t.slice(0, 80)}`);
 /* fondos: el CSS no debe pedirlos de entrada en la portada (con JavaScript activo) */
 assert.match(html, /<html lang="es-AR" data-fondos>/, 'La portada debe llevar data-fondos en <html>.');
-assert.match(html, /@media \(scripting:enabled\)\{\s*html\[data-fondos\] #financiacion/, 'Falta el bloque «Fondos diferidos» en el CSS de la portada.');
-assert.match(html, /html\[data-fondos\] \.nz-frentes:not\(\.bg-on\) i\{background-image:none\}/, 'Los fondos de Nosotros deben esperar a .bg-on.');
+const siteCss = await readFile(new URL('../css/site.css', import.meta.url), 'utf8');
+assert.match(siteCss, /@media \(scripting:enabled\)\{\s*html\[data-fondos\] #financiacion/, 'Falta el bloque «Fondos diferidos» en css/site.css.');
+assert.match(siteCss, /html\[data-fondos\] \.nz-frentes:not\(\.bg-on\) i\{background-image:none\}/, 'Los fondos de Nosotros deben esperar a .bg-on.');
 const fondos = await readFile(new URL('../js/fondos-secciones.js', import.meta.url), 'utf8');
 assert.match(fondos, /classList\.add\('bg-on'\)/, 'js/fondos-secciones.js debe marcar .bg-on al acercarse.');
 console.log(`✓ Scripts diferidos: ${diferidos.length} en el cargador, el resto sigue con defer, sin lecturas de layout intercaladas en site.js.`);
