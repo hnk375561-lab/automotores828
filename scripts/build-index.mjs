@@ -589,9 +589,15 @@ const ANILLO_UNIDADES = ANILLO_FOTOS.map(({ n, id, foto }) => {
 if (new Set(ANILLO_UNIDADES.map((e) => e.unit.id)).size !== ANILLO_FOTOS.length) throw new Error('Las fotos del anillo no tienen correspondencia única con fichas distintas');
 const anilloTarjeta = ({ n }) => `<li class="ring-card"><img src="images/anillo/anillo-${n}.webp" width="600" height="800" alt="" loading="lazy" decoding="async" draggable="false"></li>`;
 const anilloUnidad = ({ unit }, k) => {
-  const pr = unit.precio ? `<p class="ring-pr"><span class="price-currency">${esc(unit.precio.moneda)}</span> ${fmt(unit.precio.monto)}</p><p class="ring-n">Precio publicado el ${esc(fdate(unit.precio.fecha))}; puede haber cambiado.</p>` : '<p class="ring-pr">Consultar precio</p>';
+  const titulo = esc(unit.titulo);
   const meta = [unit.anio != null ? `<b>${unit.anio}</b>` : '', unit.version ? `<span>${esc(unit.version)}</span>` : ''].filter(Boolean).join('');
-  return `<div class="ring-unit${k === 0 ? ' is-on' : ''}" data-ring-i="${k}" role="group" aria-label="${esc(unit.titulo)}"><p class="ring-brand">${esc(marcaDe(unit))}</p><h3 class="ring-model">${esc(unit.modelo || sinMarca(unit))}</h3>${meta ? `<p class="ring-meta">${meta}</p>` : ''}${pr}<div class="ring-act"><button class="btn p sm" type="button" data-hero-unit="${esc(unit.id)}" aria-label="Ver la ficha completa de ${esc(unit.titulo)}">Ver ficha</button><a class="btn sm" href="${esc(consultaHref(unit))}" ${EXT} aria-label="${WA ? 'Consultar por WhatsApp' : 'Ver en Mercado Libre'}: ${esc(unit.titulo)}">${WA ? 'Consultar' : 'Ver publicación'}</a></div></div>`;
+  const precio = unit.precio
+    ? `<p class="ring-pr"><span class="price-currency">${esc(unit.precio.moneda)}</span> ${fmt(unit.precio.monto)}</p><p class="ring-n">Precio publicado el ${esc(fdate(unit.precio.fecha))}; puede haber cambiado.</p>`
+    : '<p class="ring-pr">Consultar precio</p>';
+  /* El nombre accesible de cada acción empieza con su texto visible (WCAG 2.5.3). «Ver ficha» reutiliza la ficha del catálogo (data-hero-unit). */
+  const verFicha = `<button class="btn p sm" type="button" data-hero-unit="${esc(unit.id)}" aria-label="Ver ficha de ${titulo}">Ver ficha</button>`;
+  const consultar = `<a class="btn sm" href="${esc(consultaHref(unit))}" ${EXT} aria-label="${WA ? 'Consultar por WhatsApp' : 'Ver publicación en Mercado Libre'}: ${titulo}">${WA ? 'Consultar' : 'Ver publicación'}</a>`;
+  return `<div class="ring-unit${k === 0 ? ' is-on' : ''}" data-ring-i="${k}" role="group" aria-label="${titulo}"><p class="ring-brand">${esc(marcaDe(unit))}</p><h3 class="ring-model">${esc(unit.modelo || sinMarca(unit))}</h3>${meta ? `<p class="ring-meta">${meta}</p>` : ''}${precio}<div class="ring-act">${verFicha}${consultar}</div></div>`;
 };
 /* El anillo sigue siendo decoración (aria-hidden, sin interacción). Debajo va la unidad que pasa al frente, con datos de vehicles.json; las acciones reutilizan la ficha del catálogo (data-hero-unit) y el mensaje de wa-mensajes.js. */
 const ANILLO = `<div class="ring-sec" data-anillo aria-hidden="true"><ul class="ring-stage">${ANILLO_UNIDADES.map(anilloTarjeta).join('')}</ul></div>\n<section class="ring-info" aria-labelledby="ring-t" data-anillo-info><div class="w">\n<h2 class="ey ring-k" id="ring-t"><span class="ey-brand">828</span> · Los interiores de nuestras unidades</h2>\n<div class="ring-units">${ANILLO_UNIDADES.map(anilloUnidad).join('')}</div>\n</div></section>`;

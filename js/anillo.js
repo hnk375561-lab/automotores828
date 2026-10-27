@@ -18,37 +18,42 @@
     (navigator.connection && navigator.connection.saveData);
   var rot = 0, R = 0, visible = false, raf = 0, last = 0, vel = IDLE;
 
-  /* Panel de la unidad en foco (opcional). Mientras la persona apunta con el mouse, toca o enfoca con teclado
-     un botón del panel, el panel NO cambia de unidad (el anillo sigue girando igual), para que el clic caiga en la unidad que está viendo. */
+  /* Unidad en foco (opcional): el panel [data-anillo-info] muestra la unidad cuya tarjeta va al frente.
+     Solo lee lo que pintar() ya calcula; no toca el giro. Mientras alguien apunta con el mouse, toca o enfoca
+     con el teclado las acciones del panel, este no cambia de unidad, así el clic cae en la unidad que está viendo. */
   var info = document.querySelector('[data-anillo-info]');
   var paneles = info ? [].slice.call(info.querySelectorAll('[data-ring-i]')) : [];
-  var enFoco = 0, frente = 0, hover = false, foco = false, toque = false, tToque = 0;
+  var enFoco = 0, frente = 0, tToque = 0;
+  var retiene = { mouse: false, teclado: false, toque: false };
 
   function mostrar() {
-    if (hover || foco || toque || frente === enFoco || !paneles.length) return;
-    if (paneles[enFoco]) paneles[enFoco].classList.remove('is-on');
-    if (paneles[frente]) paneles[frente].classList.add('is-on');
+    if (!paneles.length || frente === enFoco || retiene.mouse || retiene.teclado || retiene.toque) return;
+    paneles[enFoco].classList.remove('is-on');
+    paneles[frente].classList.add('is-on');
     enFoco = frente;
   }
-  if (paneles.length) {
-    var zona = info.querySelector('.ring-units') || info;
-    zona.addEventListener('pointerenter', function (e) { if (e.pointerType === 'mouse') hover = true; });
-    zona.addEventListener('pointerleave', function (e) { if (e.pointerType === 'mouse') { hover = false; mostrar(); } });
-    zona.addEventListener('pointerdown', function (e) {
+  function soltar(cual) { retiene[cual] = false; mostrar(); }
+
+  paneles.forEach(function (panel) {
+    var acciones = panel.querySelector('.ring-act');
+    if (!acciones) return;
+    acciones.addEventListener('pointerenter', function (e) { if (e.pointerType === 'mouse') retiene.mouse = true; });
+    acciones.addEventListener('pointerleave', function (e) { if (e.pointerType === 'mouse') soltar('mouse'); });
+    acciones.addEventListener('pointerdown', function (e) {
       if (e.pointerType === 'mouse') return;
-      toque = true; clearTimeout(tToque);
-      tToque = setTimeout(function () { toque = false; mostrar(); }, 2500);
+      retiene.toque = true;
+      clearTimeout(tToque);
+      tToque = setTimeout(function () { soltar('toque'); }, 2500);
     });
-    zona.addEventListener('focusin', function (e) {
+    acciones.addEventListener('focusin', function (e) {
       var porTeclado = true;
-      try { porTeclado = e.target.matches(':focus-visible'); } catch (err) {}
-      if (porTeclado) foco = true;
+      try { porTeclado = e.target.matches(':focus-visible'); } catch (err) { /* navegador sin :focus-visible */ }
+      if (porTeclado) retiene.teclado = true;
     });
-    zona.addEventListener('focusout', function (e) {
-      if (zona.contains(e.relatedTarget)) return;
-      foco = false; mostrar();
+    acciones.addEventListener('focusout', function (e) {
+      if (!acciones.contains(e.relatedTarget)) soltar('teclado');
     });
-  }
+  });
 
   function medir() {
     var r = stage.getBoundingClientRect();
