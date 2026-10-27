@@ -231,6 +231,8 @@
       raf = 0;
       if (!trabajo) return;
       if (!running) { last = null; return; }
+      /* pausa bajo superposiciones del sitio (ficha, visor, intro): el reloj no avanza */
+      if (document.querySelector('dialog.ficha[open],dialog.gv[open],.prelude[data-state="run"]')) { last = null; raf = requestAnimationFrame(frame); return; }
       if (last !== null) elapsed += ts - last;
       last = ts;
       trabajo.update(elapsed);
