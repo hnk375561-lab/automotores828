@@ -78,7 +78,7 @@ def correr(br, nombre, ctxopts, tactil):
     pg.evaluate("""() => { window.__aper = null; const ov = document.querySelector('.hist-overlay');
       new MutationObserver(() => { if (!window.__aper && ov.style.clipPath.startsWith('inset(')) window.__aper = ov.style.clipPath; })
         .observe(ov, { attributes: true, attributeFilter: ['style'] }); }""")
-    esperado = pg.evaluate("""() => { const s = document.querySelector('#unidad-destacada').getBoundingClientRect(), b = document.querySelector('.hist-btn').getBoundingClientRect();
+    esperado = pg.evaluate("""() => { const s = document.querySelector('#unidad-destacada .hist-stage, #unidad-destacada').getBoundingClientRect(), b = document.querySelector('.hist-btn').getBoundingClientRect();
       return [b.top - s.top, s.right - b.right, s.bottom - b.bottom, b.left - s.left]; }""")
     activar(pg, tactil)
     check(esperar(pg, f"{FASE} === 'reglas'", 800), 'tras activar debe entrar en la fase «reglas»')
@@ -97,7 +97,7 @@ def correr(br, nombre, ctxopts, tactil):
     check(len(nums) == 4 and all(abs(n - e) <= 10 for n, e in zip(nums, esperado)),
           f'la abertura nace en el botón: inset {nums} vs medido {[round(x,1) for x in esperado]}')
     check(esperar(pg, ABIERTO, 4000), 'la apertura debe terminar en «abierto»')
-    d = pg.evaluate("""() => { const s = document.querySelector('#unidad-destacada').getBoundingClientRect(), o = document.querySelector('.hist-overlay').getBoundingClientRect(), i = document.querySelector('.hist-fg');
+    d = pg.evaluate("""() => { const s = document.querySelector('#unidad-destacada .hist-stage, #unidad-destacada').getBoundingClientRect(), o = document.querySelector('.hist-overlay').getBoundingClientRect(), i = document.querySelector('.hist-fg');
       return { s: [s.left, s.top, s.width, s.height], o: [o.left, o.top, o.width, o.height], clip: document.querySelector('.hist-overlay').style.clipPath, nat: i.naturalWidth, tr: document.querySelector('.hist-media').style.transform,
                foco: document.activeElement.className, ancho: document.documentElement.scrollWidth > innerWidth }; }""")
     check(all(abs(a - b) < 1 for a, b in zip(d['s'], d['o'])), 'el overlay abierto cubre todo el escenario')
@@ -108,7 +108,7 @@ def correr(br, nombre, ctxopts, tactil):
     # 2. foco atrapado + fondo inerte
     for _ in range(6): pg.keyboard.press('Tab')
     dentro = pg.evaluate("document.querySelector('.hist-overlay').contains(document.activeElement)")
-    inerte = pg.evaluate("document.querySelector('#unidad-destacada > .w').inert === true")
+    inerte = pg.evaluate("document.querySelector('#unidad-destacada .w').inert === true")
     check(dentro, 'el foco queda atrapado dentro del diálogo')
     check(inerte, 'el contenido de fondo está inerte mientras el diálogo está abierto')
     check(pg.evaluate("document.querySelector('.hist-overlay').getAttribute('role') === 'dialog' && document.querySelector('.hist-overlay').getAttribute('aria-modal') === 'true' && !!document.querySelector('.hist-overlay').getAttribute('aria-label')"), 'diálogo con role, aria-modal y etiqueta accesible')
@@ -125,13 +125,13 @@ def correr(br, nombre, ctxopts, tactil):
         sup = [min(ys) / 1.0 for ys in primeras if ys]
         medio = [(t, ys) for t, ys in paths if ys and 300 < t < 600]
         prom = [sum(ys) / len(ys) for t, ys in medio] or [0]
-        check(primeras and min(sup) < pg.evaluate("document.querySelector('#unidad-destacada').clientHeight") * 0.35, 'los primeros huecos aparecen arriba (disolución dirigida desde el borde superior)')
-        check(prom and sum(prom) / len(prom) < pg.evaluate("document.querySelector('#unidad-destacada').clientHeight") * 0.62, 'a mitad del cierre los huecos se concentran en la mitad superior')
+        check(primeras and min(sup) < pg.evaluate("document.querySelector('#unidad-destacada .hist-stage, #unidad-destacada').clientHeight") * 0.35, 'los primeros huecos aparecen arriba (disolución dirigida desde el borde superior)')
+        check(prom and sum(prom) / len(prom) < pg.evaluate("document.querySelector('#unidad-destacada .hist-stage, #unidad-destacada').clientHeight") * 0.62, 'a mitad del cierre los huecos se concentran en la mitad superior')
         durs = mu[-1][0] - next(t for t, c in mu if c and c != 'none')  # desde el primer recorte, sin la latencia del toque
         check(650 <= durs <= 1150, f'duración del cierre ≈ 850 ms (medido {durs:.0f} ms)')
     foco_ok = pg.evaluate("document.activeElement === document.querySelector('[data-historia-abrir]')")
     check(foco_ok, 'al cerrar el foco vuelve al botón disparador')
-    resto = pg.evaluate("({ clip: document.querySelector('.hist-overlay').style.clipPath, h: document.querySelector('.hist-overlay').hidden, inert: !!document.querySelector('#unidad-destacada > .w').inert })")
+    resto = pg.evaluate("({ clip: document.querySelector('.hist-overlay').style.clipPath, h: document.querySelector('.hist-overlay').hidden, inert: !!document.querySelector('#unidad-destacada .w').inert })")
     check(resto['clip'] == '' and resto['h'] and not resto['inert'], f'sin estilos residuales tras cerrar ({resto})')
 
     # 4. teclado: Enter y Espacio sobre el botón real (solo escritorio)
@@ -207,7 +207,7 @@ def correr(br, nombre, ctxopts, tactil):
     nuevo = {'width': W + 40 if W < 1000 else W - 120, 'height': H - 60}
     pg.set_viewport_size(nuevo)
     check(esperar(pg, ABIERTO, 4000), 'resize durante la apertura: termina «abierto»')
-    ok = pg.evaluate("(() => { const s = document.querySelector('#unidad-destacada').getBoundingClientRect(), o = document.querySelector('.hist-overlay').getBoundingClientRect(); return Math.abs(s.width - o.width) < 1 && Math.abs(s.height - o.height) < 1; })()")
+    ok = pg.evaluate("(() => { const s = document.querySelector('#unidad-destacada .hist-stage, #unidad-destacada').getBoundingClientRect(), o = document.querySelector('.hist-overlay').getBoundingClientRect(); return Math.abs(s.width - o.width) < 1 && Math.abs(s.height - o.height) < 1; })()")
     check(ok, 'tras el resize el overlay vuelve a cubrir el escenario')
     pg.keyboard.press('Escape'); pg.wait_for_timeout(300)
     pg.set_viewport_size({'width': W, 'height': H})

@@ -1,0 +1,61 @@
+/* Recorrido horizontal DENTRO de «Unidad destacada» (#unidad-destacada[data-hist-rec]). Todo acotado a esa sección.
+   La sección es la pista (runway); .hist-stage es el escenario fijo (sticky) y sigue siendo el que usa js/historia.js
+   para el revelado de «Conocé esta unidad». Sin JS, gama baja o movimiento reducido: estático con scroll horizontal nativo. */
+.hist[data-hist-rec]{display:block;align-content:start;min-height:0;padding:0;overflow:visible}
+.hist[data-hist-rec] .hist-stage{position:relative;isolation:isolate;display:grid;grid-template-rows:auto minmax(0,auto) auto;align-content:center;min-height:clamp(520px,90svh,860px);padding:calc(var(--hdr,68px) + clamp(6px,1.6svh,16px)) 0 clamp(12px,2.4svh,28px);overflow:clip;background:var(--dr-ink,#060607);color:var(--dr-silver,#d9dbdd)}
+.hist-stage>.w{position:relative;z-index:1}
+.hist-head h2{margin-bottom:0}
+.hist-head .sec-p{margin:6px 0 0}
+.hist-foot{display:flex;flex-wrap:wrap;align-items:center;gap:8px 24px;padding-top:clamp(6px,1.4svh,14px)}
+.hist-foot .hist-btn{margin:0;flex:0 1 420px}
+.hist-foot .hist-ctl{margin:0}
+/* Región del recorrido: marco de medidas (cqw/cqh) y recorte del carril */
+.hist-rec{position:relative;z-index:1;min-height:0;height:clamp(340px,62svh,640px);container-type:size;overflow-x:auto;overflow-y:hidden;overscroll-behavior-x:contain;--rec-ac:var(--dr-red,#ee1c22);--rec-fg:var(--dr-silver,#d9dbdd)}
+.hist-rec:focus-visible{outline:3px solid var(--rec-ac);outline-offset:-4px}
+.hist-rec::before,.hist-rec::after{content:"";position:absolute;inset:0;z-index:4;pointer-events:none}
+.hist-rec::before{background:linear-gradient(90deg,rgba(6,6,7,.85) 0,rgba(6,6,7,0) 6%,rgba(6,6,7,0) 94%,rgba(6,6,7,.85) 100%)}
+.hist-rec::after{opacity:.06;mix-blend-mode:overlay;background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>")}
+.rec__skip{position:absolute;left:12px;top:calc(var(--hdr,68px) + 8px);z-index:8;padding:12px 18px;background:var(--dr-ink,#060607);color:#fff;border:1px solid var(--dr-red,#ee1c22);font:700 13px/1 "Exo 2",Inter,system-ui,sans-serif;letter-spacing:.08em;text-transform:uppercase;text-decoration:none;transform:translateY(-300%)}
+.rec__skip:focus{transform:none;outline:3px solid var(--dr-red,#ee1c22);outline-offset:2px}
+.rec__track{display:flex;align-items:center;gap:6vw;gap:6cqw;height:100%;width:max-content;padding-left:7vw;padding-left:7cqw;padding-right:9vw;padding-right:9cqw;box-sizing:border-box}
+.rec__card{--s:1;--b:1;flex:0 0 auto;display:flex;flex-direction:column;box-sizing:border-box;color:inherit;text-decoration:none;transform:scale(var(--s));filter:brightness(var(--b))}
+/* Ciclo de 3 tamaños (ancho/alto/desplazamiento del prompt) */
+.rec__card:nth-child(3n+1){width:56vw;width:56cqw;height:76%}
+.rec__card:nth-child(3n+2){width:42vw;width:42cqw;height:62%;transform:translateY(12cqh) scale(var(--s))}
+.rec__card:nth-child(3n){width:50vw;width:50cqw;height:80%;transform:translateY(-6cqh) scale(var(--s))}
+.rec__photo{position:relative;flex:0 0 88%;min-height:0;overflow:hidden;background:#111;box-shadow:0 2.4cqh 6cqh rgba(0,0,0,.65),0 0 0 1px rgba(217,219,221,.08)}
+.rec__photo::after{content:"";position:absolute;left:0;right:0;bottom:0;height:3px;background:var(--rec-ac)}
+.rec__photo img{display:block;width:100%;height:100%;object-fit:cover}
+.rec__cap{flex:1 1 12%;display:flex;align-items:center;justify-content:space-between;gap:12px;min-height:0}
+.rec__word{font:800 clamp(22px,4.4cqw,68px)/1 "Exo 2",Inter,system-ui,sans-serif;font-style:italic;text-transform:uppercase;letter-spacing:.02em;color:#fff;transition:color .2s}
+.rec__num{font:600 clamp(11px,1cqw,15px)/1 Inter,system-ui,sans-serif;font-style:normal;letter-spacing:.2em;color:var(--rec-ac)}
+a.rec__card:focus-visible{outline:3px solid var(--rec-ac);outline-offset:4px}
+@media (hover:hover){a.rec__card:hover .rec__word{color:var(--rec-ac)}}
+.rec__hud{display:none}
+/* Modo fijado: lo activa JS (data-rec="pin"). La sección alta es la pista; el escenario queda pegado al viewport. */
+.hist[data-rec="pin"] .hist-stage{position:sticky;top:0;height:100vh;height:100svh;min-height:0;grid-template-rows:auto minmax(0,1fr) auto;align-content:stretch}
+.hist[data-rec="pin"] .hist-rec{height:auto;overflow:hidden}
+.hist[data-rec="pin"] .rec__track{position:absolute;left:0;top:0;will-change:transform}
+.hist[data-rec="pin"] .rec__photo img{transform:scale(1.12);will-change:transform}
+.hist[data-rec="pin"] .rec__hud{position:absolute;z-index:5;left:7vw;left:7cqw;right:9vw;right:9cqw;bottom:2cqh;display:flex;align-items:center;gap:18px;pointer-events:none}
+.rec__count{font:700 12px/1 Inter,system-ui,sans-serif;letter-spacing:.22em;color:var(--rec-fg);font-variant-numeric:tabular-nums}
+.rec__count b{color:#fff}
+.rec__bar{position:relative;flex:1;height:2px;background:rgba(217,219,221,.22);overflow:hidden}
+.rec__bar i{position:absolute;inset:0;background:var(--rec-ac);transform:scaleX(0);transform-origin:left}
+/* Teléfono: tarjetas ≈ 78 % del ancho; scroll vertical táctil nativo (sin touch-action ni wheel). */
+@media (max-width:700px){
+  .hist-head .sec-p{display:none}
+  .hist-foot .hist-btn{flex:1 1 100%}
+  .rec__track{gap:8cqw}
+  .rec__card:nth-child(n){width:78vw;width:78cqw}
+  .rec__card:nth-child(3n+2){transform:translateY(6cqh) scale(var(--s))}
+  .rec__card:nth-child(3n){transform:translateY(-3cqh) scale(var(--s))}
+}
+/* Estático: sin JS (scripting:none), movimiento reducido o gama baja (data-rec ausente) */
+@media (prefers-reduced-motion:reduce){
+  .hist[data-rec="pin"] .hist-stage{position:relative;height:auto;min-height:clamp(520px,90svh,860px)}
+  .hist[data-rec="pin"] .hist-rec{height:clamp(340px,62svh,640px);overflow-x:auto}
+  .hist[data-rec="pin"] .rec__track{position:relative;transform:none!important}
+  .hist[data-rec="pin"] .rec__photo img{transform:none!important}
+  .hist[data-rec="pin"] .rec__hud{display:none}
+}

@@ -346,6 +346,31 @@
     }
   },
   "historias": {
+    "recorrido": {
+      "activa": true,
+      "etiqueta": "Recorrido por el stock",
+      "region": "Recorrido horizontal por la unidad destacada y once unidades del stock",
+      "saltar": "Saltar el recorrido",
+      "siguiente": "#financiacion",
+      "principal": { "leyenda": "HILUX" },
+      "tarjetas": [
+        { "unidadId": "4103009836", "foto": "images/stock/ml-4103009836-p04.webp", "ancho": 1200, "alto": 900, "leyenda": "FIT" },
+        { "unidadId": "4043971584", "foto": "images/stock/ml-4043971584-p03.webp", "ancho": 1200, "alto": 900, "leyenda": "SIENA" },
+        { "unidadId": "3922903672", "foto": "images/stock/ml-3922903672-p01.webp", "ancho": 1200, "alto": 1200, "leyenda": "VITARA" },
+        { "unidadId": "2191782749", "foto": "images/stock/ml-2191782749-p01.webp", "ancho": 1195, "alto": 1195, "leyenda": "208" },
+        { "unidadId": "2057558089", "foto": "images/stock/ml-2057558089-p04.webp", "ancho": 1195, "alto": 1195, "leyenda": "DUSTER" },
+        { "unidadId": "2128200017", "foto": "images/stock/ml-2128200017-p01.webp", "ancho": 1193, "alto": 1193, "leyenda": "CACTUS" },
+        { "unidadId": "2063616163", "foto": "images/stock/ml-2063616163-p01.webp", "ancho": 1176, "alto": 1176, "leyenda": "GOLF" },
+        { "unidadId": "4036030430", "foto": "images/stock/ml-4036030430-p02.webp", "ancho": 1160, "alto": 1160, "leyenda": "COROLLA" },
+        { "unidadId": "2063195983", "foto": "images/stock/ml-2063195983-p01.webp", "ancho": 1154, "alto": 1154, "leyenda": "408" },
+        { "unidadId": "2063173351", "foto": "images/stock/ml-2063173351-p02.webp", "ancho": 1200, "alto": 900, "leyenda": "BIZ" },
+        { "unidadId": "1982665981", "foto": "images/stock/ml-1982665981-p01.webp", "ancho": 1178, "alto": 1178, "leyenda": "C3" }
+      ],
+      "autorizacion": {
+        "registrada": false,
+        "nota": "PENDIENTE: confirmar autorización del dueño de las 11 fotos y revisar patentes/terceros (CLAUDE.md regla 6)."
+      }
+    },
     "destacada": {
       "activa": true,
       "unidadId": "3783768058",

@@ -207,6 +207,7 @@
     if (sec.__drHist) return sec.__drHist;
     var btn = sec.querySelector('[data-historia-abrir]');
     var overlay = sec.querySelector('.hist-overlay');
+    var escena = sec.querySelector('.hist-stage') || sec; /* con el recorrido, el escenario del revelado es el marco fijo (.hist-stage), no la sección alta */
     if (!btn || !overlay) return null;
     var reglaA = btn.querySelector('.hist-rule--top'), reglaB = btn.querySelector('.hist-rule--bottom');
     var media = overlay.querySelector('.hist-media'), placa = overlay.querySelector('.hist-plate');
@@ -357,10 +358,10 @@
 
     /* ---- apertura ---- */
     function medir() {
-      var s = sec.getBoundingClientRect(), a = reglaA.getBoundingClientRect(), b = reglaB.getBoundingClientRect(), bt = btn.getBoundingClientRect();
+      var s = escena.getBoundingClientRect(), a = reglaA.getBoundingClientRect(), b = reglaB.getBoundingClientRect(), bt = btn.getBoundingClientRect();
       var top = Math.min(a.top, b.top) - s.top, left = Math.min(a.left, b.left) - s.left;
       var right = s.right - Math.max(a.right, b.right), bottom = s.bottom - Math.max(a.bottom, b.bottom);
-      medidas = { top: top, right: right, bottom: bottom, left: left, k: Math.max(1, bt.height / 2), w: sec.clientWidth, h: sec.clientHeight };
+      medidas = { top: top, right: right, bottom: bottom, left: left, k: Math.max(1, bt.height / 2), w: escena.clientWidth, h: escena.clientHeight };
     }
     function abrir() {
       if (estado !== 'cerrado' || !listo || destruido) return;
@@ -415,7 +416,7 @@
       overlay.classList.add('is-anim');
       /* debajo del overlay, el botón vuelve a su estado normal para cuando la disolución lo vaya dejando ver */
       [reglaA, reglaB].forEach(function (r) { r.style.transform = ''; r.style.visibility = ''; });
-      W = sec.clientWidth; H = sec.clientHeight;
+      W = escena.clientWidth; H = escena.clientHeight;
       if (gamaBaja() || redLenta() || !soportaPath || !(W > 0 && H > 0)) {
         correr(T_CIERRE_SIMPLE, function (t) {
           overlay.style.clipPath = 'inset(' + (100 * easeIO(t / T_CIERRE_SIMPLE)).toFixed(2) + '% 0 0 0)';
@@ -475,7 +476,7 @@
     function onResize() {
       /* se remide la abertura (las reglas congeladas) y, al cerrar, se regenera el campo para el tamaño nuevo */
       if (estado === 'abriendo') medir();
-      else if (estado === 'cerrando') { W = sec.clientWidth; H = sec.clientHeight; ultimoCalculo = -1e9; }
+      else if (estado === 'cerrando') { W = escena.clientWidth; H = escena.clientHeight; ultimoCalculo = -1e9; }
     }
     function onCambioReducido() {
       if (!reducido()) return;
