@@ -61,10 +61,12 @@
         if (lote.length) setTimeout(function () { lote.forEach(function (e) { e.target.style.transitionDelay = ''; }); }, 5000);   /* > mayor duración (--rv-dur-fondo 3,8 s) + 4 desfases + margen; si se alargan los --rv-* en scripts/estilos.css, subir este valor (lo vigila npm run test:reveal) */
       }, { threshold: 0.12, rootMargin: '0px 0px -5% 0px' });
       var alto = window.innerHeight || document.documentElement.clientHeight;
-      nodos.forEach(function (n) {
+      /* primero se lee todo y después se escribe: así el navegador calcula el layout una sola vez (antes lo recalculaba en cada nodo) */
+      var cajas = nodos.map(function (n) { return n.getBoundingClientRect(); });
+      nodos.forEach(function (n, k) {
         n.classList.add('reveal');
         if (n.matches('.car')) n.classList.add('rv-card'); else if (n.matches('section h2')) n.classList.add('rv-title');
-        var r = n.getBoundingClientRect();
+        var r = cajas[k];
         if (r.bottom > 0 && r.top < alto * 0.95) { n.classList.add('in'); } else { pendientes++; io.observe(n); }
       });
       raiz.classList.add('rv-ready');

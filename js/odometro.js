@@ -22,9 +22,11 @@
   var io = new IntersectionObserver(function (es) {
     es.forEach(function (e) { if (e.isIntersecting) { io.unobserve(e.target); run(e.target); } });
   }, { threshold: 0.6 });
-  els.forEach(function (el) {
+  var alto = window.innerHeight;
+  var debajo = els.map(function (el) { return el.getBoundingClientRect().top > alto; });   /* se lee todo antes de escribir (un solo cálculo de layout) */
+  els.forEach(function (el, k) {
     var fin = el.getAttribute('data-odo'); el.style.minWidth = String(fin).length + 'ch';
-    if (el.getBoundingClientRect().top > window.innerHeight) el.textContent = '0';
+    if (debajo[k]) el.textContent = '0';
     io.observe(el);
   });
 })();
