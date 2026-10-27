@@ -1,0 +1,128 @@
+/* Automotores 828 · Intro «Prelude» (solo portada).
+   Todo vive bajo .prelude. Sin JavaScript (scripting:none) o con movimiento reducido, la intro no se muestra.
+   Paleta propia de la intro: negro #090909 y marfil #f2eee4. */
+.prelude { display: none; }
+
+@media (scripting: enabled) and (prefers-reduced-motion: no-preference) {
+  .prelude {
+    --pl-ink: #090909;
+    --pl-ivory: #f2eee4;
+    display: block;
+    position: fixed;
+    inset: 0;
+    z-index: 2147483000;
+    background: var(--pl-ink);
+    container-type: size;
+    overflow: clip;
+    overscroll-behavior: contain;
+    touch-action: none;
+    /* Red de seguridad sin JS: si el script no llega a cerrar la intro, se retira sola. */
+    animation: pl-failsafe 0.01s linear 12s forwards;
+  }
+  /* Cierre de la secuencia: la intro ya es una lámina marfil opaca que se desvanece sobre el sitio. */
+  .prelude[data-state="exit"] { background: var(--pl-ivory); pointer-events: none; }
+  /* Salto manual: el negro se desvanece directo. */
+  .prelude[data-state="skip"] { pointer-events: none; }
+  .prelude[data-state="done"] { display: none; }
+
+  @keyframes pl-failsafe { to { opacity: 0; visibility: hidden; pointer-events: none; } }
+
+  /* Tamaño de referencia: cuadrado de 84cqh, tope 94cqw. */
+  .prelude__stage {
+    position: absolute;
+    left: 50%; top: 50%;
+    width: min(84cqh, 94cqw);
+    height: min(84cqh, 94cqw);
+    translate: -50% -50%;
+  }
+
+  .prelude__rings,
+  .prelude__thin { position: absolute; inset: 0; width: 100%; height: 100%; }
+  .prelude__rings { overflow: visible; }
+
+  /* Anillos: SVG con trazo no escalable, así el grosor de 1,5 px se conserva mientras cambia la escala. */
+  .prelude__rings circle {
+    fill: none;
+    stroke: var(--pl-ivory);
+    stroke-width: 1.5;
+    vector-effect: non-scaling-stroke;
+    transform-box: fill-box;
+    transform-origin: center;
+    transform: scale(0);
+  }
+  .prelude__rings circle:first-child { fill: var(--pl-ivory); }
+
+  .prelude__thin i,
+  .prelude__core {
+    position: absolute;
+    left: 50%; top: 50%;
+    border-radius: 50%;
+    aspect-ratio: 1;
+    translate: -50% -50%;
+    box-sizing: border-box;
+  }
+  .prelude__thin i { border: 1px solid var(--pl-ivory); opacity: 0; }
+
+  .prelude__orbit {
+    position: absolute;
+    left: 50%; top: 50%;
+    width: 100%; height: auto;
+    translate: -50% -50%;
+    overflow: visible;
+    fill: none;
+    stroke: var(--pl-ivory);
+    stroke-width: 1.5;
+    vector-effect: non-scaling-stroke;
+  }
+
+  /* Disco central con el logo (sin «Loading» ni porcentaje). */
+  .prelude__core {
+    width: 50%;
+    display: grid;
+    place-items: center;
+    background: var(--pl-ivory);
+    transform-origin: 50% 50%;
+    transform: scale(0);
+  }
+  .prelude__core img {
+    width: 66%;
+    height: auto;
+    aspect-ratio: 1;
+    display: block;
+    border-radius: 50%;
+  }
+
+  /* Persianas: cinco bandas de 20 % que se expanden desde el centro. */
+  .prelude__blinds { position: absolute; inset: 0; pointer-events: none; }
+  .prelude__blind {
+    position: absolute;
+    left: 0; width: 100%; height: calc(20% + 1px);  /* +1px: sin costuras entre bandas */
+    background: var(--pl-ivory);
+    transform-origin: 50% 50%;
+    transform: scaleX(0);
+  }
+  .prelude__blind:nth-child(1) { top: 0; }
+  .prelude__blind:nth-child(2) { top: 20%; }
+  .prelude__blind:nth-child(3) { top: 40%; }
+  .prelude__blind:nth-child(4) { top: 60%; }
+  .prelude__blind:nth-child(5) { top: 80%; }
+
+  .prelude__skip {
+    position: absolute;
+    right: max(16px, env(safe-area-inset-right));
+    bottom: max(16px, env(safe-area-inset-bottom));
+    min-width: 44px; min-height: 44px;
+    padding: 0 20px;
+    font: 600 16px/1 "Inter", system-ui, sans-serif;
+    color: var(--pl-ivory);
+    background: transparent;
+    border: 1.5px solid var(--pl-ivory);
+    border-radius: 999px;
+    cursor: pointer;
+    z-index: 2;
+  }
+  .prelude__skip:hover { background: var(--pl-ivory); color: var(--pl-ink); }
+  .prelude__skip:focus-visible { outline: 3px solid var(--pl-ivory); outline-offset: 3px; }
+  .prelude[data-state="exit"] .prelude__skip,
+  .prelude[data-state="skip"] .prelude__skip { visibility: hidden; }
+}
