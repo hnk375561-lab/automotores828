@@ -1,7 +1,8 @@
 /* Unidad destacada (hist-*): revelado cinematográfico + disolución orgánica al cerrar.
    IIFE sin dependencias (sin GSAP). Expone window.drHistoria (controlador) y window.drHistoriaKernel (funciones puras).
    Se carga diferido (data-dr-diferido). Un solo requestAnimationFrame vivo a la vez, con reloj propio que se congela
-   cuando la pestaña está oculta o la sección fuera de pantalla. */
+   cuando la pestaña está oculta, la sección fuera de pantalla, hay una superposición del sitio o la persona pulsó «Pausar».
+   Fases publicadas en section[data-hist-fase]: cerrado · reglas · apertura · abierto · cierre. */
 (function () {
   'use strict';
   var root = typeof window !== 'undefined' ? window : globalThis;
@@ -214,7 +215,13 @@
     var enlaceFicha = overlay.querySelector('[data-historia-ficha]');
 
     var estado = 'cerrado', listo = false, mostrado = false;
-    var running = !document.hidden, enPantalla = true;
+    var running = !document.hidden, enPantalla = true, pausadoUsuario = false;
+    var btnPausa = sec.querySelector('[data-historia-pausa]'), btnRepetir = sec.querySelector('[data-historia-repetir]');
+    var grupoCtl = sec.querySelector('.hist-ctl'), aviso = sec.querySelector('[data-historia-estado]');
+    var txtPausa = btnPausa && btnPausa.querySelector('[data-l-off]'), txtReanudar = btnPausa && btnPausa.querySelector('[data-l-on]');
+    var ioPrep = null;
+    function fase(f) { sec.setAttribute('data-hist-fase', f); }
+    function anunciar(t) { if (aviso) aviso.textContent = t; }
     var trabajo = null, raf = 0, elapsed = 0, last = null;
     var inertados = [], medidas = null, destruido = false, imgPromesa = null;
     var W = 0, H = 0, ultimoCalculo = -1e9;
@@ -225,7 +232,15 @@
       if (!v) { last = null; if (raf) { cancelAnimationFrame(raf); raf = 0; } }
       else if (trabajo && !raf) raf = requestAnimationFrame(frame);
     }
-    function recalcRunning() { setRunning(!document.hidden && enPantalla); }
+    function recalcRunning() { setRunning(!document.hidden && enPantalla && !pausadoUsuario); }
+    function fijarPausa(v) {
+      v = !!v;
+      if (v === pausadoUsuario) return;
+      pausadoUsuario = v;
+      if (btnPausa) { btnPausa.setAttribute('aria-pressed', v ? 'true' : 'false'); if (txtPausa) txtPausa.hidden = v; if (txtReanudar) txtReanudar.hidden = !v; }
+      anunciar(v ? 'Animación en pausa.' : 'Animación reanudada.');
+      recalcRunning();
+    }
 
     function frame(ts) {
       raf = 0;
@@ -286,7 +301,7 @@
     function terminarApertura() {
       detener();
       mostrarFinalAbierto();
-      estado = 'abierto';
+      estado = 'abierto'; fase('abierto');
       btn.setAttribute('aria-expanded', 'true');
       if (cerrarBtn) cerrarBtn.focus({ preventScroll: true });
     }
@@ -295,10 +310,15 @@
       overlay.hidden = true; mostrado = false;
       resetEstilos();
       desinertar();
-      estado = 'cerrado';
+      estado = 'cerrado'; fase('cerrado');
       btn.setAttribute('aria-expanded', 'false');
       document.removeEventListener('keydown', onKey, true);
-      if (!(opts && opts.sinFoco)) btn.focus({ preventScroll: true });
+      if (!(opts && opts.sinFoco)) enfocarDisparador();
+    }
+    /* devuelve el foco al botón disparador; si la página lo reemplazó, vuelve a buscarlo */
+    function enfocarDisparador() {
+      var b = btn.isConnected ? btn : sec.querySelector('[data-historia-abrir]');
+      if (b) b.focus({ preventScroll: true });
     }
 
     /* ---- imagen ---- */
@@ -319,6 +339,7 @@
       listo = true;
       btn.setAttribute('data-hist-estado', 'listo');
       btn.removeAttribute('aria-busy');
+      if (grupoCtl) grupoCtl.hidden = false;
       if (root.__drHistPend) { root.__drHistPend = 0; abrir(); }
     }
     function preparar() {
@@ -327,10 +348,10 @@
       if (redLenta()) { Promise.all(esperas).then(marcarListo); return; }
       var lanzar = function () { esperas.push(asegurarImg()); Promise.all(esperas).then(marcarListo); };
       if ('IntersectionObserver' in window) {
-        var io = new IntersectionObserver(function (es) {
-          if (es.some(function (e) { return e.isIntersecting; })) { io.disconnect(); lanzar(); }
+        ioPrep = new IntersectionObserver(function (es) {
+          if (es.some(function (e) { return e.isIntersecting; })) { ioPrep.disconnect(); ioPrep = null; lanzar(); }
         }, { rootMargin: '600px 0px' });
-        io.observe(sec);
+        ioPrep.observe(sec);
       } else lanzar();
     }
 
@@ -343,22 +364,23 @@
     }
     function abrir() {
       if (estado !== 'cerrado' || !listo || destruido) return;
+      if (pausadoUsuario) fijarPausa(false); /* activar el botón es una orden explícita: se retoma el reloj */
       if (reducido()) { estado = 'abriendo'; terminarApertura(); document.addEventListener('keydown', onKey, true); return; }
       var lanzarAnim = function () {
         if (estado !== 'cerrado') return;
-        estado = 'abriendo';
+        estado = 'abriendo'; fase('reglas');
         medir();
         document.addEventListener('keydown', onKey, true);
-        var inset0 = medidas, mostrar = false;
+        var mostrar = false;
         correr(T_REGLAS + T_ABRIR + 100, function (t) {
           if (t < T_REGLAS) {
-            var e = easeIO(t / T_REGLAS), esc = 1 + (inset0.k - 1) * e;
+            var e = easeIO(t / T_REGLAS), esc = 1 + (medidas.k - 1) * e;
             reglaA.style.transform = 'scaleY(' + esc + ')';
             reglaB.style.transform = 'scaleY(' + esc + ')';
             return;
           }
           if (!mostrar) {
-            mostrar = true;
+            mostrar = true; fase('apertura');
             reglaA.style.visibility = 'hidden'; reglaB.style.visibility = 'hidden';
             overlay.hidden = false; mostrado = true;
             overlay.classList.add('is-anim');
@@ -366,7 +388,7 @@
             inertar();
           }
           var u = t - T_REGLAS, p = easeAbrir(clamp01(u / T_ABRIR)), r = 1 - p;
-          overlay.style.clipPath = 'inset(' + (inset0.top * r).toFixed(2) + 'px ' + (inset0.right * r).toFixed(2) + 'px ' + (inset0.bottom * r).toFixed(2) + 'px ' + (inset0.left * r).toFixed(2) + 'px)';
+          overlay.style.clipPath = 'inset(' + (medidas.top * r).toFixed(2) + 'px ' + (medidas.right * r).toFixed(2) + 'px ' + (medidas.bottom * r).toFixed(2) + 'px ' + (medidas.left * r).toFixed(2) + 'px)';
           media.style.transform = 'scale(' + (0.94 + 0.06 * p).toFixed(4) + ')';
           placa.style.opacity = String(1 - easeOut((u - 120) / 600));
           var m = clamp01((u - 350) / 500);
@@ -382,12 +404,15 @@
     function cerrar(opts) {
       opts = opts || {};
       if (estado === 'cerrado' || estado === 'cerrando') return;
+      if (pausadoUsuario) fijarPausa(false);
       var estabaAbriendo = estado === 'abriendo';
       detener();
-      if (!mostrado) { resetEstilos(); estado = 'cerrado'; document.removeEventListener('keydown', onKey, true); if (!opts.sinFoco) btn.focus({ preventScroll: true }); return; }
+      if (!mostrado) { resetEstilos(); estado = 'cerrado'; fase('cerrado'); btn.setAttribute('aria-expanded', 'false'); document.removeEventListener('keydown', onKey, true); if (!opts.sinFoco) enfocarDisparador(); return; }
       if (opts.inmediato || reducido()) { terminarCierre(opts); return; }
-      estado = 'cerrando';
-      if (estabaAbriendo) { overlay.style.clipPath = 'none'; if (media) media.style.transform = 'none'; }
+      estado = 'cerrando'; fase('cierre');
+      /* cerrar en pleno revelado: se cancela la apertura y la disolución parte de un escenario totalmente cubierto */
+      if (estabaAbriendo) mostrarFinalAbierto();
+      overlay.classList.add('is-anim');
       /* debajo del overlay, el botón vuelve a su estado normal para cuando la disolución lo vaya dejando ver */
       [reglaA, reglaB].forEach(function (r) { r.style.transform = ''; r.style.visibility = ''; });
       W = sec.clientWidth; H = sec.clientHeight;
@@ -426,6 +451,18 @@
 
     /* ---- eventos ---- */
     function onClickAbrir(e) { e.preventDefault(); abrir(); }
+    function onPausa() { fijarPausa(!pausadoUsuario); }
+    function forzarCerrado() {
+      detener();
+      if (mostrado) terminarCierre({ sinFoco: true });
+      else { resetEstilos(); estado = 'cerrado'; fase('cerrado'); btn.setAttribute('aria-expanded', 'false'); document.removeEventListener('keydown', onKey, true); }
+    }
+    function onRepetir() {
+      if (!listo || destruido) return;
+      if (pausadoUsuario) fijarPausa(false);
+      forzarCerrado();
+      requestAnimationFrame(function () { if (!destruido) abrir(); });
+    }
     function onClickCerrar() { cerrar(); }
     function onFicha(e) {
       var h = enlaceFicha && enlaceFicha.getAttribute('href');
@@ -436,8 +473,9 @@
     }
     function onVisibilidad() { recalcRunning(); }
     function onResize() {
-      if (estado === 'abriendo') { if (!medidas || Math.abs(sec.clientWidth - medidas.w) > 1 || Math.abs(sec.clientHeight - medidas.h) > 120) terminarApertura(); }
-      else if (estado === 'cerrando') { W = sec.clientWidth; H = sec.clientHeight; }
+      /* se remide la abertura (las reglas congeladas) y, al cerrar, se regenera el campo para el tamaño nuevo */
+      if (estado === 'abriendo') medir();
+      else if (estado === 'cerrando') { W = sec.clientWidth; H = sec.clientHeight; ultimoCalculo = -1e9; }
     }
     function onCambioReducido() {
       if (!reducido()) return;
@@ -445,6 +483,8 @@
       else if (estado === 'cerrando') terminarCierre({});
     }
     btn.addEventListener('click', onClickAbrir);
+    if (btnPausa) btnPausa.addEventListener('click', onPausa);
+    if (btnRepetir) btnRepetir.addEventListener('click', onRepetir);
     if (cerrarBtn) cerrarBtn.addEventListener('click', onClickCerrar);
     if (enlaceFicha) enlaceFicha.addEventListener('click', onFicha);
     document.addEventListener('visibilitychange', onVisibilidad);
@@ -459,6 +499,9 @@
     function destroy() {
       destruido = true; detener();
       btn.removeEventListener('click', onClickAbrir);
+      if (btnPausa) btnPausa.removeEventListener('click', onPausa);
+      if (btnRepetir) btnRepetir.removeEventListener('click', onRepetir);
+      if (ioPrep) { ioPrep.disconnect(); ioPrep = null; }
       if (cerrarBtn) cerrarBtn.removeEventListener('click', onClickCerrar);
       if (enlaceFicha) enlaceFicha.removeEventListener('click', onFicha);
       document.removeEventListener('visibilitychange', onVisibilidad);
@@ -466,12 +509,18 @@
       window.removeEventListener('resize', onResize);
       if (mqReducido && mqReducido.removeEventListener) mqReducido.removeEventListener('change', onCambioReducido);
       if (ioVista) ioVista.disconnect();
-      desinertar(); resetEstilos(); overlay.hidden = true; estado = 'cerrado';
+      desinertar(); resetEstilos(); overlay.hidden = true; estado = 'cerrado'; fase('cerrado');
+      sec.removeAttribute('data-hist-fase');
       delete sec.__drHist;
     }
 
+    fase('cerrado');
     preparar();
-    var api = { abrir: abrir, cerrar: cerrar, destroy: destroy, estado: function () { return estado; }, listo: function () { return listo; } };
+    var api = {
+      abrir: abrir, cerrar: cerrar, repetir: onRepetir, pausar: fijarPausa, destroy: destroy,
+      estado: function () { return estado; }, listo: function () { return listo; },
+      pausado: function () { return pausadoUsuario || !running; }, tiempo: function () { return elapsed; }
+    };
     sec.__drHist = api;
     return api;
   }
@@ -479,5 +528,5 @@
   var secciones = document.querySelectorAll('[data-historia]');
   var primera = null;
   for (var i = 0; i < secciones.length; i++) { var a = montar(secciones[i]); if (a && !primera) primera = a; }
-  root.drHistoria = primera ? { __listo: true, abrir: primera.abrir, cerrar: primera.cerrar, estado: primera.estado, listo: primera.listo, destroy: primera.destroy } : { __listo: true };
+  root.drHistoria = primera ? { __listo: true, abrir: primera.abrir, cerrar: primera.cerrar, repetir: primera.repetir, pausar: primera.pausar, estado: primera.estado, listo: primera.listo, pausado: primera.pausado, tiempo: primera.tiempo, destroy: primera.destroy } : { __listo: true };
 })();

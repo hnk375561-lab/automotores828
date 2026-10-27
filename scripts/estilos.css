@@ -2597,20 +2597,31 @@ html.has-dlg .dr-fab{display:none}
 
 /* === Unidad destacada (hist-*) ===
    Sección con revelado (js/historia.js). Escenario acotado; el overlay cubre todo el escenario.
-   Solo se animan transform, opacity y clip-path. Identidad 828: negro #060607, rojo #ee1c22, plata #d9dbdd. */
+   Solo se animan transform, opacity y clip-path. Identidad 828: negro #060607, rojo #ee1c22, plata #d9dbdd,
+   Exo 2 cursiva, esquina cortada de los botones y damero de competición (el de section[id]::after queda por encima del overlay). */
 .hist{position:relative;isolation:isolate;overflow:clip;display:grid;align-content:center;min-height:clamp(520px,90svh,860px);padding:clamp(48px,8svh,96px) 0;background:var(--dr-ink,#060607);color:var(--dr-silver,#d9dbdd)}
 .hist>.w{position:relative;z-index:1}
 .hist h2{font-family:"Exo 2",system-ui,sans-serif}
-.hist-prev{position:relative;width:100%;max-width:1100px;max-height:62svh;aspect-ratio:1200/675;margin:28px 0 0;overflow:hidden;background:#0b0b0c center/cover no-repeat;border:1px solid rgba(217,219,221,.18);border-bottom:3px solid var(--dr-red,#ee1c22)}
-.hist-prev img{position:absolute;inset:0;display:block;width:100%;height:100%;object-fit:contain}
-.hist-btn{display:grid;grid-template-rows:1px auto 1px;width:min(100%,520px);margin:28px 0 0;padding:0;border:0;background:none;color:inherit;font:inherit;text-align:center;cursor:pointer;-webkit-tap-highlight-color:transparent}
+.hist-prev{position:relative;width:min(100%,1100px,calc(62svh * 1200 / 675));aspect-ratio:1200/675;margin:28px 0 0;overflow:hidden;background:#0b0b0c center/cover no-repeat;border:1px solid rgba(217,219,221,.18);border-bottom:3px solid var(--dr-red,#ee1c22)}
+.hist-prev img{position:absolute;inset:0;display:block;width:100%;height:100%;object-fit:cover}
+/* Botón real: dos reglas de 1px con la etiqueta en medio. Las reglas son lo que se mide y crece al abrir. */
+.hist-btn{display:grid;grid-template-rows:1px auto 1px;width:min(100%,520px);margin:28px 0 0;padding:0;border:0;background:none;color:inherit;font:inherit;text-align:center;cursor:pointer;-webkit-tap-highlight-color:transparent;touch-action:manipulation}
 .hist-btn[data-hist-estado="cargando"]{opacity:.7;cursor:progress}
 .hist-rule{display:block;height:1px;background:var(--dr-silver,#d9dbdd);transition:background-color .2s}
 .hist-rule--top{transform-origin:top}
 .hist-rule--bottom{transform-origin:bottom}
 .hist-btn:hover .hist-rule,.hist-btn:focus-visible .hist-rule{background:var(--dr-red,#ee1c22)}
 .hist-label{display:block;min-height:44px;padding:18px 12px;font:italic 800 clamp(16px,2.2vw,22px)/1.2 "Exo 2",system-ui,sans-serif;letter-spacing:.08em;text-transform:uppercase}
-.hist-btn:focus-visible,.hist-close:focus-visible,.hist-info .btn:focus-visible{outline:3px solid var(--dr-red,#ee1c22);outline-offset:3px}
+.hist-btn:hover .hist-label{color:#fff}
+.hist-btn:focus-visible,.hist-close:focus-visible,.hist-info .btn:focus-visible,.hist-ctl-b:focus-visible{outline:3px solid var(--dr-red,#ee1c22);outline-offset:3px}
+/* Controles de pausa y repetición: fuera de la imagen, bajo el botón. */
+.hist-ctl{display:flex;flex-wrap:wrap;gap:8px 10px;margin:14px 0 0}
+.hist-ctl[hidden]{display:none}
+.hist-ctl-b{min-height:44px;padding:0 16px;border:1px solid rgba(217,219,221,.3);border-radius:0;background:transparent;color:var(--dr-silver,#d9dbdd);font:700 12px/1 Inter,system-ui,sans-serif;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;transition:border-color .2s,color .2s,background-color .2s;touch-action:manipulation}
+.hist-ctl-b[hidden],.hist-ctl-b [hidden]{display:none}
+.hist-ctl-b:hover{border-color:var(--dr-red,#ee1c22);color:#fff}
+.hist-ctl-b[aria-pressed="true"]{border-color:var(--dr-red,#ee1c22);background:rgba(238,28,34,.14);color:#fff}
+/* Overlay: cubre todo el escenario; el recorte lo escribe el script (inset al abrir, path evenodd al cerrar). */
 .hist-overlay{position:absolute;inset:0;z-index:5;background:var(--dr-ink,#060607);color:#fff}
 .hist-overlay[hidden]{display:none}
 .hist-overlay.is-anim{will-change:clip-path}
@@ -2620,19 +2631,32 @@ html.has-dlg .dr-fab{display:none}
 .hist-fg{position:absolute;left:50%;top:50%;width:min(100%,1500px);max-height:100%;height:auto;aspect-ratio:1200/675;object-fit:contain;transform:translate(-50%,-50%);image-rendering:auto;-webkit-mask-image:linear-gradient(to right,transparent 0,#000 6%,#000 94%,transparent 100%),linear-gradient(to bottom,transparent 0,#000 8%,#000 92%,transparent 100%);mask-image:linear-gradient(to right,transparent 0,#000 6%,#000 94%,transparent 100%),linear-gradient(to bottom,transparent 0,#000 8%,#000 92%,transparent 100%);-webkit-mask-composite:source-in;mask-composite:intersect}
 @supports (width:1cqw){.hist-fg{width:min(100cqw,1500px,calc(100cqh * 1200 / 675));max-height:none}}
 .hist-scrim{position:absolute;inset:0;pointer-events:none;background:linear-gradient(to top,rgba(6,6,7,.94) 0,rgba(6,6,7,.6) 36%,rgba(6,6,7,0) 70%),linear-gradient(to right,rgba(6,6,7,.55),rgba(6,6,7,0) 55%)}
-.hist-plate{position:absolute;inset:0;background:var(--dr-red,#ee1c22);pointer-events:none}
-.hist-info{position:absolute;left:0;right:0;bottom:0;z-index:2;display:grid;gap:8px;max-width:760px;padding:clamp(20px,4vw,56px)}
+/* Placa de cobertura (rojo 828 con damero tenue): se desvanece mientras la abertura se expande. */
+.hist-plate{position:absolute;inset:0;pointer-events:none;background:repeating-conic-gradient(rgba(6,6,7,.18) 0 25%,transparent 0 50%) 0 0/32px 32px,linear-gradient(135deg,var(--dr-red-hi,#ff4a4a) 0,var(--dr-red,#ee1c22) 38%,var(--dr-red-deep,#b3000c) 100%)}
+.hist-info{position:absolute;left:0;right:0;bottom:0;z-index:2;display:grid;gap:8px;max-width:760px;padding:clamp(20px,4vw,56px) clamp(20px,4vw,56px) clamp(28px,4vw,64px)}
+.hist-kicker{display:flex;align-items:center;gap:10px;margin:0 0 2px;font:800 12px/1 Inter,system-ui,sans-serif;letter-spacing:.2em;text-transform:uppercase;color:var(--dr-silver,#d9dbdd)}
 .hist-info h3{margin:0;font:italic 800 clamp(22px,3.4vw,40px)/1.1 "Exo 2",system-ui,sans-serif;color:#fff}
+.hist-info h3::after{content:"";display:block;width:64px;height:4px;margin-top:12px;background:repeating-conic-gradient(var(--dr-red,#ee1c22) 0 25%,var(--dr-check,#2a2a2c) 0 50%) 0 0/8px 8px}
 .hist-info p{margin:0;font:500 clamp(14px,1.5vw,17px)/1.45 Inter,system-ui,sans-serif;color:var(--dr-silver,#d9dbdd)}
+.hist-info .hist-kicker{font:800 12px/1 Inter,system-ui,sans-serif}
 .hist-info .n{font-size:13px;color:#c9cbcd}
 .hist-info .row{display:flex;flex-wrap:wrap;gap:12px;margin-top:8px}
 .hist-info .btn{min-height:44px}
-.hist-close{position:absolute;top:16px;right:16px;z-index:3;min-width:44px;min-height:44px;padding:0 18px;border:1px solid rgba(217,219,221,.55);border-radius:0;background:rgba(6,6,7,.62);color:#fff;font:700 14px/1 Inter,system-ui,sans-serif;letter-spacing:.06em;text-transform:uppercase;cursor:pointer}
-.hist-close:hover{border-color:var(--dr-red,#ee1c22);background:rgba(238,28,34,.85)}
+/* Cerrar: esquina cortada como el resto de los botones 828 (el clip-path no recorta el foco: va con outline-offset). */
+.hist-close{position:absolute;top:16px;right:16px;z-index:3;display:inline-flex;align-items:center;gap:10px;min-width:44px;min-height:44px;padding:0 18px 0 16px;border:0;border-radius:0;background:var(--dr-red,#ee1c22);color:#fff;font:800 13px/1 Inter,system-ui,sans-serif;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;clip-path:polygon(0 0,calc(100% - 12px) 0,100% 12px,100% 100%,0 100%);transition:background-color .2s,color .2s;touch-action:manipulation}
+.hist-close::before{content:"";width:12px;height:12px;background:linear-gradient(45deg,transparent 43%,currentColor 43% 57%,transparent 57%),linear-gradient(-45deg,transparent 43%,currentColor 43% 57%,transparent 57%)}
+.hist-close:hover{background:#fff;color:var(--dr-ink,#060607)}
+/* object-fit:cover donde el escenario es apaisado (≥ 1,6:1): no recorta el vehículo. En escenarios altos se mantiene la foto entera sobre su relleno difuminado. */
+@container (min-aspect-ratio: 8/5){
+  .hist[data-enc-escritorio="cover"] .hist-bg{display:none}
+  .hist[data-enc-escritorio="cover"] .hist-fg{width:100%;height:100%;max-height:none;aspect-ratio:auto;object-fit:cover;object-position:50% 50%;-webkit-mask-image:none;mask-image:none}
+}
 @media (max-width:700px){
   .hist[data-enc-movil="cover"] .hist-bg{display:none}
   .hist[data-enc-movil="cover"] .hist-fg{width:100%;height:100%;max-height:none;aspect-ratio:auto;object-fit:cover;object-position:var(--hist-foco,50% 50%);-webkit-mask-image:none;mask-image:none}
-  .hist-info{padding:20px 16px}
+  .hist-info{padding:20px 16px 28px}
+  .hist-close{top:12px;right:12px}
+  .hist-ctl-b{flex:1 1 150px}
 }
-@media (scripting:none){.hist-btn{display:none}}
+@media (scripting:none){.hist-btn,.hist-ctl{display:none}}
 @media (prefers-reduced-motion:reduce){.hist *{transition:none!important;animation:none!important}}

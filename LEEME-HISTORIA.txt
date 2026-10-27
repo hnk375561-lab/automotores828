@@ -1,0 +1,5 @@
+Unidad destacada 828 - revelado desde las reglas del boton + disolucion organica al cerrar.
+Descomprimir en la raiz del proyecto respetando carpetas (css/, js/, data/, scripts/) y reemplazar. No borrar nada.
+Archivos nuevos: scripts/e2e-historia.py y este LEEME.
+Despues de publicar, abrir el sitio y apretar Ctrl+F5.
+Para regenerar: npm run build   |   Pruebas: npm run test:historia && npm run test:historia:e2e

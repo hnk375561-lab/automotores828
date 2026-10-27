@@ -61,7 +61,9 @@ if (d && a) {
 
   const idx = html['index.html'];
   const visible = pages.map((p) => html[p]).join('\n').replace(/<script[\s\S]*?<\/script>|<style[\s\S]*?<\/style>/g, '');
-  const visNoCars = visible.replace(/<li class="car[^\"]*"[^>]*>[\s\S]*?<\/li>/g, '');
+  const visNoCars = visible.replace(/<li class="car[^\"]*"[^>]*>[\s\S]*?<\/li>/g, '')
+    /* Unidad destacada: los datos de la unidad (año, km, precio con fecha) salen de vehicles.json y se tratan como los de una tarjeta; el resto del texto de la sección sí se valida. */
+    .replace(/<div class="hist-info">[\s\S]*?<div class="row">/g, '<div class="row">');
 
   // --- datos del negocio ---
   const L = d.location;
