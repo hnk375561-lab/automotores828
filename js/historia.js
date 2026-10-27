@@ -317,6 +317,7 @@
       listo = true;
       btn.setAttribute('data-hist-estado', 'listo');
       btn.removeAttribute('aria-busy');
+      if (root.__drHistPend) { root.__drHistPend = 0; abrir(); }
     }
     function preparar() {
       var esperas = [];

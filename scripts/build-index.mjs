@@ -637,7 +637,9 @@ const secDestacada = await (async () => {
 <p class="ey"><span class="ey-brand">828</span> · ${esc(tx.eyebrow || 'Unidad destacada')}</p>
 <h2 id="hist-t">${h2}</h2>
 <p class="sec-p">${fecha ? `Dato relevado el ${esc(fdate(fecha))}. ` : ''}Precio y disponibilidad pueden cambiar; confirmalos con la agencia.</p>
+<figure class="hist-prev"${fondo ? ` style="background-image:url(${fondo})"` : ''}><img src="${esc(foto.src)}" width="${foto.ancho || 1200}" height="${foto.alto || 675}" alt="${esc(foto.alt || unit.titulo)}" loading="lazy" decoding="async"></figure>
 <button class="hist-btn" type="button" data-historia-abrir data-hist-estado="cargando" aria-busy="true" aria-controls="hist-overlay" aria-haspopup="dialog" aria-expanded="false"><span class="hist-rule hist-rule--top" aria-hidden="true"></span><span class="hist-label">${esc(tx.boton || 'Conocé esta unidad')}</span><span class="hist-rule hist-rule--bottom" aria-hidden="true"></span></button>
+<script>document.addEventListener("click",function(e){var b=e.target.closest&&e.target.closest("[data-historia-abrir]");if(b&&b.getAttribute("data-hist-estado")==="cargando")window.__drHistPend=1},true)</script>
 <noscript><p><a class="btn" href="u/${esc(unit.id)}/">Ver ficha de esta unidad</a></p></noscript>
 </div>
 <div class="hist-overlay" id="hist-overlay" role="dialog" aria-modal="true" aria-label="${esc(etiqueta)}" hidden>
