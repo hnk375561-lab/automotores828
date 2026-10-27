@@ -97,7 +97,22 @@
       if (accion) { openMappedUnit(); return; }
       catData().then(openMappedUnit);
     });
-    catData().then(function (d) { list = d || []; arrancar(); });
+    /* Tarjetas diferidas: la página trae las primeras en el HTML y el resto dentro de <noscript id="cars-rest"> (sin JavaScript se ven todas).
+       Con JavaScript ese contenido es solo texto: se lee una vez y cada tarjeta se crea cuando va a mostrarse (ver crearLi). */
+    var RESTO = (function () {
+      var out = {}, ns = $('#cars-rest'), txt = ns ? (ns.textContent || '') : '', re = /<li\b[^>]*\bdata-i="(\d+)"[\s\S]*?<\/li>/g, m;
+      while ((m = re.exec(txt))) out[m[1]] = m[0];
+      return out;
+    })();
+    function datoT(h) {
+      var m = /\sdata-t="([^"]*)"/.exec(h || ''); if (!m) return null;
+      var d = document.createElement('textarea'); d.innerHTML = m[1]; return d.value;
+    }
+    catData().then(function (d) {
+      list = d || [];
+      if (list.length < 2) { var h = ''; for (var k in RESTO) h += RESTO[k]; if (h) ul.insertAdjacentHTML('beforeend', h); return; }   /* sin datos del catálogo: se muestran todas las tarjetas escritas, como antes */
+      arrancar();
+    });
     function arrancar() {
       if (list.length < 2) return;
       accion = function (tipo, i, origen, record) {
@@ -111,10 +126,23 @@
       var fecha = function (iso) { return iso.split('-').reverse().join('/'); };
       var alfa = function (x, y) { return String(x).localeCompare(String(y), 'es'); };
       var anioHoy = new Date().getFullYear();
-      var items = {};
+      var items = {}, cbs = [], cmpTarjeta = null;
       $$('li.car', ul).forEach(function (li) { items[li.getAttribute('data-i')] = li; });
+      /* crea la tarjeta (oculta) a partir del HTML diferido; devuelve null si no existe */
+      function crearLi(i) {
+        if (items[i]) return items[i];
+        var h = RESTO[i]; if (!h) return null;
+        var t = document.createElement('template'); t.innerHTML = h;
+        var li = t.content.firstElementChild; if (!li) return null;
+        delete RESTO[i]; items[i] = li;
+        li.hidden = true; li.style.setProperty('display', 'none', 'important');
+        ul.appendChild(li);
+        if (list[+i]) favTarjeta(list[+i], li);
+        if (cmpTarjeta) cmpTarjeta(li);
+        return li;
+      }
       list.forEach(function (a) {
-        a.t = items[a.i] ? items[a.i].getAttribute('data-t') : norm(a.titulo);
+        a.t = items[a.i] ? items[a.i].getAttribute('data-t') : (datoT(RESTO[a.i]) != null ? datoT(RESTO[a.i]) : norm(a.titulo));
         a.t = norm(a.t + ' ' + [a.tipoVehiculo, a.tipoMoto, a.modelo, a.version, a.carroceria, a.transmision, a.combustible, a.cilindrada].filter(Boolean).join(' '));
         a.ant = a.anio != null ? anioHoy - a.anio : null;
         a.monto = a.precio && a.precio.moneda === 'ARS' ? a.precio.monto : null;
@@ -144,14 +172,14 @@
         if (soloFav) aplicar(false);
         aviso(adding ? 'Unidad agregada a favoritos' : 'Unidad quitada de favoritos');
       }
-      list.forEach(function (a) {
-        var li = items[a.i]; if (!li) return;
+      function favTarjeta(a, li) {
         var b = el('button', null, 'fav-b'); b.type = 'button'; b.setAttribute('data-fav', favKey(a)); b.setAttribute('data-t', a.titulo || '');
         b.innerHTML = '<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 20.5s-8-4.9-8-11A4.5 4.5 0 0 1 12 6.8 4.5 4.5 0 0 1 20 9.5c0 6.100-8 11-8 11z"/></svg>';
         b.addEventListener('click', function (e) { e.preventDefault(); e.stopPropagation(); favToggle(a); });
         var h = li.querySelector('.car-h') || li;
         h.insertBefore(b, h.querySelector('.car-c'));
-      });
+      }
+      list.forEach(function (a) { var li = items[a.i]; if (li) favTarjeta(a, li); });
 
       /* ----- definición de los filtros (todo sale de los datos publicados) ----- */
       function uniq(f) {
@@ -489,10 +517,10 @@
         var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
         if (escribirUrl && !reduce && !document.documentElement.classList.contains('save-data') && typeof Element.prototype.animate === 'function') {
           flip = new Map();
-          list.forEach(function (a) { var node = items[a.i]; if (!node.hidden) flip.set(node, node.getBoundingClientRect()); });
+          list.forEach(function (a) { var node = items[a.i]; if (node && !node.hidden) flip.set(node, node.getBoundingClientRect()); });
         }
         var n = 0, visibles = 0, quitados = podar().concat(pendQuit.splice(0));
-        var paso = window.innerWidth <= 700 ? 5 : 20;
+        var paso = window.innerWidth <= 700 ? 6 : 20;
         if (window._drCatalogoPaso !== paso) { window._drCatalogoPaso = paso; window._drCatalogoMostradas = paso; }
         else if (escribirUrl) { window._drCatalogoMostradas = paso; }
         var limite = window._drCatalogoMostradas || paso;
@@ -500,15 +528,19 @@
           ajuste.textContent = 'Se quitó ' + quitados.map(function (t) { return '«' + t + '»'; }).join(', ') + ' porque ninguna unidad coincide con esa combinación.';
           ajuste.hidden = false;
         } else { ajuste.textContent = ''; ajuste.hidden = true; }
+        var orden = list.slice().sort(ordenar), okPor = {}, nuevos = [], cupo = 0;
         list.forEach(function (a) {
-          var ok = coincide(a, null), li = items[a.i];
+          var ok = okPor[a.i] = coincide(a, null), li = items[a.i];
           if (ok) n++;
+          if (!li) return;
           li.hidden = !ok;
           if (!ok) li.style.setProperty('display', 'none', 'important');
         });
+        /* solo se crean las tarjetas que van a verse; el resto sigue sin existir en el DOM */
+        orden.forEach(function (a) { if (okPor[a.i] && cupo < limite) { cupo++; if (!items[a.i] && crearLi(a.i)) nuevos.push(items[a.i]); } });
         var frag = document.createDocumentFragment();
-list.slice().sort(ordenar).forEach(function (a) { frag.appendChild(items[a.i]); });
-ul.appendChild(frag);
+        orden.forEach(function (a) { if (items[a.i]) frag.appendChild(items[a.i]); });
+        ul.appendChild(frag);
         if (flip) flip.forEach(function (before, node) {
           if (!node.isConnected || node.hidden) return;
           var after = node.getBoundingClientRect(), dx = before.left - after.left, dy = before.top - after.top;
@@ -516,12 +548,14 @@ ul.appendChild(frag);
           try { node.animate([{ transform: 'translate(' + dx + 'px,' + dy + 'px)', opacity: .88 }, { transform: 'translate(0,0)', opacity: 1 }], { duration: 240, easing: 'ease-out' }); } catch (e) {}
         });
         visibles = 0;
-        list.slice().sort(ordenar).forEach(function (a) {
-          var li = items[a.i], ok = coincide(a, null);
+        orden.forEach(function (a) {
+          var li = items[a.i], ok = okPor[a.i];
+          if (!li) return;
           li.hidden = !ok || visibles >= limite;
           if (ok && visibles < limite) { li.style.removeProperty('display'); visibles++; }
           else li.style.setProperty('display', 'none', 'important');
         });
+        if (nuevos.length) { favSync(); if (window._drReveal) nuevos.forEach(window._drReveal); }
         ul.hidden = n === 0;
         var sinFav = soloFav && favN() === 0;
         if (sinres) sinres.hidden = n > 0 || sinFav;
@@ -594,18 +628,18 @@ ul.appendChild(frag);
         if (escribirUrl) aUrl();
       }
 
-      window._drCatalogoPaso = window.innerWidth <= 700 ? 5 : 20;
+      window._drCatalogoPaso = window.innerWidth <= 700 ? 6 : 20;
       window._drCatalogoMostradas = window._drCatalogoPaso;
       var moreBtn = document.getElementById('inventory-more');
       if (moreBtn) moreBtn.addEventListener('click', function () {
-        window._drCatalogoMostradas += window.innerWidth <= 700 ? 5 : 20;
+        window._drCatalogoMostradas += window.innerWidth <= 700 ? 6 : 20;
         aplicar(false);
       });
       var catalogoResizeTimer = 0;
       window.addEventListener('resize', function () {
         window.clearTimeout(catalogoResizeTimer);
         catalogoResizeTimer = window.setTimeout(function () {
-          var nuevoPaso = window.innerWidth <= 700 ? 5 : 20;
+          var nuevoPaso = window.innerWidth <= 700 ? 6 : 20;
           if (nuevoPaso !== window._drCatalogoPaso) {
             window._drCatalogoPaso = nuevoPaso;
             window._drCatalogoMostradas = nuevoPaso;
@@ -671,7 +705,7 @@ ul.appendChild(frag);
 
       /* ----- comparador: exactamente 2 unidades · selección por id real (nunca por posición) ----- */
       var MAX = 2, cmp = [], tray = null, dlg = null, cmpVuelta = null;
-      var cbs = $$('.car-c input', ul);
+      cbs = $$('.car-c input', ul);
       $$('.car-c', ul).forEach(function (l) { l.hidden = false; });
       function sinMarca(a) { return a.modeloTxt; }
       function porId(id) { for (var k = 0; k < list.length; k++) { if (favKey(list[k]) === id) return list[k]; } return null; }
@@ -689,6 +723,7 @@ ul.appendChild(frag);
       window.addEventListener('resize', function () { if (tray && !tray.hidden) trayAlto(); });
       function pintarBandeja() {
         podarSel();
+        cmp.forEach(function (id) { var u = porId(id); if (u) crearLi(u.i); });   /* la tarjeta de una unidad elegida existe siempre (su casilla refleja la selección) */
         cbs.forEach(function (c) { var a = list[+c.value]; c.checked = !!a && cmp.indexOf(favKey(a)) > -1; });
         document.body.classList.toggle('has-tray', cmp.length > 0);
         if (!cmp.length) { if (tray) tray.hidden = true; trayAlto(); return; }
@@ -716,7 +751,7 @@ ul.appendChild(frag);
         cmp.splice(k, 1); pintarBandeja(); aviso('Unidad quitada del comparador');
         if (dlg && dlg.open) { if (cmp.length < 2) dlg.close(); else abrirComparacion(); }
       }
-      cbs.forEach(function (c) {
+      function cmpEnlazar(c) {
         c.addEventListener('change', function () {
           var a = list[+c.value]; if (!a) { c.checked = false; return; }
           var id = favKey(a), k = cmp.indexOf(id);
@@ -727,7 +762,15 @@ ul.appendChild(frag);
           } else if (!c.checked && k > -1) { cmp.splice(k, 1); aviso('Unidad quitada del comparador'); }
           pintarBandeja();
         });
-      });
+      }
+      cbs.forEach(cmpEnlazar);
+      cmpTarjeta = function (li) {
+        var l = li.querySelector('.car-c'), c = li.querySelector('.car-c input');
+        if (l) l.hidden = false;
+        if (!c) return;
+        cbs.push(c); cmpEnlazar(c);
+        var a = list[+c.value]; c.checked = !!a && cmp.indexOf(favKey(a)) > -1;
+      };
 
       /* T5 · desde la ficha: la selección pasa a ser exactamente estas dos unidades y se abre la comparación */
       function compararCon(a, c, origen) {
@@ -1024,6 +1067,7 @@ ul.appendChild(frag);
       function boton(txt, cls, fn) { var b = el('button', txt, cls || 'btn sm'); b.type = 'button'; b.addEventListener('click', fn); return b; }
       function abrirFicha(i, origen, record) {
         var a = record || list[i]; if (!a) return;
+        if (a.i != null && !items[a.i]) crearLi(a.i);
         fOrigen = origen || null;
         fId = a.id != null ? String(a.id) : null;
         fFoco = $('#cars').querySelector('[data-ficha="' + list.indexOf(a) + '"]');   /* foco de vuelta aunque la ficha se abra por enlace, Atrás o Adelante */

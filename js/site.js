@@ -68,6 +68,12 @@
         if (r.bottom > 0 && r.top < alto * 0.95) { n.classList.add('in'); } else { pendientes++; io.observe(n); }
       });
       raiz.classList.add('rv-ready');
+      /* tarjetas creadas más tarde por js/secciones.js (catálogo diferido): entran por el mismo observador y conservan la cascada */
+      window._drReveal = function (n) {
+        if (!n || !io) return;
+        n.classList.add('reveal'); if (n.matches('.car')) n.classList.add('rv-card');
+        io.observe(n);
+      };
       if (!pendientes) vivo = true;
       setTimeout(function () { if (!vivo) recuperar(); }, 2500);
     } catch (e) { recuperar(); }
