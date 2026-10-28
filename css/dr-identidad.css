@@ -102,9 +102,6 @@ html{scroll-padding-top:110px}
 .fi-sim .fi-s-k,.fi-gu .fi-s-k{margin:0 0 10px}
 .fi-sim-g{display:grid;gap:8px}
 .fi-sim-c{display:flex;align-items:center;gap:12px;width:100%;padding:6px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.12);color:#fff;text-align:left;cursor:pointer;font:inherit;transition:border-color .2s,background .2s}
-.fi-sim-w{display:flex;gap:6px;align-items:stretch}.fi-sim-w .fi-sim-c{flex:1 1 auto;min-width:0;width:auto;min-height:44px}
-.fi-sim-v{flex:none;min-width:64px;min-height:44px;padding:0 10px;background:transparent;border:1px solid rgba(255,255,255,.12);color:#d9dbdd;font:inherit;font-size:12px;cursor:pointer}
-.fi-sim-v:hover,.fi-sim-v:focus-visible{border-color:var(--dr-red);color:#fff}
 .fi-sim-c:hover,.fi-sim-c:focus-visible{border-color:var(--dr-red);background:rgba(238,28,34,.08)}
 .fi-sim-c img{flex:none;width:84px;height:58px;object-fit:cover;display:block}
 .fi-sim-t{display:grid;gap:3px;min-width:0}
@@ -170,14 +167,5 @@ html body .fi-path .fi-path-l li::before{content:"\2705";background:none;color:i
 html body .fi-path .fi-path-l li{padding-left:38px}
 
 /* Tarjetas · botón de favoritos apenas más chico */
-/* el cuadro visible mide 38 px; el área táctil se mantiene en 44 px (regla del proyecto) */
-html body .fav-b{position:relative;border-color:transparent;background:transparent}
-html body .fav-b::after{content:"";position:absolute;inset:1px;border:2px solid var(--g3);pointer-events:none}
-html body .fav-b:hover{border-color:transparent}
-html body .fav-b:hover::after{border-color:var(--y)}
-html body .fav-b.on{background:transparent;border-color:transparent}
-html body .fav-b.on::after{background:var(--y);border-color:var(--y)}
-html body .fav-b svg{position:relative;z-index:1;width:19px;height:19px}
-
-/* Barra fija inferior (móvil): el texto largo de WhatsApp se partía en dos líneas pegado al borde */
-
+html body .fav-b{width:38px;height:38px}
+html body .fav-b svg{width:19px;height:19px}

@@ -280,7 +280,7 @@ header{border-bottom:1px solid rgba(255,255,255,.14)}
 .tray :focus-visible{outline-color:var(--ink)}
 body.has-tray{padding-bottom:calc(var(--tray-h,84px) + 8px)}
 
-html.has-dlg{overflow:hidden}
+html.has-dlg{overflow:hidden;scrollbar-gutter:stable}
 /* Ventana de comparación */
 dialog.cmp{width:min(1200px,100% - 24px);max-height:calc(100dvh - 24px);margin:auto;padding:0;border:0;border-top:1px solid var(--y);background:#f8f8f8;color:#1e1e1e;color-scheme:light;--s1:#363636;--s2:#1e1e1e;--s3:#060607;--g1:#d0d0d0;--g3:#838383;--g4:#555555;--fo:#060607;overflow:auto}
 dialog.cmp::backdrop{background:rgba(6,6,7,.8)}
@@ -1185,7 +1185,7 @@ header,header.site-header--inner{background:rgba(6,6,7,.82)}
 #unidades .car-ph{cursor:pointer}
 
 /* ===== v68 · ficha completa ===== */
-html.has-dlg{overflow:hidden}
+html.has-dlg{overflow:hidden;scrollbar-gutter:stable}
 dialog.ficha{width:min(1040px,100% - 24px);max-width:none;max-height:calc(100dvh - 24px);margin:auto;padding:0;border:0;border-top:3px solid var(--y);background:#131313;color:#f0f0f0;overflow:auto;overscroll-behavior:contain}
 dialog.ficha::backdrop{background:rgba(3,3,4,.82)}
 .fi-x{position:sticky;top:10px;display:flex;width:max-content;height:44px;z-index:3;margin:10px 10px -54px auto;background:#131313}
@@ -2626,10 +2626,10 @@ html.has-dlg .dr-fab{display:none}
 .hist-overlay[hidden]{display:none}
 .hist-overlay.is-anim{will-change:clip-path}
 .hist-overlay.is-anim .hist-media{will-change:transform,opacity}
-.hist-media{position:absolute;inset:0;overflow:hidden;transform-origin:50% 50%;container-type:size}
+.hist-media{position:absolute;inset:var(--hist-hdr,0px) 0 0 0;overflow:hidden;transform-origin:50% 50%;container-type:size}
 .hist-bg{position:absolute;inset:0;background:#0b0b0c center/cover no-repeat;transform:scale(1.06)}
-.hist-fg{position:absolute;left:50%;top:50%;width:min(100%,1500px);max-height:100%;height:auto;aspect-ratio:1200/675;object-fit:contain;transform:translate(-50%,-50%);image-rendering:auto;-webkit-mask-image:linear-gradient(to right,transparent 0,#000 6%,#000 94%,transparent 100%),linear-gradient(to bottom,transparent 0,#000 8%,#000 92%,transparent 100%);mask-image:linear-gradient(to right,transparent 0,#000 6%,#000 94%,transparent 100%),linear-gradient(to bottom,transparent 0,#000 8%,#000 92%,transparent 100%);-webkit-mask-composite:source-in;mask-composite:intersect}
-@supports (width:1cqw){.hist-fg{width:min(100cqw,1500px,calc(100cqh * 1200 / 675));max-height:none}}
+.hist-fg{position:absolute;left:50%;top:50%;width:min(100%,1500px);max-height:100%;height:auto;aspect-ratio:var(--hist-ar,1.7778);object-fit:contain;transform:translate(-50%,-50%);image-rendering:auto;-webkit-mask-image:linear-gradient(to right,transparent 0,#000 6%,#000 94%,transparent 100%),linear-gradient(to bottom,transparent 0,#000 8%,#000 92%,transparent 100%);mask-image:linear-gradient(to right,transparent 0,#000 6%,#000 94%,transparent 100%),linear-gradient(to bottom,transparent 0,#000 8%,#000 92%,transparent 100%);-webkit-mask-composite:source-in;mask-composite:intersect}
+@supports (width:1cqw){.hist-fg{width:min(100cqw,1500px,calc(100cqh * var(--hist-ar,1.7778)));max-height:none}}
 .hist-scrim{position:absolute;inset:0;pointer-events:none;background:linear-gradient(to top,rgba(6,6,7,.94) 0,rgba(6,6,7,.6) 36%,rgba(6,6,7,0) 70%),linear-gradient(to right,rgba(6,6,7,.55),rgba(6,6,7,0) 55%)}
 /* Placa de cobertura (rojo 828 con damero tenue): se desvanece mientras la abertura se expande. */
 .hist-plate{position:absolute;inset:0;pointer-events:none;background:repeating-conic-gradient(rgba(6,6,7,.18) 0 25%,transparent 0 50%) 0 0/32px 32px,linear-gradient(135deg,var(--dr-red-hi,#ff4a4a) 0,var(--dr-red,#ee1c22) 38%,var(--dr-red-deep,#b3000c) 100%)}
@@ -2643,7 +2643,11 @@ html.has-dlg .dr-fab{display:none}
 .hist-info .row{display:flex;flex-wrap:wrap;gap:12px;margin-top:8px}
 .hist-info .btn{min-height:44px}
 /* Cerrar: esquina cortada como el resto de los botones 828 (el clip-path no recorta el foco: va con outline-offset). */
-.hist-close{position:absolute;top:16px;right:16px;z-index:3;display:inline-flex;align-items:center;gap:10px;min-width:44px;min-height:44px;padding:0 18px 0 16px;border:0;border-radius:0;background:var(--dr-red,#ee1c22);color:#fff;font:800 13px/1 Inter,system-ui,sans-serif;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;clip-path:polygon(0 0,calc(100% - 12px) 0,100% 12px,100% 100%,0 100%);transition:background-color .2s,color .2s;touch-action:manipulation}
+.hist-close{position:absolute;top:var(--hist-top,88px);right:16px;z-index:3;display:inline-flex;align-items:center;gap:10px;min-width:44px;min-height:44px;padding:0 18px 0 16px;border:0;border-radius:0;background:var(--dr-red,#ee1c22);color:#fff;font:800 13px/1 Inter,system-ui,sans-serif;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;clip-path:polygon(0 0,calc(100% - 12px) 0,100% 12px,100% 100%,0 100%);transition:background-color .2s,color .2s;touch-action:manipulation}
+/* Efecto abierto: la página no se desplaza por detrás (el hueco de la barra se conserva para que nada salte). */
+html.hist-lock{overflow:hidden;scrollbar-gutter:stable;overscroll-behavior:none}
+/* Foto vertical o cuadrada en escritorio: queda entera a la derecha y el texto a la izquierda (no se pisan). */
+@media (min-width:701px){.hist-overlay[data-forma="vertical"] .hist-fg{left:auto;right:clamp(16px,5cqw,96px);transform:translateY(-50%)}}
 .hist-close::before{content:"";width:12px;height:12px;background:linear-gradient(45deg,transparent 43%,currentColor 43% 57%,transparent 57%),linear-gradient(-45deg,transparent 43%,currentColor 43% 57%,transparent 57%)}
 .hist-close:hover{background:#fff;color:var(--dr-ink,#060607)}
 /* object-fit:cover donde el escenario es apaisado (≥ 1,6:1): no recorta el vehículo. En escenarios altos se mantiene la foto entera sobre su relleno difuminado. */
@@ -2655,7 +2659,7 @@ html.has-dlg .dr-fab{display:none}
   .hist[data-enc-movil="cover"] .hist-bg{display:none}
   .hist[data-enc-movil="cover"] .hist-fg{width:100%;height:100%;max-height:none;aspect-ratio:auto;object-fit:cover;object-position:var(--hist-foco,50% 50%);-webkit-mask-image:none;mask-image:none}
   .hist-info{padding:20px 16px 28px}
-  .hist-close{top:12px;right:12px}
+  .hist-close{top:var(--hist-top,88px);right:12px}
   .hist-ctl-b{flex:1 1 150px}
 }
 @media (scripting:none){.hist-btn,.hist-ctl{display:none}}

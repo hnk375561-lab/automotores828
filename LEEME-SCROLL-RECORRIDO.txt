@@ -1,0 +1,4 @@
+Descomprimir en la raiz del proyecto respetando carpetas y reemplazar. No borrar nada.
+Cambios: cada tarjeta del recorrido abre su propio efecto, boton Cerrar visible, 3 tarjetas + "Cargar 3 mas",
+fotos completas con nombre real, ficha sin columna fija y sin salto de scroll.
+Despues: npm run build && npm test (ya corridos: 0 fallas). Despues de publicar, Ctrl+F5.

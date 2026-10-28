@@ -352,19 +352,21 @@
       "region": "Recorrido horizontal por la unidad destacada y once unidades del stock",
       "saltar": "Saltar el recorrido",
       "siguiente": "#financiacion",
-      "principal": { "leyenda": "HILUX" },
+      "inicial": 3,
+      "paso": 3,
+      "textos": { "cargarMas": "Cargar {n} más", "mostrando": "Mostrando {a} de {b} unidades", "agregadas": "Se agregaron {n} unidades. Mostrando {a} de {b}." },
       "tarjetas": [
-        { "unidadId": "4103009836", "foto": "images/stock/ml-4103009836-p04.webp", "ancho": 1200, "alto": 900, "leyenda": "FIT" },
-        { "unidadId": "4043971584", "foto": "images/stock/ml-4043971584-p03.webp", "ancho": 1200, "alto": 900, "leyenda": "SIENA" },
-        { "unidadId": "3922903672", "foto": "images/stock/ml-3922903672-p01.webp", "ancho": 1200, "alto": 1200, "leyenda": "VITARA" },
-        { "unidadId": "2191782749", "foto": "images/stock/ml-2191782749-p01.webp", "ancho": 1195, "alto": 1195, "leyenda": "208" },
-        { "unidadId": "2057558089", "foto": "images/stock/ml-2057558089-p04.webp", "ancho": 1195, "alto": 1195, "leyenda": "DUSTER" },
-        { "unidadId": "2128200017", "foto": "images/stock/ml-2128200017-p01.webp", "ancho": 1193, "alto": 1193, "leyenda": "CACTUS" },
-        { "unidadId": "2063616163", "foto": "images/stock/ml-2063616163-p01.webp", "ancho": 1176, "alto": 1176, "leyenda": "GOLF" },
-        { "unidadId": "4036030430", "foto": "images/stock/ml-4036030430-p02.webp", "ancho": 1160, "alto": 1160, "leyenda": "COROLLA" },
-        { "unidadId": "2063195983", "foto": "images/stock/ml-2063195983-p01.webp", "ancho": 1154, "alto": 1154, "leyenda": "408" },
-        { "unidadId": "2063173351", "foto": "images/stock/ml-2063173351-p02.webp", "ancho": 1200, "alto": 900, "leyenda": "BIZ" },
-        { "unidadId": "1982665981", "foto": "images/stock/ml-1982665981-p01.webp", "ancho": 1178, "alto": 1178, "leyenda": "C3" }
+        { "unidadId": "4103009836", "foto": "images/stock/ml-4103009836-p05.webp", "ancho": 1200, "alto": 900 },
+        { "unidadId": "4043971584", "foto": "images/stock/ml-4043971584-p05.webp", "ancho": 1200, "alto": 900 },
+        { "unidadId": "3922903672", "foto": "images/stock/ml-3922903672-p01.webp", "ancho": 1200, "alto": 1200 },
+        { "unidadId": "2191782749", "foto": "images/stock/ml-2191782749-p06.webp", "ancho": 1108, "alto": 1108 },
+        { "unidadId": "2057558089", "foto": "images/stock/ml-2057558089-p04.webp", "ancho": 1195, "alto": 1195 },
+        { "unidadId": "2128200017", "foto": "images/stock/ml-2128200017-p01.webp", "ancho": 1193, "alto": 1193 },
+        { "unidadId": "2063616163", "foto": "images/stock/ml-2063616163-p02.webp", "ancho": 1010, "alto": 1010 },
+        { "unidadId": "4036030430", "foto": "images/stock/ml-4036030430-p01.webp", "ancho": 900, "alto": 1200 },
+        { "unidadId": "2063195983", "foto": "images/stock/ml-2063195983-p01.webp", "ancho": 1154, "alto": 1154 },
+        { "unidadId": "2063173351", "foto": "images/stock/ml-2063173351-p02.webp", "ancho": 1200, "alto": 900 },
+        { "unidadId": "1982665981", "foto": "images/stock/ml-1982665981-p03.webp", "ancho": 1081, "alto": 1081 }
       ],
       "autorizacion": {
         "registrada": false,
@@ -381,7 +383,7 @@
         "alt": "Toyota Hilux Sw4 1998 3.0 I Runner · Foto 3 de 20 publicada en Mercado Libre",
         "autorizacion": { "registrada": false, "nota": "PENDIENTE: confirmar autorización del dueño y revisar patentes/terceros" }
       },
-      "encuadre": { "escritorio": "cover", "movil": "contain-blur", "focoMovil": "50% 60%" },
+      "encuadre": { "escritorio": "contain-blur", "movil": "contain-blur", "focoMovil": "50% 60%" },
       "textos": {
         "eyebrow": "Unidad destacada",
         "titulo": "Toyota Hilux SW4 1998",

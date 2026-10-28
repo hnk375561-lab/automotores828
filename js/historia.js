@@ -214,6 +214,13 @@
     var info = overlay.querySelector('.hist-info'), cerrarBtn = overlay.querySelector('.hist-close');
     var img = overlay.querySelector('.hist-fg');
     var enlaceFicha = overlay.querySelector('[data-historia-ficha]');
+    /* Datos por unidad (JSON del generador): el mismo revelado sirve a la unidad destacada y a cada tarjeta del recorrido */
+    var datosEl = sec.querySelector('script[data-hist-datos]'), DATOS = null;
+    try { DATOS = datosEl ? JSON.parse(datosEl.textContent) : null; } catch (e) { DATOS = null; }
+    var idPrincipal = sec.getAttribute('data-hist-main') || (DATOS && DATOS.main) || '';
+    var elTitulo = overlay.querySelector('.hist-info h3'), elDatos = overlay.querySelector('.hist-datos'), elPrecio = overlay.querySelector('.hist-info .n');
+    var elWa = overlay.querySelector('[data-historia-wa]'), fondoEl = overlay.querySelector('.hist-bg');
+    var htmlEl = document.documentElement, origenEl = null, ultimaOpc = null;
 
     var estado = 'cerrado', listo = false, mostrado = false;
     var running = !document.hidden, enPantalla = true, pausadoUsuario = false;
@@ -263,8 +270,41 @@
     }
     function detener() { trabajo = null; if (raf) { cancelAnimationFrame(raf); raf = 0; } }
 
+    function idActual() {
+      var a = sec.getAttribute('data-rec-actual');
+      return (a && DATOS && DATOS.unidades && DATOS.unidades[a]) ? a : idPrincipal;
+    }
+    /* completa el panel y la foto del revelado con los datos reales de la unidad elegida */
+    function pintarUnidad(id) {
+      var u = DATOS && DATOS.unidades && DATOS.unidades[id];
+      if (!u) return false;
+      if (elTitulo) elTitulo.textContent = u.t;
+      if (elDatos) { elDatos.textContent = u.d || ''; elDatos.hidden = !u.d; }
+      if (elPrecio) { elPrecio.textContent = u.p || ''; elPrecio.hidden = !u.p; }
+      if (enlaceFicha) enlaceFicha.setAttribute('href', '#unidad=' + id);
+      if (elWa) { if (u.w) { elWa.setAttribute('href', u.w); elWa.hidden = false; } else elWa.hidden = true; }
+      overlay.setAttribute('aria-label', 'Unidad destacada: ' + u.t);
+      if (fondoEl) fondoEl.style.backgroundImage = u.b ? 'url(' + u.b + ')' : '';
+      overlay.style.setProperty('--hist-ar', (u.f.w / u.f.h).toFixed(4));
+      overlay.setAttribute('data-forma', u.f.w / u.f.h < 1.3 ? 'vertical' : 'ancha');
+      if (img) {
+        if (img.getAttribute('src') !== u.f.s) { img.setAttribute('src', u.f.s); imgPromesa = null; }
+        img.setAttribute('width', u.f.w); img.setAttribute('height', u.f.h); img.setAttribute('alt', u.f.a);
+      }
+      return true;
+    }
+    /* «Cerrar» siempre por debajo de la cabecera fija del sitio (que tapa el borde superior del escenario) */
+    function fijarTope() {
+      var hd = document.querySelector('header'), s = escena.getBoundingClientRect();
+      var b = hd ? hd.getBoundingClientRect().bottom : 0;
+      overlay.style.setProperty('--hist-top', Math.max(12, Math.round(b - s.top + 12)) + 'px');
+      overlay.style.setProperty('--hist-hdr', Math.max(0, Math.round(b - s.top)) + 'px'); /* la foto se centra debajo de la cabecera: no queda tapada */
+    }
+
     /* ---- inert del resto de la página (se guarda solo lo que se agregó) ---- */
     function inertar() {
+      fijarTope();
+      htmlEl.classList.add('hist-lock'); /* la página no se desplaza por detrás del efecto abierto */
       var nodo = overlay;
       while (nodo && nodo !== document.body) {
         var padre = nodo.parentNode;
@@ -276,7 +316,7 @@
         nodo = padre;
       }
     }
-    function desinertar() { for (var i = 0; i < inertados.length; i++) inertados[i].inert = false; inertados = []; }
+    function desinertar() { for (var i = 0; i < inertados.length; i++) inertados[i].inert = false; inertados = []; htmlEl.classList.remove('hist-lock'); }
 
     function resetEstilos() {
       btn.style.removeProperty('visibility');
@@ -318,7 +358,7 @@
     }
     /* devuelve el foco al botón disparador; si la página lo reemplazó, vuelve a buscarlo */
     function enfocarDisparador() {
-      var b = btn.isConnected ? btn : sec.querySelector('[data-historia-abrir]');
+      var b = (origenEl && origenEl.isConnected && !origenEl.hidden) ? origenEl : (btn.isConnected ? btn : sec.querySelector('[data-historia-abrir]'));
       if (b) b.focus({ preventScroll: true });
     }
 
@@ -341,7 +381,7 @@
       btn.setAttribute('data-hist-estado', 'listo');
       btn.removeAttribute('aria-busy');
       if (grupoCtl) grupoCtl.hidden = false;
-      if (root.__drHistPend) { root.__drHistPend = 0; abrir(); }
+      if (root.__drHistPend === 1) { root.__drHistPend = 0; abrir(); }
     }
     function preparar() {
       var esperas = [];
@@ -357,24 +397,35 @@
     }
 
     /* ---- apertura ---- */
-    function medir() {
+    function medir(orig) {
+      if (orig) { /* apertura desde una tarjeta: el revelado nace del rectángulo de su foto */
+        var es = escena.getBoundingClientRect(), o = orig.getBoundingClientRect();
+        medidas = { top: Math.max(0, o.top - es.top), right: Math.max(0, es.right - o.right), bottom: Math.max(0, es.bottom - o.bottom), left: Math.max(0, o.left - es.left), k: 1, w: escena.clientWidth, h: escena.clientHeight };
+        return;
+      }
       var s = escena.getBoundingClientRect(), a = reglaA.getBoundingClientRect(), b = reglaB.getBoundingClientRect(), bt = btn.getBoundingClientRect();
       var top = Math.min(a.top, b.top) - s.top, left = Math.min(a.left, b.left) - s.left;
       var right = s.right - Math.max(a.right, b.right), bottom = s.bottom - Math.max(a.bottom, b.bottom);
       medidas = { top: top, right: right, bottom: bottom, left: left, k: Math.max(1, bt.height / 2), w: escena.clientWidth, h: escena.clientHeight };
     }
-    function abrir() {
-      if (estado !== 'cerrado' || !listo || destruido) return;
+    function abrir(opc) {
+      opc = opc || {};
+      var rectEl = opc.orig || null;
+      if (estado !== 'cerrado' || destruido || (!rectEl && !listo)) return;
+      var id = opc.id || idActual();
+      ultimaOpc = { id: id, orig: rectEl, foco: opc.foco || null };
+      origenEl = opc.foco || null;
+      if (id && DATOS) pintarUnidad(id);
       if (pausadoUsuario) fijarPausa(false); /* activar el botón es una orden explícita: se retoma el reloj */
       if (reducido()) { estado = 'abriendo'; terminarApertura(); document.addEventListener('keydown', onKey, true); return; }
       var lanzarAnim = function () {
         if (estado !== 'cerrado') return;
-        estado = 'abriendo'; fase('reglas');
-        medir();
+        estado = 'abriendo'; fase(rectEl ? 'apertura' : 'reglas');
+        medir(rectEl);
         document.addEventListener('keydown', onKey, true);
-        var mostrar = false;
-        correr(T_REGLAS + T_ABRIR + 100, function (t) {
-          if (t < T_REGLAS) {
+        var mostrar = false, tReglas = rectEl ? 0 : T_REGLAS;
+        correr(tReglas + T_ABRIR + 100, function (t) {
+          if (t < tReglas) {
             var e = easeIO(t / T_REGLAS), esc = 1 + (medidas.k - 1) * e;
             reglaA.style.transform = 'scaleY(' + esc + ')';
             reglaB.style.transform = 'scaleY(' + esc + ')';
@@ -382,13 +433,13 @@
           }
           if (!mostrar) {
             mostrar = true; fase('apertura');
-            reglaA.style.visibility = 'hidden'; reglaB.style.visibility = 'hidden';
+            if (!rectEl) { reglaA.style.visibility = 'hidden'; reglaB.style.visibility = 'hidden'; }
             overlay.hidden = false; mostrado = true;
             overlay.classList.add('is-anim');
             media.style.opacity = '0'; info.style.opacity = '0'; cerrarBtn.style.opacity = '0'; placa.style.opacity = '1';
             inertar();
           }
-          var u = t - T_REGLAS, p = easeAbrir(clamp01(u / T_ABRIR)), r = 1 - p;
+          var u = t - tReglas, p = easeAbrir(clamp01(u / T_ABRIR)), r = 1 - p;
           overlay.style.clipPath = 'inset(' + (medidas.top * r).toFixed(2) + 'px ' + (medidas.right * r).toFixed(2) + 'px ' + (medidas.bottom * r).toFixed(2) + 'px ' + (medidas.left * r).toFixed(2) + 'px)';
           media.style.transform = 'scale(' + (0.94 + 0.06 * p).toFixed(4) + ')';
           placa.style.opacity = String(1 - easeOut((u - 120) / 600));
@@ -452,6 +503,18 @@
 
     /* ---- eventos ---- */
     function onClickAbrir(e) { e.preventDefault(); abrir(); }
+    /* cada tarjeta del recorrido abre SU efecto (sin JS sigue enlazando a su ficha) */
+    function abrirUnidad(a) {
+      if (!a || estado !== 'cerrado') return;
+      abrir({ id: a.getAttribute('data-hist-unit'), orig: a.querySelector('.rec__photo') || a, foco: a });
+    }
+    function onClickTarjeta(e) {
+      var a = e.target.closest && e.target.closest('[data-hist-unit]');
+      if (!a || !sec.contains(a) || e.defaultPrevented) return;
+      if (e.ctrlKey || e.metaKey || e.shiftKey || e.altKey || e.button > 0) return; /* abrir en pestaña nueva sigue yendo a la ficha */
+      e.preventDefault();
+      abrirUnidad(a);
+    }
     function onPausa() { fijarPausa(!pausadoUsuario); }
     function forzarCerrado() {
       detener();
@@ -462,7 +525,8 @@
       if (!listo || destruido) return;
       if (pausadoUsuario) fijarPausa(false);
       forzarCerrado();
-      requestAnimationFrame(function () { if (!destruido) abrir(); });
+      var op = ultimaOpc;
+      requestAnimationFrame(function () { if (!destruido) abrir(op || undefined); });
     }
     function onClickCerrar() { cerrar(); }
     function onFicha(e) {
@@ -475,7 +539,8 @@
     function onVisibilidad() { recalcRunning(); }
     function onResize() {
       /* se remide la abertura (las reglas congeladas) y, al cerrar, se regenera el campo para el tamaño nuevo */
-      if (estado === 'abriendo') medir();
+      if (estado !== 'cerrado') fijarTope();
+      if (estado === 'abriendo') medir(ultimaOpc && ultimaOpc.orig);
       else if (estado === 'cerrando') { W = escena.clientWidth; H = escena.clientHeight; ultimoCalculo = -1e9; }
     }
     function onCambioReducido() {
@@ -484,6 +549,7 @@
       else if (estado === 'cerrando') terminarCierre({});
     }
     btn.addEventListener('click', onClickAbrir);
+    sec.addEventListener('click', onClickTarjeta);
     if (btnPausa) btnPausa.addEventListener('click', onPausa);
     if (btnRepetir) btnRepetir.addEventListener('click', onRepetir);
     if (cerrarBtn) cerrarBtn.addEventListener('click', onClickCerrar);
@@ -500,6 +566,7 @@
     function destroy() {
       destruido = true; detener();
       btn.removeEventListener('click', onClickAbrir);
+      sec.removeEventListener('click', onClickTarjeta);
       if (btnPausa) btnPausa.removeEventListener('click', onPausa);
       if (btnRepetir) btnRepetir.removeEventListener('click', onRepetir);
       if (ioPrep) { ioPrep.disconnect(); ioPrep = null; }
@@ -518,11 +585,14 @@
     fase('cerrado');
     preparar();
     var api = {
-      abrir: abrir, cerrar: cerrar, repetir: onRepetir, pausar: fijarPausa, destroy: destroy,
+      abrir: function (a) { return abrir(typeof a === 'string' ? { id: a } : a); }, cerrar: cerrar, repetir: onRepetir, pausar: fijarPausa, destroy: destroy,
       estado: function () { return estado; }, listo: function () { return listo; },
       pausado: function () { return pausadoUsuario || !running; }, tiempo: function () { return elapsed; }
     };
     sec.__drHist = api;
+    /* una tarjeta pulsada antes de que este archivo cargara (el script de la sección la dejó pendiente) */
+    var pend = root.__drHistPend;
+    if (pend && pend.id) { root.__drHistPend = 0; abrirUnidad(sec.querySelector('[data-hist-unit="' + pend.id + '"]')); }
     return api;
   }
 

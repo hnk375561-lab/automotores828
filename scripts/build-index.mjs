@@ -602,33 +602,64 @@ const anilloUnidad = ({ unit }, k) => {
 /* El anillo sigue siendo decoración (aria-hidden, sin interacción). Debajo va la unidad que pasa al frente, con datos de vehicles.json; las acciones reutilizan la ficha del catálogo (data-hero-unit) y el mensaje de wa-mensajes.js. */
 const ANILLO = `<div class="ring-sec" data-anillo aria-hidden="true"><ul class="ring-stage">${ANILLO_UNIDADES.map(anilloTarjeta).join('')}</ul></div>\n<section class="ring-info" aria-labelledby="ring-t" data-anillo-info><div class="w">\n<h2 class="ey ring-k" id="ring-t"><span class="ey-brand">828</span> · Los interiores de nuestras unidades</h2>\n<div class="ring-units">${ANILLO_UNIDADES.map(anilloUnidad).join('')}</div>\n</div></section>`;
 
+/* Datos de cada unidad del recorrido y de la unidad destacada (mismos datos reales de data/vehicles.json que usa la ficha). */
+const HIST_DATO = {
+  anio: (u) => (u.anio != null ? String(u.anio) : ''),
+  km: (u) => (u.km != null ? `${fmt(u.km)} km` : ''),
+  motor: (u) => u.motor || '',
+  transmision: (u) => u.transmision || '',
+  combustible: (u) => u.combustible || '',
+  color: (u) => u.color || '',
+};
+const histDatos = (u, claves) => (claves || []).map((k) => (HIST_DATO[k] ? HIST_DATO[k](u) : '')).filter(Boolean).join(' · ');
+const histPrecio = (u) => (u.precio && u.precio.fecha ? `Precio publicado el ${fdate(u.precio.fecha)}: ${u.precio.moneda} ${fmt(u.precio.monto)}; puede haber cambiado.` : '');
+const histFondo = async (ruta) => { try { const { fondoDifuminado } = await import('./make-historia.mjs'); return await fondoDifuminado(ruta); } catch (e) { return ''; } };
+
 /* Recorrido horizontal de la unidad destacada (js/recorrido.js, css/recorrido.css): vive DENTRO de #unidad-destacada.
    Primera tarjeta = la propia unidad destacada; luego las unidades de data/dealership.json → historias.recorrido.tarjetas (datos reales de data/vehicles.json).
-   Sin tarjetas válidas (mínimo 2), desactivado o sin foto en disco: devuelve '' y la sección queda como era. */
-const recorridoHtml = (unit, foto, fondo) => {
+   Cada tarjeta muestra el nombre real de la unidad (modelo, marca, año, km) y abre SU efecto de revelado (js/historia.js); sin JS enlaza a su ficha.
+   Las fotos se muestran completas (la tarjeta toma la proporción real de la foto: nada se recorta).
+   js/recorrido.js muestra «inicial» tarjetas y agrega «paso» por cada pulsación de «Cargar … más».
+   Sin tarjetas válidas (mínimo 2), desactivado o sin foto en disco: devuelve null y la sección queda como era. */
+const recorridoHtml = async (unit, foto, fondo, h) => {
   const r = D.historias && D.historias.recorrido;
-  if (!r || r.activa !== true) return '';
+  if (!r || r.activa !== true) return null;
   const lista = (r.tarjetas || []).map((t) => {
     const u = autos.find((x) => String(x.id) === String(t.unidadId));
     if (!u || u.vendida || !t.foto || !fs.existsSync(path.join(root, t.foto))) return null;
     return { u, t };
   }).filter(Boolean);
-  if (lista.length < 2) { console.warn('recorrido: menos de 2 tarjetas válidas; no se emite'); return ''; }
+  if (lista.length < 2) { console.warn('recorrido: menos de 2 tarjetas válidas; no se emite'); return null; }
+  const tx = r.textos || {};
+  const claves = (h && h.datos) || [];
   const total = lista.length + 1;
+  const inicial = Math.max(2, Math.min(total, Number(r.inicial) || total));
+  const paso = Math.max(1, Number(r.paso) || 3);
   const n2 = (n) => String(n).padStart(2, '0');
-  const principal = `<div class="rec__card rec__card--main"><div class="rec__photo"><img src="${esc(foto.src)}" width="${foto.ancho || 1200}" height="${foto.alto || 675}" alt="${esc(foto.alt || unit.titulo)}" decoding="async"></div><div class="rec__cap"><span class="rec__word">${esc((r.principal && r.principal.leyenda) || unit.marca || '')}</span><span class="rec__num" aria-hidden="true">${n2(1)}</span></div></div>`;
-  const tarjetas = lista.map(({ u, t }, i) => `<a class="rec__card" href="#unidad=${esc(u.id)}" data-i="${i + 1}"><div class="rec__photo"><img src="${esc(t.foto)}" width="${t.ancho || 1200}" height="${t.alto || 900}" alt="${esc(u.titulo)} · Foto publicada en Mercado Libre" loading="lazy" decoding="async"></div><span class="rec__cap"><b class="rec__word">${esc(t.leyenda || u.marca)}</b><i class="rec__num" aria-hidden="true">${n2(i + 2)}</i></span></a>`).join('\n');
+  const items = [{ u: unit, src: foto.src, ancho: foto.ancho || 1200, alto: foto.alto || 675, alt: foto.alt || unit.titulo, bg: fondo, main: true }]
+    .concat(lista.map(({ u, t }) => ({ u, src: t.foto, ancho: t.ancho || 1200, alto: t.alto || 900, alt: `${u.titulo} · Foto publicada en Mercado Libre`, bg: null, main: false })));
+  for (const it of items) if (it.bg === null) it.bg = await histFondo(path.join(root, it.src));
+  const nombre = (u) => String(u.modelo || sinMarca(u));
+  const detalle = (u) => [u.marca, u.anio != null ? u.anio : null, u.km != null ? `${fmt(u.km)} km` : null].filter((x) => x != null && x !== '').join(' · ');
+  const tarjetas = items.map((it, i) => `<a class="rec__card${it.main ? ' rec__card--main' : ''}" href="#unidad=${esc(it.u.id)}" data-hist-unit="${esc(it.u.id)}" data-i="${i}" style="--ar:${(it.ancho / it.alto).toFixed(4)}" aria-label="${esc(`Ver unidad: ${it.u.titulo}`)}"><span class="rec__photo"><img src="${esc(it.src)}" width="${it.ancho}" height="${it.alto}" alt=""${i === 0 ? '' : ' loading="lazy"'} decoding="async"></span><span class="rec__cap"><span class="rec__name"><b class="rec__word">${esc(nombre(it.u))}</b><i class="rec__sub">${esc(detalle(it.u))}</i></span><i class="rec__num" aria-hidden="true">${n2(i + 1)}</i></span></a>`).join('\n');
+  const unidades = {};
+  for (const it of items) unidades[it.u.id] = { t: it.u.titulo, d: histDatos(it.u, claves), p: histPrecio(it.u), w: wa(`Hola! Quiero consultar por ${it.u.titulo}.`), f: { s: it.src, w: it.ancho, h: it.alto, a: it.alt }, b: it.bg || '' };
+  const json = JSON.stringify({ main: String(unit.id), unidades }).replace(/</g, '\\u003c');
   const sig = /^#[\w-]+$/.test(r.siguiente || '') ? r.siguiente : '#unidades';
-  return `<a class="rec__skip" href="${sig}">${esc(r.saltar || 'Saltar el recorrido')}</a>
-<div class="hist-rec" role="region" aria-label="${esc(r.region || 'Recorrido horizontal')}" tabindex="0"><div class="rec__track">
-${principal}
+  const html = `<a class="rec__skip" href="${sig}">${esc(r.saltar || 'Saltar el recorrido')}</a>
+<div class="hist-rec" role="region" aria-label="${esc(r.region || 'Recorrido horizontal')}" tabindex="0" data-rec-inicial="${inicial}" data-rec-paso="${paso}"><div class="rec__track">
 ${tarjetas}
-</div><div class="rec__hud" aria-hidden="true"><span class="rec__count"><b data-rec-n>01</b> / ${n2(total)}</span><span class="rec__bar"><i data-rec-bar></i></span></div></div>`;
+</div></div>
+<div class="rec__hud" aria-hidden="true"><span class="rec__count"><b data-rec-n>01</b> / <span data-rec-total>${n2(total)}</span></span><span class="rec__bar"><i data-rec-bar></i></span></div>`;
+  const mas = `<button class="hist-ctl-b hist-more" type="button" data-rec-mas hidden data-txt="${esc(tx.cargarMas || 'Cargar {n} más')}" data-txt-agregadas="${esc(tx.agregadas || 'Se agregaron {n} unidades. Mostrando {a} de {b}.')}">${esc((tx.cargarMas || 'Cargar {n} más').replace('{n}', String(paso)))}</button>
+<p class="rec__cuenta" role="status" aria-live="polite" data-rec-cuenta data-txt="${esc(tx.mostrando || 'Mostrando {a} de {b} unidades')}"></p>`;
+  return { html, mas, json };
 };
 
-/* Unidad destacada (js/historia.js): foto apaisada de una unidad real con revelado. Todo sale de data/dealership.json → historias.destacada
+/* Unidad destacada (js/historia.js): foto de una unidad real con revelado. Todo sale de data/dealership.json → historias.destacada
    y de data/vehicles.json (nada se duplica). Sin datos válidos, desactivada, vendida o sin foto en disco no se emite nada.
-   El relleno difuminado se genera aquí con sharp (scripts/make-historia.mjs) y va incrustado como data: URI. */
+   El relleno difuminado se genera aquí con sharp (scripts/make-historia.mjs) y va incrustado como data: URI.
+   El revelado sirve a la unidad destacada y a cada tarjeta del recorrido: js/historia.js completa el panel con el JSON [data-hist-datos]. */
 const secDestacada = await (async () => {
   const h = D.historias && D.historias.destacada;
   if (!h || h.activa !== true) return '';
@@ -640,24 +671,17 @@ const secDestacada = await (async () => {
   const titulo = String(tx.titulo || unit.titulo);
   const palabras = titulo.split(/\s+/);
   const h2 = palabras.length > 2 ? `${esc(palabras.slice(0, 2).join(' '))} <em>${esc(palabras.slice(2).join(' '))}</em>` : esc(titulo);
-  let fondo = '';
-  try { const { fondoDifuminado } = await import('./make-historia.mjs'); fondo = await fondoDifuminado(path.join(root, foto.src)); } catch (e) { fondo = ''; }
+  const fondo = await histFondo(path.join(root, foto.src));
   const fecha = unit.relevadoEl || (unit.precio && unit.precio.fecha) || null;
-  const DATO = {
-    anio: (u) => (u.anio != null ? String(u.anio) : ''),
-    km: (u) => (u.km != null ? `${fmt(u.km)} km` : ''),
-    motor: (u) => u.motor || '',
-    transmision: (u) => u.transmision || '',
-    combustible: (u) => u.combustible || '',
-    color: (u) => u.color || '',
-  };
-  const datos = (h.datos || []).map((k) => (DATO[k] ? DATO[k](unit) : '')).filter(Boolean).join(' · ');
-  const precio = unit.precio ? `<p class="n">Precio publicado el ${esc(fdate(unit.precio.fecha))}: ${esc(unit.precio.moneda)} ${fmt(unit.precio.monto)}; puede haber cambiado.</p>` : '';
+  const datos = histDatos(unit, h.datos);
+  const precioTxt = histPrecio(unit);
+  const precio = precioTxt ? `<p class="n">${esc(precioTxt)}</p>` : '';
   const waUrl = wa(`Hola! Quiero consultar por ${unit.titulo}.`);
   const etiqueta = `Unidad destacada: ${titulo}`;
-  const REC = recorridoHtml(unit, foto, fondo);
+  const RECR = await recorridoHtml(unit, foto, fondo, h);
+  const REC = RECR ? RECR.html : '';
   const foco = /^[0-9. %a-z-]+$/i.test(enc.focoMovil || '') ? ` style="--hist-foco:${enc.focoMovil}"` : '';
-  return `<section class="hist" id="unidad-destacada" aria-labelledby="hist-t" data-historia data-enc-escritorio="${esc(enc.escritorio || 'contain-blur')}" data-enc-movil="${esc(enc.movil || 'contain-blur')}"${foco}${REC ? ' data-hist-rec' : ''}>
+  return `<section class="hist" id="unidad-destacada" aria-labelledby="hist-t" data-historia data-hist-main="${esc(unit.id)}" data-enc-escritorio="${esc(enc.escritorio || 'contain-blur')}" data-enc-movil="${esc(enc.movil || 'contain-blur')}"${foco}${REC ? ' data-hist-rec' : ''}>
 ${REC ? '<div class="hist-stage">\n' : ''}<div class="w${REC ? ' hist-head' : ''}">
 <p class="ey"><span class="ey-brand">828</span> · ${esc(tx.eyebrow || 'Unidad destacada')}</p>
 <h2 id="hist-t">${h2}</h2>
@@ -668,8 +692,8 @@ ${REC ? `</div>\n${REC}\n<div class="w hist-foot">` : `<figure class="hist-prev"
 <button class="hist-ctl-b" type="button" data-historia-pausa aria-pressed="false"><span data-l-off>${esc(tx.pausar || 'Pausar animación')}</span><span data-l-on hidden>${esc(tx.reanudar || 'Reanudar animación')}</span></button>
 <button class="hist-ctl-b" type="button" data-historia-repetir>${esc(tx.repetir || 'Repetir animación')}</button>
 </div>
-<p class="sr" role="status" aria-live="polite" data-historia-estado></p>
-<script>document.addEventListener("click",function(e){var b=e.target.closest&&e.target.closest("[data-historia-abrir]");if(b&&b.getAttribute("data-hist-estado")==="cargando")window.__drHistPend=1},true)</script>
+${RECR ? RECR.mas + '\n' : ''}<p class="sr" role="status" aria-live="polite" data-historia-estado></p>
+<script>document.addEventListener("click",function(e){var b=e.target.closest&&e.target.closest("[data-historia-abrir],[data-hist-unit]");if(!b||(window.drHistoria&&window.drHistoria.__listo))return;if(b.hasAttribute("data-hist-unit")){var id=b.getAttribute("data-hist-unit");e.preventDefault();window.__drHistPend={id:id};setTimeout(function(){if(window.__drHistPend&&window.__drHistPend.id===id){window.__drHistPend=0;location.hash="#unidad="+id}},6000)}else if(b.getAttribute("data-hist-estado")==="cargando")window.__drHistPend=1},true)</script>
 <noscript><p><a class="btn" href="u/${esc(unit.id)}/">Ver ficha de esta unidad</a></p></noscript>
 </div>
 <div class="hist-overlay" id="hist-overlay" role="dialog" aria-modal="true" aria-label="${esc(etiqueta)}" hidden>
@@ -682,13 +706,13 @@ ${REC ? `</div>\n${REC}\n<div class="w hist-foot">` : `<figure class="hist-prev"
 <div class="hist-info">
 <p class="hist-kicker"><span class="ey-brand" aria-hidden="true">828</span><span>${esc(tx.eyebrow || 'Unidad destacada')}</span></p>
 <h3>${esc(unit.titulo)}</h3>
-${datos ? `<p>${esc(datos)}</p>` : ''}
-${precio}
-<div class="row"><a class="btn p" href="#unidad=${esc(unit.id)}" data-historia-ficha>${esc(tx.verFicha || 'Ver ficha completa')}</a>${waUrl ? `<a class="btn" href="${esc(waUrl)}" ${EXT}>Consultar por WhatsApp</a>` : ''}</div>
+${datos ? `<p class="hist-datos">${esc(datos)}</p>` : '<p class="hist-datos" hidden></p>'}
+${precio || '<p class="n hist-precio" hidden></p>'}
+<div class="row"><a class="btn p" href="#unidad=${esc(unit.id)}" data-historia-ficha>${esc(tx.verFicha || 'Ver ficha completa')}</a>${waUrl ? `<a class="btn" href="${esc(waUrl)}" data-historia-wa ${EXT}>Consultar por WhatsApp</a>` : ''}</div>
 </div>
 <button class="hist-close" type="button" aria-label="Cerrar unidad destacada">${esc(tx.cerrar || 'Cerrar')}</button>
 </div>
-${REC ? '</div>\n' : ''}</section>`;
+${RECR ? `<script type="application/json" data-hist-datos>${RECR.json}</script>\n</div>\n` : ''}</section>`;
 })();
 
 /* Intro «Prelude» (solo portada): superposición a pantalla completa; css/prelude.css la oculta sin JavaScript o con movimiento reducido. */
@@ -707,7 +731,7 @@ const index = page({
   desc: `${NAME} en ${L.city}, ${L.partido}: compra y venta de autos y motos usados, permutas y consignaciones. Visitanos en ${L.address} o escribinos por redes o correo.`,
   file: 'index.html',
   htmlAttrs: ' data-fondos',
-  extraHead: `<link rel="stylesheet" href="css/prelude.css">\n<script defer src="js/prelude.js"></script>\n<link rel="stylesheet" href="css/hero-carousel.css?v=20261024-5">\n<link rel="stylesheet" href="css/fondos-secciones.css">\n<link rel="stylesheet" href="css/damero-secciones.css?v=20261027-1">\n<link rel="stylesheet" href="css/comparador.css?v=20261028-1">\n<link rel="stylesheet" href="css/galeria-visor.css?v=20261026-1">\n<link rel="stylesheet" href="css/recorrido.css">\n<script type="application/ld+json">${JSON.stringify(ld)}</script>\n<script defer src="js/hero-carousel.js?v=20261024-1"></script>\n<script type="text/plain" data-dr-diferido src="js/hero-motion.js?v=20261025-1"></script>\n<script defer src="js/odometro.js?v=20261025-1"></script>\n<script defer src="js/fondos-secciones.js?v=20261024-1"></script>\n<script defer src="js/wa-mensajes.js"></script>\n<script defer src="js/secciones.js?v=20261029-1"></script>\n<script defer src="js/ficha-flip.js?v=20261027-1"></script>\n<script defer src="js/galeria-visor.js?v=20261026-1"></script>\n<script defer src="js/recorrido.js"></script>\n<script defer src="js/combobox.js?v=20261024-1"></script>\n<script type="text/plain" data-dr-diferido src="js/anillo.js?v=20261024-2"></script>\n<script defer src="js/boton-flecha.js?v=20261024-1"></script>\n<script type="text/plain" data-dr-diferido src="js/mapa.js?v=20261023-1"></script>\n<script defer src="js/horarios.js?v=20261024-1"></script>\n<script defer src="js/site.js?v=20261024-3"></script>\n<script defer src="js/diferidos.js"></script>\n<script type="text/plain" data-dr-diferido src="js/foto-reactiva.js?v=20261027-1"></script>\n<script type="text/plain" data-dr-diferido src="js/historia.js?v=20261030-1"></script>\n<script defer src="js/visita-horarios.js?v=1"></script>\n<script defer src="js/reserva-inline.js?v=20261028-1"></script>\n`,
+  extraHead: `<link rel="stylesheet" href="css/prelude.css">\n<script defer src="js/prelude.js"></script>\n<link rel="stylesheet" href="css/hero-carousel.css?v=20261024-5">\n<link rel="stylesheet" href="css/fondos-secciones.css">\n<link rel="stylesheet" href="css/damero-secciones.css?v=20261027-1">\n<link rel="stylesheet" href="css/comparador.css?v=20261028-1">\n<link rel="stylesheet" href="css/galeria-visor.css?v=20261026-1">\n<link rel="stylesheet" href="css/recorrido.css">\n<script type="application/ld+json">${JSON.stringify(ld)}</script>\n<script defer src="js/hero-carousel.js?v=20261024-1"></script>\n<script type="text/plain" data-dr-diferido src="js/hero-motion.js?v=20261025-1"></script>\n<script defer src="js/odometro.js?v=20261025-1"></script>\n<script defer src="js/fondos-secciones.js?v=20261024-1"></script>\n<script defer src="js/wa-mensajes.js"></script>\n<script defer src="js/secciones.js?v=20261029-1"></script>\n<script defer src="js/ficha-flip.js?v=20261027-1"></script>\n<script defer src="js/galeria-visor.js?v=20261026-1"></script>\n<script defer src="js/recorrido.js"></script>\n<script defer src="js/combobox.js?v=20261024-1"></script>\n<script type="text/plain" data-dr-diferido src="js/anillo.js?v=20261024-2"></script>\n<script defer src="js/boton-flecha.js?v=20261024-1"></script>\n<script type="text/plain" data-dr-diferido src="js/mapa.js?v=20261023-1"></script>\n<script defer src="js/horarios.js?v=20261024-1"></script>\n<script defer src="js/site.js?v=20261024-3"></script>\n<script defer src="js/diferidos.js"></script>\n<script type="text/plain" data-dr-diferido src="js/foto-reactiva.js?v=20261027-1"></script>\n<script type="text/plain" data-dr-diferido src="js/historia.js?v=20261031-1"></script>\n<script defer src="js/visita-horarios.js?v=1"></script>\n<script defer src="js/reserva-inline.js?v=20261028-1"></script>\n`,
   body: `${PRELUDE}${header()}
 <main id="top">
 <div class="hero" role="region" aria-label="${esc(NAME)}">

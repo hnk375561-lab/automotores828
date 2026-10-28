@@ -47,19 +47,7 @@
   var io = 'IntersectionObserver' in window ? new IntersectionObserver(function (es) {
     es.forEach(function (e) { if (e.isIntersecting) { io.unobserve(e.target); encolar(e.target); } });
   }, { rootMargin: '900px 0px' }) : null;
-  /* Fondos que pone el propio CSS (franja «Nosotros» y «Dónde estamos»): el CSS no los pide hasta que el elemento lleva .bg-on,
-     que se agrega al acercarse a 900 px de la pantalla (ver «Fondos diferidos» al final de scripts/estilos.css). */
-  function fondosCss() {
-    var els = [].slice.call(document.querySelectorAll('.nz-frentes,.nz-donde-hd'));
-    if (!els.length) return;
-    if (!('IntersectionObserver' in window)) { els.forEach(function (e) { e.classList.add('bg-on'); }); return; }
-    var o = new IntersectionObserver(function (es) {
-      es.forEach(function (e) { if (e.isIntersecting) { o.unobserve(e.target); e.target.classList.add('bg-on'); } });
-    }, { rootMargin: '900px 0px' });
-    els.forEach(function (e) { o.observe(e); });
-  }
   function armar() {
-    fondosCss();
     MAPA.forEach(function (cfg) {
       var el = document.querySelector(cfg[0]);
       if (!el) return;

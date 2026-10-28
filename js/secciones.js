@@ -1445,20 +1445,11 @@
         var arriba = function () { fdlg.scrollTop = 0; fdlg.scrollLeft = 0; [].forEach.call(fdlg.querySelectorAll('*'), function (n) { if (n.scrollTop) n.scrollTop = 0; }); };
         arriba(); window.requestAnimationFrame(arriba); window.setTimeout(arriba, 80);
         x.focus({ preventScroll: true });
-        /* A1: la columna más corta queda fija (sticky) mientras se recorre la más larga, para que no quede un hueco debajo */
+        /* La ficha se desplaza ENTERA con un solo scroll: las dos columnas suben juntas. (Antes la columna más corta quedaba fija —sticky—
+           y parecía que la ficha «se trababa» en la foto mientras la barra lateral seguía moviéndose.) Aquí solo se limpian restos de estilos. */
         if (fRO) { fRO.disconnect(); fRO = null; }
-        var pegar = function () {
-          left.style.position = ''; left.style.top = ''; info.style.position = ''; info.style.top = '';
-          if (!fdlg.open || window.innerWidth <= 800 || getComputedStyle(g).gridTemplateColumns.split(' ').length < 2) return;
-          var hl = left.offsetHeight, hi = info.offsetHeight;
-          if (hl === hi) return;
-          var s = hl < hi ? left : info;
-          s.style.position = 'sticky';
-          s.style.top = Math.min(0, fdlg.clientHeight - s.offsetHeight) + 'px';
-        };
+        var pegar = function () { left.style.position = ''; left.style.top = ''; info.style.position = ''; info.style.top = ''; };
         pegar();
-        if (window.ResizeObserver) { fRO = new ResizeObserver(pegar); fRO.observe(left); fRO.observe(info); fRO.observe(fdlg); }
-        else window.addEventListener('resize', pegar);
         /* transición tarjeta → ficha (js/ficha-flip.js); si ese archivo no carga, la ficha abre como siempre */
         if (window.drFichaFlip) window.drFichaFlip.open(fdlg, fOrigen);
       }
