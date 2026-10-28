@@ -44,7 +44,7 @@ a.rec__card:focus-visible{outline:3px solid var(--rec-ac);outline-offset:4px}
 .hist[data-rec="pin"] .hist-stage{position:sticky;top:0;height:100vh;height:100svh;min-height:0;grid-template-rows:auto minmax(0,1fr) auto;align-content:stretch}
 .hist[data-rec="pin"] .hist-rec{height:auto;overflow:hidden}
 .hist[data-rec="pin"] .rec__track{position:absolute;left:0;top:0;will-change:transform}
-.hist[data-rec="pin"] .rec__card.is-near{will-change:transform,opacity}
+.hist[data-rec="pin"] .rec__card{will-change:transform,opacity}
 /* Ficha abierta (js/recorrido.js «pliega» la pista): el escenario deja de estar fijo y la página scrollea normal; la foto/ficha sigue abierta */
 .hist[data-rec="pin"][data-rec-plegado] .hist-stage{position:relative;top:auto}
 .hist[data-rec="pin"][data-rec-plegado] .hist-rec{overflow:hidden}
@@ -87,15 +87,11 @@ html body .ring-act{margin-top:12px;gap:8px 10px}
   background:radial-gradient(ellipse 44% 56% at 50% 50%,rgba(238,28,34,.2),rgba(238,28,34,.06) 48%,transparent 72%),
              radial-gradient(ellipse 70% 30% at 50% 100%,rgba(217,219,221,.07),transparent 70%)}
 /* Foco: halo rojo en un pseudo-elemento propio (solo cambia su opacidad: no repinta la foto). Desenfoque de vecinas: solo escritorio con mouse. */
-.rec__card::before{content:"";position:absolute;left:0;top:0;width:100%;aspect-ratio:var(--ar);z-index:0;pointer-events:none;opacity:0;box-shadow:0 0 0 1px rgba(238,28,34,.85),0 0 46px rgba(238,28,34,.34),0 0 120px rgba(238,28,34,.16);transition:opacity .45s ease}
+.rec__card::before{content:"";position:absolute;left:0;top:0;width:100%;aspect-ratio:var(--ar);z-index:0;pointer-events:none;opacity:0;box-shadow:0 0 0 1px rgba(238,28,34,.85),0 0 40px rgba(238,28,34,.38);transition:opacity .45s ease}
 .rec__card .rec__photo{z-index:1}
 .rec__card.is-act::before{opacity:1}
-@media (hover:hover) and (pointer:fine){
-  .rec__card{transition:filter .5s ease}
-  .rec__card.is-cerca{filter:blur(1.2px) saturate(.85)}
-  .rec__card.is-lejos{filter:blur(3px) saturate(.6)}
-  [data-rec-lite] .rec__card{filter:none!important}
-}
+/* RENDIMIENTO 60 fps: se quitó filter:blur() de las tarjetas vecinas. Un blur sobre capas grandes que además cambian de scale/opacity en cada frame
+   se recalcula completo en la GPU por cada tarjeta y por cada frame (era la causa principal del lag). El foco se sigue notando por opacity + scale (js/recorrido.js). */
 .rec__card.is-act .rec__photo::after{height:4px;background:linear-gradient(90deg,var(--rec-ac),#ff5a5f 50%,var(--rec-ac));box-shadow:0 0 18px rgba(238,28,34,.9)}
 .rec__card.is-act .rec__word{color:#fff;text-shadow:0 0 22px rgba(238,28,34,.55)}
 .rec__card:not(.is-act) .rec__word{color:#c9cbcd}
@@ -156,3 +152,12 @@ html body .ring-info::after{right:0;--dir:270deg;clip-path:polygon(0 0,100% 0,10
 @media (hover:hover){.dr-fab a:hover::before{opacity:1;transform:translate(0,-50%)}}
 .dr-fab a:focus-visible::before{opacity:1;transform:translate(0,-50%)}
 @media (prefers-reduced-motion:reduce){.dr-fab a::before{transition:none}}
+
+/* ======================================================================================================
+   RENDIMIENTO (60 fps constantes en «Unidad destacada»)
+   - El header fijo tenia backdrop-filter:blur(18px): con el carrusel moviendose debajo, el navegador re-desenfoca esa franja en CADA frame.
+     Sobre un fondo casi negro no se nota: se reemplaza por un fondo mas opaco, sin backdrop-filter.
+   - La etiqueta «Conoce esta unidad» y el filo del foco pasan a capa propia: al cambiar de foco ya no se repinta la foto completa.
+   ====================================================================================================== */
+html body header,html body header.site-header{-webkit-backdrop-filter:none!important;backdrop-filter:none!important;background:rgba(6,6,7,.94)}
+.rec__card .rec__photo::before{will-change:opacity,transform}
