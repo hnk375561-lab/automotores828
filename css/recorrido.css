@@ -59,3 +59,16 @@ a.rec__card:focus-visible{outline:3px solid var(--rec-ac);outline-offset:4px}
   .hist[data-rec="pin"] .hist-rec{height:clamp(280px,50svh,520px);overflow-x:auto}
   .hist[data-rec="pin"] .rec__track{position:relative;transform:none!important}
 }
+/* «Los interiores de nuestras unidades» (anillo + unidad en foco): la sección mide la mitad que antes, para verla completa en escritorio y móvil.
+   El alto del anillo también sigue al alto de la pantalla (svh); js/anillo.js toma el radio del tamaño del escenario, así que se adapta solo. */
+html body .ring-stage{height:clamp(200px,min(24vw,40svh),360px)}
+html body .ring-card{width:clamp(70px,8.2vw,120px)}
+html body .ring-info{padding:clamp(14px,2.2svh,22px) 0 clamp(14px,2.4svh,24px)}
+html body .ring-info .ring-k{margin:0 0 clamp(8px,1.4svh,12px)}
+html body .ring-brand::before{margin:0 auto 8px}
+html body .ring-model{margin:4px 0 0;font-size:clamp(26px,4.2vw,44px)}
+html body .ring-meta{margin:6px 0 0;font-size:14px}
+html body .ring-meta b{font-size:14px}
+html body .ring-pr{margin:8px 0 0;font-size:clamp(22px,2.6vw,30px)}
+html body .ring-n{margin:3px 0 0;font-size:12px}
+html body .ring-act{margin-top:12px;gap:8px 10px}

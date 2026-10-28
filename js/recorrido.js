@@ -50,8 +50,36 @@
     if (hudBar) hudBar.style.transform = '';
     ultimoN = -1;
   }
+  /* El título de la sección acompaña a la unidad que está al centro: «Marca Modelo» en blanco y el resto (año) en rojo, igual que el título original. */
+  var titulo = sec.querySelector('#hist-t');
+  var tituloOriginal = titulo ? titulo.innerHTML : '';
+  var tituloId = null;
+  function pintarTitulo(card) {
+    if (!titulo || !card) return;
+    var id = card.getAttribute('data-hist-unit') || '';
+    if (id === tituloId) return;
+    tituloId = id;
+    if (card.classList.contains('rec__card--main')) { titulo.innerHTML = tituloOriginal; return; }
+    var w = card.querySelector('.rec__word'), sub = card.querySelector('.rec__sub');
+    var marca = '', anio = '';
+    (sub ? sub.textContent.split(' · ') : []).forEach(function (t) {
+      t = t.trim();
+      if (/^\d{4}$/.test(t)) anio = t; else if (t && !/km$/i.test(t) && !marca) marca = t;
+    });
+    var palabras = [marca, w ? w.textContent : '', anio].join(' ').split(/\s+/).filter(Boolean);
+    if (!palabras.length) return;
+    titulo.textContent = palabras.slice(0, 2).join(' ');
+    if (palabras.length > 2) {
+      titulo.appendChild(document.createTextNode(' '));
+      var em = document.createElement('em');
+      em.textContent = palabras.slice(2).join(' ');
+      titulo.appendChild(em);
+    }
+  }
   function marcarActual(i) {
-    if (cards[i]) sec.setAttribute('data-rec-actual', cards[i].getAttribute('data-hist-unit') || '');
+    if (!cards[i]) return;
+    sec.setAttribute('data-rec-actual', cards[i].getAttribute('data-hist-unit') || '');
+    pintarTitulo(cards[i]);
   }
   function pintar() {
     pending = 0;
