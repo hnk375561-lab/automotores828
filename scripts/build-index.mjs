@@ -640,8 +640,10 @@ const recorridoHtml = async (unit, foto, fondo, h) => {
     .concat(lista.map(({ u, t }) => ({ u, src: t.foto, ancho: t.ancho || 1200, alto: t.alto || 900, alt: `${u.titulo} · Foto publicada en Mercado Libre`, bg: null, main: false })));
   for (const it of items) if (it.bg === null) it.bg = await histFondo(path.join(root, it.src));
   const nombre = (u) => String(u.modelo || sinMarca(u));
+  /* Precio con identidad 828 (etiqueta roja de esquina cortada + cifra Exo 2 cursiva); sale de vehicles.json, igual que la ficha. */
+  const precioTarj = (u) => (u.precio && u.precio.monto != null ? `<span class="rec__pr"><i class="rec__cur">${esc(u.precio.moneda)}</i><b class="rec__amt">${fmt(u.precio.monto)}</b></span>` : '<span class="rec__pr rec__pr--c"><i class="rec__cur">Consultar</i></span>');
   const detalle = (u) => [u.marca, u.anio != null ? u.anio : null, u.km != null ? `${fmt(u.km)} km` : null].filter((x) => x != null && x !== '').join(' · ');
-  const tarjetas = items.map((it, i) => `<a class="rec__card${it.main ? ' rec__card--main' : ''}" href="#unidad=${esc(it.u.id)}" data-hist-unit="${esc(it.u.id)}" data-i="${i}" style="--ar:${(it.ancho / it.alto).toFixed(4)}" aria-label="${esc(`Ver unidad: ${it.u.titulo}`)}"><span class="rec__photo"><img src="${esc(it.src)}" width="${it.ancho}" height="${it.alto}" alt=""${i === 0 ? '' : ' loading="lazy"'} decoding="async"></span><span class="rec__cap"><span class="rec__name"><b class="rec__word">${esc(nombre(it.u))}</b><i class="rec__sub">${esc(detalle(it.u))}</i></span><i class="rec__num" aria-hidden="true">${n2(i + 1)}</i></span></a>`).join('\n');
+  const tarjetas = items.map((it, i) => `<a class="rec__card${it.main ? ' rec__card--main' : ''}" href="#unidad=${esc(it.u.id)}" data-hist-unit="${esc(it.u.id)}" data-i="${i}" style="--ar:${(it.ancho / it.alto).toFixed(4)}" aria-label="${esc(`Ver unidad: ${it.u.titulo}${it.u.precio && it.u.precio.monto != null ? `, ${it.u.precio.moneda} ${fmt(it.u.precio.monto)}` : ''}`)}"><span class="rec__photo"><img src="${esc(it.src)}" width="${it.ancho}" height="${it.alto}" alt=""${i === 0 ? '' : ' loading="lazy"'} decoding="async"></span><span class="rec__cap"><b class="rec__word">${esc(nombre(it.u))}</b>${precioTarj(it.u)}<i class="rec__sub">${esc(detalle(it.u))}</i></span></a>`).join('\n');
   const unidades = {};
   for (const it of items) unidades[it.u.id] = { t: it.u.titulo, d: histDatos(it.u, claves), p: histPrecio(it.u), w: wa(`Hola! Quiero consultar por ${it.u.titulo}.`), f: { s: it.src, w: it.ancho, h: it.alto, a: it.alt }, b: it.bg || '' };
   const json = JSON.stringify({ main: String(unit.id), unidades }).replace(/</g, '\\u003c');
@@ -649,10 +651,9 @@ const recorridoHtml = async (unit, foto, fondo, h) => {
   const html = `<a class="rec__skip" href="${sig}">${esc(r.saltar || 'Saltar el recorrido')}</a>
 <div class="hist-rec" role="region" aria-label="${esc(r.region || 'Recorrido horizontal')}" tabindex="0" data-rec-inicial="${inicial}" data-rec-paso="${paso}"><div class="rec__track">
 ${tarjetas}
-</div></div>
-<div class="rec__hud" aria-hidden="true"><span class="rec__count"><b data-rec-n>01</b> / <span data-rec-total>${n2(total)}</span></span><span class="rec__bar"><i data-rec-bar></i></span></div>`;
+</div></div>`;
   const mas = `<button class="hist-ctl-b hist-more" type="button" data-rec-mas hidden data-txt="${esc(tx.cargarMas || 'Cargar {n} más')}" data-txt-agregadas="${esc(tx.agregadas || 'Se agregaron {n} unidades. Mostrando {a} de {b}.')}">${esc((tx.cargarMas || 'Cargar {n} más').replace('{n}', String(paso)))}</button>
-<p class="rec__cuenta" role="status" aria-live="polite" data-rec-cuenta data-txt="${esc(tx.mostrando || 'Mostrando {a} de {b} unidades')}"></p>`;
+<p class="sr" role="status" aria-live="polite" data-rec-cuenta data-txt="${esc(tx.mostrando || 'Mostrando {a} de {b} unidades')}"></p>`;
   return { html, mas, json };
 };
 
@@ -688,10 +689,10 @@ ${REC ? '<div class="hist-stage">\n' : ''}<div class="w${REC ? ' hist-head' : ''
 <p class="sec-p">${fecha ? `Dato relevado el ${esc(fdate(fecha))}. ` : ''}Precio y disponibilidad pueden cambiar; confirmalos con la agencia.</p>
 ${REC ? `</div>\n${REC}\n<div class="w hist-foot">` : `<figure class="hist-prev"${fondo ? ` style="background-image:url(${fondo})"` : ''}><img src="${esc(foto.src)}" width="${foto.ancho || 1200}" height="${foto.alto || 675}" alt="${esc(foto.alt || unit.titulo)}" loading="lazy" decoding="async"></figure>`}
 <button class="hist-btn" type="button" data-historia-abrir data-hist-estado="cargando" aria-busy="true" aria-controls="hist-overlay" aria-haspopup="dialog" aria-expanded="false"><span class="hist-rule hist-rule--top" aria-hidden="true"></span><span class="hist-label">${esc(tx.boton || 'Conocé esta unidad')}</span><span class="hist-rule hist-rule--bottom" aria-hidden="true"></span></button>
-<div class="hist-ctl" role="group" aria-label="${esc(tx.controles || 'Control de la animación')}" hidden>
+${REC ? '' : `<div class="hist-ctl" role="group" aria-label="${esc(tx.controles || 'Control de la animación')}" hidden>
 <button class="hist-ctl-b" type="button" data-historia-pausa aria-pressed="false"><span data-l-off>${esc(tx.pausar || 'Pausar animación')}</span><span data-l-on hidden>${esc(tx.reanudar || 'Reanudar animación')}</span></button>
 <button class="hist-ctl-b" type="button" data-historia-repetir>${esc(tx.repetir || 'Repetir animación')}</button>
-</div>
+</div>`}
 ${RECR ? RECR.mas + '\n' : ''}<p class="sr" role="status" aria-live="polite" data-historia-estado></p>
 <script>document.addEventListener("click",function(e){var b=e.target.closest&&e.target.closest("[data-historia-abrir],[data-hist-unit]");if(!b||(window.drHistoria&&window.drHistoria.__listo))return;if(b.hasAttribute("data-hist-unit")){var id=b.getAttribute("data-hist-unit");e.preventDefault();window.__drHistPend={id:id};setTimeout(function(){if(window.__drHistPend&&window.__drHistPend.id===id){window.__drHistPend=0;location.hash="#unidad="+id}},6000)}else if(b.getAttribute("data-hist-estado")==="cargando")window.__drHistPend=1},true)</script>
 <noscript><p><a class="btn" href="u/${esc(unit.id)}/">Ver ficha de esta unidad</a></p></noscript>

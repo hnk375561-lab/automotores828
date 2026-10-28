@@ -1,22 +1,22 @@
 /* Recorrido horizontal DENTRO de «Unidad destacada» (#unidad-destacada[data-hist-rec]). Todo acotado a esa sección.
    La sección es la pista (runway); .hist-stage es el escenario fijo (sticky) y sigue siendo el que usa js/historia.js
    para el revelado de cada unidad. Sin JS, gama baja o movimiento reducido: estático con scroll horizontal nativo.
-   Cada tarjeta toma la PROPORCIÓN REAL de su foto (--ar): la foto se ve entera, sin recortes. El pie (nombre real) tiene su propia
-   fila y el contador (HUD) también: nada se superpone. */
+   Cada tarjeta toma la PROPORCIÓN REAL de su foto (--ar): la foto se ve entera, sin recortes. El pie de la tarjeta lleva nombre real,
+   precio (identidad 828) y datos en su propia franja: nada se superpone. El escenario es compacto: cabecera + recorrido + pie
+   entran completos en la altura de la pantalla (100 % de zoom, escritorio). */
 .hist[data-hist-rec]{display:block;align-content:start;min-height:0;padding:0;overflow:visible}
-.hist[data-hist-rec] .hist-stage{position:relative;isolation:isolate;display:grid;grid-template-rows:auto minmax(0,auto) auto auto;align-content:center;min-height:clamp(520px,90svh,860px);padding:calc(var(--hdr,68px) + clamp(6px,1.6svh,16px)) 0 clamp(12px,2.4svh,28px);overflow:clip;background:var(--dr-ink,#060607);color:var(--dr-silver,#d9dbdd)}
+.hist[data-hist-rec] .hist-stage{position:relative;isolation:isolate;display:grid;grid-template-rows:auto minmax(0,auto) auto;align-content:center;min-height:clamp(480px,86svh,820px);padding:calc(var(--hdr,68px) + clamp(4px,1svh,10px)) 0 clamp(8px,1.6svh,18px);overflow:clip;background:var(--dr-ink,#060607);color:var(--dr-silver,#d9dbdd)}
 .hist-stage>.w{position:relative;z-index:1}
-.hist-head h2{margin-bottom:0}
-.hist-head .sec-p{margin:6px 0 0}
-.hist-foot{display:flex;flex-wrap:wrap;align-items:center;gap:8px 16px;padding-top:clamp(6px,1.2svh,12px)}
-.hist-foot .hist-btn{margin:0;flex:0 1 420px}
-.hist-foot .hist-ctl{margin:0}
+.hist-head .ey{margin:0 0 2px}
+.hist-head h2{margin:0;font-size:clamp(24px,4.4svh,40px);line-height:1.05}
+.hist-head .sec-p{margin:4px 0 0;max-width:none;font-size:clamp(12px,1.9svh,15px);line-height:1.35}
+.hist-foot{display:flex;flex-wrap:wrap;align-items:center;gap:8px 16px;padding-top:clamp(4px,1svh,10px)}
+.hist-foot .hist-btn{margin:0;flex:0 1 380px}
+.hist-foot .hist-label{padding:12px;font-size:clamp(15px,2.2svh,20px)}
 .hist-more{border-color:var(--dr-red,#ee1c22);color:#fff}
 .hist-more[hidden]{display:none}
-.rec__cuenta{margin:0;font:600 12px/1.3 Inter,system-ui,sans-serif;letter-spacing:.12em;text-transform:uppercase;color:var(--dr-silver,#d9dbdd)}
-.rec__cuenta:empty{display:none}
 /* Región del recorrido: marco de medidas (cqw/cqh) y recorte del carril */
-.hist-rec{position:relative;z-index:1;min-height:0;height:clamp(340px,62svh,640px);container-type:size;overflow-x:auto;overflow-y:hidden;overscroll-behavior-x:contain;--rec-ac:var(--dr-red,#ee1c22);--rec-fg:var(--dr-silver,#d9dbdd)}
+.hist-rec{position:relative;z-index:1;min-height:0;height:clamp(280px,50svh,520px);container-type:size;overflow-x:auto;overflow-y:hidden;overscroll-behavior-x:contain;--rec-ac:var(--dr-red,#ee1c22);--rec-fg:var(--dr-silver,#d9dbdd)}
 .hist-rec:focus-visible{outline:3px solid var(--rec-ac);outline-offset:-4px}
 .hist-rec::before,.hist-rec::after{content:"";position:absolute;inset:0;z-index:4;pointer-events:none}
 .hist-rec::before{background:linear-gradient(90deg,rgba(6,6,7,.85) 0,rgba(6,6,7,0) 5%,rgba(6,6,7,0) 95%,rgba(6,6,7,.85) 100%)}
@@ -25,29 +25,25 @@
 .rec__skip:focus{transform:none;outline:3px solid var(--dr-red,#ee1c22);outline-offset:2px}
 .rec__track{display:flex;align-items:center;gap:6vw;gap:6cqw;height:100%;width:max-content;padding-left:7vw;padding-left:7cqw;padding-right:9vw;padding-right:9cqw;box-sizing:border-box}
 /* Tarjeta: alto total = foto + pie (--cap) ≤ alto de la región; ancho = alto de foto × proporción real (tope 84 % del ancho) */
-.rec__card{--s:1;--b:1;--ar:1.3333;--cap:clamp(54px,10cqh,88px);flex:0 0 auto;display:flex;flex-direction:column;box-sizing:border-box;width:min(calc((100cqh - var(--cap)) * var(--ar)),84cqw);color:inherit;text-decoration:none;transform:scale(var(--s));filter:brightness(var(--b))}
+.rec__card{--s:1;--b:1;--ar:1.3333;--cap:clamp(58px,10cqh,84px);flex:0 0 auto;display:flex;flex-direction:column;box-sizing:border-box;width:min(calc((100cqh - var(--cap)) * var(--ar)),84cqw);color:inherit;text-decoration:none;transform:scale(var(--s));filter:brightness(var(--b))}
 .rec__card[hidden]{display:none}
 .rec__photo{position:relative;display:block;width:100%;aspect-ratio:var(--ar);overflow:hidden;background:#111;box-shadow:0 2.4cqh 6cqh rgba(0,0,0,.65),0 0 0 1px rgba(217,219,221,.08)}
 .rec__photo::after{content:"";position:absolute;left:0;right:0;bottom:0;height:3px;background:var(--rec-ac)}
 .rec__photo img{display:block;width:100%;height:100%;object-fit:cover}
-.rec__cap{display:flex;align-items:center;justify-content:space-between;gap:12px;height:var(--cap);min-height:0;padding-top:6px;box-sizing:border-box}
-.rec__name{display:flex;flex-direction:column;gap:4px;min-width:0}
-.rec__word{display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font:800 clamp(18px,2.7cqw,42px)/1.05 "Exo 2",Inter,system-ui,sans-serif;font-style:italic;text-transform:uppercase;letter-spacing:.02em;color:#fff;transition:color .2s}
-.rec__sub{display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font:600 clamp(11px,1.05cqw,14px)/1.2 Inter,system-ui,sans-serif;font-style:normal;letter-spacing:.1em;text-transform:uppercase;color:var(--rec-fg)}
-.rec__num{flex:none;font:600 clamp(11px,1cqw,15px)/1 Inter,system-ui,sans-serif;font-style:normal;letter-spacing:.2em;color:var(--rec-ac)}
+.rec__cap{display:grid;grid-template-columns:minmax(0,1fr) auto;grid-template-areas:"w p" "s s";align-items:center;column-gap:12px;row-gap:3px;height:var(--cap);min-height:0;padding-top:6px;box-sizing:border-box}
+.rec__word{grid-area:w;display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font:800 clamp(17px,2.3cqw,30px)/1.05 "Exo 2",Inter,system-ui,sans-serif;font-style:italic;text-transform:uppercase;letter-spacing:.02em;color:#fff;transition:color .2s}
+.rec__sub{grid-area:s;display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font:600 clamp(10px,.95cqw,13px)/1.2 Inter,system-ui,sans-serif;font-style:normal;letter-spacing:.1em;text-transform:uppercase;color:var(--rec-fg)}
+/* Precio 828: etiqueta roja de esquina cortada (como los botones del sitio) + cifra en Exo 2 cursiva */
+.rec__pr{grid-area:p;justify-self:end;display:inline-flex;align-items:center;gap:7px;white-space:nowrap}
+.rec__cur{display:inline-block;padding:5px 9px 5px 7px;background:var(--rec-ac);color:#fff;font:800 clamp(10px,.8cqw,12px)/1 Inter,system-ui,sans-serif;font-style:normal;letter-spacing:.12em;text-transform:uppercase;clip-path:polygon(0 0,calc(100% - 7px) 0,100% 7px,100% 100%,0 100%)}
+.rec__amt{font:800 clamp(17px,1.9cqw,28px)/1 "Exo 2",Inter,system-ui,sans-serif;font-style:italic;letter-spacing:.01em;color:#fff;font-variant-numeric:tabular-nums}
 a.rec__card{cursor:pointer;-webkit-tap-highlight-color:transparent;touch-action:manipulation}
 a.rec__card:focus-visible{outline:3px solid var(--rec-ac);outline-offset:4px}
 @media (hover:hover){a.rec__card:hover .rec__word{color:var(--rec-ac)}}
-.rec__hud{display:none}
 /* Modo fijado: lo activa JS (data-rec="pin"). La sección alta es la pista; el escenario queda pegado al viewport. */
-.hist[data-rec="pin"] .hist-stage{position:sticky;top:0;height:100vh;height:100svh;min-height:0;grid-template-rows:auto minmax(0,1fr) auto auto;align-content:stretch}
+.hist[data-rec="pin"] .hist-stage{position:sticky;top:0;height:100vh;height:100svh;min-height:0;grid-template-rows:auto minmax(0,1fr) auto;align-content:stretch}
 .hist[data-rec="pin"] .hist-rec{height:auto;overflow:hidden}
 .hist[data-rec="pin"] .rec__track{position:absolute;left:0;top:0;will-change:transform}
-.hist[data-rec="pin"] .rec__hud{position:relative;z-index:5;display:flex;align-items:center;gap:18px;padding:8px 7vw 0;pointer-events:none}
-.rec__count{font:700 12px/1 Inter,system-ui,sans-serif;letter-spacing:.22em;color:var(--rec-fg);font-variant-numeric:tabular-nums}
-.rec__count b{color:#fff}
-.rec__bar{position:relative;flex:1;height:2px;background:rgba(217,219,221,.22);overflow:hidden}
-.rec__bar i{position:absolute;inset:0;background:var(--rec-ac);transform:scaleX(0);transform-origin:left}
 /* Teléfono: la tarjeta ocupa ≈ 84 % del ancho; scroll vertical táctil nativo (sin touch-action ni wheel). */
 @media (max-width:700px){
   .hist-head .sec-p{display:none}
@@ -56,12 +52,10 @@ a.rec__card:focus-visible{outline:3px solid var(--rec-ac);outline-offset:4px}
   .hist-foot .hist-btn{flex:1 1 100%;margin:0}
   .hist-foot .hist-ctl-b,.hist-foot .hist-more{min-height:44px}
   .rec__track{gap:8cqw}
-  .hist[data-rec="pin"] .rec__hud{padding:6px 7vw 0}
 }
 /* Estático: sin JS (scripting:none), movimiento reducido o gama baja (data-rec ausente) */
 @media (prefers-reduced-motion:reduce){
-  .hist[data-rec="pin"] .hist-stage{position:relative;height:auto;min-height:clamp(520px,90svh,860px)}
-  .hist[data-rec="pin"] .hist-rec{height:clamp(340px,62svh,640px);overflow-x:auto}
+  .hist[data-rec="pin"] .hist-stage{position:relative;height:auto;min-height:clamp(480px,86svh,820px)}
+  .hist[data-rec="pin"] .hist-rec{height:clamp(280px,50svh,520px);overflow-x:auto}
   .hist[data-rec="pin"] .rec__track{position:relative;transform:none!important}
-  .hist[data-rec="pin"] .rec__hud{display:none}
 }

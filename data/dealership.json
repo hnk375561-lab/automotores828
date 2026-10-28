@@ -352,8 +352,8 @@
       "region": "Recorrido horizontal por la unidad destacada y once unidades del stock",
       "saltar": "Saltar el recorrido",
       "siguiente": "#financiacion",
-      "inicial": 3,
-      "paso": 3,
+      "inicial": 6,
+      "paso": 6,
       "textos": { "cargarMas": "Cargar {n} más", "mostrando": "Mostrando {a} de {b} unidades", "agregadas": "Se agregaron {n} unidades. Mostrando {a} de {b}." },
       "tarjetas": [
         { "unidadId": "4103009836", "foto": "images/stock/ml-4103009836-p05.webp", "ancho": 1200, "alto": 900 },

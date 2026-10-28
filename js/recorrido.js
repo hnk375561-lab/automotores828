@@ -88,7 +88,6 @@
   function pintarLimite() {
     todas.forEach(function (c, i) { c.hidden = i >= visibles; });
     if (hudTotal) hudTotal.textContent = n2(visibles);
-    if (cuenta) cuenta.textContent = plantilla(cuenta, { a: visibles, b: todas.length });
     if (btnMas) {
       var resto = todas.length - visibles;
       btnMas.hidden = resto <= 0;

@@ -44,6 +44,7 @@ def nueva_pagina(br, ctxopts, errs, externos):
     pg.goto(URL, wait_until='load')
     pg.evaluate("(()=>{const p=document.querySelector('.prelude'); if(p) p.remove();})()")
     pg.evaluate("document.querySelector('#unidad-destacada').scrollIntoView({block:'center'})")
+    pg.wait_for_timeout(1800)  # el scroll es suave (scroll-behavior:smooth) y el recorrido es largo: se espera a que termine antes de medir
     ok = esperar(pg, "document.querySelector('[data-historia-abrir]').dataset.histEstado === 'listo'", 15000)
     check(ok, 'el botón nunca pasó a estado «listo»')
     return ctx, pg
@@ -70,15 +71,18 @@ def correr(br, nombre, ctxopts, tactil):
     W, H = ctxopts['viewport']['width'], ctxopts['viewport']['height']
 
     # 0. controles fuera de la imagen
-    fuera = pg.evaluate("""() => { const c = document.querySelector('.hist-ctl'), p = document.querySelector('.hist-prev'), o = document.querySelector('.hist-overlay');
-      return !!c && !p.contains(c) && !o.contains(c) && !c.hidden; }""")
-    check(fuera, 'los controles de pausa/repetición deben existir, estar visibles y fuera de la imagen')
+    # (con el recorrido horizontal ya no hay botones de pausa/repetición: se quitaron a pedido; sin ellos no hay nada que comprobar)
+    CON_CTL = pg.evaluate("!!document.querySelector('[data-historia-pausa]')")
+    if CON_CTL:
+        fuera = pg.evaluate("""() => { const c = document.querySelector('.hist-ctl'), p = document.querySelector('.hist-prev'), o = document.querySelector('.hist-overlay');
+          return !!c && !p.contains(c) && !o.contains(c) && !c.hidden; }""")
+        check(fuera, 'los controles de pausa/repetición deben existir, estar visibles y fuera de la imagen')
 
     # 1. origen de la abertura = reglas del botón
     pg.evaluate("""() => { window.__aper = null; const ov = document.querySelector('.hist-overlay');
       new MutationObserver(() => { if (!window.__aper && ov.style.clipPath.startsWith('inset(')) window.__aper = ov.style.clipPath; })
         .observe(ov, { attributes: true, attributeFilter: ['style'] }); }""")
-    esperado = pg.evaluate("""() => { const s = document.querySelector('#unidad-destacada .hist-stage, #unidad-destacada').getBoundingClientRect(), b = document.querySelector('.hist-btn').getBoundingClientRect();
+    esperado = pg.evaluate("""() => { const s = (document.querySelector('#unidad-destacada .hist-stage') || document.querySelector('#unidad-destacada')).getBoundingClientRect(), b = document.querySelector('.hist-btn').getBoundingClientRect();
       return [b.top - s.top, s.right - b.right, s.bottom - b.bottom, b.left - s.left]; }""")
     activar(pg, tactil)
     check(esperar(pg, f"{FASE} === 'reglas'", 800), 'tras activar debe entrar en la fase «reglas»')
@@ -97,7 +101,7 @@ def correr(br, nombre, ctxopts, tactil):
     check(len(nums) == 4 and all(abs(n - e) <= 10 for n, e in zip(nums, esperado)),
           f'la abertura nace en el botón: inset {nums} vs medido {[round(x,1) for x in esperado]}')
     check(esperar(pg, ABIERTO, 4000), 'la apertura debe terminar en «abierto»')
-    d = pg.evaluate("""() => { const s = document.querySelector('#unidad-destacada .hist-stage, #unidad-destacada').getBoundingClientRect(), o = document.querySelector('.hist-overlay').getBoundingClientRect(), i = document.querySelector('.hist-fg');
+    d = pg.evaluate("""() => { const s = (document.querySelector('#unidad-destacada .hist-stage') || document.querySelector('#unidad-destacada')).getBoundingClientRect(), o = document.querySelector('.hist-overlay').getBoundingClientRect(), i = document.querySelector('.hist-fg');
       return { s: [s.left, s.top, s.width, s.height], o: [o.left, o.top, o.width, o.height], clip: document.querySelector('.hist-overlay').style.clipPath, nat: i.naturalWidth, tr: document.querySelector('.hist-media').style.transform,
                foco: document.activeElement.className, ancho: document.documentElement.scrollWidth > innerWidth }; }""")
     check(all(abs(a - b) < 1 for a, b in zip(d['s'], d['o'])), 'el overlay abierto cubre todo el escenario')
@@ -125,8 +129,8 @@ def correr(br, nombre, ctxopts, tactil):
         sup = [min(ys) / 1.0 for ys in primeras if ys]
         medio = [(t, ys) for t, ys in paths if ys and 300 < t < 600]
         prom = [sum(ys) / len(ys) for t, ys in medio] or [0]
-        check(primeras and min(sup) < pg.evaluate("document.querySelector('#unidad-destacada .hist-stage, #unidad-destacada').clientHeight") * 0.35, 'los primeros huecos aparecen arriba (disolución dirigida desde el borde superior)')
-        check(prom and sum(prom) / len(prom) < pg.evaluate("document.querySelector('#unidad-destacada .hist-stage, #unidad-destacada').clientHeight") * 0.62, 'a mitad del cierre los huecos se concentran en la mitad superior')
+        check(primeras and min(sup) < pg.evaluate("(document.querySelector('#unidad-destacada .hist-stage') || document.querySelector('#unidad-destacada')).clientHeight") * 0.35, 'los primeros huecos aparecen arriba (disolución dirigida desde el borde superior)')
+        check(prom and sum(prom) / len(prom) < pg.evaluate("(document.querySelector('#unidad-destacada .hist-stage') || document.querySelector('#unidad-destacada')).clientHeight") * 0.62, 'a mitad del cierre los huecos se concentran en la mitad superior')
         durs = mu[-1][0] - next(t for t, c in mu if c and c != 'none')  # desde el primer recorte, sin la latencia del toque
         check(650 <= durs <= 1150, f'duración del cierre ≈ 850 ms (medido {durs:.0f} ms)')
     foco_ok = pg.evaluate("document.activeElement === document.querySelector('[data-historia-abrir]')")
@@ -182,12 +186,13 @@ def correr(br, nombre, ctxopts, tactil):
     check(esperar(pg, CERRADO, 3000), 'al volver la pestaña el cierre se completa')
 
     # 8. botones de pausa/repetición reales
-    pg.click('[data-historia-pausa]') if not tactil else pg.tap('[data-historia-pausa]')
-    check(pg.evaluate("document.querySelector('[data-historia-pausa]').getAttribute('aria-pressed') === 'true'"), 'el botón de pausa alterna aria-pressed')
-    pg.click('[data-historia-pausa]') if not tactil else pg.tap('[data-historia-pausa]')
-    activar(pg, tactil, '[data-historia-repetir]')
-    check(esperar(pg, ABIERTO, 5000), 'Repetir animación vuelve a abrir la historia')
-    pg.keyboard.press('Escape'); esperar(pg, CERRADO, 3000)
+    if CON_CTL:
+        pg.click('[data-historia-pausa]') if not tactil else pg.tap('[data-historia-pausa]')
+        check(pg.evaluate("document.querySelector('[data-historia-pausa]').getAttribute('aria-pressed') === 'true'"), 'el botón de pausa alterna aria-pressed')
+        pg.click('[data-historia-pausa]') if not tactil else pg.tap('[data-historia-pausa]')
+        activar(pg, tactil, '[data-historia-repetir]')
+        check(esperar(pg, ABIERTO, 5000), 'Repetir animación vuelve a abrir la historia')
+        pg.keyboard.press('Escape'); esperar(pg, CERRADO, 3000)
 
     # 9. movimiento reducido a mitad de vuelo (apertura y cierre)
     activar(pg, tactil); esperar(pg, f"{FASE} === 'apertura'", 1500); pg.wait_for_timeout(300)
@@ -207,7 +212,7 @@ def correr(br, nombre, ctxopts, tactil):
     nuevo = {'width': W + 40 if W < 1000 else W - 120, 'height': H - 60}
     pg.set_viewport_size(nuevo)
     check(esperar(pg, ABIERTO, 4000), 'resize durante la apertura: termina «abierto»')
-    ok = pg.evaluate("(() => { const s = document.querySelector('#unidad-destacada .hist-stage, #unidad-destacada').getBoundingClientRect(), o = document.querySelector('.hist-overlay').getBoundingClientRect(); return Math.abs(s.width - o.width) < 1 && Math.abs(s.height - o.height) < 1; })()")
+    ok = pg.evaluate("(() => { const s = (document.querySelector('#unidad-destacada .hist-stage') || document.querySelector('#unidad-destacada')).getBoundingClientRect(), o = document.querySelector('.hist-overlay').getBoundingClientRect(); return Math.abs(s.width - o.width) < 1 && Math.abs(s.height - o.height) < 1; })()")
     check(ok, 'tras el resize el overlay vuelve a cubrir el escenario')
     pg.keyboard.press('Escape'); pg.wait_for_timeout(300)
     pg.set_viewport_size({'width': W, 'height': H})
