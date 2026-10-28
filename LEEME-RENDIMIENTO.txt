@@ -1,0 +1,5 @@
+Descomprimir en la raiz del proyecto respetando carpetas (css/, js/, scripts/) y reemplazar. No borrar nada.
+Cambios: fichas de todas las unidades con el mismo formato que la unidad destacada, scroll libre con la ficha abierta,
+carrusel y catalogo optimizados para movil (Moto G14), fotos de tarjetas livianas en celular.
+Despues de publicar, abrir el sitio y apretar Ctrl+F5.
+Para regenerar (opcional): npm run build

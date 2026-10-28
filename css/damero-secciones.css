@@ -229,3 +229,16 @@ html.rv-ready .car.reveal:not(.in) .car-ph{clip-path:inset(0 0 100% 0)}
   html.rv-ready .reveal:not(.in){opacity:1;transform:none}
   html.rv-ready .car.reveal:not(.in) .car-ph{clip-path:none}
 }
+
+/* ======================================================================================================
+   Rendimiento táctil / móvil (probado pensando en Moto G14): «Nuestras unidades» entraba con transiciones de 3,2 s y un clip-path animado
+   en cada foto (el clip-path no corre en GPU: repintaba la foto en cada frame, de a dos tarjetas por fila). En móvil y táctil la entrada es
+   solo opacity + transform (compuestos en GPU), corta y con desfase mínimo; sin will-change permanente en los fondos de sección.
+   ====================================================================================================== */
+@media (max-width:700px),(hover:none),(pointer:coarse){
+  html:root{--rv-dur:620ms;--rv-dur-b:560ms;--rv-dur-ph:0ms;--rv-delay-ph:0ms;--rv-dur-fondo:700ms;--rv-dist:14px;--rv-dist-title:10px;--rv-dist-card:14px;--rv-stagger:45ms}
+  html.rv-ready .reveal,html.rv-ready #unidades .cars .car.reveal{transition-property:opacity,transform;transition-duration:var(--rv-dur-b,560ms),var(--rv-dur-b,560ms)}
+  html.rv-ready #unidades .cars .car.reveal .car-ph,html.rv-ready .car.reveal .car-ph{transition:none}
+  html.rv-ready .car.reveal:not(.in) .car-ph{clip-path:none}
+  .dr-fondo{will-change:auto}
+}

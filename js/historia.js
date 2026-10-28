@@ -201,6 +201,11 @@
     return document.documentElement.classList.contains('save-data') || !!c.saveData || /^(slow-2g|2g|3g)$/.test(c.effectiveType || '');
   };
   var gamaBaja = function () { return (navigator.hardwareConcurrency || 8) <= 2 || (navigator.deviceMemory || 8) <= 2; };
+  /* Móvil táctil de gama media (p. ej. Moto G14: 4 GB): la disolución orgánica anima un clip-path path() que repinta toda la foto en cada frame; ahí se usa el barrido simple (compuesto, 280 ms) */
+  var movilLiviano = function () {
+    var tactil = !!(window.matchMedia && window.matchMedia('(pointer:coarse)').matches);
+    return tactil && ((navigator.deviceMemory || 8) <= 4 || (navigator.hardwareConcurrency || 8) <= 4);
+  };
   var soportaPath = !!(window.CSS && CSS.supports && CSS.supports('clip-path', 'path(evenodd,"M0 0Z")'));
 
   function montar(sec) {
@@ -286,6 +291,7 @@
       overlay.setAttribute('aria-label', 'Unidad destacada: ' + u.t);
       if (fondoEl) fondoEl.style.backgroundImage = u.b ? 'url(' + u.b + ')' : '';
       overlay.style.setProperty('--hist-ar', (u.f.w / u.f.h).toFixed(4));
+      overlay.style.setProperty('--hist-box', Math.max(u.f.w / u.f.h, 1.2).toFixed(4)); /* escritorio: las fotos cuadradas/verticales se amplían a un marco 1,2:1 (recorte leve arriba/abajo) para acercarse a la foto ancha de la unidad destacada */
       overlay.setAttribute('data-forma', u.f.w / u.f.h < 1.3 ? 'vertical' : 'ancha');
       if (img) {
         if (img.getAttribute('src') !== u.f.s) { img.setAttribute('src', u.f.s); imgPromesa = null; }
@@ -455,7 +461,7 @@
       /* debajo del overlay, el botón vuelve a su estado normal para cuando la disolución lo vaya dejando ver */
       [reglaA, reglaB].forEach(function (r) { r.style.transform = ''; r.style.visibility = ''; });
       W = escena.clientWidth; H = escena.clientHeight;
-      if (gamaBaja() || redLenta() || !soportaPath || !(W > 0 && H > 0)) {
+      if (gamaBaja() || movilLiviano() || redLenta() || !soportaPath || !(W > 0 && H > 0)) {
         correr(T_CIERRE_SIMPLE, function (t) {
           overlay.style.clipPath = 'inset(' + (100 * easeIO(t / T_CIERRE_SIMPLE)).toFixed(2) + '% 0 0 0)';
         }, function () { terminarCierre(opts); });

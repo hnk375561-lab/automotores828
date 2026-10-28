@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /* Relleno difuminado de la «Unidad destacada» (js/historia.js).
-   Toma la foto indicada en data/dealership.json → historias.destacada.foto.src, la reduce a ~64 px de ancho,
+   Toma la foto indicada en data/dealership.json → historias.destacada.foto.src, la reduce a ~96 px de ancho,
    la desenfoca y la oscurece. El resultado (WebP de 1–2 KB) se incrusta como data: URI en el HTML (cero pedidos extra,
    cero destello). scripts/build-index.mjs lo genera solo en cada build; este comando sirve para ver el resultado.
    Uso:  npm run historia:img    (escribe images/historia/<unidadId>-bg.webp solo para inspección) */
@@ -15,9 +15,9 @@ export async function fondoDifuminado(rutaFoto) {
   try {
     const { default: sharp } = await import('sharp');
     const buf = await sharp(rutaFoto)
-      .resize({ width: 64 })
-      .blur(2.5)
-      .modulate({ brightness: 0.55, saturation: 1.1 })
+      .resize({ width: 96 })
+      .blur(3)
+      .modulate({ brightness: 0.72, saturation: 1.25 })
       .webp({ quality: 60 })
       .toBuffer();
     return `data:image/webp;base64,${buf.toString('base64')}`;

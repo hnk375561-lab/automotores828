@@ -2,7 +2,11 @@
    Scroll nativo (listeners pasivos, un solo rAF pendiente); sin secuestrar rueda ni táctil. El revelado de cada tarjeta (js/historia.js)
    usa .hist-stage como escenario. Medidas cacheadas: sin lecturas de layout por frame.
    Muestra «data-rec-inicial» tarjetas y suma «data-rec-paso» con «Cargar … más» para que el scroll no se haga larguísimo.
-   Mientras hay un diálogo abierto (ficha, visor o efecto) NO se remide: un cambio de ancho por la barra de scroll movería la página. */
+   Mientras hay un diálogo abierto (ficha, visor) NO se remide: un cambio de ancho por la barra de scroll movería la página.
+   Rendimiento (móvil de gama media): por frame solo se escribe transform en el carril y transform/opacity en las tarjetas vecinas (capas propias,
+   sin filter ni custom properties animadas); las fotos se cargan y decodifican de a una; las medidas no se rehacen por cargas de imagen ni por la barra de URL.
+   Scroll libre con la ficha abierta: al abrirse el efecto de una unidad (data-hist-fase de js/historia.js) la pista se PLIEGA (la sección pasa a medir un escenario y
+   la página fluye normal); al cerrarse se DESPLIEGA sin saltos (o, si la persona ya se fue, compensando el alto para que nada se mueva). */
 (function () {
   'use strict';
   /* Botones flotantes: el texto («WhatsApp» / «Coordinar visita») lo dibuja css/recorrido.css; el title nativo se retira para que no se duplique (aria-label queda). */
@@ -28,7 +32,9 @@
   var paso = Math.max(1, parseInt(region.getAttribute('data-rec-paso'), 10) || 3);
   var visibles = Math.min(todas.length, Math.max(2, parseInt(region.getAttribute('data-rec-inicial'), 10) || todas.length));
   var cards = todas.slice(0, visibles);
-  var travel = 0, fw = 1, sh = 1, centros = [], pending = 0, pinned = false, ro = null, io = null, mo = null, ultimoN = -1, visible = true, remedirPendiente = false;
+  var travel = 0, fw = 1, sh = 1, span = 0, centros = [], pending = 0, pinned = false, ro = null, io = null, mo = null, ultimoN = -1, visible = true, remedirPendiente = false;
+  var plegado = false, pendDesplegar = false, xAct = 0, ultW = 0, moFase = null;
+  var cacheS = [], cacheO = [];
 
   function clamp01(v) { return v < 0 ? 0 : v > 1 ? 1 : v; }
   function n2(n) { return (n < 10 ? '0' : '') + n; }
@@ -36,6 +42,11 @@
     var n = navigator;
     return (n.hardwareConcurrency && n.hardwareConcurrency <= 2) || (n.deviceMemory && n.deviceMemory <= 2);
   }
+  function gamaMedia() {
+    var n = navigator;
+    return (n.hardwareConcurrency && n.hardwareConcurrency <= 8) || (n.deviceMemory && n.deviceMemory <= 4);
+  }
+  function irA(y) { try { window.scrollTo({ top: y, left: 0, behavior: 'instant' }); } catch (e) { window.scrollTo(0, y); } }
   function soportaSticky() { return !(window.CSS && CSS.supports) || CSS.supports('position', 'sticky'); }
   function bloqueado() { return html.classList.contains('hist-lock') || html.classList.contains('has-dlg'); }
   function medir() {
@@ -43,15 +54,18 @@
     fw = region.clientWidth || 1;
     travel = Math.max(0, track.scrollWidth - fw);
     centros = cards.map(function (c) { return c.offsetLeft + c.offsetWidth / 2; });
-    /* alto de la pista: escenario + recorrido (scrollWidth real, nunca un múltiplo fijo del viewport) */
-    var vh = window.innerHeight;
-    var h = sh + Math.min(Math.max(travel * RITMO, 0.9 * vh), 7 * vh);
-    sec.style.height = Math.round(h) + 'px';
+    ultW = window.innerWidth;
+    if (plegado) { sec.style.height = Math.round(sh) + 'px'; span = 0; return; }
+    /* alto de la pista: escenario + recorrido. Se mide con el alto del escenario (svh, estable), nunca con innerHeight: la barra de URL del móvil lo cambia al scrollear */
+    var h = Math.round(sh + Math.min(Math.max(travel * RITMO, 0.9 * sh), 7 * sh));
+    sec.style.height = h + 'px';
+    span = h - sh;
   }
   function limpiar() {
     sec.style.height = '';
     track.style.transform = '';
-    todas.forEach(function (c) { c.style.removeProperty('--s'); c.style.removeProperty('--b'); });
+    todas.forEach(function (c) { c.style.transform = ''; c.style.opacity = ''; });
+    cacheS = []; cacheO = [];
     if (hudBar) hudBar.style.transform = '';
     ultimoN = -1;
   }
@@ -88,6 +102,7 @@
       cl.toggle('is-act', d === 0);
       cl.toggle('is-cerca', d === 1);
       cl.toggle('is-lejos', d > 1);
+      cl.toggle('is-near', d <= 2);   /* solo las cercanas tienen capa propia (will-change): menos memoria de GPU */
     }
   }
   function marcarActual(i) {
@@ -99,29 +114,54 @@
   function pintar() {
     pending = 0;
     if (!pinned || !visible) return;
-    var span = sec.offsetHeight - sh;
+    if (plegado) { if (pendDesplegar) desplegar(); return; }
     var p = span > 0 ? clamp01(-sec.getBoundingClientRect().top / span) : 0;
     var x = p * travel;
-    track.style.transform = 'translate3d(' + (-x) + 'px,0,0)';
+    xAct = x;
+    track.style.transform = 'translate3d(' + (-x).toFixed(1) + 'px,0,0)';
     var mejor = 0, dmin = 9;
     for (var i = 0; i < cards.length; i++) {
       var d = (centros[i] - x - fw / 2) / fw;
       var a = Math.min(1, Math.abs(d));
-      cards[i].style.setProperty('--s', (1 - 0.07 * a).toFixed(4));
-      cards[i].style.setProperty('--b', (1 - 0.55 * a).toFixed(3));
       if (a < dmin) { dmin = a; mejor = i; }
+      /* solo transform y opacity (compuestos en GPU): sin filter ni variables CSS por frame; se escribe únicamente si el valor cambió */
+      var sc = Math.round((1 - 0.07 * a) * 500) / 500, op = Math.round((1 - 0.5 * a) * 100) / 100;
+      if (cacheS[i] !== sc) { cacheS[i] = sc; cards[i].style.transform = 'scale(' + sc + ')'; }
+      if (cacheO[i] !== op) { cacheO[i] = op; cards[i].style.opacity = op; }
     }
     if (hudBar) hudBar.style.transform = 'scaleX(' + p.toFixed(4) + ')';
     if (mejor !== ultimoN) { ultimoN = mejor; if (hudN) hudN.textContent = n2(mejor + 1); marcarActual(mejor); }
   }
   function pedir() { if (!pending) pending = requestAnimationFrame(pintar); }
+  /* En el móvil la barra de URL aparece y se oculta mientras se scrollea y dispara «resize» sin cambiar el ancho: eso NO debe remedir (movía la página) */
+  function alRedimensionar() {
+    if (window.innerWidth === ultW && Math.abs((stage.clientHeight || 0) - sh) < 2) return;
+    remedir();
+  }
   function remedir() {
     if (!pinned) return;
     if (bloqueado()) { remedirPendiente = true; return; }
     remedirPendiente = false;
     medir(); pedir();
   }
-  function cargarFotos(lista) { lista.forEach(function (c) { var im = c.querySelector('img'); if (im && im.loading === 'lazy') im.loading = 'eager'; }); }
+  /* Fotos: de a una, con pausa, y decodificadas fuera del hilo principal antes de que lleguen a pantalla (en un Moto G14 cargarlas todas juntas trababa el scroll) */
+  var colaFotos = [], timerFotos = 0;
+  function siguienteFoto() {
+    var im = colaFotos.shift();
+    if (!im) { timerFotos = 0; return; }
+    im.loading = 'eager';
+    if (im.decode) { try { im.decode().catch(function () {}); } catch (e) {} }
+    timerFotos = setTimeout(siguienteFoto, gamaMedia() ? 200 : 80);
+  }
+  function cargarFotos(lista) {
+    lista.forEach(function (c) {
+      var im = c.querySelector('img');
+      if (!im || im.loading !== 'lazy' || im.__enCola) return;
+      im.__enCola = 1;
+      colaFotos.push(im);
+    });
+    if (!timerFotos && colaFotos.length) timerFotos = setTimeout(siguienteFoto, 0);
+  }
 
   /* ---- límite de tarjetas y «Cargar … más» ---- */
   function plantilla(el, vars) {
@@ -138,7 +178,6 @@
     }
   }
   function posicionDe(card) {
-    var span = sec.offsetHeight - sh;
     var objetivo = travel > 0 ? clamp01((card.offsetLeft + card.offsetWidth / 2 - fw / 2) / travel) : 0;
     return sec.getBoundingClientRect().top + window.pageYOffset + objetivo * span;
   }
@@ -175,6 +214,45 @@
     marcarActual(mejor);
   }
 
+  /* ---- scroll libre con la ficha abierta: pliegue / despliegue de la pista ---- */
+  function sinAnclaje(fn) {
+    var prev = html.style.overflowAnchor;
+    html.style.overflowAnchor = 'none';
+    try { fn(); } finally { requestAnimationFrame(function () { requestAnimationFrame(function () { html.style.overflowAnchor = prev; }); }); }
+  }
+  function plegar() {
+    if (!pinned || plegado) return;
+    var top = sec.getBoundingClientRect().top + (window.pageYOffset || 0);
+    sinAnclaje(function () {
+      plegado = true; pendDesplegar = false;
+      sec.setAttribute('data-rec-plegado', '');
+      sec.style.height = Math.round(sh) + 'px';
+      irA(top);   /* el escenario queda donde estaba (arriba de la pantalla), pero ya sin pista: la página fluye con normalidad */
+    });
+  }
+  function desplegar() {
+    if (!plegado) return;
+    var rs = sec.getBoundingClientRect(), r = stage.getBoundingClientRect(), vh = window.innerHeight;
+    var alineado = Math.abs(r.top) <= 2, arriba = rs.bottom <= 0, debajo = rs.top >= vh;
+    if (!alineado && !arriba && !debajo) { pendDesplegar = true; return; }   /* aún se ve a medias: se espera a que salga de pantalla */
+    pendDesplegar = false;
+    var top = rs.top + (window.pageYOffset || 0), antes = sec.offsetHeight;
+    sinAnclaje(function () {
+      plegado = false;
+      sec.removeAttribute('data-rec-plegado');
+      medir();
+      if (alineado) irA(top + (travel > 0 ? clamp01(xAct / travel) : 0) * span);   /* misma imagen que antes de plegar */
+      else if (arriba) { var dl = sec.offsetHeight - antes; if (dl) irA((window.pageYOffset || 0) + dl); }   /* la sección está sobre la vista: el contenido de abajo no se mueve */
+    });
+    ultimoN = -1;
+    pedir();
+  }
+  function onFase() {
+    var f = sec.getAttribute('data-hist-fase');
+    if (!f) return;
+    if (f === 'cerrado') desplegar(); else plegar();
+  }
+
   function activar() {
     if (pinned) return;
     pinned = true;
@@ -182,8 +260,9 @@
     region.removeAttribute('tabindex');
     region.scrollLeft = 0;
     window.addEventListener('scroll', pedir, { passive: true });
-    window.addEventListener('resize', remedir, { passive: true });
+    window.addEventListener('resize', alRedimensionar, { passive: true });
     if (window.ResizeObserver) { ro = new ResizeObserver(remedir); ro.observe(region); ro.observe(track); }
+    if ('MutationObserver' in window) { moFase = new MutationObserver(onFase); moFase.observe(sec, { attributes: true, attributeFilter: ['data-hist-fase'] }); }
     if ('MutationObserver' in window) {
       /* al cerrar el diálogo (cambia la clase de <html>) se completa la medición que quedó en espera */
       mo = new MutationObserver(function () { if (remedirPendiente && !bloqueado()) remedir(); });
@@ -196,7 +275,7 @@
       }, { rootMargin: '150% 0px' });
       io.observe(sec);
     }
-    track.addEventListener('load', remedir, true);
+    /* las tarjetas tienen proporción fija (aspect-ratio): cargar una foto no cambia ninguna medida, así que no se remide por cada «load» */
     medir(); pedir();
   }
   function desactivar() {
@@ -205,8 +284,9 @@
     sec.removeAttribute('data-rec');
     region.setAttribute('tabindex', '0');
     window.removeEventListener('scroll', pedir);
-    window.removeEventListener('resize', remedir);
-    track.removeEventListener('load', remedir, true);
+    window.removeEventListener('resize', alRedimensionar);
+    if (moFase) { moFase.disconnect(); moFase = null; }
+    plegado = false; pendDesplegar = false; sec.removeAttribute('data-rec-plegado');
     if (ro) { ro.disconnect(); ro = null; }
     if (io) { io.disconnect(); io = null; }
     if (mo) { mo.disconnect(); mo = null; }
@@ -220,6 +300,7 @@
   track.addEventListener('focusin', function (e) {
     if (!pinned) return;
     region.scrollLeft = 0;
+    if (plegado) return;
     var card = e.target.closest && e.target.closest('.rec__card');
     if (!card || travel <= 0) return;
     try { if (!card.matches(':focus-visible')) return; } catch (err) {}

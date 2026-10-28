@@ -2647,7 +2647,9 @@ html.has-dlg .dr-fab{display:none}
 /* Efecto abierto: la página no se desplaza por detrás (el hueco de la barra se conserva para que nada salte). */
 html.hist-lock{overflow:hidden;scrollbar-gutter:stable;overscroll-behavior:none}
 /* Foto vertical o cuadrada en escritorio: queda entera a la derecha y el texto a la izquierda (no se pisan). */
-@media (min-width:701px){.hist-overlay[data-forma="vertical"] .hist-fg{left:auto;right:clamp(16px,5cqw,96px);transform:translateY(-50%)}}
+/* Todas las unidades se muestran como la unidad destacada (foto centrada a pantalla completa): las fotos cuadradas o verticales YA NO se corren a la derecha con un vacío oscuro a la izquierda.
+   La foto va centrada a la altura del escenario y sus bordes laterales se funden con el relleno difuminado de la propia foto (ver fondoDifuminado en scripts/make-historia.mjs). */
+@media (min-width:701px){.hist-overlay[data-forma="vertical"] .hist-fg{aspect-ratio:var(--hist-box,1.2);width:min(100cqw,1500px,calc(100cqh * var(--hist-box,1.2)));object-fit:cover;object-position:50% 62%;-webkit-mask-image:linear-gradient(to right,transparent 0,#000 17%,#000 83%,transparent 100%),linear-gradient(to bottom,transparent 0,#000 7%,#000 93%,transparent 100%);mask-image:linear-gradient(to right,transparent 0,#000 17%,#000 83%,transparent 100%),linear-gradient(to bottom,transparent 0,#000 7%,#000 93%,transparent 100%)}}
 .hist-close::before{content:"";width:12px;height:12px;background:linear-gradient(45deg,transparent 43%,currentColor 43% 57%,transparent 57%),linear-gradient(-45deg,transparent 43%,currentColor 43% 57%,transparent 57%)}
 .hist-close:hover{background:#fff;color:var(--dr-ink,#060607)}
 /* object-fit:cover donde el escenario es apaisado (≥ 1,6:1): no recorta el vehículo. En escenarios altos se mantiene la foto entera sobre su relleno difuminado. */
