@@ -49,6 +49,13 @@ def cerca(d, esperado, tol=60): return abs(d - esperado) <= tol
 def dur(pg, sel, prop):
     v = pg.evaluate(DUR_JS, [sel, prop]); check(v is not None, f'{sel} no transiciona {prop}'); return ms(v)
 
+def dur_ph(pg, W):
+    """Foto de tarjeta: en móvil (<=700px) el clip-path NO se anima a propósito (damero-secciones.css, rendimiento táctil) -> 0 ms."""
+    if W <= 700:
+        v = pg.evaluate(DUR_JS, ['li.car.reveal .car-ph', 'clip-path'])
+        check(v is None or ms(v) == 0, f'[{W}] móvil: la foto no debe animar clip-path (duración {v})'); return 0
+    return dur(pg, 'li.car.reveal .car-ph', 'clip-path')
+
 srv = subprocess.Popen(['node', 'scripts/serve.mjs'], cwd=ROOT, env={**os.environ, 'PORT': str(PORT)}, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
 try:
     with sync_playwright() as p:
@@ -63,7 +70,7 @@ try:
             def cat_b():
                 for prop in ('opacity', 'transform'):
                     d = dur(pg, 'li.car.reveal', prop); check(cerca(d, rv(pg, '--rv-dur-b')), f'[{W}] B li.car {prop} = {d} ms (esperado --rv-dur-b = {rv(pg, "--rv-dur-b")})')
-                d = dur(pg, 'li.car.reveal .car-ph', 'clip-path'); check(cerca(d, rv(pg, '--rv-dur-ph')), f'[{W}] B foto clip-path = {d} ms (esperado --rv-dur-ph = {rv(pg, "--rv-dur-ph")})')
+                d = dur_ph(pg, W); check(cerca(d, rv(pg, '--rv-dur-ph')), f'[{W}] B foto clip-path = {d} ms (esperado --rv-dur-ph = {rv(pg, "--rv-dur-ph")})')
                 d = dur(pg, '.dr-fondo', 'opacity'); check(cerca(d, rv(pg, '--rv-dur-fondo')), f'[{W}] B .dr-fondo = {d} ms (esperado --rv-dur-fondo = {rv(pg, "--rv-dur-fondo")})')
                 a = pg.evaluate("getComputedStyle(document.querySelector('.hx-copy')).animationDuration")
                 check(cerca(ms(a), rv(pg, '--rv-dur-hero')), f'[{W}] hero .hx-copy animación = {a} (esperado --rv-dur-hero = {rv(pg, "--rv-dur-hero")})')
@@ -73,7 +80,7 @@ try:
                 t = int(m.group(1))
                 paso = float(pg.evaluate("parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--rv-stagger'))"))
                 peor = max(dur(pg, 'section h2.reveal', 'opacity'), dur(pg, 'li.car.reveal', 'opacity'),
-                           dur(pg, 'li.car.reveal .car-ph', 'clip-path') + 100) + 4 * paso
+                           dur_ph(pg, W) + 100) + 4 * paso
                 check(t >= peor + 200, f'[{W}] temporizador {t} ms no cubre {peor:.0f} ms + 200 de margen')
             def cat_c():
                 for sel in ('a.btn.p', 'button.menu-toggle' if W == 390 else 'a.btn'):
