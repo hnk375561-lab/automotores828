@@ -1,0 +1,3 @@
+Estos 5 archivos son las versiones correctas (las del commit 9379b9f, anterior al error).
+Subirlos a GitHub respetando carpetas, reemplazando los actuales. No subir nada mas.
+Despues: borrar LEEME-SCROLL-RECORRIDO.txt si no se quiere en el repo, y Ctrl+F5 al publicar.
