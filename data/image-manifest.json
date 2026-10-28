@@ -268,11 +268,11 @@
       "objectPosition": "50% 50%"
     },
     "footer": {
-      "source": "images/stock/ml-3783768058-p02.webp",
+      "source": "images/stock/ml-2090433129-p10.webp + ml-2137817901-p10.webp + ml-2140604399-p09.webp + ml-2128200017-p08.webp (composición horizontal de 4 interiores, sin recorte ni zoom)",
       "desktop": "images/fondos/fondo-footer.webp",
       "mobile": "images/fondos/fondo-footer-800.webp",
-      "width": 1200,
-      "height": 675,
+      "width": 2418,
+      "height": 800,
       "objectPosition": "50% 50%"
     }
   },

@@ -5,6 +5,11 @@
    Mientras hay un diálogo abierto (ficha, visor o efecto) NO se remide: un cambio de ancho por la barra de scroll movería la página. */
 (function () {
   'use strict';
+  /* Botones flotantes: el texto («WhatsApp» / «Coordinar visita») lo dibuja css/recorrido.css; el title nativo se retira para que no se duplique (aria-label queda). */
+  [].forEach.call(document.querySelectorAll('.dr-fab a[title]'), function (a) { a.removeAttribute('title'); });
+})();
+(function () {
+  'use strict';
   var RITMO = 0.85;
   var sec = document.querySelector('#unidad-destacada[data-hist-rec]');
   if (!sec) return;
@@ -76,8 +81,18 @@
       titulo.appendChild(em);
     }
   }
+  /* Ficha en foco: nítida e iluminada (is-act); vecinas con leve desenfoque (is-cerca); el resto más difuminado (is-lejos). */
+  function marcarFoco(i) {
+    for (var k = 0; k < todas.length; k++) {
+      var c = todas[k], d = Math.abs(k - i), cl = c.classList;
+      cl.toggle('is-act', d === 0);
+      cl.toggle('is-cerca', d === 1);
+      cl.toggle('is-lejos', d > 1);
+    }
+  }
   function marcarActual(i) {
     if (!cards[i]) return;
+    marcarFoco(i);
     sec.setAttribute('data-rec-actual', cards[i].getAttribute('data-hist-unit') || '');
     pintarTitulo(cards[i]);
   }
@@ -220,6 +235,7 @@
     desactivar();
     if (mq.removeEventListener) mq.removeEventListener('change', aplicar);
   });
+  if (gamaBaja()) sec.setAttribute('data-rec-lite', '');
   sec.setAttribute('data-rec-lim', '');
   pintarLimite();
   marcarActual(0);

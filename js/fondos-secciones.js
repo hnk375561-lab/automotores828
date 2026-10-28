@@ -20,7 +20,7 @@
     ['#guia', 'guia', '40%', velo(.82, .4)],
     ['#visita', 'visita', '50%', velo(.82, .4)],
     ['#contacto', 'contacto', '58%', velo(.84, .45)],
-    ['footer', 'footer', '58%', velo(.88, .6)]
+    ['footer', 'footer', '30%', velo(.72, .42)]
   ];
   var movil = window.matchMedia && window.matchMedia('(max-width: 700px)').matches;
   var cola = [], ocupado = false;
@@ -29,7 +29,7 @@
     if (ocupado || !cola.length) return;
     ocupado = true;
     var it = cola.shift(), cfg = it.cfg, capa = it.capa;
-    var url = 'images/fondos/fondo-' + cfg[1] + (movil ? '-800' : '') + '.webp', im = new Image();
+    var url = 'images/fondos/fondo-' + cfg[1] + (movil ? '-800' : '') + '.webp' + (cfg[0] === 'footer' ? '?v=interiores1' : ''), im = new Image();
     function fin() { ocupado = false; setTimeout(function () { idle(siguiente); }, 250); }
     function listo() {
       var capas = movil ? (cfg[3] ? PLANO : null) : cfg[3];

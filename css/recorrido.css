@@ -4,13 +4,15 @@
    Cada tarjeta toma la PROPORCIÓN REAL de su foto (--ar): la foto se ve entera, sin recortes. El pie de la tarjeta lleva nombre real,
    precio (identidad 828) y datos en su propia franja: nada se superpone. El escenario es compacto: cabecera + recorrido + pie
    entran completos en la altura de la pantalla (100 % de zoom, escritorio). */
+@property --bl{syntax:"<length>";inherits:false;initial-value:0px}
+@property --sat{syntax:"<number>";inherits:false;initial-value:1}
 .hist[data-hist-rec]{display:block;align-content:start;min-height:0;padding:0;overflow:visible}
-.hist[data-hist-rec] .hist-stage{position:relative;isolation:isolate;display:grid;grid-template-rows:auto minmax(0,auto) auto;align-content:center;min-height:clamp(480px,86svh,820px);padding:calc(var(--hdr,68px) + clamp(4px,1svh,10px)) 0 clamp(8px,1.6svh,18px);overflow:clip;background:var(--dr-ink,#060607);color:var(--dr-silver,#d9dbdd)}
+.hist[data-hist-rec] .hist-stage{position:relative;isolation:isolate;display:grid;grid-template-rows:auto minmax(0,auto) auto;align-content:center;min-height:clamp(480px,86svh,820px);padding:calc(var(--hdr,68px) + clamp(4px,1svh,10px)) 0 calc(12px + clamp(18px,3.4svh,36px));overflow:clip;background:var(--dr-ink,#060607);color:var(--dr-silver,#d9dbdd)}
 .hist-stage>.w{position:relative;z-index:1}
 .hist-head .ey{margin:0 0 2px}
 .hist-head h2{margin:0;font-size:clamp(24px,4.4svh,40px);line-height:1.05}
 .hist-head .sec-p{margin:4px 0 0;max-width:none;font-size:clamp(12px,1.9svh,15px);line-height:1.35}
-.hist-foot{display:flex;flex-wrap:wrap;align-items:center;gap:8px 16px;padding-top:clamp(4px,1svh,10px)}
+.hist-foot{display:flex;flex-wrap:wrap;align-items:center;gap:8px 16px;padding-top:clamp(8px,1.6svh,16px);padding-bottom:clamp(2px,.6svh,6px)}
 .hist-foot .hist-btn{margin:0;flex:0 1 380px}
 .hist-foot .hist-label{padding:12px;font-size:clamp(15px,2.2svh,20px)}
 .hist-more{border-color:var(--dr-red,#ee1c22);color:#fff}
@@ -25,7 +27,7 @@
 .rec__skip:focus{transform:none;outline:3px solid var(--dr-red,#ee1c22);outline-offset:2px}
 .rec__track{display:flex;align-items:center;gap:6vw;gap:6cqw;height:100%;width:max-content;padding-left:7vw;padding-left:7cqw;padding-right:9vw;padding-right:9cqw;box-sizing:border-box}
 /* Tarjeta: alto total = foto + pie (--cap) ≤ alto de la región; ancho = alto de foto × proporción real (tope 84 % del ancho) */
-.rec__card{--s:1;--b:1;--ar:1.3333;--cap:clamp(58px,10cqh,84px);flex:0 0 auto;display:flex;flex-direction:column;box-sizing:border-box;width:min(calc((100cqh - var(--cap)) * var(--ar)),84cqw);color:inherit;text-decoration:none;transform:scale(var(--s));filter:brightness(var(--b))}
+.rec__card{--bl:0px;--sat:1;--s:1;--b:1;--ar:1.3333;--cap:clamp(58px,10cqh,84px);flex:0 0 auto;display:flex;flex-direction:column;box-sizing:border-box;width:min(calc((100cqh - var(--cap)) * var(--ar)),84cqw);color:inherit;text-decoration:none;transform:scale(var(--s));filter:brightness(var(--b)) saturate(var(--sat)) blur(var(--bl));transition:--bl .5s cubic-bezier(.2,.7,.2,1),--sat .5s ease}
 .rec__card[hidden]{display:none}
 .rec__photo{position:relative;display:block;width:100%;aspect-ratio:var(--ar);overflow:hidden;background:#111;box-shadow:0 2.4cqh 6cqh rgba(0,0,0,.65),0 0 0 1px rgba(217,219,221,.08)}
 .rec__photo::after{content:"";position:absolute;left:0;right:0;bottom:0;height:3px;background:var(--rec-ac)}
@@ -72,3 +74,71 @@ html body .ring-meta b{font-size:14px}
 html body .ring-pr{margin:8px 0 0;font-size:clamp(22px,2.6vw,30px)}
 html body .ring-n{margin:3px 0 0;font-size:12px}
 html body .ring-act{margin-top:12px;gap:8px 10px}
+
+/* ======================================================================================================
+   v2 · «Unidad destacada»: la ficha EN FOCO se ilumina y las demás se difuminan (js/recorrido.js marca is-act / is-cerca / is-lejos).
+   Foco = foto nítida con halo rojo 828, pie en blanco y filo inferior encendido. Cercanas = leve desenfoque. Lejanas = más desenfoque y menos color.
+   Sin JS o sin @property el recorrido se ve igual que antes (nada queda borroso). Con gama baja (data-rec-lite) no hay desenfoque.
+   ====================================================================================================== */
+.hist[data-hist-rec] .hist-stage::before{content:"";position:absolute;inset:0;z-index:0;pointer-events:none;
+  background:radial-gradient(ellipse 44% 56% at 50% 50%,rgba(238,28,34,.2),rgba(238,28,34,.06) 48%,transparent 72%),
+             radial-gradient(ellipse 70% 30% at 50% 100%,rgba(217,219,221,.07),transparent 70%)}
+.rec__card.is-cerca{--bl:1.2px;--sat:.85}
+.rec__card.is-lejos{--bl:3px;--sat:.6}
+[data-rec-lite] .rec__card{--bl:0px!important}
+.rec__card .rec__photo{transition:box-shadow .5s ease}
+.rec__card.is-act .rec__photo{box-shadow:0 0 0 1px rgba(238,28,34,.85),0 0 46px rgba(238,28,34,.34),0 0 120px rgba(238,28,34,.16),0 2.4cqh 6cqh rgba(0,0,0,.7)}
+.rec__card.is-act .rec__photo::after{height:4px;background:linear-gradient(90deg,var(--rec-ac),#ff5a5f 50%,var(--rec-ac));box-shadow:0 0 18px rgba(238,28,34,.9)}
+.rec__card.is-act .rec__word{color:#fff;text-shadow:0 0 22px rgba(238,28,34,.55)}
+.rec__card:not(.is-act) .rec__word{color:#c9cbcd}
+.rec__card:not(.is-act) .rec__amt{color:#c9cbcd}
+.rec__card.is-act .rec__cur{box-shadow:0 0 18px rgba(238,28,34,.6)}
+/* Indicador de selección: etiqueta 828 de esquina cortada sobre la foto en foco */
+.rec__card .rec__photo::before{content:"Conocé esta unidad";position:absolute;left:0;top:14px;z-index:2;padding:8px 14px 8px 12px;background:var(--rec-ac);color:#fff;font:800 clamp(10px,.9cqw,12px)/1 Inter,system-ui,sans-serif;letter-spacing:.14em;text-transform:uppercase;clip-path:polygon(0 0,100% 0,calc(100% - 8px) 100%,0 100%);opacity:0;transform:translateX(-12px);transition:opacity .35s ease,transform .35s ease}
+.rec__card.is-act .rec__photo::before{opacity:1;transform:none}
+@media (hover:hover){
+  a.rec__card:hover{--bl:0px!important;--sat:1!important;--b:1!important}
+  a.rec__card:hover .rec__photo{box-shadow:0 0 0 1px rgba(238,28,34,.85),0 0 46px rgba(238,28,34,.34),0 2.4cqh 6cqh rgba(0,0,0,.7)}
+  a.rec__card:hover .rec__photo::before{opacity:1;transform:none}
+  a.rec__card:hover .rec__word,a.rec__card:hover .rec__amt{color:#fff}
+}
+@media (prefers-reduced-motion:reduce){.rec__card,.rec__card .rec__photo,.rec__card .rec__photo::before{transition:none}}
+
+/* ======================================================================================================
+   v2 · «Los interiores de nuestras unidades»: laterales con identidad 828 (antes quedaban vacíos).
+   Arriba (.ring-sec): emblema 828 con halo y anillo de competición a cada lado del carrusel.
+   Abajo (.ring-info): pista con damero, filo rojo y emblema a cada lado de la unidad en foco.
+   ====================================================================================================== */
+html body .ring-stage{position:relative;z-index:1}
+html body .ring-sec::before,html body .ring-sec::after{content:"";position:absolute;z-index:0;top:50%;width:clamp(120px,17vw,270px);aspect-ratio:1;border-radius:50%;pointer-events:none;
+  background:url("../images/logo-emblema-828.png") center/100% 100% no-repeat;
+  border:1px solid rgba(238,28,34,.7);
+  box-shadow:0 0 0 clamp(10px,1.3vw,18px) rgba(238,28,34,.07),0 0 0 calc(clamp(10px,1.3vw,18px) + 1px) rgba(217,219,221,.14),0 0 0 clamp(26px,3.4vw,48px) rgba(238,28,34,.04),0 0 0 calc(clamp(26px,3.4vw,48px) + 1px) rgba(217,219,221,.07),0 0 90px rgba(238,28,34,.3);
+  opacity:.9}
+html body .ring-sec::before{left:clamp(34px,6.5vw,120px);transform:translateY(-50%)}
+html body .ring-sec::after{right:clamp(34px,6.5vw,120px);transform:translateY(-50%)}
+html body .ring-info{overflow:clip;isolation:isolate}
+html body .ring-info .w{position:relative;z-index:1}
+html body .ring-info::before,html body .ring-info::after{content:"";position:absolute;z-index:0;top:50%;height:clamp(96px,11vw,150px);width:clamp(110px,24vw,380px);transform:translateY(-50%);pointer-events:none;
+  background:repeating-conic-gradient(#ee1c22 0 25%,#060607 0 50%) 0 0/12px 12px;
+  -webkit-mask:linear-gradient(var(--dir,90deg),#000 0,rgba(0,0,0,.55) 38%,transparent 100%);mask:linear-gradient(var(--dir,90deg),#000 0,rgba(0,0,0,.55) 38%,transparent 100%);
+  opacity:.5}
+html body .ring-info::before{left:0;--dir:90deg;clip-path:polygon(0 0,calc(100% - 22px) 0,100% 22px,100% 100%,0 100%)}
+html body .ring-info::after{right:0;--dir:270deg;clip-path:polygon(0 0,100% 0,100% 100%,22px 100%,0 calc(100% - 22px))}
+@media (max-width:700px){
+  html body .ring-sec::before,html body .ring-sec::after{width:clamp(70px,22vw,110px);top:auto;bottom:14px;opacity:.55;transform:none}
+  html body .ring-sec::before{left:14px}
+  html body .ring-sec::after{right:14px}
+  html body .ring-info::before,html body .ring-info::after{height:84px;width:34vw;opacity:.32}
+}
+
+/* ======================================================================================================
+   v2 · Botones flotantes (WhatsApp / agendar): texto al pasar el mouse o enfocar con teclado.
+   ====================================================================================================== */
+.dr-fab a{position:relative}
+.dr-fab a::before{content:"";position:absolute;right:calc(100% + 14px);top:50%;z-index:2;padding:11px 18px 11px 16px;background:linear-gradient(90deg,#0d0d0f,#220609);color:#fff;border-right:3px solid var(--dr-red,#ee1c22);box-shadow:inset 0 0 0 1px rgba(217,219,221,.24),inset -3px 0 0 var(--dr-red,#ee1c22);filter:drop-shadow(0 8px 14px rgba(0,0,0,.6));font:800 12px/1 Inter,system-ui,sans-serif;font-style:normal;letter-spacing:.14em;text-transform:uppercase;white-space:nowrap;clip-path:polygon(0 0,calc(100% - 10px) 0,100% 10px,100% 100%,0 100%);opacity:0;transform:translate(10px,-50%);pointer-events:none;transition:opacity .22s ease,transform .22s ease}
+.dr-fab .dr-fab-wa::before{content:"WhatsApp"}
+.dr-fab .dr-fab-ag::before{content:"Coordinar visita"}
+@media (hover:hover){.dr-fab a:hover::before{opacity:1;transform:translate(0,-50%)}}
+.dr-fab a:focus-visible::before{opacity:1;transform:translate(0,-50%)}
+@media (prefers-reduced-motion:reduce){.dr-fab a::before{transition:none}}

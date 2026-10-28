@@ -301,21 +301,8 @@
       overlay.style.setProperty('--hist-hdr', Math.max(0, Math.round(b - s.top)) + 'px'); /* la foto se centra debajo de la cabecera: no queda tapada */
     }
 
-    /* ---- inert del resto de la página (se guarda solo lo que se agregó) ---- */
-    function inertar() {
-      fijarTope();
-      htmlEl.classList.add('hist-lock'); /* la página no se desplaza por detrás del efecto abierto */
-      var nodo = overlay;
-      while (nodo && nodo !== document.body) {
-        var padre = nodo.parentNode;
-        if (!padre) break;
-        for (var h = padre.firstElementChild; h; h = h.nextElementSibling) {
-          if (h === nodo || /^(SCRIPT|STYLE|LINK|NOSCRIPT|TEMPLATE)$/.test(h.tagName) || h.inert) continue;
-          h.inert = true; inertados.push(h);
-        }
-        nodo = padre;
-      }
-    }
+    /* ---- scroll libre: el efecto abierto NO bloquea la página ni deja inerte el resto del sitio ---- */
+    function inertar() { fijarTope(); }
     function desinertar() { for (var i = 0; i < inertados.length; i++) inertados[i].inert = false; inertados = []; htmlEl.classList.remove('hist-lock'); }
 
     function resetEstilos() {
@@ -485,20 +472,13 @@
       }, function () { terminarCierre(opts); });
     }
 
-    /* ---- teclado: Escape y trampa de foco ---- */
+    /* ---- teclado: Escape cierra; Tab navega libremente por todo el sitio ---- */
     function onKey(e) {
       if (estado === 'cerrado') return;
       if (e.key === 'Escape') {
         if (document.querySelector('dialog.ficha[open], dialog.gv[open]')) return;
         e.preventDefault(); cerrar(); return;
       }
-      if (e.key !== 'Tab' || estado === 'cerrando') return;
-      var f = Array.prototype.filter.call(overlay.querySelectorAll('a[href],button:not([disabled])'), function (n) { return n.offsetParent !== null || n === document.activeElement; });
-      if (!f.length) { e.preventDefault(); return; }
-      var primero = f[0], ultimo = f[f.length - 1], act = document.activeElement;
-      if (!overlay.contains(act)) { e.preventDefault(); primero.focus(); }
-      else if (e.shiftKey && act === primero) { e.preventDefault(); ultimo.focus(); }
-      else if (!e.shiftKey && act === ultimo) { e.preventDefault(); primero.focus(); }
     }
 
     /* ---- eventos ---- */
@@ -559,7 +539,11 @@
     if (mqReducido && mqReducido.addEventListener) mqReducido.addEventListener('change', onCambioReducido);
     var ioVista = null;
     if ('IntersectionObserver' in window) {
-      ioVista = new IntersectionObserver(function (es) { enPantalla = es.some(function (e) { return e.isIntersecting; }); recalcRunning(); });
+      ioVista = new IntersectionObserver(function (es) {
+        enPantalla = es.some(function (e) { return e.isIntersecting; }); recalcRunning();
+        /* con el scroll libre, al salir la sección de pantalla el efecto abierto se cierra solo (sin mover el foco) */
+        if (!enPantalla && (estado === 'abierto' || estado === 'abriendo')) cerrar({ inmediato: true, sinFoco: true });
+      });
       ioVista.observe(sec);
     }
 
